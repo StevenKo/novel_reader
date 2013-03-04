@@ -9,17 +9,51 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
 
 import com.android.novel.reader.entity.Category;
+import com.android.novel.reader.entity.Novel;
 
 public class NovelAPI {
 
     final static String         HOST  = "http://106.187.103.131";
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
+
+    public static ArrayList<Novel> getCatNovels(int category_id) {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels.json?category_id=" + category_id, null);
+        if (message == null) {
+            return null;
+        } else {
+            try {
+                JSONArray novelsArray;
+                novelsArray = new JSONArray(message.toString());
+                for (int i = 0; i < novelsArray.length(); i++) {
+
+                    int id = novelsArray.getJSONObject(i).getInt("id");
+                    String articleNum = novelsArray.getJSONObject(i).getString("article_num");
+                    String author = novelsArray.getJSONObject(i).getString("author");
+                    boolean isSerializing = novelsArray.getJSONObject(i).getBoolean("is_serializing");
+                    String lastUpdate = novelsArray.getJSONObject(i).getString("last_update");
+                    String name = novelsArray.getJSONObject(i).getString("name");
+                    String pic = novelsArray.getJSONObject(i).getString("pic");
+
+                    Novel novel = new Novel(id, name, author, "", pic, 0, articleNum, lastUpdate, isSerializing);
+                    novels.add(novel);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return novels;
+    }
 
     public static ArrayList<Category> getCategories() {
         return Category.getCategories();

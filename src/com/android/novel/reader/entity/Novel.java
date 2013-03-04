@@ -9,14 +9,13 @@ public class Novel {
     int     categoryId;
     String  articleNum;
     String  lastUpdate;
-    boolean isSearializing;
+    boolean isSerializing;
 
     public Novel() {
         this(1, "", "", "", "", 1, "", "", true);
     }
 
-    public Novel(int id, String name, String author, String description, String pic, int categoryId, String articleNum, String lastUpdate,
-            boolean isSearializing) {
+    public Novel(int id, String name, String author, String description, String pic, int categoryId, String articleNum, String lastUpdate, boolean isSerializing) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -25,7 +24,7 @@ public class Novel {
         this.categoryId = categoryId;
         this.articleNum = articleNum;
         this.lastUpdate = lastUpdate;
-        this.isSearializing = isSearializing;
+        this.isSerializing = isSerializing;
 
     }
 
@@ -37,8 +36,8 @@ public class Novel {
         return categoryId;
     }
 
-    public boolean isSearializing() {
-        return isSearializing;
+    public boolean isSerializing() {
+        return isSerializing;
     }
 
     public String getName() {
