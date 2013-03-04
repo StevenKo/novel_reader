@@ -24,9 +24,39 @@ public class NovelAPI {
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
 
-    public static ArrayList<Novel> getCatNovels(int category_id) {
+    public static Novel getNovel(int novelId) {
+        Novel n = null;
+        String message = getMessageFromServer("GET", "/api/v1/novels/" + novelId + ".json", null);
+        if (message == null) {
+            return null;
+        } else {
+            try {
+                JSONObject nObject;
+                nObject = new JSONObject(message.toString());
+                int id = nObject.getInt("id");
+                String articleNum = nObject.getString("article_num");
+                String author = nObject.getString("author");
+                boolean isSerializing = nObject.getBoolean("is_serializing");
+                String lastUpdate = nObject.getString("last_update");
+                String name = nObject.getString("name");
+                String pic = nObject.getString("pic");
+                String description = nObject.getString("description");
+                int category_id = nObject.getInt("category_id");
+
+                n = new Novel(id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing);
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return n;
+    }
+
+    public static ArrayList<Novel> getCatNovels(int category_id, int page) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
-        String message = getMessageFromServer("GET", "/api/v1/novels.json?category_id=" + category_id, null);
+        String message = getMessageFromServer("GET", "/api/v1/novels.json?category_id=" + category_id + "&page=" + page, null);
         if (message == null) {
             return null;
         } else {
