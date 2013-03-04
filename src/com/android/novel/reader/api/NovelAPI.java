@@ -45,9 +45,9 @@ public class NovelAPI {
         return article;
     }
 
-    public static ArrayList<Article> getNovelArticles(int novelId, int page) {
+    public static ArrayList<Article> getNovelArticles(int novelId, int page, boolean isOrderUp) {
         ArrayList<Article> articles = new ArrayList<Article>();
-        String message = getMessageFromServer("GET", "/api/v1/articles.json?novel_id=" + novelId + "&page=" + page, null);
+        String message = getMessageFromServer("GET", "/api/v1/articles.json?novel_id=" + novelId + "&page=" + page + "&order=" + isOrderUp, null);
         if (message == null) {
             return null;
         } else {
