@@ -5,20 +5,22 @@ public class Article {
     int    novelId;
     String text;
     String title;
-    String link;
     String subject;
 
     public Article() {
-        this(1, 1, "", "", "", "");
+        this(1, 1, "", "", "");
     }
 
-    public Article(int id, int novelId, String text, String title, String link, String subject) {
+    public Article(int id, int novelId, String text, String title, String subject) {
         this.id = id;
         this.novelId = novelId;
         this.title = title;
         this.text = text;
-        this.link = link;
         this.subject = subject;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getId() {
@@ -35,10 +37,6 @@ public class Article {
 
     public String getTitle() {
         return title;
-    }
-
-    public String getLink() {
-        return link;
     }
 
     public String getSubject() {
