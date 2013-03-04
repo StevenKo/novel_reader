@@ -24,6 +24,67 @@ public class NovelAPI {
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
 
+    public static ArrayList<Novel> getThisMonthHotNovels() {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/this_month_hot.json", null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+
+    }
+
+    public static ArrayList<Novel> getThisWeekHotNovels() {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/this_week_hot.json", null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+    }
+
+    public static ArrayList<Novel> getHotNovels() {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/hot.json", null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+    }
+
+    public static ArrayList<Novel> getCategoryRecommendNovels(int category_id) {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/category_recommend.json?category_id=" + category_id, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+    }
+
+    public static ArrayList<Novel> getCategoryThisWeekHotNovels(int category_id) {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/category_this_week_hot.json?category_id=" + category_id, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+    }
+
+    public static ArrayList<Novel> getCategoryHotNovels(int category_id) {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/category_hot.json?category_id=" + category_id, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+    }
+
     public static Novel getNovel(int novelId) {
         Novel n = null;
         String message = getMessageFromServer("GET", "/api/v1/novels/" + novelId + ".json", null);
@@ -54,35 +115,14 @@ public class NovelAPI {
         return n;
     }
 
-    public static ArrayList<Novel> getCatNovels(int category_id, int page) {
+    public static ArrayList<Novel> getCategoryNovels(int category_id, int page) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
         String message = getMessageFromServer("GET", "/api/v1/novels.json?category_id=" + category_id + "&page=" + page, null);
         if (message == null) {
             return null;
         } else {
-            try {
-                JSONArray novelsArray;
-                novelsArray = new JSONArray(message.toString());
-                for (int i = 0; i < novelsArray.length(); i++) {
-
-                    int id = novelsArray.getJSONObject(i).getInt("id");
-                    String articleNum = novelsArray.getJSONObject(i).getString("article_num");
-                    String author = novelsArray.getJSONObject(i).getString("author");
-                    boolean isSerializing = novelsArray.getJSONObject(i).getBoolean("is_serializing");
-                    String lastUpdate = novelsArray.getJSONObject(i).getString("last_update");
-                    String name = novelsArray.getJSONObject(i).getString("name");
-                    String pic = novelsArray.getJSONObject(i).getString("pic");
-
-                    Novel novel = new Novel(id, name, author, "", pic, 0, articleNum, lastUpdate, isSerializing);
-                    novels.add(novel);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
+            return parseNovel(message, novels);
         }
-        return novels;
     }
 
     public static ArrayList<Category> getCategories() {
@@ -139,5 +179,30 @@ public class NovelAPI {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static ArrayList<Novel> parseNovel(String message, ArrayList<Novel> novels) {
+        try {
+            JSONArray novelsArray;
+            novelsArray = new JSONArray(message.toString());
+            for (int i = 0; i < novelsArray.length(); i++) {
+
+                int id = novelsArray.getJSONObject(i).getInt("id");
+                String articleNum = novelsArray.getJSONObject(i).getString("article_num");
+                String author = novelsArray.getJSONObject(i).getString("author");
+                boolean isSerializing = novelsArray.getJSONObject(i).getBoolean("is_serializing");
+                String lastUpdate = novelsArray.getJSONObject(i).getString("last_update");
+                String name = novelsArray.getJSONObject(i).getString("name");
+                String pic = novelsArray.getJSONObject(i).getString("pic");
+
+                Novel novel = new Novel(id, name, author, "", pic, 0, articleNum, lastUpdate, isSerializing);
+                novels.add(novel);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return novels;
     }
 }
