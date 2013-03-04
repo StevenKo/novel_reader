@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.android.novel.reader.entity.Article;
 import com.android.novel.reader.entity.Category;
 import com.android.novel.reader.entity.Novel;
 
@@ -23,6 +24,34 @@ public class NovelAPI {
     final static String         HOST  = "http://106.187.103.131";
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
+
+    public static ArrayList<Article> getNovelArticles(int novelId, int page) {
+        ArrayList<Article> articles = new ArrayList<Article>();
+        String message = getMessageFromServer("GET", "/api/v1/articles.json?novel_id=" + novelId + "&page=" + page, null);
+        if (message == null) {
+            return null;
+        } else {
+            try {
+                JSONArray novelsArray;
+                novelsArray = new JSONArray(message.toString());
+                for (int i = 0; i < novelsArray.length(); i++) {
+
+                    String link = novelsArray.getJSONObject(i).getString("link");
+                    String subject = novelsArray.getJSONObject(i).getString("subject");
+                    String title = novelsArray.getJSONObject(i).getString("title");
+
+                    Article a = new Article(0, novelId, "", title, link, subject);
+                    articles.add(a);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        return articles;
+    }
 
     public static ArrayList<Novel> getThisMonthHotNovels() {
         ArrayList<Novel> novels = new ArrayList<Novel>();
