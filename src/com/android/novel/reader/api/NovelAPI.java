@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -24,6 +26,40 @@ public class NovelAPI {
     final static String         HOST  = "http://106.187.103.131";
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
+
+    public static ArrayList<Novel> searchNovels(String keyword) {
+        String query;
+        try {
+            query = URLEncoder.encode(keyword, "utf-8");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+            return null;
+        }
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/search.json?search=" + query, null);
+        if (message == null) {
+            return null;
+        } else {
+            try {
+                JSONArray novelsArray;
+                novelsArray = new JSONArray(message.toString());
+                for (int i = 0; i < novelsArray.length(); i++) {
+
+                    int id = novelsArray.getJSONObject(i).getInt("id");
+                    String author = novelsArray.getJSONObject(i).getString("author");
+                    String name = novelsArray.getJSONObject(i).getString("name");
+
+                    Novel novel = new Novel(id, name, author, "", "", 0, "", "", false);
+                    novels.add(novel);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return novels;
+    }
 
     public static Article getArticle(Article article) {
         String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
