@@ -29,6 +29,92 @@ public class NovelAPI {
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
 
+    public static boolean downloadArticle(int novelId, Article article, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        Novel n = db.getNovel(novelId);
+        if (n == null) {
+            downloadNovelInfo(novelId, context);
+        }
+
+        String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
+        if (message == null) {
+            return false;
+        } else {
+            try {
+                JSONObject nObject;
+                nObject = new JSONObject(message.toString());
+                String text = nObject.getString("text");
+                article.setText(text);
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        if (db.getArticle(article.getId()) != null)
+            db.updateArticle(article);
+        else
+            db.insertArticle(article);
+
+        return true;
+    }
+
+    private static boolean downloadNovelInfo(int novelId, Context context) {
+
+        Novel n = null;
+        ArrayList<Article> articles = new ArrayList<Article>();
+
+        String message = getMessageFromServer("GET", "/api/v1/novels/" + novelId + "/detail_for_save.json", null);
+        if (message == null) {
+            return false;
+        } else {
+            try {
+                JSONObject nObject;
+                nObject = new JSONObject(message.toString());
+                nObject = nObject.getJSONObject("novel");
+
+                int novel_id = nObject.getInt("id");
+                String articleNum = nObject.getString("article_num");
+                String author = nObject.getString("author");
+                boolean isSerializing = nObject.getBoolean("is_serializing");
+                String lastUpdate = nObject.getString("last_update");
+                String name = nObject.getString("name");
+                String pic = nObject.getString("pic");
+                String description = nObject.getString("description");
+                int category_id = nObject.getInt("category_id");
+
+                n = new Novel(novel_id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing);
+
+                JSONArray articlesArray = nObject.getJSONArray("articles");
+                for (int i = 0; i < articlesArray.length(); i++) {
+
+                    int article_id = articlesArray.getJSONObject(i).getInt("id");
+                    String subject = articlesArray.getJSONObject(i).getString("subject");
+                    String title = articlesArray.getJSONObject(i).getString("title");
+
+                    Article a = new Article(article_id, novelId, "", title, subject, false);
+                    articles.add(a);
+                }
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        SQLiteNovel db = new SQLiteNovel(context);
+        db.insertNovel(n);
+
+        for (int i = 0; i < articles.size(); i++) {
+            db.insertArticle(articles.get(i));
+        }
+
+        return true;
+    }
+
     public static ArrayList<Novel> searchNovels(String keyword) {
         String query;
         try {
