@@ -156,7 +156,13 @@ public class NovelAPI {
         return novels;
     }
 
-    public static Article getArticle(Article article) {
+    public static Article getArticle(Article article, Context context) {
+
+        if (article.isDownload()) {
+            SQLiteNovel db = new SQLiteNovel(context);
+            return db.getArticle(article.getId());
+        }
+
         String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
         if (message == null) {
             return null;
