@@ -3,6 +3,10 @@
 
     <string name="app_name">Novel</string>
     <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
+    
+    <string name="menu_settings">設定</string>
+    <string name="menu_respond">意見回饋</string>
+    <string name="menu_aboutus">關於我們</string>
+    <string name="menu_recommend">為App評分</string>
 
 </resources>
