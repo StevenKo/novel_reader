@@ -6,6 +6,7 @@ package com.android.novel.reader;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.android.novel.reader.entity.Article;
 import com.viewpagerindicator.TitlePageIndicator;
 import android.content.Context;
 import android.content.res.Resources;
@@ -18,7 +19,26 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 public class MainActivity extends SherlockFragmentActivity {
-
+	
+// 	API: 
+//	搜索: searchNovels(String), 
+//	取某篇章節: getArticle(Article), 
+//	取所有章節: getNovelArticles(int novelId, int page, boolean isOrderUp),
+	
+//	熱門排行
+//	getThisMonthHotNovels(),
+//	getThisWeekHotNovels(),
+//	getHotNovels(),
+//	getCategoryRecommendNovels(int category_id),
+//	getCategoryThisWeekHotNovels(int category_id),
+//	getCategoryHotNovels(int category_id)
+	
+//	取小說:
+//	getNovel(int novelId)
+//	getCategoryNovels(int category_id, int page)
+	
+//	取cagegory: getCategories()
+	
 	private String[] CONTENT;
 	private EditText search;
 	
@@ -86,8 +106,12 @@ public class MainActivity extends SherlockFragmentActivity {
         		kk = CategoryListFragment.newInstance();
         	}else if(position == 1){
         		kk = MyNovelFragment.newInstance();
-        	}else{
-        		kk = TestListFragment.newInstance();
+        	}else if(position == 2) {
+        		kk = WeekFragment.newInstance();
+        	}else if(position == 3){
+        		kk = MonthFragment.newInstance();
+        	}else if(position == 4){
+        		kk = HotNovelsFragment.newInstance();
         	}
             return kk;
         }
