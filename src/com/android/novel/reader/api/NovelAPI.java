@@ -29,6 +29,12 @@ public class NovelAPI {
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
 
+    public static boolean downloadArticles(int novelId, ArrayList<Article> articles, Context context) {
+        for (int i = 0; i < articles.size(); i++)
+            downloadArticle(novelId, articles.get(i), context);
+        return true;
+    }
+
     public static boolean downloadArticle(int novelId, Article article, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         Novel n = db.getNovel(novelId);
