@@ -25,6 +25,10 @@ public class Article {
         this.text = text;
     }
 
+    public void setIsDownloaded(boolean b) {
+        this.isDownloaded = b;
+    }
+
     public int getId() {
         return id;
     }

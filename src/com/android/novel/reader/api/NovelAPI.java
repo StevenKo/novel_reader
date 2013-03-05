@@ -15,8 +15,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.android.novel.db.SQLiteNovel;
 import com.android.novel.reader.entity.Article;
 import com.android.novel.reader.entity.Category;
 import com.android.novel.reader.entity.Novel;
@@ -81,7 +83,7 @@ public class NovelAPI {
         return article;
     }
 
-    public static ArrayList<Article> getNovelArticles(int novelId, int page, boolean isOrderUp) {
+    public static ArrayList<Article> getNovelArticles(int novelId, int page, boolean isOrderUp, Context context) {
         ArrayList<Article> articles = new ArrayList<Article>();
         String message = getMessageFromServer("GET", "/api/v1/articles.json?novel_id=" + novelId + "&page=" + page + "&order=" + isOrderUp, null);
         if (message == null) {
@@ -105,6 +107,9 @@ public class NovelAPI {
                 return null;
             }
         }
+
+        SQLiteNovel db = new SQLiteNovel(context);
+        articles = db.getArticleDownloadInfo(articles);
 
         return articles;
     }

@@ -1,6 +1,7 @@
 package com.android.novel.db;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -95,6 +96,31 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         }
         cursor.close();
         return novel;
+    }
+
+    public ArrayList<Article> getArticleDownloadInfo(ArrayList<Article> articles) {
+        HashMap hash = new HashMap();
+
+        String idLst = "";
+        for (int i = 0; i < articles.size(); i++)
+            idLst = articles.get(i).getId() + "," + idLst;
+        idLst = idLst.substring(0, idLst.length() - 1);
+
+        Cursor cursor = null;
+        cursor = db.rawQuery("SELECT id,is_downloaded FROM " + ArtcileSchema.TABLE_NAME + " WHERE id in (" + idLst + ")", null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            Boolean is_downloaded = cursor.getInt(1) > 0;
+            hash.put(id, is_downloaded);
+        }
+
+        for (int i = 0; i < articles.size(); i++) {
+            Boolean value = (Boolean) hash.get(articles.get(i).getId());
+            if (value != null)
+                articles.get(i).setIsDownloaded(value);
+        }
+
+        return articles;
     }
 
     public ArrayList<Article> getNovelArticles(int novel_id) {
