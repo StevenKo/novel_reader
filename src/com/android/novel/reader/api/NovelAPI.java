@@ -51,6 +51,7 @@ public class NovelAPI {
                 nObject = new JSONObject(message.toString());
                 String text = nObject.getString("text");
                 article.setText(text);
+                article.setIsDownloaded(true);
 
             } catch (JSONException e) {
 
