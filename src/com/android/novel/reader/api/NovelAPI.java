@@ -96,7 +96,7 @@ public class NovelAPI {
                     String subject = novelsArray.getJSONObject(i).getString("subject");
                     String title = novelsArray.getJSONObject(i).getString("title");
 
-                    Article a = new Article(id, novelId, "", title, subject);
+                    Article a = new Article(id, novelId, "", title, subject, false);
                     articles.add(a);
                 }
 

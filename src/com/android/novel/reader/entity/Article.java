@@ -1,22 +1,24 @@
 package com.android.novel.reader.entity;
 
 public class Article {
-    int    id;
-    int    novelId;
-    String text;
-    String title;
-    String subject;
+    int     id;
+    int     novelId;
+    String  text;
+    String  title;
+    String  subject;
+    boolean isDownloaded;
 
     public Article() {
-        this(1, 1, "", "", "");
+        this(1, 1, "", "", "", false);
     }
 
-    public Article(int id, int novelId, String text, String title, String subject) {
+    public Article(int id, int novelId, String text, String title, String subject, boolean isDownloaded) {
         this.id = id;
         this.novelId = novelId;
         this.title = title;
         this.text = text;
         this.subject = subject;
+        this.isDownloaded = isDownloaded;
     }
 
     public void setText(String text) {
@@ -41,5 +43,9 @@ public class Article {
 
     public String getSubject() {
         return subject;
+    }
+
+    public boolean isDownload() {
+        return isDownloaded;
     }
 }
