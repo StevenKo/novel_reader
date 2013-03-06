@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.android.novel.reader.entity.Article;
+import com.android.novel.reader.entity.Bookmark;
 import com.android.novel.reader.entity.Novel;
 
 public class SQLiteNovel extends SQLiteOpenHelper {
@@ -43,6 +44,14 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         String IS_DOWNLOADED = "is_downloaded";
     }
 
+    public interface BookmarkSchema {
+        String TABLE_NAME = "bookmarks";
+        String ID         = "id";
+        String NOVEL_ID   = "novel_id";
+        String ARTICLE_ID = "article_id";
+        String READ_RATE  = "read_rate";
+    }
+
     public SQLiteNovel(Context context) {
         super(context, DB_NAME, null, DATABASE_VERSION);
         ctx = context;
@@ -61,6 +70,74 @@ public class SQLiteNovel extends SQLiteOpenHelper {
                 + ArtcileSchema.SUBJECT + " TEXT NOT NULL" + "," + ArtcileSchema.IS_DOWNLOADED + " INTEGER NOT NULL" + "," + "FOREIGN KEY("
                 + ArtcileSchema.NOVEL_ID + ") REFERENCES " + NovelSchema.TABLE_NAME + "(" + NovelSchema.ID + ") ON UPDATE CASCADE" + ");");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + BookmarkSchema.TABLE_NAME + " (" + BookmarkSchema.ID + " INTEGER PRIMARY KEY" + ","
+                + BookmarkSchema.NOVEL_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.ARTICLE_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.READ_RATE
+                + " INTEGER NOT NULL" + ");");
+
+    }
+
+    public boolean deleteNovel(Novel novel) {
+        Cursor cursor = db.rawQuery("DELETE FROM novels WHERE `novels`.`id` = ?", new String[] { novel.getId() + "" });
+        cursor.moveToFirst();
+        cursor.close();
+        return true;
+    }
+
+    public boolean deleteBookmark(Bookmark bookmark) {
+        Cursor cursor = db.rawQuery("DELETE FROM bookmarks WHERE `bookmarks`.`id` = ?", new String[] { bookmark.getId() + "" });
+        cursor.moveToFirst();
+        cursor.close();
+        return true;
+    }
+
+    public long insertBookmark(Bookmark bookmark) {
+        ContentValues args = new ContentValues();
+        args.put(BookmarkSchema.NOVEL_ID, bookmark.getNovelId());
+        args.put(BookmarkSchema.ARTICLE_ID, bookmark.getArticleId());
+        args.put(BookmarkSchema.READ_RATE, bookmark.getReadRate());
+        return db.insert(BookmarkSchema.TABLE_NAME, null, args);
+    }
+
+    public boolean updateBookmark(Bookmark bookmark) {
+        Cursor cursor = db.rawQuery("UPDATE bookmarks SET `novel_id` = ?, `article_id` = ?, `read_rate` = ? WHERE `bookmarks`.`id` = ?", new String[] {
+                bookmark.getNovelId() + "", bookmark.getArticleId() + "", bookmark.getReadRate() + "", bookmark.getId() + "" });
+        cursor.moveToFirst();
+        cursor.close();
+        return true;
+    }
+
+    public ArrayList<Bookmark> getAllBookmarks() {
+        Cursor cursor = null;
+        ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
+        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME, null);
+
+        while (cursor.moveToNext()) {
+            int ID = cursor.getInt(0);
+            int NOVEL_ID = cursor.getInt(1);
+            int ARTICLE_ID = cursor.getInt(2);
+            int READ_RATE = cursor.getInt(3);
+
+            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE);
+            bookmarks.add(bookmark);
+        }
+        return bookmarks;
+    }
+
+    public ArrayList<Bookmark> getNovelBookmarks(int novelId) {
+        Cursor cursor = null;
+        ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
+        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE novel_id = \'" + novelId + "\'", null);
+
+        while (cursor.moveToNext()) {
+            int ID = cursor.getInt(0);
+            int NOVEL_ID = cursor.getInt(1);
+            int ARTICLE_ID = cursor.getInt(2);
+            int READ_RATE = cursor.getInt(3);
+
+            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE);
+            bookmarks.add(bookmark);
+        }
+        return bookmarks;
     }
 
     public boolean updateNovel(Novel novel) {

@@ -20,6 +20,7 @@ import android.util.Log;
 
 import com.android.novel.db.SQLiteNovel;
 import com.android.novel.reader.entity.Article;
+import com.android.novel.reader.entity.Bookmark;
 import com.android.novel.reader.entity.Category;
 import com.android.novel.reader.entity.Novel;
 
@@ -28,6 +29,39 @@ public class NovelAPI {
     final static String         HOST  = "http://106.187.103.131";
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
+
+    public static boolean deleteNovel(Novel novel, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.deleteNovel(novel);
+    }
+
+    public static ArrayList<Bookmark> getNovelBookmarks(int novelId, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.getNovelBookmarks(novelId);
+    }
+
+    public static ArrayList<Bookmark> getAllBookmarks(Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.getAllBookmarks();
+    }
+
+    public static boolean updateBookmark(Bookmark bookmark, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.updateBookmark(bookmark);
+    }
+
+    public static boolean deleteBookmark(Bookmark bookmark, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        db.deleteBookmark(bookmark);
+        return true;
+    }
+
+    public static Bookmark insertBookmark(Bookmark bookmark, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        int id = (int) db.insertBookmark(bookmark);
+        bookmark.setId(id);
+        return bookmark;
+    }
 
     public static ArrayList<Novel> getDownloadedNovels(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
