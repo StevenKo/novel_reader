@@ -1,13 +1,5 @@
 package com.android.novel.reader;
 
-
-
-
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.android.novel.reader.entity.Article;
-import com.viewpagerindicator.TitlePageIndicator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -18,7 +10,17 @@ import android.support.v4.view.ViewPager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-public class MainActivity extends SherlockFragmentActivity {
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.viewpagerindicator.TitlePageIndicator;
+import com.kosbrother.fragments.CategoryNewNovelsFragment;
+import com.kosbrother.fragments.CategoryRecommendFragment;
+import com.kosbrother.fragments.CategoryWeekFragment;
+import com.kosbrother.fragments.CategroyHotNovelsFragment;
+
+public class CategoryActivity extends SherlockFragmentActivity {
 	
 // 	API: 
 //	搜索: searchNovels(String), 
@@ -41,14 +43,27 @@ public class MainActivity extends SherlockFragmentActivity {
 	
 	private String[] CONTENT;
 	private EditText search;
+	private Bundle mBundle;
+	private String categoryName;
+	private int categoryId;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_titles);
         
+        
+        final ActionBar ab = getSupportActionBar();		     
+        mBundle = this.getIntent().getExtras();
+        categoryName = mBundle.getString("CategoryName");
+        categoryId = mBundle.getInt("CategoryId");
+        
+        ab.setTitle(categoryName);
+        ab.setDisplayHomeAsUpEnabled(true);
+        
+        
         Resources res = getResources();
-        CONTENT = res.getStringArray(R.array.sections);
+        CONTENT = res.getStringArray(R.array.category_sections);
         
         FragmentStatePagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
 
@@ -93,6 +108,18 @@ public class MainActivity extends SherlockFragmentActivity {
         
         return true;
     }
+	
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+
+	    int itemId = item.getItemId();
+	    switch (itemId) {
+	    case android.R.id.home:
+	        finish();
+	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+	        break;
+	    }
+	    return true;
+	}
     
     class NovelPagerAdapter extends FragmentStatePagerAdapter {
         public NovelPagerAdapter(FragmentManager fm) {
@@ -103,15 +130,13 @@ public class MainActivity extends SherlockFragmentActivity {
         public Fragment getItem(int position) {        	
         	Fragment kk = new Fragment();
         	if( position == 0){
-        		kk = CategoryListFragment.newInstance(MainActivity.this);
+        		kk = CategroyHotNovelsFragment.newInstance();
         	}else if(position == 1){
-        		kk = MyNovelFragment.newInstance();
+        		kk = CategoryRecommendFragment.newInstance();
         	}else if(position == 2) {
-        		kk = WeekFragment.newInstance();
+        		kk = CategoryWeekFragment.newInstance();
         	}else if(position == 3){
-        		kk = MonthFragment.newInstance();
-        	}else if(position == 4){
-        		kk = HotNovelsFragment.newInstance();
+        		kk = CategoryNewNovelsFragment.newInstance();
         	}
             return kk;
         }
