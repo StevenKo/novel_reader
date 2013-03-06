@@ -130,13 +130,13 @@ public class CategoryActivity extends SherlockFragmentActivity {
         public Fragment getItem(int position) {        	
         	Fragment kk = new Fragment();
         	if( position == 0){
-        		kk = CategroyHotNovelsFragment.newInstance();
+        		kk = CategroyHotNovelsFragment.newInstance(categoryId);
         	}else if(position == 1){
-        		kk = CategoryRecommendFragment.newInstance();
+        		kk = CategoryRecommendFragment.newInstance(categoryId);
         	}else if(position == 2) {
-        		kk = CategoryWeekFragment.newInstance();
+        		kk = CategoryWeekFragment.newInstance(categoryId);
         	}else if(position == 3){
-        		kk = CategoryNewNovelsFragment.newInstance();
+        		kk = CategoryNewNovelsFragment.newInstance(categoryId);
         	}
             return kk;
         }

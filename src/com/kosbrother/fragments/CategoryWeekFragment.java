@@ -29,12 +29,15 @@ public final class CategoryWeekFragment extends Fragment {
 	private Boolean checkLoad = true;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
+	private LinearLayout noDataLayout;
+	private static int id;
 	
-    public static CategoryWeekFragment newInstance() {     
-   	 
+    public static CategoryWeekFragment newInstance(int categoryId) {     
+     	 
 
-//  	  myPage = page;
-//  	  novels = theNovels;
+//	  myPage = page;
+//	  novels = theNovels;
+    	id = categoryId;
  
   	  CategoryWeekFragment fragment = new CategoryWeekFragment();
   	    
@@ -57,6 +60,7 @@ public final class CategoryWeekFragment extends Fragment {
     	View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
     	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
+    	noDataLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_no_data);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
@@ -94,7 +98,7 @@ public final class CategoryWeekFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-        	novels = NovelAPI.getThisWeekHotNovels(); 
+        	novels = NovelAPI.getCategoryThisWeekHotNovels(id); 
 //        	moreNovels = NovelAPI.getThisWeekHotNovels(); 
 
             return null;
@@ -105,25 +109,9 @@ public final class CategoryWeekFragment extends Fragment {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
-            loadmoreLayout.setVisibility(View.GONE);
-   
-        	if(moreNovels!= null){
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-        	}
+            loadmoreLayout.setVisibility(View.GONE);            
             
-            
-            if(novels !=null){
+            if(novels !=null && novels.size()!= 0){
           	  try{
           		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
           		myGrid.setAdapter(myGridViewAdapter);
@@ -131,8 +119,10 @@ public final class CategoryWeekFragment extends Fragment {
           		 
           	  }
             }else{
-          	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
-          	  myGrid.setAdapter(nothingAdapter);
+            	
+              noDataLayout.setVisibility(View.VISIBLE);
+//        	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
+//        	  myGrid.setAdapter(nothingAdapter);
             }
 
         }

@@ -29,6 +29,18 @@
             android:screenOrientation="portrait" 
             >
         </activity>
+        <activity
+            android:name=".NovelIntroduceActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" 
+            >
+        </activity>
+        <activity
+            android:name=".ArticleActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" 
+            >
+        </activity>
     </application>
     
     <uses-permission android:name="android.permission.INTERNET" />

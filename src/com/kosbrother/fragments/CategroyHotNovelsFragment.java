@@ -28,13 +28,15 @@ public class CategroyHotNovelsFragment extends Fragment {
 	private Boolean checkLoad = true;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
+	private LinearLayout noDataLayout;
+	private static int id;
 	
-    public static CategroyHotNovelsFragment newInstance() {     
+    public static CategroyHotNovelsFragment newInstance(int categoryId) {     
    	 
 
 //  	  myPage = page;
 //  	  novels = theNovels;
- 
+    	id = categoryId;
     	CategroyHotNovelsFragment fragment = new CategroyHotNovelsFragment();
   	    
       return fragment;
@@ -56,6 +58,7 @@ public class CategroyHotNovelsFragment extends Fragment {
     	View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
     	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
+    	noDataLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_no_data);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
@@ -93,7 +96,7 @@ public class CategroyHotNovelsFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-        	novels =  NovelAPI.getHotNovels(); 
+        	novels =  NovelAPI.getCategoryHotNovels(id); 
 //        	moreNovels = NovelAPI.getHotNovels(); 
 
             return null;
@@ -105,24 +108,9 @@ public class CategroyHotNovelsFragment extends Fragment {
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
             loadmoreLayout.setVisibility(View.GONE);
-   
-        	if(moreNovels!= null){
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-        	}
             
             
-            if(novels !=null){
+            if(novels !=null && novels.size()!= 0){
           	  try{
           		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
           		myGrid.setAdapter(myGridViewAdapter);
@@ -130,8 +118,9 @@ public class CategroyHotNovelsFragment extends Fragment {
           		 
           	  }
             }else{
-          	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
-          	  myGrid.setAdapter(nothingAdapter);
+            	noDataLayout.setVisibility(View.VISIBLE);
+//        	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
+//        	  myGrid.setAdapter(nothingAdapter);
             }
 
         }

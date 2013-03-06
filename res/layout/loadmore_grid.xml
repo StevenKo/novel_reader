@@ -51,5 +51,19 @@
 	        android:visibility="visible"
 	        />
 	</LinearLayout>
+	
+    <LinearLayout 
+   	 	android:id="@+id/layout_no_data"
+   	 	android:layout_width="fill_parent"
+   	 	android:layout_height="fill_parent"
+     	android:gravity="center"
+     	android:visibility="gone"
+     	>
+	    <TextView 
+	        android:layout_width="wrap_content"
+   	 		android:layout_height="wrap_content"
+   	 		android:text="無資料"
+	        />
+	</LinearLayout>
 
 </LinearLayout>
