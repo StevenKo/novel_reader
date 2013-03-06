@@ -29,6 +29,11 @@ public class NovelAPI {
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
 
+    public static ArrayList<Novel> getDownloadedNovels(Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.getNovels();
+    }
+
     public static boolean downloadArticles(int novelId, ArrayList<Article> articles, Context context) {
         for (int i = 0; i < articles.size(); i++)
             downloadArticle(novelId, articles.get(i), context);
@@ -37,9 +42,9 @@ public class NovelAPI {
 
     public static boolean downloadArticle(int novelId, Article article, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
-        Novel n = db.getNovel(novelId);
-        if (n == null) {
-            downloadNovelInfo(novelId, context);
+
+        if (!db.isNovelExists(novelId)) {
+            downloadOrUpdateNovelInfo(novelId, context);
         }
 
         String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
@@ -60,7 +65,7 @@ public class NovelAPI {
             }
         }
 
-        if (db.getArticle(article.getId()) != null)
+        if (db.isArticleExists(article.getId()))
             db.updateArticle(article);
         else
             db.insertArticle(article);
@@ -68,7 +73,7 @@ public class NovelAPI {
         return true;
     }
 
-    private static boolean downloadNovelInfo(int novelId, Context context) {
+    public static boolean downloadOrUpdateNovelInfo(int novelId, Context context) {
 
         Novel n = null;
         ArrayList<Article> articles = new ArrayList<Article>();
@@ -113,10 +118,16 @@ public class NovelAPI {
         }
 
         SQLiteNovel db = new SQLiteNovel(context);
-        db.insertNovel(n);
+        if (db.isNovelExists(novelId))
+            db.updateNovel(n);
+        else
+            db.insertNovel(n);
 
         for (int i = 0; i < articles.size(); i++) {
-            db.insertArticle(articles.get(i));
+            if (db.isArticleExists(articles.get(i).getId()))
+                db.updateArticle(articles.get(i));
+            else
+                db.insertArticle(articles.get(i));
         }
 
         return true;
@@ -158,8 +169,8 @@ public class NovelAPI {
 
     public static Article getArticle(Article article, Context context) {
 
-        if (article.isDownload()) {
-            SQLiteNovel db = new SQLiteNovel(context);
+        SQLiteNovel db = new SQLiteNovel(context);
+        if (db.isArticleExists(article.getId())) {
             return db.getArticle(article.getId());
         }
 
@@ -180,6 +191,11 @@ public class NovelAPI {
             }
         }
         return article;
+    }
+
+    public static ArrayList<Article> getDownloadedNovelArticles(int novelId, boolean isOrderUp, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.getNovelArticles(novelId, isOrderUp);
     }
 
     public static ArrayList<Article> getNovelArticles(int novelId, int page, boolean isOrderUp, Context context) {
@@ -274,7 +290,13 @@ public class NovelAPI {
         }
     }
 
-    public static Novel getNovel(int novelId) {
+    public static Novel getNovel(int novelId, Context context) {
+
+        SQLiteNovel db = new SQLiteNovel(context);
+        if (db.isNovelExists(novelId)) {
+            return db.getNovel(novelId);
+        }
+
         Novel n = null;
         String message = getMessageFromServer("GET", "/api/v1/novels/" + novelId + ".json", null);
         if (message == null) {

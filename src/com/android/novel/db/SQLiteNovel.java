@@ -123,10 +123,16 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         return articles;
     }
 
-    public ArrayList<Article> getNovelArticles(int novel_id) {
+    public ArrayList<Article> getNovelArticles(int novel_id, boolean isOrderUp) {
         Cursor cursor = null;
         ArrayList<Article> articles = new ArrayList<Article>();
-        cursor = db.rawQuery("SELECT id,novel_id,title,subject,is_downloaded FROM " + ArtcileSchema.TABLE_NAME + " WHERE id = \'" + novel_id + "\'", null);
+        if (isOrderUp)
+            cursor = db.rawQuery("SELECT id,novel_id,title,subject,is_downloaded FROM " + ArtcileSchema.TABLE_NAME + " WHERE novel_id = \'" + novel_id + "\'",
+                    null);
+        else
+            cursor = db.rawQuery("SELECT id,novel_id,title,subject,is_downloaded FROM " + ArtcileSchema.TABLE_NAME + " WHERE novel_id = \'" + novel_id
+                    + "\' ORDER BY id DESC", null);
+
         while (cursor.moveToNext()) {
             int ID = cursor.getInt(0);
             int NOVEL_ID = cursor.getInt(1);
@@ -137,6 +143,20 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             articles.add(article);
         }
         return articles;
+    }
+
+    public boolean isArticleExists(int articleId) {
+        Cursor cursor = db.rawQuery("select 1 from " + ArtcileSchema.TABLE_NAME + " where id = " + articleId, null);
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+
+    public boolean isNovelExists(int novelId) {
+        Cursor cursor = db.rawQuery("select 1 from " + NovelSchema.TABLE_NAME + " where id = " + novelId, null);
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
     }
 
     public Article getArticle(int article_id) {
