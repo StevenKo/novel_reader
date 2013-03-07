@@ -45,11 +45,13 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     }
 
     public interface BookmarkSchema {
-        String TABLE_NAME = "bookmarks";
-        String ID         = "id";
-        String NOVEL_ID   = "novel_id";
-        String ARTICLE_ID = "article_id";
-        String READ_RATE  = "read_rate";
+        String TABLE_NAME    = "bookmarks";
+        String ID            = "id";
+        String NOVEL_ID      = "novel_id";
+        String ARTICLE_ID    = "article_id";
+        String READ_RATE     = "read_rate";
+        String NOVEL_NAME    = "novel_name";
+        String ARTICLE_TITLE = "article_title";
     }
 
     public SQLiteNovel(Context context) {
@@ -72,7 +74,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + BookmarkSchema.TABLE_NAME + " (" + BookmarkSchema.ID + " INTEGER PRIMARY KEY" + ","
                 + BookmarkSchema.NOVEL_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.ARTICLE_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.READ_RATE
-                + " INTEGER NOT NULL" + ");");
+                + " INTEGER NOT NULL" + "," + BookmarkSchema.NOVEL_NAME + " TEXT NOT NULL" + "," + BookmarkSchema.ARTICLE_TITLE + " TEXT NOT NULL" + ");");
 
     }
 
@@ -95,12 +97,16 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         args.put(BookmarkSchema.NOVEL_ID, bookmark.getNovelId());
         args.put(BookmarkSchema.ARTICLE_ID, bookmark.getArticleId());
         args.put(BookmarkSchema.READ_RATE, bookmark.getReadRate());
+        args.put(BookmarkSchema.NOVEL_NAME, bookmark.getNovelName());
+        args.put(BookmarkSchema.ARTICLE_TITLE, bookmark.getArticleTitle());
         return db.insert(BookmarkSchema.TABLE_NAME, null, args);
     }
 
     public boolean updateBookmark(Bookmark bookmark) {
-        Cursor cursor = db.rawQuery("UPDATE bookmarks SET `novel_id` = ?, `article_id` = ?, `read_rate` = ? WHERE `bookmarks`.`id` = ?", new String[] {
-                bookmark.getNovelId() + "", bookmark.getArticleId() + "", bookmark.getReadRate() + "", bookmark.getId() + "" });
+        Cursor cursor = db.rawQuery(
+                "UPDATE bookmarks SET `novel_id` = ?, `article_id` = ?, `read_rate` = ? , `novel_name` = ?, `article_title` = ? WHERE `bookmarks`.`id` = ?",
+                new String[] { bookmark.getNovelId() + "", bookmark.getArticleId() + "", bookmark.getReadRate() + "", bookmark.getNovelName(),
+                        bookmark.getArticleTitle(), bookmark.getId() + "" });
         cursor.moveToFirst();
         cursor.close();
         return true;
@@ -116,8 +122,10 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             int NOVEL_ID = cursor.getInt(1);
             int ARTICLE_ID = cursor.getInt(2);
             int READ_RATE = cursor.getInt(3);
+            String NOVEL_NAME = cursor.getString(4);
+            String ARTICLE_TITLE = cursor.getString(5);
 
-            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE);
+            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE);
             bookmarks.add(bookmark);
         }
         return bookmarks;
@@ -133,8 +141,10 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             int NOVEL_ID = cursor.getInt(1);
             int ARTICLE_ID = cursor.getInt(2);
             int READ_RATE = cursor.getInt(3);
+            String NOVEL_NAME = cursor.getString(4);
+            String ARTICLE_TITLE = cursor.getString(5);
 
-            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE);
+            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE);
             bookmarks.add(bookmark);
         }
         return bookmarks;
