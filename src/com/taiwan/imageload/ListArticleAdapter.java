@@ -3,11 +3,16 @@ package com.taiwan.imageload;
 import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.android.novel.reader.NovelIntroduceActivity;
 import com.android.novel.reader.R;
 import com.android.novel.reader.entity.Article;
 
@@ -36,10 +41,12 @@ public class ListArticleAdapter extends BaseAdapter {
         return position;
     }
     
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View vi=convertView;
         if(convertView==null)
             vi = inflater.inflate(R.layout.item_list, null);
+        
+        
 	        TextView text=(TextView)vi.findViewById(R.id.text_category_name);
 	        TextView testId = (TextView)vi.findViewById(R.id.text_category_id);
 	        text.setText(data.get(position).getTitle());

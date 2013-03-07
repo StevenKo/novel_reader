@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+   <ScrollView 
+       android:layout_width="fill_parent"
+	   android:layout_height="wrap_content"
+       >
+    
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:orientation="vertical"
+	        >
+	    
+		    <TextView 
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="文字大小:"
+		    	android:layout_marginLeft="10dp"
+		    	android:textSize="18dp"
+		    	android:layout_marginTop="10dp"
+		        />
+		    
+		     <SeekBar
+		        android:id="@+id/seekBar1"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_margin="10dp" />
+		     
+		     <TextView 
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="文字預覽:小說王"
+		    	android:layout_marginLeft="10dp"
+		        />
+		    
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="1dp"
+		        android:background="#A3A3A3"
+		        android:layout_margin="10dp"
+		        >      
+		    </LinearLayout>
+		    
+		    <TextView 
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="繁簡字體選擇:"
+		    	android:layout_marginLeft="10dp"
+		    	android:textSize="18dp"
+		    	android:layout_marginTop="10dp"
+		    	android:layout_marginBottom="10dp"
+		        />
+		    
+		    <RadioGroup
+			    android:id="@+id/myRadioGroup"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:layout_marginLeft="10dp"
+			    >
+			    <!--第一個RadioButton -->
+			    <RadioButton
+			      android:id="@+id/myRadioButton1"
+			      android:layout_width="wrap_content"
+			      android:layout_height="wrap_content"
+			      android:text="繁體"
+			    />
+			    <!--第二個RadioButton -->
+			    <RadioButton
+			      android:id="@+id/myRadioButton2"
+			      android:layout_width="wrap_content"
+			      android:layout_height="wrap_content"
+			      android:text="簡體"
+			    />
+			</RadioGroup>
+			
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="1dp"
+		        android:background="#A3A3A3"
+		        android:layout_margin="10dp"
+		        >      
+		    </LinearLayout>
+		    
+		    <TextView 
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="閱讀方向:"
+		    	android:layout_marginLeft="10dp"
+		    	android:textSize="18dp"
+		    	android:layout_marginTop="10dp"
+		    	android:layout_marginBottom="10dp"
+		        />
+		    
+		    <RadioGroup
+			    android:id="@+id/myRadioGroup_reading_direction"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:layout_marginLeft="10dp"
+			    >
+			    <!--第一個RadioButton -->
+			    <RadioButton
+			      android:id="@+id/myRadioButton_reading_direction"
+			      android:layout_width="wrap_content"
+			      android:layout_height="wrap_content"
+			      android:text="直向"
+			    />
+			    <!--第二個RadioButton -->
+			    <RadioButton
+			      android:id="@+id/myRadioButton2_reading_direction"
+			      android:layout_width="wrap_content"
+			      android:layout_height="wrap_content"
+			      android:text="橫向"
+			    />
+			</RadioGroup>
+			
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="1dp"
+		        android:background="#A3A3A3"
+		        android:layout_margin="10dp"
+		        >      
+		    </LinearLayout>
+		    
+		    <TextView 
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="點擊換頁:"
+		    	android:layout_marginLeft="10dp"
+		    	android:textSize="18dp"
+		    	android:layout_marginTop="10dp"
+		    	android:layout_marginBottom="10dp"
+		        />
+		    
+		    <RadioGroup
+			    android:id="@+id/myRadioGroup_reading_direction"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:layout_marginLeft="10dp"
+			    >
+			    <!--第一個RadioButton -->
+			    <RadioButton
+			      android:id="@+id/myRadioButton_reading_direction"
+			      android:layout_width="wrap_content"
+			      android:layout_height="wrap_content"
+			      android:text="開啟"
+			    />
+			    <!--第二個RadioButton -->
+			    <RadioButton
+			      android:id="@+id/myRadioButton2_reading_direction"
+			      android:layout_width="wrap_content"
+			      android:layout_height="wrap_content"
+			      android:text="關閉"
+			    />
+			</RadioGroup>
+			
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="1dp"
+		        android:background="#A3A3A3"
+		        android:layout_margin="10dp"
+		        >      
+		    </LinearLayout>
+		    
+		    <TextView 
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="停止休眠:"
+		    	android:layout_marginLeft="10dp"
+		    	android:textSize="18dp"
+		    	android:layout_marginTop="10dp"
+		    	android:layout_marginBottom="10dp"
+		        />
+		    
+		    <RadioGroup
+			    android:id="@+id/myRadioGroup_reading_direction"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:orientation="vertical"
+			    android:layout_marginLeft="10dp"
+			    >
+			    <!--第一個RadioButton -->
+			    <RadioButton
+			      android:id="@+id/myRadioButton_reading_direction"
+			      android:layout_width="wrap_content"
+			      android:layout_height="wrap_content"
+			      android:text="開啟停止休眠"
+			    />
+			    <!--第二個RadioButton -->
+			    <RadioButton
+			      android:id="@+id/myRadioButton2_reading_direction"
+			      android:layout_width="wrap_content"
+			      android:layout_height="wrap_content"
+			      android:text="關閉停止休眠"
+			    />
+			</RadioGroup>
+	    
+	    </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

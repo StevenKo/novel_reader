@@ -4,16 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
        
-    <ScrollView 
+    <com.kosbrother.tool.DetectScrollView android:id="@+id/article_scrollview"
        android:layout_width="fill_parent"
        android:layout_height="0dp"
        android:layout_weight="1"
         >
-    <TextView 
-        android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-        />
-    </ScrollView>
+	    <TextView  android:id="@+id/article_text"
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	        />
+    </com.kosbrother.tool.DetectScrollView>
     
     <RelativeLayout android:id="@+id/bottom_buttons"
 	     android:layout_width="fill_parent"
@@ -21,20 +21,20 @@
        	 android:gravity="center_vertical"
        	 android:orientation="horizontal"
 	      >
-	     <Button android:id="@+id/button_up"
+	     <Button android:id="@+id/article_button_up"
 	        android:layout_width="wrap_content"
        	 	android:layout_height="wrap_content" 	 	
        	 	android:layout_alignParentLeft="true"
        	 	android:layout_marginLeft="10dp"
        	 	android:text="上一篇"
 	         />
-	     <TextView 
+	     <TextView android:id="@+id/article_percent"
 	         android:layout_width="wrap_content"
        	 	 android:layout_height="wrap_content"
        	 	 android:layout_centerInParent="true"
        	 	 android:text="57%"
 	         />     
-	     <Button android:id="@+id/button_down"
+	     <Button android:id="@+id/article_button_down"
 	       	android:layout_width="wrap_content"
        	 	android:layout_height="wrap_content" 	
        	 	android:layout_alignParentRight="true"

@@ -3,17 +3,20 @@ package com.android.novel.reader;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -105,6 +108,18 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 			}
 		});
 		
+		novelListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {														
+				Intent intent = new Intent(NovelIntroduceActivity.this, ArticleActivity.class);
+				mBundle.putInt("ArticleId", articleList.get(position).getId());
+				mBundle.putString("ArticleTitle", articleList.get(position).getTitle());
+				intent.putExtras(mBundle);
+				startActivity(intent);		
+			}
+		});
+		
 	}
 
 	@Override
@@ -149,6 +164,12 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	        finish();
 	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
 	        break;
+	    case 0: // setting
+	    		Intent intent = new Intent(NovelIntroduceActivity.this, SettingActivity.class);
+	    		startActivity(intent); 
+	        break;
+	        
+	        
 	    }
 	    return true;
 	}
@@ -158,7 +179,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	        @Override
 	        protected Object doInBackground(Object... params) {
 	            // TODO Auto-generated method stub
-	        	articleList = NovelAPI.getNovelArticles(novelId, 0, true, NovelIntroduceActivity.this);
+	        	articleList = NovelAPI.getNovelArticles(novelId, 1, true, NovelIntroduceActivity.this);
 	            return null;
 	        }
 
