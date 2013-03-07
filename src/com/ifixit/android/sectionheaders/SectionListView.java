@@ -1,111 +1,95 @@
 package com.ifixit.android.sectionheaders;
 
-import com.jumplife.movieinfo.R;
-
 import android.content.Context;
-
-
 import android.util.AttributeSet;
-
 import android.view.LayoutInflater;
 import android.view.View;
-
 import android.widget.AbsListView;
-import android.widget.ListView;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 
-public class SectionListView extends FrameLayout implements
- AbsListView.OnScrollListener {
-   private ListView mListView;
-   private SectionHeadersAdapter mAdapter;
-   private View mPinnedHeader;
-   private int mHeaderPosition = -1;
+import com.android.novel.reader.R;
 
-   public SectionListView(Context context) {
-      super(context);
-      init(context);
-   }
+public class SectionListView extends FrameLayout implements AbsListView.OnScrollListener {
+    private ListView              mListView;
+    private SectionHeadersAdapter mAdapter;
+    private View                  mPinnedHeader;
+    private int                   mHeaderPosition = -1;
 
-   public SectionListView(Context context, AttributeSet attrs) {
-      super(context, attrs);
-      init(context);
-   }
+    public SectionListView(Context context) {
+        super(context);
+        init(context);
+    }
 
-   public SectionListView(Context context, AttributeSet attrs, int def) {
-      super(context, attrs, def);
-      init(context);
-   }
+    public SectionListView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
 
-   private void init(Context context) {
-      LayoutInflater inflater = (LayoutInflater)context.getSystemService(
-       Context.LAYOUT_INFLATER_SERVICE);
+    public SectionListView(Context context, AttributeSet attrs, int def) {
+        super(context, attrs, def);
+        init(context);
+    }
 
-      inflater.inflate(R.layout.section_list_view, this, true);
+    private void init(Context context) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-      mListView = (ListView)findViewById(R.id.list_view);
-   }
+        inflater.inflate(R.layout.section_list_view, this, true);
 
-   public ListView getListView() {
-      return mListView;
-   }
+        mListView = (ListView) findViewById(R.id.list_view);
+    }
 
-   public void setAdapter(SectionHeadersAdapter adapter) {
-      mAdapter = adapter;
-      mListView.setAdapter(mAdapter);
-      mListView.setOnScrollListener(this);
-      mListView.setTextFilterEnabled(true);
-   }
+    public ListView getListView() {
+        return mListView;
+    }
 
-   public void onScroll(AbsListView view, int firstVisibleItem,
-    int visibleItemCount, int totalItemCount) {
-      int headerPos;
+    public void setAdapter(SectionHeadersAdapter adapter) {
+        mAdapter = adapter;
+        mListView.setAdapter(mAdapter);
+        mListView.setOnScrollListener(this);
+        mListView.setTextFilterEnabled(true);
+    }
 
-      if ((headerPos = mAdapter.getHeaderPosition(firstVisibleItem)) !=
-       mHeaderPosition) {
-         mHeaderPosition = headerPos;
-         injectPinnedHeader(mAdapter.getView(mHeaderPosition, mPinnedHeader,
-          this));
-      }
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int headerPos;
 
-      int nextHeader = mAdapter.getNextHeaderPosition(firstVisibleItem);
-      int nextHeaderChild = nextHeader - firstVisibleItem;
-      int top;
-      View nextView = mListView.getChildAt(nextHeaderChild);
+        if ((headerPos = mAdapter.getHeaderPosition(firstVisibleItem)) != mHeaderPosition) {
+            mHeaderPosition = headerPos;
+            injectPinnedHeader(mAdapter.getView(mHeaderPosition, mPinnedHeader, this));
+        }
 
+        int nextHeader = mAdapter.getNextHeaderPosition(firstVisibleItem);
+        int nextHeaderChild = nextHeader - firstVisibleItem;
+        int top;
+        View nextView = mListView.getChildAt(nextHeaderChild);
 
-      // Pin the header at the top if the next header is not in view or the
-      // next header is "pushing" the current header up
-      if (nextView == null || nextView.getTop() > mPinnedHeader.getHeight()) {
-         top = mPinnedHeader.getHeight();
-      } else {
-         top = nextView.getTop();
-      }
+        // Pin the header at the top if the next header is not in view or the
+        // next header is "pushing" the current header up
+        if (nextView == null || nextView.getTop() > mPinnedHeader.getHeight()) {
+            top = mPinnedHeader.getHeight();
+        } else {
+            top = nextView.getTop();
+        }
 
-      mPinnedHeader.layout(mPinnedHeader.getLeft(),
-                           top - mPinnedHeader.getHeight(),
-                           mPinnedHeader.getRight(),
-                           top);
-   }
+        mPinnedHeader.layout(mPinnedHeader.getLeft(), top - mPinnedHeader.getHeight(), mPinnedHeader.getRight(), top);
+    }
 
-   public void onScrollStateChanged(AbsListView view, int scrollState) {
-   }
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
 
-   private void injectPinnedHeader(View header) {
-      // Adapter isn't using the convertView so we must remove the previous one
-      if (mPinnedHeader != header) {
-         if (mPinnedHeader != null) {
-            removeView(mPinnedHeader);
-         }
+    private void injectPinnedHeader(View header) {
+        // Adapter isn't using the convertView so we must remove the previous one
+        if (mPinnedHeader != header) {
+            if (mPinnedHeader != null) {
+                removeView(mPinnedHeader);
+            }
 
-         @SuppressWarnings("deprecation")
-         FrameLayout.LayoutParams layoutParams =
-          new FrameLayout.LayoutParams(
-          FrameLayout.LayoutParams.FILL_PARENT,
-          FrameLayout.LayoutParams.WRAP_CONTENT);
+            @SuppressWarnings("deprecation")
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
 
-         addView(header, layoutParams);
-      }
+            addView(header, layoutParams);
+        }
 
-      mPinnedHeader = header;
-   }
+        mPinnedHeader = header;
+    }
 }
