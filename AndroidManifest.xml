@@ -41,6 +41,12 @@
             android:screenOrientation="portrait" 
             >
         </activity>
+        <activity
+            android:name=".SearchActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" 
+            >
+        </activity>
     </application>
     
     <uses-permission android:name="android.permission.INTERNET" />
