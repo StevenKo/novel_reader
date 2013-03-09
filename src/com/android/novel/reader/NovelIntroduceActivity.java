@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -24,6 +25,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Article;
+import com.android.novel.reader.entity.Novel;
 import com.taiwan.imageload.ImageLoader;
 import com.taiwan.imageload.ListArticleAdapter;
 
@@ -33,6 +35,13 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 //	搜索: searchNovels(String), 
 //	取某篇章節: getArticle(Article), 
 //	取所有章節: getNovelArticles(int novelId, int page, boolean isOrderUp),
+	
+	private static final int ID_SETTING = 0;
+    private static final int ID_RESPONSE = 1;
+    private static final int ID_ABOUT_US = 2;
+    private static final int ID_GRADE = 3;
+    
+	
 	
 	private EditText search;
 	private Bundle mBundle;
@@ -54,6 +63,8 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	private ArrayList<Article> articleList = new ArrayList<Article>();
 	private ListView novelListView;
 	private ListArticleAdapter mListAdapter;
+	private Novel theNovel;
+	private Boolean descriptionExpand = false;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +86,8 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         
         setViews();
+        
+        new DownloadNovelTask().execute();
         new DownloadArticlesTask().execute();
         
     }
@@ -120,6 +133,18 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 			}
 		});
 		
+		novelTextDescription.setOnClickListener(new OnClickListener() {			 
+			@Override
+			public void onClick(View arg0) {
+				if(descriptionExpand.equals(false)){
+					novelTextDescription.setMaxLines(999);
+					descriptionExpand = true;
+				}else{
+					novelTextDescription.setMaxLines(3);
+					descriptionExpand = false;
+				}
+			}
+		});
 	}
 
 	@Override
@@ -127,10 +152,16 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.activity_main, menu);
 		
-		menu.add("設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add("意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add("關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add("為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		
+		menu.add(0, ID_SETTING, 0, "設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_RESPONSE, 1, "意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		
+//		menu.add("設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+//		menu.add("意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+//		menu.add("關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+//		menu.add("為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		
         menu.add("Search")
         .setIcon(R.drawable.ic_search_inverse)
@@ -164,12 +195,19 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	        finish();
 	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
 	        break;
-	    case 0: // setting
+	    case ID_SETTING: // setting
 	    		Intent intent = new Intent(NovelIntroduceActivity.this, SettingActivity.class);
 	    		startActivity(intent); 
 	        break;
-	        
-	        
+	    case ID_RESPONSE: // response
+    			Toast.makeText(NovelIntroduceActivity.this, "RESPONESE", Toast.LENGTH_SHORT).show();
+    		break;
+	    case ID_ABOUT_US: // response
+			Toast.makeText(NovelIntroduceActivity.this, "ABOUT_US", Toast.LENGTH_SHORT).show();
+			break;
+	    case ID_GRADE: // response
+			Toast.makeText(NovelIntroduceActivity.this, "GRADE", Toast.LENGTH_SHORT).show();
+			break;	        
 	    }
 	    return true;
 	}
@@ -193,6 +231,25 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 		            novelListView.setAdapter(mListAdapter);
 	            }
 
+	        }
+	 }
+	 
+	 private class DownloadNovelTask extends AsyncTask {
+
+	        @Override
+	        protected Object doInBackground(Object... params) {
+	            // TODO Auto-generated method stub
+	        	theNovel = NovelAPI.getNovel(novelId, NovelIntroduceActivity.this);
+	            return null;
+	        }
+
+	        @Override
+	        protected void onPostExecute(Object result) {
+	            // TODO Auto-generated method stub
+	            super.onPostExecute(result);
+	            novelTextDescription.setText(theNovel.getDescription());
+	            novelTextDescription.setMaxLines(3);
+	            descriptionExpand = false;
 	        }
 	 }
     
