@@ -1,17 +1,22 @@
 package com.android.novel.reader;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 public final class MyNovelFragment extends Fragment {
 
-    public static MyNovelFragment newInstance() {      
-    	MyNovelFragment fragment = new MyNovelFragment();
+    public static MyNovelFragment newInstance() {
+        MyNovelFragment fragment = new MyNovelFragment();
         return fragment;
     }
+
+    private View   myFragmentView;
+    private Button myBookmarks;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,9 +25,28 @@ public final class MyNovelFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {        
-    	View myFragmentView = inflater.inflate(R.layout.my_novel, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        myFragmentView = inflater.inflate(R.layout.my_novel, container, false);
+        findViews();
+        setViews();
         return myFragmentView;
+    }
+
+    private void setViews() {
+
+        myBookmarks.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), BookmarkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    private void findViews() {
+        myBookmarks = (Button) myFragmentView.findViewById(R.id.my_bookmarks);
     }
 
     @Override

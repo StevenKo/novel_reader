@@ -18,6 +18,7 @@
         	android:text="我的書櫃"
             />
         <Button 
+            android:id="@+id/my_bookmarks"
             android:layout_width="wrap_content"
            	android:layout_height="wrap_content"
         	android:text="我的書籤" 

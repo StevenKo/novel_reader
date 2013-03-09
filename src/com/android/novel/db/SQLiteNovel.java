@@ -52,6 +52,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         String READ_RATE     = "read_rate";
         String NOVEL_NAME    = "novel_name";
         String ARTICLE_TITLE = "article_title";
+        String NOVEL_PIC     = "novel_pic";
     }
 
     public SQLiteNovel(Context context) {
@@ -74,7 +75,8 @@ public class SQLiteNovel extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + BookmarkSchema.TABLE_NAME + " (" + BookmarkSchema.ID + " INTEGER PRIMARY KEY" + ","
                 + BookmarkSchema.NOVEL_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.ARTICLE_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.READ_RATE
-                + " INTEGER NOT NULL" + "," + BookmarkSchema.NOVEL_NAME + " TEXT NOT NULL" + "," + BookmarkSchema.ARTICLE_TITLE + " TEXT NOT NULL" + ");");
+                + " INTEGER NOT NULL" + "," + BookmarkSchema.NOVEL_NAME + " TEXT NOT NULL" + "," + BookmarkSchema.ARTICLE_TITLE + " TEXT NOT NULL" + ","
+                + BookmarkSchema.NOVEL_PIC + " TEXT NOT NULL" + ");");
 
     }
 
@@ -99,6 +101,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         args.put(BookmarkSchema.READ_RATE, bookmark.getReadRate());
         args.put(BookmarkSchema.NOVEL_NAME, bookmark.getNovelName());
         args.put(BookmarkSchema.ARTICLE_TITLE, bookmark.getArticleTitle());
+        args.put(BookmarkSchema.NOVEL_PIC, bookmark.getArticleId());
         return db.insert(BookmarkSchema.TABLE_NAME, null, args);
     }
 
@@ -124,8 +127,9 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             int READ_RATE = cursor.getInt(3);
             String NOVEL_NAME = cursor.getString(4);
             String ARTICLE_TITLE = cursor.getString(5);
+            String NOVEL_PIC = cursor.getString(6);
 
-            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE);
+            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC);
             bookmarks.add(bookmark);
         }
         return bookmarks;
@@ -143,8 +147,9 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             int READ_RATE = cursor.getInt(3);
             String NOVEL_NAME = cursor.getString(4);
             String ARTICLE_TITLE = cursor.getString(5);
+            String NOVEL_PIC = cursor.getString(6);
 
-            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE);
+            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC);
             bookmarks.add(bookmark);
         }
         return bookmarks;

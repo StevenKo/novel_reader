@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <com.ifixit.android.sectionheaders.SectionListView
-         android:id="@+id/android:list"
+         android:id="@+id/bookmark_listview"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content" />
 

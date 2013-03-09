@@ -7,18 +7,24 @@ public class Bookmark {
     int    rate;
     String novelName;
     String articleTitle;
+    String novelPic;
 
     public Bookmark() {
 
     }
 
-    public Bookmark(int id, int novelId, int articleId, int rate, String novelName, String articleTitle) {
+    public Bookmark(int id, int novelId, int articleId, int rate, String novelName, String articleTitle, String novelPic) {
         this.id = id;
         this.novelId = novelId;
         this.articleId = articleId;
         this.rate = rate;
         this.novelName = novelName;
         this.articleTitle = articleTitle;
+        this.novelPic = novelPic;
+    }
+
+    public String getNovelPic() {
+        return this.novelPic;
     }
 
     public String getArticleTitle() {
