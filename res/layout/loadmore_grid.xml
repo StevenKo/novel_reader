@@ -24,6 +24,9 @@
         android:cacheColorHint="#FFFFFF"
         android:numColumns="2"
         android:stretchMode="columnWidth"
+        android:verticalSpacing="2dp"
+        android:horizontalSpacing="2dp"
+        android:background="@color/main_color_grey_dark"
         />
     
     <LinearLayout 

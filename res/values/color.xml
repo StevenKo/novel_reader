@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <color name="main_color_yellow">#f6c737</color>
-    <color name="main_color_grey_dark">#2a2723</color>
+    <color name="main_color_grey_dark">#dddddd</color>
     
      <!-- Add for Report -->
     <color name="report_view_1">#f6c737</color>
