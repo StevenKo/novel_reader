@@ -5,8 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.LinearLayout;
 
 public final class MyNovelFragment extends Fragment {
 
@@ -15,8 +16,8 @@ public final class MyNovelFragment extends Fragment {
         return fragment;
     }
 
-    private View   myFragmentView;
-    private Button myBookmarks;
+    private View         myFragmentView;
+    private LinearLayout myBookmarks;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public final class MyNovelFragment extends Fragment {
 
     private void setViews() {
 
-        myBookmarks.setOnClickListener(new Button.OnClickListener() {
+        myBookmarks.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -46,7 +47,7 @@ public final class MyNovelFragment extends Fragment {
     }
 
     private void findViews() {
-        myBookmarks = (Button) myFragmentView.findViewById(R.id.my_bookmarks);
+        myBookmarks = (LinearLayout) myFragmentView.findViewById(R.id.my_bookmarks);
     }
 
     @Override

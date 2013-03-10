@@ -11,18 +11,50 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:gravity="center"
-        >       
-        <Button 
+        >
+        <LinearLayout
             android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="我的書櫃"
-            />
-        <Button 
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/my_novel_selector"
+            android:clickable="true"
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            >
+            <ImageView 
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/bookcase"
+                />     
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的書櫃"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/my_novel_selector"
+            android:clickable="true"
+            android:layout_margin="15dp"
+            android:padding="15dp"
             android:id="@+id/my_bookmarks"
-            android:layout_width="wrap_content"
-           	android:layout_height="wrap_content"
-        	android:text="我的書籤" 
-            />
+            >
+            <ImageView 
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/bookmark"
+                />     
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的書籤"
+                />
+        </LinearLayout>
     </LinearLayout>
     
     <LinearLayout 
@@ -31,17 +63,49 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:gravity="center"
-        >       
-        <Button 
+        >
+        <LinearLayout
             android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="最近閱讀"
-            />
-        <Button 
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/my_novel_selector"
+            android:clickable="true"
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            >
+            <ImageView 
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/chalender"
+                />     
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="最近閱讀"
+                />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
-           	android:layout_height="wrap_content"
-        	android:text="閱讀設定" 
-            />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/my_novel_selector"
+            android:clickable="true"
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            >
+            <ImageView 
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/setting"
+                />     
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="閱讀設定"
+                />
+        </LinearLayout>      
     </LinearLayout>
     
     <LinearLayout 
@@ -50,17 +114,49 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:gravity="center"
-        >       
-        <Button 
+        >
+        <LinearLayout
             android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="經典武俠"
-            />
-        <Button 
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/my_novel_selector"
+            android:clickable="true"
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            >
+            <ImageView 
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/action"
+                />     
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="經典武俠"
+                />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
-           	android:layout_height="wrap_content"
-        	android:text="經典小說" 
-            />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/my_novel_selector"
+            android:clickable="true"
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            >
+            <ImageView 
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/classic"
+                />     
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="經典小說"
+                />
+        </LinearLayout>      
     </LinearLayout>
 
 </LinearLayout>
