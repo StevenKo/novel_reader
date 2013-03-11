@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.novel.db.SQLiteNovel;
@@ -117,7 +118,7 @@ public class NovelAPI {
         return true;
     }
 
-    public static boolean collecNovel(Novel novel, Context context) {
+    public static boolean collecNovel(final Novel novel, final Context context) {
         novel.setIsCollected(true);
         SQLiteNovel db = new SQLiteNovel(context);
         if (db.isNovelExists(novel.getId()))
@@ -125,7 +126,15 @@ public class NovelAPI {
         else
             db.insertNovel(novel);
 
-        return downloadOrUpdateNovelInfo(novel.getId(), context, true);
+        new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object... params) {
+                downloadOrUpdateNovelInfo(novel.getId(), context, true);
+                return params;
+            }
+        }.execute();
+
+        return true;
     }
 
     public static boolean downloadOrUpdateNovelInfo(int novelId, Context context, boolean isCollected) {
@@ -227,7 +236,9 @@ public class NovelAPI {
 
         SQLiteNovel db = new SQLiteNovel(context);
         if (db.isArticleExists(article.getId())) {
-            return db.getArticle(article.getId());
+            Article articleFromDB = db.getArticle(article.getId());
+            if (articleFromDB.getText().length() > 0)
+                return articleFromDB;
         }
 
         String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
@@ -247,6 +258,30 @@ public class NovelAPI {
             }
         }
         return article;
+    }
+
+    public static Article getPreviousArticle(Article orginArticle, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        ArrayList<Article> articles = db.getNovelArticles(orginArticle.getNovelId(), true);
+        for (int i = 1; i < articles.size(); i++) {
+            if (articles.get(i).getId() == orginArticle.getId()) {
+                return getArticle(articles.get(i - 1), context);
+            }
+        }
+
+        return null;
+    }
+
+    public static Article getNextArticle(Article orginArticle, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        ArrayList<Article> articles = db.getNovelArticles(orginArticle.getNovelId(), true);
+        for (int i = 0; i < articles.size() - 1; i++) {
+            if (articles.get(i).getId() == orginArticle.getId()) {
+                return getArticle(articles.get(i + 1), context);
+            }
+        }
+
+        return null;
     }
 
     public static ArrayList<Article> getDownloadedNovelArticles(int novelId, boolean isOrderUp, Context context) {
