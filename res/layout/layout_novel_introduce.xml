@@ -120,10 +120,11 @@
     </LinearLayout>
     
     
-    <ListView android:id="@+id/novel_artiles_list"
+    <ExpandableListView android:id="@+id/novel_artiles_list"
         android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
+	    android:groupIndicator="@null"
         >      
-    </ListView>
+    </ExpandableListView>
     
 </LinearLayout>

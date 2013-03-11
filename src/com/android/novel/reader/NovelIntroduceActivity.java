@@ -1,6 +1,9 @@
 package com.android.novel.reader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeMap;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,9 +15,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
@@ -26,6 +29,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Article;
 import com.android.novel.reader.entity.Novel;
+import com.taiwan.imageload.ExpandListAdapter;
 import com.taiwan.imageload.ImageLoader;
 import com.taiwan.imageload.ListArticleAdapter;
 
@@ -40,9 +44,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
     private static final int ID_RESPONSE = 1;
     private static final int ID_ABOUT_US = 2;
     private static final int ID_GRADE = 3;
-    
-	
-	
+   	
 	private EditText search;
 	private Bundle mBundle;
 	private String novelName;
@@ -61,10 +63,14 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	private ImageLoader mImageLoader;
 	private LinearLayout novelLayoutProgress;
 	private ArrayList<Article> articleList = new ArrayList<Article>();
-	private ListView novelListView;
+	private ExpandableListView novelListView;
 	private ListArticleAdapter mListAdapter;
 	private Novel theNovel;
 	private Boolean descriptionExpand = false;
+	
+	private TreeMap<String, ArrayList<Article>> myData = new  TreeMap<String, ArrayList<Article>>();
+	private ArrayList<String> groupTitleList = new ArrayList<String>();
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +104,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 		novelTextAuthor = (TextView) findViewById (R.id.novel_author);
 		novelTextDescription = (TextView) findViewById (R.id.novel_description);
 		novelTextUpdate = (TextView) findViewById (R.id.novel_update);
-		novelListView = (ListView) findViewById (R.id.novel_artiles_list);
+		novelListView = (ExpandableListView) findViewById (R.id.novel_artiles_list);
 		novelButton = (Button) findViewById (R.id.novel_button);
 		novelLayoutProgress = (LinearLayout) findViewById (R.id.novel_layout_progress);
 		
@@ -217,7 +223,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	        @Override
 	        protected Object doInBackground(Object... params) {
 	            // TODO Auto-generated method stub
-	        	articleList = NovelAPI.getNovelArticles(novelId, 1, true, NovelIntroduceActivity.this);
+	        	articleList = NovelAPI.getNovelArticles(novelId, true, NovelIntroduceActivity.this);
 	            return null;
 	        }
 
@@ -227,8 +233,29 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	            super.onPostExecute(result);
 	            novelLayoutProgress.setVisibility(View.GONE);
 	            if(articleList!= null && articleList.size()!= 0){
-		            mListAdapter = new ListArticleAdapter(NovelIntroduceActivity.this, articleList);
-		            novelListView.setAdapter(mListAdapter);
+	            	
+	            	// use HashMap || TreeMap to make a parent key
+	            	for(int i=0; i<articleList.size(); i++){
+	            		if(myData.containsKey(articleList.get(i).getSubject())){
+	            			myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
+	            		}else{
+	            			groupTitleList.add(articleList.get(i).getSubject());
+	            			myData.put(articleList.get(i).getSubject(), new ArrayList<Article>());
+	            			myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
+	            		}
+	            	}
+	            	
+//	            	myData.get(key)
+	            	
+	            	Set<String> keyArray =  myData.keySet();
+	            	keyArray.size();
+	            	
+	            	
+	            	ExpandListAdapter mAdapter = new ExpandListAdapter(NovelIntroduceActivity.this,myData, groupTitleList);
+	            	novelListView.setAdapter(mAdapter);
+	            	
+//		            mListAdapter = new ListArticleAdapter(NovelIntroduceActivity.this, articleList);
+//		            novelListView.setAdapter(mListAdapter);
 	            }
 
 	        }

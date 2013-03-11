@@ -44,10 +44,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_article);
-        
-        
-        
+        setContentView(R.layout.layout_article); 
         restorePreValues();
         setViews();
         
