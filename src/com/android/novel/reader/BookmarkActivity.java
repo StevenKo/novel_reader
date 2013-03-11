@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Bookmark;
 import com.ifixit.android.sectionheaders.Section;
@@ -55,6 +56,19 @@ public class BookmarkActivity extends SherlockActivity {
 
         new LoadDataTask().execute();
 
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+
+        int itemId = item.getItemId();
+        switch (itemId) {
+        case android.R.id.home:
+            finish();
+            // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+            break;
+        }
+        return true;
     }
 
     private void setListAdatper() {
