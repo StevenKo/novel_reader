@@ -351,6 +351,28 @@ public class NovelAPI {
         }
     }
 
+    // 經典小說
+    public static ArrayList<Novel> getClassicNovels() {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/classic.json", null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+    }
+
+    // 經典武俠
+    public static ArrayList<Novel> getClassicActionNovels() {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/classic_action.json", null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+    }
+
     public static ArrayList<Novel> getCategoryRecommendNovels(int category_id) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
         String message = getMessageFromServer("GET", "/api/v1/novels/category_recommend.json?category_id=" + category_id, null);
