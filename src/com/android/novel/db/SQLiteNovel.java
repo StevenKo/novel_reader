@@ -32,6 +32,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         String ARTICLE_NUM    = "article_num";
         String LAST_UPDATE    = "last_update";
         String IS_SERIALIZING = "is_serializing";
+        String IS_COLLECTED   = "is_collected";
     }
 
     public interface ArtcileSchema {
@@ -67,7 +68,8 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + NovelSchema.TABLE_NAME + " (" + NovelSchema.ID + " INTEGER PRIMARY KEY" + "," + NovelSchema.NAME
                 + " TEXT NOT NULL" + "," + NovelSchema.AUTHOR + " TEXT NOT NULL" + "," + NovelSchema.DESCRIPTION + " TEXT NOT NULL" + "," + NovelSchema.PIC
                 + " TEXT NOT NULL" + "," + NovelSchema.CATEGORY_ID + " INTEGER NOT NULL" + "," + NovelSchema.ARTICLE_NUM + " TEXT NOT NULL" + ","
-                + NovelSchema.LAST_UPDATE + " TEXT NOT NULL" + "," + NovelSchema.IS_SERIALIZING + " INTEGER NOT NULL" + ");");
+                + NovelSchema.LAST_UPDATE + " TEXT NOT NULL" + "," + NovelSchema.IS_SERIALIZING + " INTEGER NOT NULL" + "," + NovelSchema.IS_COLLECTED
+                + " INTEGER NOT NULL" + ");");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + ArtcileSchema.TABLE_NAME + " (" + ArtcileSchema.ID + " INTEGER PRIMARY KEY" + "," + ArtcileSchema.NOVEL_ID
                 + " INTEGER NOT NULL" + "," + ArtcileSchema.TEXT + " TEXT NOT NULL" + "," + ArtcileSchema.TITLE + " TEXT NOT NULL" + ","
@@ -181,8 +183,10 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     // }
 
     public boolean updateNovel(Novel novel) {
-        Cursor cursor = db.rawQuery("UPDATE novels SET `article_num` = ?, `last_update` = ?, `is_serializing` = ? WHERE `novels`.`id` = ?", new String[] {
-                novel.getArticleNum(), novel.getLastUpdate(), getSQLiteBoolean(novel.isSerializing()) + "", novel.getId() + "" });
+        Cursor cursor = db.rawQuery(
+                "UPDATE novels SET `article_num` = ?, `last_update` = ?, `is_serializing` = ? , `is_collected` = ? WHERE `novels`.`id` = ?", new String[] {
+                        novel.getArticleNum(), novel.getLastUpdate(), getSQLiteBoolean(novel.isSerializing()) + "", getSQLiteBoolean(novel.isCollected()) + "",
+                        novel.getId() + "" });
         cursor.moveToFirst();
         cursor.close();
         return true;
@@ -209,7 +213,8 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             String ARTICLE_NUM = cursor.getString(6);
             String LAST_UPDATE = cursor.getString(7);
             Boolean IS_SERIALIZING = cursor.getInt(8) > 0;
-            novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING);
+            Boolean IS_COLLECTED = cursor.getInt(9) > 0;
+            novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED);
         }
         cursor.close();
         return novel;
@@ -304,10 +309,10 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         return db.insert(ArtcileSchema.TABLE_NAME, null, args);
     }
 
-    public ArrayList<Novel> getNovels() {
+    public ArrayList<Novel> getCollectedNovels() {
         Cursor cursor = null;
         ArrayList<Novel> novels = new ArrayList<Novel>();
-        cursor = db.rawQuery("SELECT * FROM " + NovelSchema.TABLE_NAME, null);
+        cursor = db.rawQuery("SELECT * FROM " + NovelSchema.TABLE_NAME + " WHERE is_collected != 0", null);
         while (cursor.moveToNext()) {
             int ID = cursor.getInt(0);
             String NAME = cursor.getString(1);
@@ -318,7 +323,29 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             String ARTICLE_NUM = cursor.getString(6);
             String LAST_UPDATE = cursor.getString(7);
             Boolean IS_SERIALIZING = cursor.getInt(8) > 0;
-            Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING);
+            Boolean IS_COLLECTED = cursor.getInt(9) > 0;
+            Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED);
+            novels.add(novel);
+        }
+        return novels;
+    }
+
+    public ArrayList<Novel> getDownloadNovels() {
+        Cursor cursor = null;
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        cursor = db.rawQuery("SELECT * FROM " + NovelSchema.TABLE_NAME + " WHERE is_collected = 0", null);
+        while (cursor.moveToNext()) {
+            int ID = cursor.getInt(0);
+            String NAME = cursor.getString(1);
+            String AUTHOR = cursor.getString(2);
+            String DESCRIPTION = cursor.getString(3);
+            String PIC = cursor.getString(4);
+            int CATEGORY_ID = cursor.getInt(5);
+            String ARTICLE_NUM = cursor.getString(6);
+            String LAST_UPDATE = cursor.getString(7);
+            Boolean IS_SERIALIZING = cursor.getInt(8) > 0;
+            Boolean IS_COLLECTED = cursor.getInt(9) > 0;
+            Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED);
             novels.add(novel);
         }
         return novels;
@@ -336,6 +363,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         args.put(NovelSchema.ARTICLE_NUM, novel.getArticleNum());
         args.put(NovelSchema.LAST_UPDATE, novel.getLastUpdate());
         args.put(NovelSchema.IS_SERIALIZING, getSQLiteBoolean(novel.isSerializing()));
+        args.put(NovelSchema.IS_COLLECTED, getSQLiteBoolean(novel.isCollected()));
 
         return db.insert(NovelSchema.TABLE_NAME, null, args);
     }

@@ -68,9 +68,14 @@ public class NovelAPI {
         return bookmark;
     }
 
+    public static ArrayList<Novel> getCollectedNovels(Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.getCollectedNovels();
+    }
+
     public static ArrayList<Novel> getDownloadedNovels(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
-        return db.getNovels();
+        return db.getDownloadNovels();
     }
 
     public static boolean downloadArticles(int novelId, ArrayList<Article> articles, Context context) {
@@ -83,7 +88,7 @@ public class NovelAPI {
         SQLiteNovel db = new SQLiteNovel(context);
 
         if (!db.isNovelExists(novelId)) {
-            downloadOrUpdateNovelInfo(novelId, context);
+            downloadOrUpdateNovelInfo(novelId, context, false);
         }
 
         String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
@@ -112,7 +117,18 @@ public class NovelAPI {
         return true;
     }
 
-    public static boolean downloadOrUpdateNovelInfo(int novelId, Context context) {
+    public static boolean collecNovel(Novel novel, Context context) {
+        novel.setIsCollected(true);
+        SQLiteNovel db = new SQLiteNovel(context);
+        if (db.isNovelExists(novel.getId()))
+            db.updateNovel(novel);
+        else
+            db.insertNovel(novel);
+
+        return downloadOrUpdateNovelInfo(novel.getId(), context, true);
+    }
+
+    public static boolean downloadOrUpdateNovelInfo(int novelId, Context context, boolean isCollected) {
 
         Novel n = null;
         ArrayList<Article> articles = new ArrayList<Article>();
@@ -136,7 +152,7 @@ public class NovelAPI {
                 String description = nObject.getString("description");
                 int category_id = nObject.getInt("category_id");
 
-                n = new Novel(novel_id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing);
+                n = new Novel(novel_id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing, isCollected);
 
                 JSONArray articlesArray = nObject.getJSONArray("articles");
                 for (int i = 0; i < articlesArray.length(); i++) {
@@ -195,7 +211,7 @@ public class NovelAPI {
                     String name = novelsArray.getJSONObject(i).getString("name");
                     String pic = novelsArray.getJSONObject(i).getString("pic");
 
-                    Novel novel = new Novel(id, name, author, "", pic, 0, "", "", false);
+                    Novel novel = new Novel(id, name, author, "", pic, 0, "", "", false, false);
                     novels.add(novel);
                 }
 
@@ -238,9 +254,9 @@ public class NovelAPI {
         return db.getNovelArticles(novelId, isOrderUp);
     }
 
-    public static ArrayList<Article> getNovelArticles(int novelId, int page, boolean isOrderUp, Context context) {
+    public static ArrayList<Article> getNovelArticles(int novelId, boolean isOrderUp, Context context) {
         ArrayList<Article> articles = new ArrayList<Article>();
-        String message = getMessageFromServer("GET", "/api/v1/articles.json?novel_id=" + novelId + "&page=" + page + "&order=" + isOrderUp, null);
+        String message = getMessageFromServer("GET", "/api/v1/articles.json?novel_id=" + novelId + "&order=" + isOrderUp, null);
         if (message == null) {
             return null;
         } else {
@@ -355,7 +371,7 @@ public class NovelAPI {
                 String description = nObject.getString("description");
                 int category_id = nObject.getInt("category_id");
 
-                n = new Novel(id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing);
+                n = new Novel(id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing, false);
 
             } catch (JSONException e) {
 
@@ -446,7 +462,7 @@ public class NovelAPI {
                 String name = novelsArray.getJSONObject(i).getString("name");
                 String pic = novelsArray.getJSONObject(i).getString("pic");
 
-                Novel novel = new Novel(id, name, author, "", pic, 0, articleNum, lastUpdate, isSerializing);
+                Novel novel = new Novel(id, name, author, "", pic, 0, articleNum, lastUpdate, isSerializing, false);
                 novels.add(novel);
             }
 

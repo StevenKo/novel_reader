@@ -10,12 +10,14 @@ public class Novel {
     String  articleNum;
     String  lastUpdate;
     boolean isSerializing;
+    boolean isCollected;
 
     public Novel() {
-        this(1, "", "", "", "", 1, "", "", true);
+        this(1, "", "", "", "", 1, "", "", true, false);
     }
 
-    public Novel(int id, String name, String author, String description, String pic, int categoryId, String articleNum, String lastUpdate, boolean isSerializing) {
+    public Novel(int id, String name, String author, String description, String pic, int categoryId, String articleNum, String lastUpdate,
+            boolean isSerializing, boolean isCollected) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -25,7 +27,15 @@ public class Novel {
         this.articleNum = articleNum;
         this.lastUpdate = lastUpdate;
         this.isSerializing = isSerializing;
+        this.isCollected = isCollected;
+    }
 
+    public void setIsCollected(boolean b) {
+        this.isCollected = b;
+    }
+
+    public boolean isCollected() {
+        return isCollected;
     }
 
     public int getId() {
