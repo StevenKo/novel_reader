@@ -1,19 +1,20 @@
 package com.android.novel.reader.entity;
 
 public class Bookmark {
-    int    id;
-    int    novelId;
-    int    articleId;
-    int    rate;
-    String novelName;
-    String articleTitle;
-    String novelPic;
+    int     id;
+    int     novelId;
+    int     articleId;
+    int     rate;
+    String  novelName;
+    String  articleTitle;
+    String  novelPic;
+    boolean is_recent_read;
 
     public Bookmark() {
 
     }
 
-    public Bookmark(int id, int novelId, int articleId, int rate, String novelName, String articleTitle, String novelPic) {
+    public Bookmark(int id, int novelId, int articleId, int rate, String novelName, String articleTitle, String novelPic, Boolean is_recent_read) {
         this.id = id;
         this.novelId = novelId;
         this.articleId = articleId;
@@ -21,6 +22,11 @@ public class Bookmark {
         this.novelName = novelName;
         this.articleTitle = articleTitle;
         this.novelPic = novelPic;
+        this.is_recent_read = is_recent_read;
+    }
+
+    public boolean isRecentRead() {
+        return is_recent_read;
     }
 
     public String getNovelPic() {

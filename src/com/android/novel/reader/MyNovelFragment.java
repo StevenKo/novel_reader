@@ -18,6 +18,7 @@ public final class MyNovelFragment extends Fragment {
 
     private View         myFragmentView;
     private LinearLayout myBookmarks;
+    private LinearLayout recentRead;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,21 @@ public final class MyNovelFragment extends Fragment {
         myBookmarks.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("IS_RECNET", false);
                 Intent intent = new Intent();
+                intent.putExtras(bundle);
+                intent.setClass(getActivity(), BookmarkActivity.class);
+                startActivity(intent);
+            }
+        });
+        recentRead.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("IS_RECNET", true);
+                Intent intent = new Intent();
+                intent.putExtras(bundle);
                 intent.setClass(getActivity(), BookmarkActivity.class);
                 startActivity(intent);
             }
@@ -48,6 +63,7 @@ public final class MyNovelFragment extends Fragment {
 
     private void findViews() {
         myBookmarks = (LinearLayout) myFragmentView.findViewById(R.id.my_bookmarks);
+        recentRead = (LinearLayout) myFragmentView.findViewById(R.id.my_recent_read_bookmarks);
     }
 
     @Override

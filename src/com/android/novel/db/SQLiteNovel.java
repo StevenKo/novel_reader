@@ -45,14 +45,15 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     }
 
     public interface BookmarkSchema {
-        String TABLE_NAME    = "bookmarks";
-        String ID            = "id";
-        String NOVEL_ID      = "novel_id";
-        String ARTICLE_ID    = "article_id";
-        String READ_RATE     = "read_rate";
-        String NOVEL_NAME    = "novel_name";
-        String ARTICLE_TITLE = "article_title";
-        String NOVEL_PIC     = "novel_pic";
+        String TABLE_NAME     = "bookmarks";
+        String ID             = "id";
+        String NOVEL_ID       = "novel_id";
+        String ARTICLE_ID     = "article_id";
+        String READ_RATE      = "read_rate";
+        String NOVEL_NAME     = "novel_name";
+        String ARTICLE_TITLE  = "article_title";
+        String NOVEL_PIC      = "novel_pic";
+        String IS_RECENT_READ = "is_recent_read";
     }
 
     public SQLiteNovel(Context context) {
@@ -76,7 +77,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + BookmarkSchema.TABLE_NAME + " (" + BookmarkSchema.ID + " INTEGER PRIMARY KEY" + ","
                 + BookmarkSchema.NOVEL_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.ARTICLE_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.READ_RATE
                 + " INTEGER NOT NULL" + "," + BookmarkSchema.NOVEL_NAME + " TEXT NOT NULL" + "," + BookmarkSchema.ARTICLE_TITLE + " TEXT NOT NULL" + ","
-                + BookmarkSchema.NOVEL_PIC + " TEXT NOT NULL" + ");");
+                + BookmarkSchema.NOVEL_PIC + " TEXT NOT NULL" + "," + BookmarkSchema.IS_RECENT_READ + " INTEGER NOT NULL" + ");");
 
     }
 
@@ -102,6 +103,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         args.put(BookmarkSchema.NOVEL_NAME, bookmark.getNovelName());
         args.put(BookmarkSchema.ARTICLE_TITLE, bookmark.getArticleTitle());
         args.put(BookmarkSchema.NOVEL_PIC, bookmark.getArticleId());
+        args.put(BookmarkSchema.IS_RECENT_READ, getSQLiteBoolean(bookmark.isRecentRead()));
         return db.insert(BookmarkSchema.TABLE_NAME, null, args);
     }
 
@@ -115,10 +117,31 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         return true;
     }
 
+    public ArrayList<Bookmark> getAllRecentReadBookmarks() {
+        Cursor cursor = null;
+        ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
+        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE is_recent_read != 0", null);
+
+        while (cursor.moveToNext()) {
+            int ID = cursor.getInt(0);
+            int NOVEL_ID = cursor.getInt(1);
+            int ARTICLE_ID = cursor.getInt(2);
+            int READ_RATE = cursor.getInt(3);
+            String NOVEL_NAME = cursor.getString(4);
+            String ARTICLE_TITLE = cursor.getString(5);
+            String NOVEL_PIC = cursor.getString(6);
+            Boolean IS_RECENT_READ = cursor.getInt(7) > 0;
+
+            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC, IS_RECENT_READ);
+            bookmarks.add(bookmark);
+        }
+        return bookmarks;
+    }
+
     public ArrayList<Bookmark> getAllBookmarks() {
         Cursor cursor = null;
         ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
-        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME, null);
+        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE is_recent_read = 0", null);
 
         while (cursor.moveToNext()) {
             int ID = cursor.getInt(0);
@@ -128,32 +151,34 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             String NOVEL_NAME = cursor.getString(4);
             String ARTICLE_TITLE = cursor.getString(5);
             String NOVEL_PIC = cursor.getString(6);
+            Boolean IS_RECENT_READ = cursor.getInt(7) > 0;
 
-            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC);
+            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC, IS_RECENT_READ);
             bookmarks.add(bookmark);
         }
         return bookmarks;
     }
 
-    public ArrayList<Bookmark> getNovelBookmarks(int novelId) {
-        Cursor cursor = null;
-        ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
-        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE novel_id = \'" + novelId + "\'", null);
-
-        while (cursor.moveToNext()) {
-            int ID = cursor.getInt(0);
-            int NOVEL_ID = cursor.getInt(1);
-            int ARTICLE_ID = cursor.getInt(2);
-            int READ_RATE = cursor.getInt(3);
-            String NOVEL_NAME = cursor.getString(4);
-            String ARTICLE_TITLE = cursor.getString(5);
-            String NOVEL_PIC = cursor.getString(6);
-
-            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC);
-            bookmarks.add(bookmark);
-        }
-        return bookmarks;
-    }
+    // public ArrayList<Bookmark> getNovelBookmarks(int novelId) {
+    // Cursor cursor = null;
+    // ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
+    // cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE novel_id = \'" + novelId + "\' AND is_recent_read = 0", null);
+    //
+    // while (cursor.moveToNext()) {
+    // int ID = cursor.getInt(0);
+    // int NOVEL_ID = cursor.getInt(1);
+    // int ARTICLE_ID = cursor.getInt(2);
+    // int READ_RATE = cursor.getInt(3);
+    // String NOVEL_NAME = cursor.getString(4);
+    // String ARTICLE_TITLE = cursor.getString(5);
+    // String NOVEL_PIC = cursor.getString(6);
+    // Boolean IS_RECENT_READ = cursor.getInt(7) > 0;
+    //
+    // Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC, IS_RECENT_READ);
+    // bookmarks.add(bookmark);
+    // }
+    // return bookmarks;
+    // }
 
     public boolean updateNovel(Novel novel) {
         Cursor cursor = db.rawQuery("UPDATE novels SET `article_num` = ?, `last_update` = ?, `is_serializing` = ? WHERE `novels`.`id` = ?", new String[] {

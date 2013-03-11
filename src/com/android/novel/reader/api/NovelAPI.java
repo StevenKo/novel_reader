@@ -35,9 +35,14 @@ public class NovelAPI {
         return db.deleteNovel(novel);
     }
 
-    public static ArrayList<Bookmark> getNovelBookmarks(int novelId, Context context) {
+    // public static ArrayList<Bookmark> getNovelBookmarks(int novelId, Context context) {
+    // SQLiteNovel db = new SQLiteNovel(context);
+    // return db.getNovelBookmarks(novelId);
+    // }
+
+    public static ArrayList<Bookmark> getAllRecentReadBookmarks(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
-        return db.getNovelBookmarks(novelId);
+        return db.getAllRecentReadBookmarks();
     }
 
     public static ArrayList<Bookmark> getAllBookmarks(Context context) {

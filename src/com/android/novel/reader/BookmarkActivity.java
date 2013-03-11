@@ -36,22 +36,32 @@ public class BookmarkActivity extends SherlockActivity {
     private SectionListView                      bookmarkListView;
     private ArrayList<Bookmark>                  bookmarks;
     private TreeMap<String, ArrayList<Bookmark>> bookmarksMap;
+    private Bundle                               mBundle;
+    private boolean                              isRecent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_bookmark);
-        // Bookmark b = new Bookmark(0, 1, 1, 45, "novel1", "title1", "");
-        // Bookmark b1 = new Bookmark(0, 1, 2, 45, "novel1", "title2", "");
-        // Bookmark b2 = new Bookmark(0, 2, 3, 45, "novel2", "title3", "");
+        // Bookmark b = new Bookmark(0, 1, 1, 45, "novel1", "title1", "", false);
+        // Bookmark b1 = new Bookmark(0, 1, 2, 45, "novel1", "title2", "", false);
+        // Bookmark b2 = new Bookmark(0, 2, 3, 45, "novel2", "title3", "", false);
         // NovelAPI.insertBookmark(b, getApplicationContext());
         // NovelAPI.insertBookmark(b1, getApplicationContext());
         // NovelAPI.insertBookmark(b2, getApplicationContext());
 
+        mBundle = this.getIntent().getExtras();
+        isRecent = mBundle.getBoolean("IS_RECNET");
+
         final ActionBar ab = getSupportActionBar();
         bookmarkListView = (SectionListView) findViewById(R.id.bookmark_listview);
 
-        ab.setTitle("我的書籤");
+        if (isRecent) {
+            ab.setTitle("最近閱讀");
+        } else {
+            ab.setTitle("我的書籤");
+        }
+
         ab.setDisplayHomeAsUpEnabled(true);
 
         new LoadDataTask().execute();
@@ -84,9 +94,13 @@ public class BookmarkActivity extends SherlockActivity {
     }
 
     private void fetchData() {
-        bookmarks = NovelAPI.getAllBookmarks(BookmarkActivity.this);
+        if (isRecent)
+            bookmarks = NovelAPI.getAllRecentReadBookmarks(BookmarkActivity.this);
+        else
+            bookmarks = NovelAPI.getAllBookmarks(BookmarkActivity.this);
+
         if (bookmarks.size() == 0)
-            bookmarks.add(new Bookmark(0, 0, 0, 0, "目前沒有書籤！", "", ""));
+            bookmarks.add(new Bookmark(0, 0, 0, 0, "目前沒有書籤！", "", "", false));
         bookmarksMap = getBookmarksMap(bookmarks);
     }
 
