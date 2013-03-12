@@ -17,7 +17,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ExpandListAdapter extends BaseExpandableListAdapter {
+public class ExpandListDownLoadAdapter extends BaseExpandableListAdapter {
 
 	 public ArrayList<String> groupListArray;
 //	 public String[] groupListArray;	 
@@ -27,7 +27,7 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
 	 private Activity activity;
 	 private String theNovelName;
 	 
-	 public ExpandListAdapter(Activity a, TreeMap<String, ArrayList<Article>> myData, ArrayList<String> groupTitles, String novelName) {
+	 public ExpandListDownLoadAdapter(Activity a, TreeMap<String, ArrayList<Article>> myData, ArrayList<String> groupTitles, String novelName) {
 		 
 		 activity = a;
 		 theData = myData;
@@ -40,16 +40,12 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	 public Object getChild(int groupPosition, int childPosition) {
-		String aString = groupListArray.get(groupPosition);
-		ArrayList<Article> childArticles = theData.get(aString);
-		return childArticles.get(childPosition);
+	  return null;
 	 }
 
 	 @Override
 	 public long getChildId(int groupPosition, int childPosition) {
-		 String aString = groupListArray.get(groupPosition);
-	     ArrayList<Article> childArticles = theData.get(aString);
-	     return childArticles.get(childPosition).getId();
+	  return 0;
 	 }
 
 	 @Override
@@ -57,26 +53,13 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
 	   boolean isLastChild, View convertView, ViewGroup parent) {
 		 
 		 View vi=convertView;
-	     vi = inflater.inflate(R.layout.item_expandible_child, null);
+	     vi = inflater.inflate(R.layout.item_expandable_download_child, null);
 	     TextView text=(TextView)vi.findViewById(R.id.expandlist_child);
 	     String aString = groupListArray.get(groupPosition);
 	     final ArrayList<Article> childArticles = theData.get(aString);
 	     String childString = childArticles.get(childPosition).getTitle();
 	     text.setText(childString);
-	     
-	     vi.setOnClickListener(new OnClickListener() {
-	         @Override
-	         public void onClick(View v) {
-	            Intent intent = new Intent(activity, ArticleActivity.class);
-	            Bundle bundle = new Bundle();
-	 			bundle.putInt("ArticleId", childArticles.get(childPosition).getId()); 
-	 			bundle.putString("ArticleTitle", childArticles.get(childPosition).getTitle());
-	 			bundle.putString("NovelName", theNovelName);
-	 			intent.putExtras(bundle);
-	 			activity.startActivity(intent);
-	        }
-	     });
-	     
+	    	     
 		   
 	  return vi;
 	 }
@@ -118,7 +101,7 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
 	 public View getGroupView(int groupPosition, boolean isExpanded,
 	   View convertView, ViewGroup parent) {
 		 View vi=convertView;
-	     vi = inflater.inflate(R.layout.item_expandbile_parent, null);
+	     vi = inflater.inflate(R.layout.item_expandable_download_parent, null);
 	     TextView text=(TextView)vi.findViewById(R.id.expandlist_parent);
 	     String groupString = groupListArray.get(groupPosition);
 	     text.setText(groupString);	  
@@ -133,14 +116,12 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
 	 
 	 @Override
 	 public boolean hasStableIds() {
-	  return true;
+	  return false;
 	 }
 
 	 @Override
 	 public boolean isChildSelectable(int groupPosition, int childPosition) {
-	  return true;
+	  return false;
 	 }
-	 
-	 
 
 }

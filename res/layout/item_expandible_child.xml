@@ -7,7 +7,7 @@
     <TextView android:id="@+id/expandlist_child"
 	    android:layout_width="fill_parent"
    		android:layout_height="35dp"
-   		android:background="#FFFFFF"
+   		android:background="@drawable/my_article_selector"
    		android:text="child"
 	    />
     
