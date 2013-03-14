@@ -74,6 +74,11 @@ public class NovelAPI {
         return db.getCollectedNovels();
     }
 
+    public static Boolean isNovelCollected(Context context, int novel_id) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.isNovelCollected(novel_id);
+    }
+
     public static ArrayList<Novel> getDownloadedNovels(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         return db.getDownloadNovels();

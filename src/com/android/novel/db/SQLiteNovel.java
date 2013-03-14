@@ -381,4 +381,11 @@ public class SQLiteNovel extends SQLiteOpenHelper {
 
     }
 
+    public Boolean isNovelCollected(int novel_id) {
+        Cursor cursor = db.rawQuery("select 1 from " + NovelSchema.TABLE_NAME + " where id = " + novel_id + " and is_collected = 1", null);
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+
 }
