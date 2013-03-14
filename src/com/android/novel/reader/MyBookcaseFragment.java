@@ -23,13 +23,9 @@ public class MyBookcaseFragment extends Fragment {
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
 	
-    public static WeekFragment newInstance() {     
+    public static MyBookcaseFragment newInstance() {     
    	 
-
-//  	  myPage = page;
-//  	  novels = theNovels;
- 
-  	  WeekFragment fragment = new WeekFragment();
+    	MyBookcaseFragment fragment = new MyBookcaseFragment();
   	    
       return fragment;
         

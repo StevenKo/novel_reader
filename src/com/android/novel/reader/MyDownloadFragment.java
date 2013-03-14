@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
 import com.taiwan.imageload.GridViewAdapter;
+import com.taiwan.imageload.GridViewDownloadAdapter;
 import com.taiwan.imageload.ListNothingAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
@@ -20,17 +21,14 @@ public class MyDownloadFragment extends Fragment {
     
 	private ArrayList<Novel> novels = new ArrayList<Novel>();
 	private LoadMoreGridView  myGrid;
-	private GridViewAdapter myGridViewAdapter;
+	private GridViewDownloadAdapter myGridViewAdapter;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
+	private LinearLayout noDataLayout;
 	
-    public static WeekFragment newInstance() {     
-   	 
-
-//  	  myPage = page;
-//  	  novels = theNovels;
+    public static MyDownloadFragment newInstance() {     
  
-  	  WeekFragment fragment = new WeekFragment();
+    	MyDownloadFragment fragment = new MyDownloadFragment();
   	    
       return fragment;
         
@@ -51,6 +49,7 @@ public class MyDownloadFragment extends Fragment {
     	View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
     	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
+    	noDataLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_no_data);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
@@ -99,18 +98,18 @@ public class MyDownloadFragment extends Fragment {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
-            loadmoreLayout.setVisibility(View.GONE);           
+            loadmoreLayout.setVisibility(View.GONE);          
             
-            if(novels !=null){
+            if(novels !=null && novels.size()!=0){
           	  try{
-          		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
+          		myGridViewAdapter = new GridViewDownloadAdapter(getActivity(), novels);
           		myGrid.setAdapter(myGridViewAdapter);
           	  }catch(Exception e){
           		 
           	  }
             }else{
-          	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
-          	  myGrid.setAdapter(nothingAdapter);
+            	myGrid.setVisibility(View.GONE);
+            	noDataLayout.setVisibility(View.VISIBLE);
             }
 
         }

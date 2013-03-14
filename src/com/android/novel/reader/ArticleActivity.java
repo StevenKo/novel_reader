@@ -40,6 +40,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	private Button articleButtonDown;
 	private TextView articlePercent;
 	private Article myAricle; // uset to get article text
+	private Boolean downloadBoolean;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +54,16 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         novelName = mBundle.getString("NovelName");
         articleTitle = mBundle.getString("ArticleTitle");
         articleId = mBundle.getInt("ArticleId");
+        downloadBoolean = mBundle.getBoolean("ArticleDownloadBoolean",false);
         
         ab.setTitle(novelName);
         ab.setDisplayHomeAsUpEnabled(true);
         
-        myAricle = new Article(articleId, 0, "","","",false);
+        if(downloadBoolean){
+        	myAricle = new Article(articleId, 0, "","","",true);
+        }else{
+        	myAricle = new Article(articleId, 0, "","","",false);
+        }
         
         new DownloadArticleTask().execute();
         

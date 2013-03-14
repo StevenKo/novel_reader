@@ -61,13 +61,13 @@ public final class WeekFragment extends Fragment {
 			public void onLoadMore() {
 				// Do the work to load more items at the end of list
 				
-				if(checkLoad){
-					myPage = myPage +1;
-					loadmoreLayout.setVisibility(View.VISIBLE);
-					new LoadMoreTask().execute();
-				}else{
-					myGrid.onLoadMoreComplete();
-				}
+//				if(checkLoad){
+//					myPage = myPage +1;
+//					loadmoreLayout.setVisibility(View.VISIBLE);
+//					new LoadMoreTask().execute();
+//				}else{
+//					myGrid.onLoadMoreComplete();
+//				}
 			}
 		});
         return myFragmentView;
@@ -105,21 +105,6 @@ public final class WeekFragment extends Fragment {
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
             loadmoreLayout.setVisibility(View.GONE);
-   
-        	if(moreNovels!= null){
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-        	}
             
             
             if(novels !=null){
@@ -157,9 +142,6 @@ public final class WeekFragment extends Fragment {
 	        	for(int i=0; i<moreNovels.size();i++){
 	        		novels.add(moreNovels.get(i));
 	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
         	}
         	
         	
@@ -185,13 +167,4 @@ public final class WeekFragment extends Fragment {
         }
     }
     
-//    public boolean isOnline() {
-//	    ConnectivityManager cm =
-//	        (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-//	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
-//	    if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-//	        return true;
-//	    }
-//	    return false;
-//	}
 }

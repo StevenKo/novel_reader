@@ -33,11 +33,6 @@ import com.taiwan.imageload.ImageLoader;
 
 public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	
-// 	API: 
-//	搜索: searchNovels(String), 
-//	取某篇章節: getArticle(Article), 
-//	取所有章節: getNovelArticles(int novelId, int page, boolean isOrderUp),
-	
 	private static final int ID_SETTING = 0;
     private static final int ID_RESPONSE = 1;
     private static final int ID_ABOUT_US = 2;
@@ -69,6 +64,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	private ExpandableListView novelListView;
 	private Novel theNovel;
 	private Boolean descriptionExpand = false;
+	private Boolean isNovelChecked;
 	
 	private TreeMap<String, ArrayList<Article>> myData = new  TreeMap<String, ArrayList<Article>>();
 //	private ArrayList<String> groupTitleList = new ArrayList<String>();
@@ -94,6 +90,8 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         ab.setTitle("小說介紹");
         ab.setDisplayHomeAsUpEnabled(true);
         
+        isNovelChecked = NovelAPI.isNovelCollected(NovelIntroduceActivity.this, novelId);
+        
         setViews();
         
         new DownloadNovelTask().execute();
@@ -113,6 +111,11 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 		layoutTextArrow = (LinearLayout) findViewById (R.id.layout_text_arrow);
 		imageArrow = (ImageView) findViewById (R.id.image_arrow);
 		checkBoxAddBookcase = (CheckBox) findViewById (R.id.checkbox_add_bookcase);
+		if (isNovelChecked){
+			checkBoxAddBookcase.setChecked(true);
+		}else{
+			checkBoxAddBookcase.setChecked(false);
+		}
 		
 		novelTextName.setText(novelName + "(" + novelArticleNum + ")");
 		novelTextAuthor.setText("作者:"+novelAuthor);
@@ -146,22 +149,27 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 				if(descriptionExpand.equals(false)){
 					novelTextDescription.setMaxLines(999);
 					descriptionExpand = true;
+					imageArrow.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_arrow_up));
 				}else{
 					novelTextDescription.setMaxLines(3);
 					descriptionExpand = false;
+					imageArrow.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_arrow_right));
 				}
 			}
 		});
 		
 		layoutTextArrow.setOnClickListener(new OnClickListener() {			 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onClick(View arg0) {
 				if(descriptionExpand.equals(false)){
 					novelTextDescription.setMaxLines(999);
 					descriptionExpand = true;
+					imageArrow.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_arrow_up));
 				}else{
 					novelTextDescription.setMaxLines(3);
 					descriptionExpand = false;
+					imageArrow.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_arrow_right));
 				}
 			}
 		});
@@ -172,9 +180,11 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 				if(descriptionExpand.equals(false)){
 					novelTextDescription.setMaxLines(999);
 					descriptionExpand = true;
+					imageArrow.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_arrow_up));
 				}else{
 					novelTextDescription.setMaxLines(3);
 					descriptionExpand = false;
+					imageArrow.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_arrow_right));
 				}
 			}
 		});

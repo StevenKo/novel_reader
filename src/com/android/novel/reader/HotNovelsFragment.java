@@ -59,13 +59,13 @@ public class HotNovelsFragment extends Fragment {
 			public void onLoadMore() {
 				// Do the work to load more items at the end of list
 				
-				if(checkLoad){
-					myPage = myPage +1;
-					loadmoreLayout.setVisibility(View.VISIBLE);
-					new LoadMoreTask().execute();
-				}else{
-					myGrid.onLoadMoreComplete();
-				}
+//				if(checkLoad){
+//					myPage = myPage +1;
+//					loadmoreLayout.setVisibility(View.VISIBLE);
+//					new LoadMoreTask().execute();
+//				}else{
+//					myGrid.onLoadMoreComplete();
+//				}
 			}
 		});
         return myFragmentView;
@@ -152,9 +152,7 @@ public class HotNovelsFragment extends Fragment {
 
         	moreNovels = NovelAPI.getThisMonthHotNovels();
         	if(moreNovels!= null){
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
+        		
 	        	for(int i=0; i<moreNovels.size();i++){
 	        		novels.add(moreNovels.get(i));
 	            }

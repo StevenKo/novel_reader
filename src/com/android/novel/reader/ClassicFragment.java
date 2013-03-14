@@ -1,4 +1,4 @@
-package com.kosbrother.fragments;
+package com.android.novel.reader;
 
 import java.util.ArrayList;
 
@@ -10,15 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import com.android.novel.reader.R;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
 import com.taiwan.imageload.GridViewAdapter;
 import com.taiwan.imageload.ListNothingAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
-public class CategroyHotNovelsFragment extends Fragment {
+public class ClassicFragment extends Fragment {
     
 	private ArrayList<Novel> novels = new ArrayList<Novel>();
 	private ArrayList<Novel> moreNovels = new ArrayList<Novel>();
@@ -28,17 +26,16 @@ public class CategroyHotNovelsFragment extends Fragment {
 	private Boolean checkLoad = true;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
-	private LinearLayout noDataLayout;
-	private static int id;
+	private static int classicType; // 0 for classic action, 1 for classic
 	
-    public static CategroyHotNovelsFragment newInstance(int categoryId) {     
+    public static ClassicFragment newInstance(int type) {     
    	 
 
 //  	  myPage = page;
 //  	  novels = theNovels;
-    	id = categoryId;
-    	CategroyHotNovelsFragment fragment = new CategroyHotNovelsFragment();
-  	    
+ 
+      ClassicFragment fragment = new ClassicFragment();
+  	  classicType = type;
       return fragment;
         
     }
@@ -58,7 +55,6 @@ public class CategroyHotNovelsFragment extends Fragment {
     	View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
     	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
-    	noDataLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_no_data);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
@@ -95,9 +91,13 @@ public class CategroyHotNovelsFragment extends Fragment {
         @Override
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
-
-        	novels =  NovelAPI.getCategoryHotNovels(id); 
-//        	moreNovels = NovelAPI.getHotNovels(); 
+        	
+        	if(classicType == 0){
+        		novels = NovelAPI.getClassicActionNovels(); 
+        	}else if(classicType == 1){
+        		novels = NovelAPI.getClassicNovels(); 
+        	}
+//        	moreNovels = NovelAPI.getThisWeekHotNovels(); 
 
             return null;
         }
@@ -108,9 +108,9 @@ public class CategroyHotNovelsFragment extends Fragment {
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
             loadmoreLayout.setVisibility(View.GONE);
-            
-            
-            if(novels !=null && novels.size()!= 0){
+   
+
+            if(novels !=null){
           	  try{
           		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
           		myGrid.setAdapter(myGridViewAdapter);
@@ -118,60 +118,59 @@ public class CategroyHotNovelsFragment extends Fragment {
           		 
           	  }
             }else{
-            	noDataLayout.setVisibility(View.VISIBLE);
-//        	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
-//        	  myGrid.setAdapter(nothingAdapter);
+          	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
+          	  myGrid.setAdapter(nothingAdapter);
             }
 
         }
     }
     
     
-    private class LoadMoreTask extends AsyncTask {
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            
-
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            // TODO Auto-generated method stub
-
-        	moreNovels = NovelAPI.getThisMonthHotNovels();
-        	if(moreNovels!= null){
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-        	}
-        	
-        	
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            // TODO Auto-generated method stub
-            super.onPostExecute(result);
-            
-            loadmoreLayout.setVisibility(View.GONE);
-            
-            if(moreNovels!= null){
-            	myGridViewAdapter.notifyDataSetChanged();	                
-            }else{
-                checkLoad= false;
-                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();            	
-            }       
-            myGrid.onLoadMoreComplete();
-          	
-          	
-        }
-    }
-    
+//    private class LoadMoreTask extends AsyncTask {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            // TODO Auto-generated method stub
+//            super.onPreExecute();
+//            
+//
+//        }
+//
+//        @Override
+//        protected Object doInBackground(Object... params) {
+//            // TODO Auto-generated method stub
+//
+//        	moreNovels = NovelAPI.getThisMonthHotNovels();
+//        	if(moreNovels!= null){
+//	        	for(int i=0; i<moreNovels.size();i++){
+//	        		novels.add(moreNovels.get(i));
+//	            }
+//	        	for(int i=0; i<moreNovels.size();i++){
+//	        		novels.add(moreNovels.get(i));
+//	            }
+//        	}
+//        	
+//        	
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Object result) {
+//            // TODO Auto-generated method stub
+//            super.onPostExecute(result);
+//            
+//            loadmoreLayout.setVisibility(View.GONE);
+//            
+//            if(moreNovels!= null){
+//            	myGridViewAdapter.notifyDataSetChanged();	                
+//            }else{
+//                checkLoad= false;
+//                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();            	
+//            }       
+//            myGrid.onLoadMoreComplete();
+//          	
+//          	
+//        }
+//    }
+   
 }

@@ -6,26 +6,26 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.android.novel.reader.NovelIntroduceActivity;
+
+import com.android.novel.reader.MyDownloadArticleActivity;
 import com.android.novel.reader.R;
 import com.android.novel.reader.entity.Novel;
 
-public class GridViewAdapter extends BaseAdapter {
+public class GridViewDownloadAdapter extends BaseAdapter {
 
     private final Activity         activity;
     private final ArrayList<Novel> data;
     private static LayoutInflater  inflater = null;
     public ImageLoader             imageLoader;
 
-    public GridViewAdapter(Activity a, ArrayList<Novel> d) {
+    public GridViewDownloadAdapter(Activity a, ArrayList<Novel> d) {
         activity = a;
         data = d;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -48,19 +48,8 @@ public class GridViewAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         // if (convertView == null)
-//        vi = inflater.inflate(R.layout.item_gridview_novel, null);
-        
-        Display display = activity.getWindowManager().getDefaultDisplay(); 
-		int width = display.getWidth();  // deprecated
-		int height = display.getHeight();  // deprecated
-	
-		if (width > 480){
-			vi = inflater.inflate(R.layout.item_gridview_novel, null);
-		}else{
-			vi = inflater.inflate(R.layout.item_gridview_novel_small, null);
-		}
-        
-        
+        vi = inflater.inflate(R.layout.item_gridview_novel, null);
+
         vi.setClickable(true);
         vi.setFocusable(true);
         // vi.setBackgroundResource(android.R.drawable.menuitem_background);
@@ -69,13 +58,13 @@ public class GridViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // Toast.makeText(activity, "tt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(activity, NovelIntroduceActivity.class);
+                Intent intent = new Intent(activity, MyDownloadArticleActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("NovelId", data.get(position).getId());
                 bundle.putString("NovelName", data.get(position).getName());
                 bundle.putString("NovelAuthor", data.get(position).getAuthor());
-                bundle.putString("NovelDescription", data.get(position).getDescription());
-                bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
+//                bundle.putString("NovelDescription", data.get(position).getDescription());
+//                bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
                 bundle.putString("NovelPicUrl", data.get(position).getPic());
                 bundle.putString("NovelArticleNum", data.get(position).getArticleNum());
                 intent.putExtras(bundle);

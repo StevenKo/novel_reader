@@ -1,6 +1,5 @@
 package com.android.novel.reader;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +10,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.viewpagerindicator.TitlePageIndicator;
 
 public class ClassicNovelsActivity extends SherlockFragmentActivity {
 
@@ -32,13 +30,10 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
         ab.setTitle(title);
         ab.setDisplayHomeAsUpEnabled(true);
 
-        FragmentStatePagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
+        FragmentStatePagerAdapter adapter = new ClassicNovelPagerAdapter(getSupportFragmentManager());
 
         ViewPager pager = (ViewPager) findViewById(R.id.classic_pager);
         pager.setAdapter(adapter);
-
-//        TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
-//        indicator.setViewPager(pager);
 
     }
 
@@ -55,8 +50,8 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
         return true;
     }
 
-    class NovelPagerAdapter extends FragmentStatePagerAdapter {
-        public NovelPagerAdapter(FragmentManager fm) {
+    class ClassicNovelPagerAdapter extends FragmentStatePagerAdapter {
+        public ClassicNovelPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -64,7 +59,7 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
         public Fragment getItem(int position) {
             Fragment kk = new Fragment();
             if (position == 0) {
-            	kk = WeekFragment.newInstance();
+            	kk = ClassicFragment.newInstance(classicInt);
             } 
             return kk;
         }
