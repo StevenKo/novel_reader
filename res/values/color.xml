@@ -3,6 +3,9 @@
     <color name="main_color_yellow">#f6c737</color>
     <color name="main_color_grey_dark">#dddddd</color>
     
+    <color name="bookmark_section_head">#29A3CC</color>
+    <color name="bookmark_section_text">#041014</color>
+    
      <!-- Add for Report -->
     <color name="report_view_1">#f6c737</color>
     <color name="report_view_2">#e1e1e1</color>

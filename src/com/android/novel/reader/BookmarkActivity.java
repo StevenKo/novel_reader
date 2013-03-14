@@ -218,8 +218,8 @@ public class BookmarkActivity extends SherlockActivity {
                 header = new TextView(mContext);
                 header.setTextSize(16);
                 header.setPadding(2, 1, 2, 1);
-                header.setBackgroundColor(mContext.getResources().getColor(R.color.black));
-                header.setTextColor(mContext.getResources().getColor(R.color.main_color_yellow));
+                header.setBackgroundColor(mContext.getResources().getColor(R.color.bookmark_section_head));
+                header.setTextColor(mContext.getResources().getColor(R.color.bookmark_section_text));
             }
             header.setText(headerString);
 
