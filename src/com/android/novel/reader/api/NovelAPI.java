@@ -79,6 +79,11 @@ public class NovelAPI {
         return db.isNovelCollected(novel_id);
     }
 
+    public static Boolean isNovelDownloaded(Context context, int novel_id) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.isNovelDownloaded(novel_id);
+    }
+
     public static ArrayList<Novel> getDownloadedNovels(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         return db.getDownloadNovels();
@@ -94,7 +99,7 @@ public class NovelAPI {
         SQLiteNovel db = new SQLiteNovel(context);
 
         if (!db.isNovelExists(novelId)) {
-            downloadOrUpdateNovelInfo(novelId, context, false);
+            downloadOrUpdateNovelInfo(article.getNovelId(), context, false, true);
         }
 
         String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
@@ -123,6 +128,16 @@ public class NovelAPI {
         return true;
     }
 
+    public static boolean removeNovelFromCollected(Novel novel, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.removeNovelFromCollected(novel);
+    }
+
+    public static boolean removeNovelFromDownload(Novel novel, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.removeNovelFromDownload(novel);
+    }
+
     public static boolean collecNovel(final Novel novel, final Context context) {
         novel.setIsCollected(true);
         SQLiteNovel db = new SQLiteNovel(context);
@@ -134,7 +149,7 @@ public class NovelAPI {
         new AsyncTask() {
             @Override
             protected Object doInBackground(Object... params) {
-                downloadOrUpdateNovelInfo(novel.getId(), context, true);
+                downloadOrUpdateNovelInfo(novel.getId(), context, true, false);
                 return params;
             }
         }.execute();
@@ -142,7 +157,7 @@ public class NovelAPI {
         return true;
     }
 
-    public static boolean downloadOrUpdateNovelInfo(int novelId, Context context, boolean isCollected) {
+    public static boolean downloadOrUpdateNovelInfo(int novelId, Context context, boolean isCollected, boolean isDownload) {
 
         Novel n = null;
         ArrayList<Article> articles = new ArrayList<Article>();
@@ -166,7 +181,7 @@ public class NovelAPI {
                 String description = nObject.getString("description");
                 int category_id = nObject.getInt("category_id");
 
-                n = new Novel(novel_id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing, isCollected);
+                n = new Novel(novel_id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing, isCollected, isDownload);
 
                 JSONArray articlesArray = nObject.getJSONArray("articles");
                 for (int i = 0; i < articlesArray.length(); i++) {
@@ -435,7 +450,7 @@ public class NovelAPI {
                 String description = nObject.getString("description");
                 int category_id = nObject.getInt("category_id");
 
-                n = new Novel(id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing, false);
+                n = new Novel(id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing, false, false);
 
             } catch (JSONException e) {
 
@@ -528,7 +543,7 @@ public class NovelAPI {
                 String name = novelsArray.getJSONObject(i).getString("name");
                 String pic = novelsArray.getJSONObject(i).getString("pic");
 
-                Novel novel = new Novel(id, name, author, "", pic, 0, articleNum, lastUpdate, isSerializing, false);
+                Novel novel = new Novel(id, name, author, "", pic, 0, articleNum, lastUpdate, isSerializing, false, false);
                 novels.add(novel);
             }
 

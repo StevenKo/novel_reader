@@ -11,13 +11,14 @@ public class Novel {
     String  lastUpdate;
     boolean isSerializing;
     boolean isCollected;
+    boolean isDownloaded;
 
     public Novel() {
-        this(1, "", "", "", "", 1, "", "", true, false);
+        this(1, "", "", "", "", 1, "", "", true, false, false);
     }
 
     public Novel(int id, String name, String author, String description, String pic, int categoryId, String articleNum, String lastUpdate,
-            boolean isSerializing, boolean isCollected) {
+            boolean isSerializing, boolean isCollected, boolean isDownloaded) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -28,10 +29,15 @@ public class Novel {
         this.lastUpdate = lastUpdate;
         this.isSerializing = isSerializing;
         this.isCollected = isCollected;
+        this.isDownloaded = isDownloaded;
     }
 
     public void setIsCollected(boolean b) {
         this.isCollected = b;
+    }
+
+    public void setIsDownload(boolean b) {
+        this.isDownloaded = b;
     }
 
     public boolean isCollected() {
@@ -72,6 +78,10 @@ public class Novel {
 
     public String getLastUpdate() {
         return lastUpdate;
+    }
+
+    public boolean isDownloaded() {
+        return isDownloaded;
     }
 
 }

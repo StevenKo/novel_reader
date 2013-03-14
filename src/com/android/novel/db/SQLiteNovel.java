@@ -33,6 +33,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         String LAST_UPDATE    = "last_update";
         String IS_SERIALIZING = "is_serializing";
         String IS_COLLECTED   = "is_collected";
+        String IS_DOWNLOAD    = "is_downloaded";
     }
 
     public interface ArtcileSchema {
@@ -69,7 +70,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
                 + " TEXT NOT NULL" + "," + NovelSchema.AUTHOR + " TEXT NOT NULL" + "," + NovelSchema.DESCRIPTION + " TEXT NOT NULL" + "," + NovelSchema.PIC
                 + " TEXT NOT NULL" + "," + NovelSchema.CATEGORY_ID + " INTEGER NOT NULL" + "," + NovelSchema.ARTICLE_NUM + " TEXT NOT NULL" + ","
                 + NovelSchema.LAST_UPDATE + " TEXT NOT NULL" + "," + NovelSchema.IS_SERIALIZING + " INTEGER NOT NULL" + "," + NovelSchema.IS_COLLECTED
-                + " INTEGER NOT NULL" + ");");
+                + " INTEGER NOT NULL" + "," + NovelSchema.IS_DOWNLOAD + " INTEGER NOT NULL" + ");");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + ArtcileSchema.TABLE_NAME + " (" + ArtcileSchema.ID + " INTEGER PRIMARY KEY" + "," + ArtcileSchema.NOVEL_ID
                 + " INTEGER NOT NULL" + "," + ArtcileSchema.TEXT + " TEXT NOT NULL" + "," + ArtcileSchema.TITLE + " TEXT NOT NULL" + ","
@@ -183,10 +184,11 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     // }
 
     public boolean updateNovel(Novel novel) {
-        Cursor cursor = db.rawQuery(
-                "UPDATE novels SET `article_num` = ?, `last_update` = ?, `is_serializing` = ? , `is_collected` = ? WHERE `novels`.`id` = ?", new String[] {
-                        novel.getArticleNum(), novel.getLastUpdate(), getSQLiteBoolean(novel.isSerializing()) + "", getSQLiteBoolean(novel.isCollected()) + "",
-                        novel.getId() + "" });
+        Cursor cursor = db
+                .rawQuery(
+                        "UPDATE novels SET `article_num` = ?, `last_update` = ?, `is_serializing` = ? , `is_collected` = ? , `is_downloaded` = ? WHERE `novels`.`id` = ?",
+                        new String[] { novel.getArticleNum(), novel.getLastUpdate(), getSQLiteBoolean(novel.isSerializing()) + "",
+                                getSQLiteBoolean(novel.isCollected()) + "", getSQLiteBoolean(novel.isDownloaded()) + "", novel.getId() + "" });
         cursor.moveToFirst();
         cursor.close();
         return true;
@@ -214,7 +216,8 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             String LAST_UPDATE = cursor.getString(7);
             Boolean IS_SERIALIZING = cursor.getInt(8) > 0;
             Boolean IS_COLLECTED = cursor.getInt(9) > 0;
-            novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED);
+            Boolean IS_DOWNLOADED = cursor.getInt(10) > 0;
+            novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED, IS_DOWNLOADED);
         }
         cursor.close();
         return novel;
@@ -324,7 +327,8 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             String LAST_UPDATE = cursor.getString(7);
             Boolean IS_SERIALIZING = cursor.getInt(8) > 0;
             Boolean IS_COLLECTED = cursor.getInt(9) > 0;
-            Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED);
+            Boolean IS_DOWNLOADED = cursor.getInt(10) > 0;
+            Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED, IS_DOWNLOADED);
             novels.add(novel);
         }
         return novels;
@@ -333,7 +337,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     public ArrayList<Novel> getDownloadNovels() {
         Cursor cursor = null;
         ArrayList<Novel> novels = new ArrayList<Novel>();
-        cursor = db.rawQuery("SELECT * FROM " + NovelSchema.TABLE_NAME + " WHERE is_collected = 0", null);
+        cursor = db.rawQuery("SELECT * FROM " + NovelSchema.TABLE_NAME + " WHERE is_downloaded = 1", null);
         while (cursor.moveToNext()) {
             int ID = cursor.getInt(0);
             String NAME = cursor.getString(1);
@@ -345,7 +349,8 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             String LAST_UPDATE = cursor.getString(7);
             Boolean IS_SERIALIZING = cursor.getInt(8) > 0;
             Boolean IS_COLLECTED = cursor.getInt(9) > 0;
-            Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED);
+            Boolean IS_DOWNLOADED = cursor.getInt(10) > 0;
+            Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED, IS_DOWNLOADED);
             novels.add(novel);
         }
         return novels;
@@ -364,6 +369,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         args.put(NovelSchema.LAST_UPDATE, novel.getLastUpdate());
         args.put(NovelSchema.IS_SERIALIZING, getSQLiteBoolean(novel.isSerializing()));
         args.put(NovelSchema.IS_COLLECTED, getSQLiteBoolean(novel.isCollected()));
+        args.put(NovelSchema.IS_DOWNLOAD, getSQLiteBoolean(novel.isDownloaded()));
 
         return db.insert(NovelSchema.TABLE_NAME, null, args);
     }
@@ -386,6 +392,23 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         boolean exists = (cursor.getCount() > 0);
         cursor.close();
         return exists;
+    }
+
+    public Boolean isNovelDownloaded(int novel_id) {
+        Cursor cursor = db.rawQuery("select 1 from " + NovelSchema.TABLE_NAME + " where id = " + novel_id + " and is_downloaded = 1", null);
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+
+    public Boolean removeNovelFromCollected(Novel novel) {
+        novel.setIsCollected(false);
+        return updateNovel(novel);
+    }
+
+    public Boolean removeNovelFromDownload(Novel novel) {
+        novel.setIsDownload(false);
+        return updateNovel(novel);
     }
 
 }
