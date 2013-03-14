@@ -4,6 +4,8 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    
+    
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
@@ -13,11 +15,13 @@
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock.Light"
+        android:windowSoftInputMode="adjustPan"
         >
         <activity
             android:name="com.android.novel.reader.MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,13 +30,15 @@
         <activity
             android:name=".CategoryActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait" 
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" 
             >
         </activity>
         <activity
             android:name=".NovelIntroduceActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait" 
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" 
             >
         </activity>
         <activity
@@ -50,7 +56,8 @@
         <activity      
             android:name=".SearchActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait" 
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" 
             >
         </activity>
         <activity
@@ -73,6 +80,13 @@
         </activity>
         <activity
             android:name=".ClassicNovelsActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" 
+            >
+        </activity>
+        <activity
+            android:name=".MyDownloadArticleActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" 
             >

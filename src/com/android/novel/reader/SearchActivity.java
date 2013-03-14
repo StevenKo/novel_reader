@@ -21,8 +21,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
@@ -33,17 +35,27 @@ import com.android.novel.reader.entity.Novel;
 import com.taiwan.imageload.ImageLoader;
 
 public class SearchActivity extends SherlockListActivity {
-
+	
+	private static final int ID_SETTING = 0;
+    private static final int ID_RESPONSE = 1;
+    private static final int ID_ABOUT_US = 2;
+    private static final int ID_GRADE = 3;
+    private static final int ID_DOWNLOAD = 4;
+    private static final int ID_SEARCH = 5;
+	
     private Bundle           mBundle;
     private String           keyword;
     private ArrayList<Novel> novels;
     private ListView         novelListView;
     private MenuItem         item;
+    
+    private LinearLayout layoutNoSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_search);
+        layoutNoSearch = (LinearLayout) findViewById (R.id.layout_no_search);
 
         final ActionBar ab = getSupportActionBar();
         mBundle = this.getIntent().getExtras();
@@ -139,12 +151,12 @@ public class SearchActivity extends SherlockListActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         // getMenuInflater().inflate(R.menu.activity_main, menu);
 
-        menu.add("設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add("意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add("關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add("為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+    	menu.add(0, ID_SETTING, 0, "設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_RESPONSE, 1, "意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
-        item = menu.add("Search").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+        item = menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             private EditText search;
 
             @Override
@@ -189,9 +201,24 @@ public class SearchActivity extends SherlockListActivity {
         int itemId = item.getItemId();
         switch (itemId) {
         case android.R.id.home:
-            finish();
-            // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
-            break;
+	        finish();
+	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+	        break;
+	    case ID_SETTING: // setting
+	    		Intent intent = new Intent(SearchActivity.this, SettingActivity.class);
+	    		startActivity(intent); 
+	        break;
+	    case ID_RESPONSE: // response
+    			Toast.makeText(SearchActivity.this, "RESPONESE", Toast.LENGTH_SHORT).show();
+    		break;
+	    case ID_ABOUT_US: // response
+			Toast.makeText(SearchActivity.this, "ABOUT_US", Toast.LENGTH_SHORT).show();
+			break;
+	    case ID_GRADE: // response
+			Toast.makeText(SearchActivity.this, "GRADE", Toast.LENGTH_SHORT).show();
+			break;
+	    case ID_SEARCH: // response
+			break;
         }
         return true;
     }
@@ -232,7 +259,11 @@ public class SearchActivity extends SherlockListActivity {
         @Override
         protected void onPostExecute(String result) {
             progressdialogInit.dismiss();
-            novelListView.setAdapter(new SearchAdapter(SearchActivity.this, novels));
+            if(novels.size()!=0 && novels != null){
+            	novelListView.setAdapter(new SearchAdapter(SearchActivity.this, novels));
+            }else{
+            	layoutNoSearch.setVisibility(View.VISIBLE);
+            }
             item.expandActionView();
             EditText search = (EditText) item.getActionView();
             search.setText(keyword);

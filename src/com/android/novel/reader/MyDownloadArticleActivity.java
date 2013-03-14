@@ -1,7 +1,11 @@
 package com.android.novel.reader;
 
 import java.util.ArrayList;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +20,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Article;
+import com.android.novel.reader.entity.Novel;
 import com.kosbrother.tool.Group;
 import com.taiwan.imageload.ImageLoader;
 import com.taiwan.imageload.ListArticleAdapter;
@@ -31,7 +36,7 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
     private static final int ID_RESPONSE = 1;
     private static final int ID_ABOUT_US = 2;
     private static final int ID_GRADE = 3;
-    private static final int ID_DOWNLOAD = 4;
+    private static final int ID_DELETE_DOWNLOAD = 4;
 
   	
 	private Bundle mBundle;
@@ -43,12 +48,14 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
 	private ImageView novelImageView;
 	private TextView novelTextName;
 	private TextView novelTextAuthor;
+	private TextView downloadedCount;
 	private ImageLoader mImageLoader;
 	private LinearLayout novelLayoutProgress;
 	private ArrayList<Article> articleList = new ArrayList<Article>();
 	private ListView novelListView;
 	
 	private ArrayList<Group> mGroups = new ArrayList<Group>();
+	private AlertDialog.Builder deleteDialog;
 	
 	
     @Override
@@ -79,6 +86,7 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
 		novelTextName = (TextView) findViewById (R.id.novel_name);
 		novelTextAuthor = (TextView) findViewById (R.id.novel_author);
 		novelListView = (ListView) findViewById (R.id.novel_download_artiles_list);
+		downloadedCount =  (TextView) findViewById (R.id.text_downloaded_count);
 		novelLayoutProgress = (LinearLayout) findViewById (R.id.novel_layout_progress);
 		
 		novelTextName.setText(novelName + "(" + novelArticleNum + ")");
@@ -86,6 +94,22 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
 		
 		mImageLoader = new ImageLoader(MyDownloadArticleActivity.this, 70);
 		mImageLoader.DisplayImage(novelPicUrl, novelImageView);
+		
+		deleteDialog = new AlertDialog.Builder(this).setTitle("刪除")
+				.setMessage("是否刪除此小說")
+				.setIcon(R.drawable.app_icon)
+				.setPositiveButton("刪除", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Novel myNovel = new Novel(novelId, novelName, novelAuthor, "", novelPicUrl, 0, novelArticleNum, "", false, false,true);
+						NovelAPI.removeNovelFromDownload(myNovel, MyDownloadArticleActivity.this);
+				}
+				})
+				.setNegativeButton("不刪除", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+				}
+		});
 		
 	}
 	
@@ -98,7 +122,7 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
 		menu.add(0, ID_RESPONSE, 1, "意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_DOWNLOAD, 5, "下載").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);     
+		menu.add(0, ID_DELETE_DOWNLOAD, 5, "刪除").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
     }
 	
@@ -122,6 +146,9 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
 			break;
 	    case ID_GRADE: // response
 			Toast.makeText(MyDownloadArticleActivity.this, "GRADE", Toast.LENGTH_SHORT).show();
+			break;
+	    case ID_DELETE_DOWNLOAD: // response
+	    	deleteDialog.show();
 			break;
 	    	
 	    }
@@ -147,6 +174,8 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
 	            	novelListView.setAdapter(mAdapter);
 	            
 	            }
+	            String txtCount = Integer.toString(articleList.size());
+	            downloadedCount.setText("共 "+txtCount+" 個下載");
 
 	        }
 	 }

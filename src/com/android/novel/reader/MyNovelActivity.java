@@ -1,11 +1,15 @@
 package com.android.novel.reader;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
+
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -19,7 +23,11 @@ public class MyNovelActivity extends SherlockFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_titles);
-
+        
+        final ActionBar ab = getSupportActionBar();
+        ab.setTitle(" 我的書櫃");
+        ab.setDisplayHomeAsUpEnabled(true);
+        
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.collections);
 
@@ -45,6 +53,18 @@ public class MyNovelActivity extends SherlockFragmentActivity {
 
         return true;
     }
+    
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+
+	    int itemId = item.getItemId();
+	    switch (itemId) {
+	    case android.R.id.home:
+	        finish();
+	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+	        break;	    	
+	    }
+	    return true;
+	}
 
     class NovelPagerAdapter extends FragmentStatePagerAdapter {
         public NovelPagerAdapter(FragmentManager fm) {

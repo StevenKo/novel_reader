@@ -47,10 +47,10 @@
         android:background="#A3A3A3"
         >      
     </LinearLayout>  
-    <TextView 
+    <TextView  android:id="@+id/text_downloaded_count"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
-       android:text="共18個下載"
+       android:text="共 0 個下載"
        android:background="#82B5E8"
        android:paddingTop="1dp"
        android:paddingBottom="1dp"

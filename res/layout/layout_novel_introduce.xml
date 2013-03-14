@@ -24,6 +24,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/novel_image"
             android:layout_weight="1"
+            android:layout_marginRight="2dp"
              >
             <TextView android:id="@+id/novel_name"
                 android:layout_width="wrap_content"
@@ -37,6 +38,7 @@
                 android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
             	android:text="作者:金庸"
+            	android:maxLines="1"
             	android:layout_marginTop="2dp"
                 />
         </LinearLayout>

@@ -3,6 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    
+	<LinearLayout 
+   	 	android:id="@+id/layout_no_search"
+   	 	android:layout_width="fill_parent"
+   	 	android:layout_height="fill_parent"
+     	android:gravity="center"
+     	android:visibility="gone"
+     	android:background="@color/main_color_grey_dark"
+     	>
+	    <ImageView 
+	       android:layout_width="80dp"
+   	 	   android:layout_height="80dp"
+   	 	   android:src="@drawable/app_icon_black" 
+	        />
+	    <TextView 
+	        android:layout_width="wrap_content"
+   	 		android:layout_height="wrap_content"
+   	 		android:text="找不到資料"
+   	 		android:textSize="23dp"
+   	 		android:layout_marginLeft="5dp"
+   	 		android:textColor="@color/textcolor_grey"
+   	 		android:textStyle="bold"
+	        />
+	</LinearLayout>
+    
 <ListView
         android:id="@+id/android:list"
         android:cacheColorHint="#00000000"

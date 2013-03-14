@@ -22,6 +22,7 @@ public class MyBookcaseFragment extends Fragment {
 	private GridViewAdapter myGridViewAdapter;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
+	private LinearLayout noDataLayout;
 	
     public static MyBookcaseFragment newInstance() {     
    	 
@@ -46,6 +47,7 @@ public class MyBookcaseFragment extends Fragment {
     	View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
     	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
+    	noDataLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_no_data);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
@@ -96,7 +98,7 @@ public class MyBookcaseFragment extends Fragment {
             progressLayout.setVisibility(View.GONE);
             loadmoreLayout.setVisibility(View.GONE);           
             
-            if(novels !=null){
+            if(novels !=null && novels.size()!=0){
           	  try{
           		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
           		myGrid.setAdapter(myGridViewAdapter);
@@ -104,8 +106,8 @@ public class MyBookcaseFragment extends Fragment {
           		 
           	  }
             }else{
-          	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
-          	  myGrid.setAdapter(nothingAdapter);
+            	myGrid.setVisibility(View.GONE);
+            	noDataLayout.setVisibility(View.VISIBLE);
             }
 
         }
