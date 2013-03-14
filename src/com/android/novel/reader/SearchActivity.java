@@ -91,11 +91,20 @@ public class SearchActivity extends SherlockListActivity {
             TextView name = (TextView) converView.findViewById(R.id.grid_item_name);
             TextView author = (TextView) converView.findViewById(R.id.grid_item_author);
             TextView articleNum = (TextView) converView.findViewById(R.id.grid_item_counts);
-            TextView isSerializing = (TextView) converView.findViewById(R.id.grid_item_finish);
+            TextView textFinish = (TextView) converView.findViewById(R.id.grid_item_finish);
+            TextView textSerialize = (TextView) converView.findViewById(R.id.serializing);
+
             imageLoader.DisplayImage(novels.get(position).getPic(), pic);
             name.setText(novels.get(position).getName());
             author.setText(novels.get(position).getAuthor());
             articleNum.setText(novels.get(position).getArticleNum());
+            textFinish.setText(novels.get(position).getLastUpdate());
+
+            if (novels.get(position).isSerializing()) {
+                textSerialize.setText("連載中...");
+            } else {
+                textSerialize.setText("全本");
+            }
 
             return converView;
         }

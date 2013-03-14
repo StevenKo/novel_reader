@@ -215,26 +215,28 @@ public class NovelAPI {
         if (message == null) {
             return null;
         } else {
-            try {
-                JSONArray novelsArray;
-                novelsArray = new JSONArray(message.toString());
-                for (int i = 0; i < novelsArray.length(); i++) {
-
-                    int id = novelsArray.getJSONObject(i).getInt("id");
-                    String author = novelsArray.getJSONObject(i).getString("author");
-                    String name = novelsArray.getJSONObject(i).getString("name");
-                    String pic = novelsArray.getJSONObject(i).getString("pic");
-
-                    Novel novel = new Novel(id, name, author, "", pic, 0, "", "", false, false);
-                    novels.add(novel);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
+            return parseNovel(message, novels);
         }
-        return novels;
+        // try {
+        // JSONArray novelsArray;
+        // novelsArray = new JSONArray(message.toString());
+        // for (int i = 0; i < novelsArray.length(); i++) {
+        //
+        // int id = novelsArray.getJSONObject(i).getInt("id");
+        // String author = novelsArray.getJSONObject(i).getString("author");
+        // String name = novelsArray.getJSONObject(i).getString("name");
+        // String pic = novelsArray.getJSONObject(i).getString("pic");
+        //
+        // Novel novel = new Novel(id, name, author, "", pic, 0, "", "", false, false);
+        // novels.add(novel);
+        // }
+        //
+        // } catch (JSONException e) {
+        // e.printStackTrace();
+        // return null;
+        // }
+        // }
+        // return novels;
     }
 
     public static Article getArticle(Article article, Context context) {
