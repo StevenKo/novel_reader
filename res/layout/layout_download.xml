@@ -32,7 +32,7 @@
         <TextView android:id="@+id/download_count_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="共選了x項"
+            android:text="共選了 0 項"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="5dp"
             android:layout_centerVertical="true"

@@ -44,6 +44,8 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	
 	private Boolean downloadBoolean;
 	private ProgressDialog progressDialog= null;
+	private ExpandListDownLoadAdapter mAdapter;
+	private int downloadCount;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,17 +79,13 @@ public class DownloadActivity extends SherlockFragmentActivity {
 				new DownloadToDBTask().execute();
 			}
 		});
-		
 	
 	}	
 		
 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.activity_main, menu);
-		
-		
+        // Inflate the menu; this adds items to the action bar if it is present.	
 		menu.add(0, ID_SELECT_ALL, 0, "全選").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		menu.add(0, ID_SELECT_NONE, 1, "全取消").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		
@@ -105,9 +103,28 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	        break;
 	    case ID_SELECT_ALL: // setting
 	    		Toast.makeText(DownloadActivity.this, "全選", Toast.LENGTH_SHORT).show();
+	    		downloadCount = 0;
+	    	    for(int i=0; i<mGroups.size(); i++){
+	    	    	mGroups.get(i).setChecked(true);
+	    	    	for(int j=0; j<mGroups.get(i).getChildrenCount();j++){
+	    	    		downloadCount = downloadCount + 1;
+	    	    		mGroups.get(i).getChildItem(j).setChecked(true);
+	    	    	}
+	    	    }
+	    	    mAdapter.notifyDataSetChanged();
+	    	    downLoadCountText.setText("共選了 "+Integer.toString(downloadCount)+" 項");
 	        break;
 	    case ID_SELECT_NONE: // response
     			Toast.makeText(DownloadActivity.this, "全部取消", Toast.LENGTH_SHORT).show();
+    			downloadCount = 0;
+    			for(int i=0; i<mGroups.size(); i++){
+	    	    	mGroups.get(i).setChecked(false);
+	    	    	for(int j=0; j<mGroups.get(i).getChildrenCount();j++){
+	    	    		mGroups.get(i).getChildItem(j).setChecked(false);
+	    	    	}
+	    	    }
+    			mAdapter.notifyDataSetChanged();
+    			downLoadCountText.setText("共選了 "+Integer.toString(downloadCount)+" 項");
     		break;
 	    }
 	    return true;
@@ -136,8 +153,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	            		}else{
 //	            			groupTitleList.add(articleList.get(i).getSubject());
 	            			
-	            			mGroups.add(new Group(articleList.get(i).getSubject()));
-	            			
+	            			mGroups.add(new Group(articleList.get(i).getSubject()));            			
 	            			myData.put(articleList.get(i).getSubject(), new ArrayList<Article>());
 	            			myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
 	            		}
@@ -151,7 +167,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	            		}
 	            	}
 	            	
-	            	ExpandListDownLoadAdapter mAdapter = new ExpandListDownLoadAdapter(DownloadActivity.this, mGroups, downLoadCountText);
+	            	mAdapter = new ExpandListDownLoadAdapter(DownloadActivity.this, mGroups, downLoadCountText);
 	            	novelListView.setAdapter(mAdapter);
 	            	
 	            }

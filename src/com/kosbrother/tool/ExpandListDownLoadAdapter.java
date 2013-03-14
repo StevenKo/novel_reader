@@ -68,7 +68,7 @@ public class ExpandListDownLoadAdapter extends BaseExpandableListAdapter {
 		for(int i=0; i< theGroups.size();i++){
 			totalCount = totalCount + theGroups.get(i).getGroupCheckedCount();
 		}
-		theCountText.setText("共選了"+Integer.toString(totalCount)+"項");
+		theCountText.setText("共選了 "+Integer.toString(totalCount)+" 項");
 	}
 
 	@Override
