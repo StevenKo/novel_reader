@@ -48,20 +48,35 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
-	    <TextView 
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="小說簡介"
-	        android:layout_marginLeft="10dp"
-	        android:textColor="#3B6F9C"
-	        android:textSize="15dp"
-	        />
+        <RelativeLayout 
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_vertical"
+            >
+		    <TextView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="小說簡介"
+		        android:layout_marginLeft="10dp"
+		        android:textColor="#3B6F9C"
+		        android:textSize="15dp"
+		        />
+		    <TextView android:id="@+id/novel_update"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="更新:2013-03-06"
+		        android:layout_marginLeft="10dp"
+		        android:textSize="15dp"
+		        android:layout_alignParentRight="true"
+		        android:layout_marginRight="5dp"
+		        />
+	    </RelativeLayout>	    
 	    <TextView android:id="@+id/novel_description"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="簡介內容.................................. >"
 	        android:layout_marginLeft="10dp"
-	        android:textSize="12dp"
+	        android:textSize="15dp"
 	        />
 	    <TextView android:id="@+id/novel_unfold"
 	        android:layout_width="fill_parent"
@@ -80,7 +95,7 @@
         >      
     </LinearLayout>
     
-    <LinearLayout
+    <!-- <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -98,14 +113,8 @@
 	        android:layout_marginLeft="3dp"
 	        android:text="從前往後"
 	        />
-	    <TextView android:id="@+id/novel_update"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="更新:2013-03-06"
-	        android:layout_marginLeft="10dp"
-	        android:textSize="12dp"
-	        />
-    </LinearLayout>
+	    
+    </LinearLayout> -->
 	
     
     <LinearLayout android:id="@+id/novel_layout_progress"
@@ -120,10 +129,11 @@
     </LinearLayout>
     
     
-    <ListView android:id="@+id/novel_artiles_list"
+    <ExpandableListView android:id="@+id/novel_artiles_list"
         android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
+	    android:groupIndicator="@null"
         >      
-    </ListView>
+    </ExpandableListView>
     
 </LinearLayout>

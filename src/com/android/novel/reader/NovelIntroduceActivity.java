@@ -1,24 +1,28 @@
 package com.android.novel.reader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeMap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
+import com.kosbrother.tool.FastScroller;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -26,6 +30,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Article;
 import com.android.novel.reader.entity.Novel;
+import com.taiwan.imageload.ExpandListAdapter;
 import com.taiwan.imageload.ImageLoader;
 import com.taiwan.imageload.ListArticleAdapter;
 
@@ -40,9 +45,10 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
     private static final int ID_RESPONSE = 1;
     private static final int ID_ABOUT_US = 2;
     private static final int ID_GRADE = 3;
+    private static final int ID_DOWNLOAD = 4;
+    private static final int ID_SEARCH = 5;
     
-	
-	
+   	
 	private EditText search;
 	private Bundle mBundle;
 	private String novelName;
@@ -57,14 +63,18 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	private TextView novelTextAuthor;
 	private TextView novelTextDescription;
 	private TextView novelTextUpdate;
-	private Button novelButton;
+//	private Button novelButton;
 	private ImageLoader mImageLoader;
 	private LinearLayout novelLayoutProgress;
 	private ArrayList<Article> articleList = new ArrayList<Article>();
-	private ListView novelListView;
+	private ExpandableListView novelListView;
 	private ListArticleAdapter mListAdapter;
 	private Novel theNovel;
 	private Boolean descriptionExpand = false;
+	
+	private TreeMap<String, ArrayList<Article>> myData = new  TreeMap<String, ArrayList<Article>>();
+	private ArrayList<String> groupTitleList = new ArrayList<String>();
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +108,8 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 		novelTextAuthor = (TextView) findViewById (R.id.novel_author);
 		novelTextDescription = (TextView) findViewById (R.id.novel_description);
 		novelTextUpdate = (TextView) findViewById (R.id.novel_update);
-		novelListView = (ListView) findViewById (R.id.novel_artiles_list);
-		novelButton = (Button) findViewById (R.id.novel_button);
+		novelListView = (ExpandableListView) findViewById (R.id.novel_artiles_list);
+//		novelButton = (Button) findViewById (R.id.novel_button);
 		novelLayoutProgress = (LinearLayout) findViewById (R.id.novel_layout_progress);
 		
 		novelTextName.setText(novelName + "(" + novelArticleNum + ")");
@@ -110,28 +120,28 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 		mImageLoader = new ImageLoader(NovelIntroduceActivity.this, 70);
 		mImageLoader.DisplayImage(novelPicUrl, novelImageView);
 		
-		novelButton.setOnClickListener(new OnClickListener() {			 
-			@Override
-			public void onClick(View arg0) {
-				if(novelButton.getText().equals("由後往前")){
-					novelButton.setText("由前往後");
-				}else{
-					novelButton.setText("由後往前");
-				}
-			}
-		});
+//		novelButton.setOnClickListener(new OnClickListener() {			 
+//			@Override
+//			public void onClick(View arg0) {
+//				if(novelButton.getText().equals("由後往前")){
+//					novelButton.setText("由前往後");
+//				}else{
+//					novelButton.setText("由後往前");
+//				}
+//			}
+//		});
 		
-		novelListView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {														
-				Intent intent = new Intent(NovelIntroduceActivity.this, ArticleActivity.class);
-				mBundle.putInt("ArticleId", articleList.get(position).getId());
-				mBundle.putString("ArticleTitle", articleList.get(position).getTitle());
-				intent.putExtras(mBundle);
-				startActivity(intent);		
-			}
-		});
+//		novelListView.setOnItemClickListener(new OnItemClickListener() {
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view,
+//					int position, long id) {														
+//				Intent intent = new Intent(NovelIntroduceActivity.this, ArticleActivity.class);
+//				mBundle.putInt("ArticleId", articleList.get(position).getId());
+//				mBundle.putString("ArticleTitle", articleList.get(position).getTitle());
+//				intent.putExtras(mBundle);
+//				startActivity(intent);		
+//			}
+//		});
 		
 		novelTextDescription.setOnClickListener(new OnClickListener() {			 
 			@Override
@@ -157,13 +167,15 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 		menu.add(0, ID_RESPONSE, 1, "意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_DOWNLOAD, 5, "下載").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		
 		
 //		menu.add("設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 //		menu.add("意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 //		menu.add("關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 //		menu.add("為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		
-        menu.add("Search")
+        menu.add(0, ID_SEARCH, 4,"Search")
         .setIcon(R.drawable.ic_search_inverse)
         .setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
@@ -207,7 +219,18 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 			break;
 	    case ID_GRADE: // response
 			Toast.makeText(NovelIntroduceActivity.this, "GRADE", Toast.LENGTH_SHORT).show();
-			break;	        
+			break;
+	    case ID_DOWNLOAD: // response
+		    	Intent intent_to_download = new Intent(NovelIntroduceActivity.this, DownloadActivity.class);
+	            Bundle bundle = new Bundle();
+	 			bundle.putInt("NovelId", novelId); 
+	 			bundle.putString("NovelName", novelName);
+	 			intent_to_download.putExtras(bundle);
+	 			startActivity(intent_to_download);
+			break;
+	    case ID_SEARCH: // response
+			Toast.makeText(NovelIntroduceActivity.this, "SEARCH", Toast.LENGTH_SHORT).show();
+			break;	
 	    }
 	    return true;
 	}
@@ -217,7 +240,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	        @Override
 	        protected Object doInBackground(Object... params) {
 	            // TODO Auto-generated method stub
-	        	articleList = NovelAPI.getNovelArticles(novelId, 1, true, NovelIntroduceActivity.this);
+	        	articleList = NovelAPI.getNovelArticles(novelId, true, NovelIntroduceActivity.this);
 	            return null;
 	        }
 
@@ -227,8 +250,51 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	            super.onPostExecute(result);
 	            novelLayoutProgress.setVisibility(View.GONE);
 	            if(articleList!= null && articleList.size()!= 0){
-		            mListAdapter = new ListArticleAdapter(NovelIntroduceActivity.this, articleList);
-		            novelListView.setAdapter(mListAdapter);
+	            	
+	            	// use HashMap || TreeMap to make a parent key
+	            	for(int i=0; i<articleList.size(); i++){
+	            		if(myData.containsKey(articleList.get(i).getSubject())){
+	            			myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
+	            		}else{
+	            			groupTitleList.add(articleList.get(i).getSubject());
+	            			myData.put(articleList.get(i).getSubject(), new ArrayList<Article>());
+	            			myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
+	            		}
+	            	}
+	            	        	
+	            	ExpandListAdapter mAdapter = new ExpandListAdapter(NovelIntroduceActivity.this,myData, groupTitleList, novelName);
+	            	novelListView.setAdapter(mAdapter);
+	            	
+	            	//FastScroller problem
+//	            	FastScroller newFastScroller = new FastScroller(NovelIntroduceActivity.this, novelListView);
+//	            	newFastScroller.setState(2);
+//	            	newFastScroller.draw(new Canvas());
+	            	
+//	            	novelListView.setFastScrollEnabled(true);
+//	            	
+//	            	novelListView.setOnScrollListener(new OnScrollListener() {  
+//	                    
+//	                    @Override  
+//	                    public void onScrollStateChanged(AbsListView paramAbsListView, int paramInt) {  
+//	                          
+//	                          
+//	                    }  
+//	                      
+//	                    @Override  
+//	                    public void onScroll(AbsListView paramAbsListView, int firstVisibleItem,  
+//	                            int visibleItemCount, int totalItemCount) {  
+//	                    	
+//	                    	System.out.println("***first:"+firstVisibleItem);
+//	                    	System.out.println("***visible:"+visibleItemCount);
+//	                    	System.out.println("***Total:"+totalItemCount);
+//	                    	
+//	                    }  
+//	                });  
+	              
+	            	
+	            	
+//		            mListAdapter = new ListArticleAdapter(NovelIntroduceActivity.this, articleList);
+//		            novelListView.setAdapter(mListAdapter);
 	            }
 
 	        }
