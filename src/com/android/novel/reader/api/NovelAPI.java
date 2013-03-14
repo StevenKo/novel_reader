@@ -512,6 +512,8 @@ public class NovelAPI {
             for (int i = 0; i < novelsArray.length(); i++) {
 
                 int id = novelsArray.getJSONObject(i).getInt("id");
+                if (novelsArray.getJSONObject(i).isNull("article_num"))
+                    continue;
                 String articleNum = novelsArray.getJSONObject(i).getString("article_num");
                 String author = novelsArray.getJSONObject(i).getString("author");
                 boolean isSerializing = novelsArray.getJSONObject(i).getBoolean("is_serializing");
