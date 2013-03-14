@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,6 +49,26 @@ public class SearchActivity extends SherlockListActivity {
         mBundle = this.getIntent().getExtras();
         keyword = mBundle.getString("SearchKeyword");
         novelListView = this.getListView();
+
+        novelListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Novel movie = novels.get(position);
+                Intent newAct = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putInt("NovelId", movie.getId());
+                bundle.putString("NovelName", movie.getName());
+                bundle.putString("NovelAuthor", movie.getAuthor());
+                bundle.putString("NovelDescription", movie.getDescription());
+                bundle.putString("NovelUpdate", movie.getLastUpdate());
+                bundle.putString("NovelPicUrl", movie.getPic());
+                bundle.putString("NovelArticleNum", movie.getArticleNum());
+                newAct.putExtras(bundle);
+                newAct.setClass(SearchActivity.this, NovelIntroduceActivity.class);
+                startActivity(newAct);
+            }
+
+        });
 
         ab.setTitle("小說王");
         ab.setDisplayHomeAsUpEnabled(true);

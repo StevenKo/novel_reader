@@ -10,6 +10,6 @@
     <string name="menu_respond">意見回饋</string>
     <string name="menu_aboutus">關於我們</string>
     <string name="menu_recommend">為App評分</string>
-    <string name="search_hint">可以搜作者或書名</string>
+    <string name="search_hint">請輸入作者或書名</string>
 
 </resources>
