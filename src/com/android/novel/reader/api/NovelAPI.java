@@ -100,6 +100,10 @@ public class NovelAPI {
 
         if (!db.isNovelExists(novelId)) {
             downloadOrUpdateNovelInfo(article.getNovelId(), context, false, true);
+        } else if (!db.isNovelDownloaded(novelId)) {
+            Novel novel = getNovel(novelId, context);
+            novel.setIsDownload(true);
+            db.updateNovel(novel);
         }
 
         String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
