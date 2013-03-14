@@ -29,10 +29,12 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="天龍八部"
-              android:layout_marginBottom="2px"
+            android:layout_marginBottom="2px"
 	        android:textSize="30px" 
-              android:textStyle="bold"
-              android:typeface="serif"/>
+            android:textStyle="bold"
+            android:typeface="serif"
+            android:maxLines="2"
+            />
 	   
         <RelativeLayout android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,7 +63,9 @@
             android:text="金庸"
             android:textSize="20px" 
             android:textColor="#555555"
-            android:typeface="serif">
+            android:typeface="serif"
+            android:maxLines="1"
+            >
             </TextView>
             </RelativeLayout>
         </RelativeLayout>

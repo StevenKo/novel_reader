@@ -114,7 +114,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 		if (isNovelChecked){
 			checkBoxAddBookcase.setChecked(true);
 		}else{
-			checkBoxAddBookcase.setChecked(true);
+			checkBoxAddBookcase.setChecked(false);
 		}
 		
 		novelTextName.setText(novelName + "(" + novelArticleNum + ")");

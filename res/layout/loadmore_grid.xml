@@ -61,11 +61,21 @@
    	 	android:layout_height="fill_parent"
      	android:gravity="center"
      	android:visibility="gone"
+     	android:background="@color/main_color_grey_dark"
      	>
+	    <ImageView 
+	       android:layout_width="80dp"
+   	 	   android:layout_height="80dp"
+   	 	   android:src="@drawable/app_icon_black" 
+	        />
 	    <TextView 
 	        android:layout_width="wrap_content"
    	 		android:layout_height="wrap_content"
-   	 		android:text="無資料"
+   	 		android:text="目前無資料"
+   	 		android:textSize="23dp"
+   	 		android:layout_marginLeft="5dp"
+   	 		android:textColor="@color/textcolor_grey"
+   	 		android:textStyle="bold"
 	        />
 	</LinearLayout>
 

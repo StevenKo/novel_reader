@@ -142,12 +142,9 @@ public final class CategoryNewNovelsFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-        	moreNovels = NovelAPI.getThisMonthHotNovels();
+        	moreNovels = NovelAPI.getCategoryNovels(id, myPage); 
         	if(moreNovels!= null){
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-	        	for(int i=0; i<moreNovels.size();i++){
+        		for(int i=0; i<moreNovels.size();i++){
 	        		novels.add(moreNovels.get(i));
 	            }
         	}
@@ -175,13 +172,4 @@ public final class CategoryNewNovelsFragment extends Fragment {
         }
     }
     
-//    public boolean isOnline() {
-//	    ConnectivityManager cm =
-//	        (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-//	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
-//	    if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-//	        return true;
-//	    }
-//	    return false;
-//	}
 }

@@ -24,6 +24,7 @@ public class MyDownloadFragment extends Fragment {
 	private GridViewDownloadAdapter myGridViewAdapter;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
+	private LinearLayout noDataLayout;
 	
     public static MyDownloadFragment newInstance() {     
  
@@ -48,6 +49,7 @@ public class MyDownloadFragment extends Fragment {
     	View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
     	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
+    	noDataLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_no_data);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
@@ -96,9 +98,9 @@ public class MyDownloadFragment extends Fragment {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
-            loadmoreLayout.setVisibility(View.GONE);           
+            loadmoreLayout.setVisibility(View.GONE);          
             
-            if(novels !=null){
+            if(novels !=null && novels.size()!=0){
           	  try{
           		myGridViewAdapter = new GridViewDownloadAdapter(getActivity(), novels);
           		myGrid.setAdapter(myGridViewAdapter);
@@ -106,8 +108,8 @@ public class MyDownloadFragment extends Fragment {
           		 
           	  }
             }else{
-          	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
-          	  myGrid.setAdapter(nothingAdapter);
+            	myGrid.setVisibility(View.GONE);
+            	noDataLayout.setVisibility(View.VISIBLE);
             }
 
         }
