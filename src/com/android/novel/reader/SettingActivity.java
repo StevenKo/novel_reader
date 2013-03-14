@@ -50,7 +50,7 @@ public class SettingActivity extends SherlockFragmentActivity {
         setViews();
         
         final ActionBar ab = getSupportActionBar();		             
-        ab.setTitle("設定");
+        ab.setTitle(" 閱讀設定");
         ab.setDisplayHomeAsUpEnabled(true);
         
         

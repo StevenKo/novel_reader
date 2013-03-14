@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -20,19 +22,14 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Article;
-import com.taiwan.imageload.ExpandListDownLoadAdapter;
+import com.kosbrother.tool.ChildArticle;
+import com.kosbrother.tool.ExpandListDownLoadAdapter;
+import com.kosbrother.tool.Group;
 
 public class DownloadActivity extends SherlockFragmentActivity {
 	
-// 	API: 
-//	搜索: searchNovels(String), 
-//	取某篇章節: getArticle(Article), 
-//	取所有章節: getNovelArticles(int novelId, int page, boolean isOrderUp),
-	
 	private static final int ID_SELECT_ALL = 0;
-	private static final int ID_SELECT_NONE = 1;
-    
-   
+	private static final int ID_SELECT_NONE = 1;  
 	private Bundle mBundle;
 	private String novelName;
 	private int novelId;
@@ -43,16 +40,15 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	private ExpandableListView novelListView;
 	
 	private TreeMap<String, ArrayList<Article>> myData = new  TreeMap<String, ArrayList<Article>>();
-	private ArrayList<String> groupTitleList = new ArrayList<String>();
+	private ArrayList<Group> mGroups = new ArrayList<Group>();
 	
-	
-	
+	private Boolean downloadBoolean;
+	private ProgressDialog progressDialog= null;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_download);
-        
         
         final ActionBar ab = getSupportActionBar();		     
         mBundle = this.getIntent().getExtras();
@@ -77,9 +73,12 @@ public class DownloadActivity extends SherlockFragmentActivity {
 		
 		downLoadButton.setOnClickListener(new OnClickListener() {			 
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0) {							
+				new DownloadToDBTask().execute();
 			}
 		});
+		
+	
 	}	
 		
 
@@ -135,20 +134,67 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	            		if(myData.containsKey(articleList.get(i).getSubject())){
 	            			myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
 	            		}else{
-	            			groupTitleList.add(articleList.get(i).getSubject());
+//	            			groupTitleList.add(articleList.get(i).getSubject());
+	            			
+	            			mGroups.add(new Group(articleList.get(i).getSubject()));
+	            			
 	            			myData.put(articleList.get(i).getSubject(), new ArrayList<Article>());
 	            			myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
 	            		}
 	            	}
-	            		            	
-	            	Set<String> keyArray =  myData.keySet();
-	            	keyArray.size();
-	            		            	
-	            	ExpandListDownLoadAdapter mAdapter = new ExpandListDownLoadAdapter(DownloadActivity.this,myData, groupTitleList, novelName);
+	            	
+	            	
+	            	for(int i= 0; i< mGroups.size(); i++){
+	            		ArrayList<Article> articles = myData.get(mGroups.get(i).getTitle());
+	            		for(int j=0; j< articles.size(); j++){
+	            			mGroups.get(i).addChildrenItem(new ChildArticle(articles.get(j).getId(), articles.get(j).getNovelId(), "", articles.get(j).getTitle(), articles.get(j).getSubject(), articles.get(j).isDownload()));
+	            		}
+	            	}
+	            	
+	            	ExpandListDownLoadAdapter mAdapter = new ExpandListDownLoadAdapter(DownloadActivity.this, mGroups, downLoadCountText);
 	            	novelListView.setAdapter(mAdapter);
 	            	
 	            }
 
+	        }
+	 }
+	 
+	 
+	 private class DownloadToDBTask extends AsyncTask {
+
+			 @Override
+		    protected void onPreExecute() {
+		        super.onPreExecute();
+		        progressDialog = ProgressDialog.show(DownloadActivity.this, "","小說下載中,...");
+		        progressDialog.setCancelable(true);
+		    }
+		 
+	        @Override
+	        protected Object doInBackground(Object... params) {
+	            // TODO Auto-generated method stub
+	        	ArrayList<Article> checkedArticles = new ArrayList<Article>();
+				for(int i=0; i< mGroups.size(); i++){
+					for(int j=0; j< mGroups.get(i).getChildrenCount(); j++){
+						ChildArticle aChildArticle = mGroups.get(i).getChildItem(j);
+						if(aChildArticle.getChecked()){
+							checkedArticles.add(new Article(aChildArticle.getId(), aChildArticle.getNovelId(),aChildArticle.getText(), aChildArticle.getTitle(), aChildArticle.getSubject(), aChildArticle.isDownload())); 
+						}
+					}
+				}
+				downloadBoolean = NovelAPI.downloadArticles(novelId, checkedArticles, DownloadActivity.this);				
+	            return null;
+	        }
+
+	        @Override
+	        protected void onPostExecute(Object result) {
+	            // TODO Auto-generated method stub
+	            super.onPostExecute(result);
+	            progressDialog.dismiss();
+	            if (downloadBoolean){
+					Toast.makeText(DownloadActivity.this, "成功下載", Toast.LENGTH_SHORT).show();
+				}else{
+					Toast.makeText(DownloadActivity.this, "出現錯誤, 請重新下載", Toast.LENGTH_SHORT).show();
+				}
 	        }
 	 }
     
