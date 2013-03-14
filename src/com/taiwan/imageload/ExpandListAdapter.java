@@ -5,6 +5,9 @@ import java.util.TreeMap;
 import com.android.novel.reader.ArticleActivity;
 import com.android.novel.reader.R;
 import com.android.novel.reader.entity.Article;
+import com.kosbrother.tool.ChildArticle;
+import com.kosbrother.tool.Group;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,49 +22,43 @@ import android.widget.TextView;
 
 public class ExpandListAdapter extends BaseExpandableListAdapter {
 
-	 public ArrayList<String> groupListArray;
-//	 public String[] groupListArray;	 
-	 public TreeMap<String, ArrayList<Article>> theData = new TreeMap<String, ArrayList<Article>>();
+ 
 	 
 	 private static LayoutInflater inflater=null;
 	 private Activity activity;
-	 private String theNovelName;
+	 private String theNovelName;	 
+	 public ArrayList<Group> theGroups;
 	 
-	 public ExpandListAdapter(Activity a, TreeMap<String, ArrayList<Article>> myData, ArrayList<String> groupTitles, String novelName) {
+	 public ExpandListAdapter(Activity a, ArrayList<Group> mGroups, String novelName) {
 		 
 		 activity = a;
-		 theData = myData;
+		 theGroups = mGroups;
 		 
-		 groupListArray = groupTitles;
 		 inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		 
 		 theNovelName = novelName;
 	 }
 
-	@Override
+	 @Override
 	 public Object getChild(int groupPosition, int childPosition) {
-		String aString = groupListArray.get(groupPosition);
-		ArrayList<Article> childArticles = theData.get(aString);
-		return childArticles.get(childPosition);
+	  return null;
 	 }
 
 	 @Override
 	 public long getChildId(int groupPosition, int childPosition) {
-		 String aString = groupListArray.get(groupPosition);
-	     ArrayList<Article> childArticles = theData.get(aString);
-	     return childArticles.get(childPosition).getId();
+	  return 0;
 	 }
 
 	 @Override
 	 public View getChildView(int groupPosition, final int childPosition,
 	   boolean isLastChild, View convertView, ViewGroup parent) {
 		 
+		 final ChildArticle child = theGroups.get(groupPosition).getChildItem(childPosition);
+		 
 		 View vi=convertView;
 	     vi = inflater.inflate(R.layout.item_expandible_child, null);
 	     TextView text=(TextView)vi.findViewById(R.id.expandlist_child);
-	     String aString = groupListArray.get(groupPosition);
-	     final ArrayList<Article> childArticles = theData.get(aString);
-	     String childString = childArticles.get(childPosition).getTitle();
+	     String childString = child.getTitle();
 	     text.setText(childString);
 	     
 	     vi.setOnClickListener(new OnClickListener() {
@@ -69,8 +66,8 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
 	         public void onClick(View v) {
 	            Intent intent = new Intent(activity, ArticleActivity.class);
 	            Bundle bundle = new Bundle();
-	 			bundle.putInt("ArticleId", childArticles.get(childPosition).getId()); 
-	 			bundle.putString("ArticleTitle", childArticles.get(childPosition).getTitle());
+	 			bundle.putInt("ArticleId", child.getId()); 
+	 			bundle.putString("ArticleTitle", child.getTitle());
 	 			bundle.putString("NovelName", theNovelName);
 	 			intent.putExtras(bundle);
 	 			activity.startActivity(intent);
@@ -83,20 +80,17 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
 
 	 @Override
 	 public int getChildrenCount(int groupPosition) {	 
-      String aString = groupListArray.get(groupPosition);
-	  int ii = theData.get(aString).size();
-	  return ii;
-//		 return 2;
+		 return theGroups.get(groupPosition).getChildrenCount();
 	 }
 
 	 @Override
 	 public Object getGroup(int groupPosition) {
-	  return groupListArray.get(groupPosition);
+		 return theGroups.get(groupPosition);
 	 }
 
 	 @Override
 	 public int getGroupCount() {
-	  return groupListArray.size();
+		 return theGroups.size();
 	 }
 
 	 @Override
@@ -117,10 +111,13 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
 	 @Override
 	 public View getGroupView(int groupPosition, boolean isExpanded,
 	   View convertView, ViewGroup parent) {
+		 
+		 Group group = theGroups.get(groupPosition);
+		 
 		 View vi=convertView;
 	     vi = inflater.inflate(R.layout.item_expandbile_parent, null);
 	     TextView text=(TextView)vi.findViewById(R.id.expandlist_parent);
-	     String groupString = groupListArray.get(groupPosition);
+	     String groupString = group.getTitle();
 	     text.setText(groupString);	  
 	     
 	     int id = (!isExpanded) ? R.drawable.right_arrow

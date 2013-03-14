@@ -3,6 +3,8 @@
 
     <string name="app_name">小說王</string>
     <string name="hello_world">Hello world!</string>
+    <string name="add_my_bookcase">已加入我的書櫃</string>
+    <string name="remove_my_bookcase">已從我的書櫃移除</string>
     
     <string name="menu_settings">設定</string>
     <string name="menu_respond">意見回饋</string>

@@ -12,7 +12,7 @@
         android:orientation="horizontal"
         android:gravity="center"
         >
-        <LinearLayout
+        <LinearLayout android:id="@+id/my_bookcase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -86,7 +86,7 @@
                 android:text="最近閱讀"
                 />
         </LinearLayout>
-        <LinearLayout
+        <LinearLayout  android:id="@+id/my_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -116,7 +116,7 @@
         android:orientation="horizontal"
         android:gravity="center"
         >
-        <LinearLayout
+        <LinearLayout  android:id="@+id/classic_kongfu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -137,7 +137,7 @@
                 android:text="經典武俠"
                 />
         </LinearLayout>
-        <LinearLayout
+        <LinearLayout	android:id="@+id/classic_novel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"

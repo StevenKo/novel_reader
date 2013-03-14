@@ -19,6 +19,10 @@ public final class MyNovelFragment extends Fragment {
     private View         myFragmentView;
     private LinearLayout myBookmarks;
     private LinearLayout recentRead;
+    private LinearLayout myBookcase;
+    private LinearLayout mySetting;
+    private LinearLayout classicKongFu;
+    private LinearLayout classicNovel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,12 +62,58 @@ public final class MyNovelFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        
+        myBookcase.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	Intent intent = new Intent(getActivity(), MyNovelActivity.class);
+            	startActivity(intent);
+            }
+        });
+        
+        mySetting.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	Intent intent = new Intent(getActivity(), SettingActivity.class);
+            	startActivity(intent);
+            }
+        });
+        
+        classicKongFu.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	Intent intent = new Intent(getActivity(), ClassicNovelsActivity.class);
+            	Bundle bundle = new Bundle();
+                bundle.putString("ClassTitle", "經典武俠");
+                bundle.putInt("ClassicId", 0);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        
+        classicNovel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	Intent intent = new Intent(getActivity(), ClassicNovelsActivity.class);
+            	Bundle bundle = new Bundle();
+                bundle.putString("ClassTitle", "經典小說");
+                bundle.putInt("ClassicId", 1);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        
+        
 
     }
 
     private void findViews() {
         myBookmarks = (LinearLayout) myFragmentView.findViewById(R.id.my_bookmarks);
         recentRead = (LinearLayout) myFragmentView.findViewById(R.id.my_recent_read_bookmarks);
+        myBookcase = (LinearLayout) myFragmentView.findViewById(R.id.my_bookcase);
+        mySetting = (LinearLayout) myFragmentView.findViewById(R.id.my_setting);
+        classicKongFu = (LinearLayout) myFragmentView.findViewById(R.id.classic_kongfu);
+        classicNovel = (LinearLayout) myFragmentView.findViewById(R.id.classic_novel);
     }
 
     @Override
