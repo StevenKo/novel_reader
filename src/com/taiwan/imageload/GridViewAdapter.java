@@ -47,8 +47,8 @@ public class GridViewAdapter extends BaseAdapter {
 
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        if (convertView == null)
-            vi = inflater.inflate(R.layout.item_gridview_novel, null);
+        // if (convertView == null)
+        vi = inflater.inflate(R.layout.item_gridview_novel, null);
 
         vi.setClickable(true);
         vi.setFocusable(true);
@@ -79,9 +79,15 @@ public class GridViewAdapter extends BaseAdapter {
         TextView textAuthor = (TextView) vi.findViewById(R.id.grid_item_author);
         TextView textCounts = (TextView) vi.findViewById(R.id.grid_item_counts);
         TextView textFinish = (TextView) vi.findViewById(R.id.grid_item_finish);
+        TextView textSerialize = (TextView) vi.findViewById(R.id.serializing);
 
         textName.setText(data.get(position).getName());
+        if (data.get(position).getName().length() > 6)
+            textName.setTextSize(12);
         textAuthor.setText(data.get(position).getAuthor());
+        if (data.get(position).getAuthor().length() > 14) {
+            textAuthor.setTextSize(8);
+        }
         textCounts.setText(data.get(position).getArticleNum());
         textFinish.setText(data.get(position).getLastUpdate());
 
@@ -89,6 +95,12 @@ public class GridViewAdapter extends BaseAdapter {
             image.setImageResource(R.drawable.app_icon);
         } else {
             imageLoader.DisplayImage(data.get(position).getPic(), image);
+        }
+
+        if (data.get(position).isSerializing()) {
+            textSerialize.setText("連載中...");
+        } else {
+            textSerialize.setText("全本");
         }
 
         return vi;
