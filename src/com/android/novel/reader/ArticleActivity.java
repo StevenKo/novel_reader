@@ -2,6 +2,7 @@ package com.android.novel.reader;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -23,6 +25,10 @@ import com.kosbrother.tool.DetectScrollView.DetectScrollViewListener;
 
 public class ArticleActivity extends SherlockFragmentActivity implements DetectScrollViewListener {
 	
+	private static final int ID_SETTING = 0;
+    private static final int ID_RESPONSE = 1;
+    private static final int ID_ABOUT_US = 2;
+    private static final int ID_GRADE = 3;
 
 	private int textSize;
 	private int textLanguage; // 0 for 繁體, 1 for 簡體
@@ -149,10 +155,10 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.activity_main, menu);
 		
-		menu.add("設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add("意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add("關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add("為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_SETTING, 0, "設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_RESPONSE, 1, "意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         
         return true;
     }
@@ -165,6 +171,19 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	        finish();
 	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
 	        break;
+	    case ID_SETTING: // setting
+	    		Intent intent = new Intent(ArticleActivity.this, SettingActivity.class);
+	    		startActivity(intent); 
+	        break;
+	    case ID_RESPONSE: // response
+    			Toast.makeText(ArticleActivity.this, "RESPONESE", Toast.LENGTH_SHORT).show();
+    		break;
+	    case ID_ABOUT_US: // response
+			Toast.makeText(ArticleActivity.this, "ABOUT_US", Toast.LENGTH_SHORT).show();
+			break;
+	    case ID_GRADE: // response
+			Toast.makeText(ArticleActivity.this, "GRADE", Toast.LENGTH_SHORT).show();
+			break;
 	    }
 	    return true;
 	}
@@ -215,5 +234,20 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         }
 	}
 	
-
+	@Override
+	 protected void onResume() {
+		super.onResume();
+		textSize = Setting.getSetting(Setting.keyTextSize, ArticleActivity.this);
+        textLanguage = Setting.getSetting(Setting.keyTextLanguage, ArticleActivity.this);
+        readingDirection = Setting.getSetting(Setting.keyReadingDirection, ArticleActivity.this);
+        clickToNextPage = Setting.getSetting(Setting.keyClickToNextPage, ArticleActivity.this);
+        stopSleeping = Setting.getSetting(Setting.keyStopSleeping, ArticleActivity.this);
+        
+		articleTextView.setTextSize(textSize);
+		if(stopSleeping == 0){
+        	ArticleActivity.this.findViewById(android.R.id.content).setKeepScreenOn(true);
+        }
+		
+	 }
+	
 }

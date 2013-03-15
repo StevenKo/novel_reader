@@ -13,6 +13,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.kosbrother.fragments.MyBookcaseFragment;
+import com.kosbrother.fragments.MyDownloadFragment;
 import com.viewpagerindicator.TitlePageIndicator;
 
 public class MyNovelActivity extends SherlockFragmentActivity {

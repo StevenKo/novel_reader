@@ -19,6 +19,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.kosbrother.fragments.ClassicFragment;
 
 public class ClassicNovelsActivity extends SherlockFragmentActivity {
 
@@ -33,6 +34,7 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
 	private String title;
 	private int classicInt;
 	private EditText search;
+	private MenuItem  itemSearch;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,26 +66,28 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
 		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		
-		menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+		itemSearch = menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            private EditText search;
+
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                search = (EditText) item.getActionView();             
-                search.setInputType(InputType.TYPE_CLASS_TEXT);
+                search = (EditText) item.getActionView();
                 search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+                search.setInputType(InputType.TYPE_CLASS_TEXT);
                 search.requestFocus();
                 search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("SearchKeyword", v.getText().toString());
-                            Intent intent = new Intent();
-                            intent.setClass(ClassicNovelsActivity.this, SearchActivity.class);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            return true;
-                        }
-
+                    	if (actionId == EditorInfo.IME_ACTION_SEARCH || event.getKeyCode() == KeyEvent.KEYCODE_ENTER ) {                    	  
+                          Bundle bundle = new Bundle();
+                          bundle.putString("SearchKeyword", v.getText().toString());
+                          Intent intent = new Intent();
+                          intent.setClass(ClassicNovelsActivity.this, SearchActivity.class);
+                          intent.putExtras(bundle);
+                          startActivity(intent);
+                          itemSearch.collapseActionView();
+                          return true;
+                      }
                         return false;
                     }
                 });
@@ -98,7 +102,8 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
                 search.setText("");
                 return true;
             }
-        }).setActionView(R.layout.collapsible_edittext).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        }).setActionView(R.layout.collapsible_edittext);
+		itemSearch.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		
         return true;
     }

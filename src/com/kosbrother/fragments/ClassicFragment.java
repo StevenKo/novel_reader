@@ -1,4 +1,4 @@
-package com.android.novel.reader;
+package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
@@ -10,6 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.android.novel.reader.R;
+import com.android.novel.reader.R.id;
+import com.android.novel.reader.R.layout;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
 import com.taiwan.imageload.GridViewAdapter;

@@ -30,6 +30,7 @@ public final class CategoryNewNovelsFragment extends Fragment {
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
 	private LinearLayout noDataLayout;
+	private LinearLayout layoutReload;
 	private static int id;
 	
     public static CategoryNewNovelsFragment newInstance(int categoryId) {     
@@ -61,6 +62,7 @@ public final class CategoryNewNovelsFragment extends Fragment {
     	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
     	noDataLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_no_data);
+    	layoutReload = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
@@ -119,7 +121,8 @@ public final class CategoryNewNovelsFragment extends Fragment {
           		 
           	  }
             }else{
-            	noDataLayout.setVisibility(View.VISIBLE);
+            	layoutReload.setVisibility(View.VISIBLE);
+//            	noDataLayout.setVisibility(View.VISIBLE);
 //          	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
 //          	  myGrid.setAdapter(nothingAdapter);
             }

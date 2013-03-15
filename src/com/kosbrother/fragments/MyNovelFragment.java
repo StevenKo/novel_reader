@@ -1,4 +1,12 @@
-package com.android.novel.reader;
+package com.kosbrother.fragments;
+
+import com.android.novel.reader.BookmarkActivity;
+import com.android.novel.reader.ClassicNovelsActivity;
+import com.android.novel.reader.MyNovelActivity;
+import com.android.novel.reader.R;
+import com.android.novel.reader.SettingActivity;
+import com.android.novel.reader.R.id;
+import com.android.novel.reader.R.layout;
 
 import android.content.Intent;
 import android.os.Bundle;

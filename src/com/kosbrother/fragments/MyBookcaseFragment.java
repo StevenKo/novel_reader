@@ -1,4 +1,4 @@
-package com.android.novel.reader;
+package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
@@ -10,25 +10,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.android.novel.reader.R;
+import com.android.novel.reader.R.id;
+import com.android.novel.reader.R.layout;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
 import com.taiwan.imageload.GridViewAdapter;
-import com.taiwan.imageload.GridViewDownloadAdapter;
 import com.taiwan.imageload.ListNothingAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
-public class MyDownloadFragment extends Fragment {
+public class MyBookcaseFragment extends Fragment {
     
 	private ArrayList<Novel> novels = new ArrayList<Novel>();
 	private LoadMoreGridView  myGrid;
-	private GridViewDownloadAdapter myGridViewAdapter;
+	private GridViewAdapter myGridViewAdapter;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
 	private LinearLayout noDataLayout;
 	
-    public static MyDownloadFragment newInstance() {     
- 
-    	MyDownloadFragment fragment = new MyDownloadFragment();
+    public static MyBookcaseFragment newInstance() {     
+   	 
+    	MyBookcaseFragment fragment = new MyBookcaseFragment();
   	    
       return fragment;
         
@@ -87,7 +89,7 @@ public class MyDownloadFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-        	novels = NovelAPI.getDownloadedNovels(getActivity());
+        	novels = NovelAPI.getCollectedNovels(getActivity());
 //        	moreNovels = NovelAPI.getThisWeekHotNovels(); 
 
             return null;
@@ -98,11 +100,11 @@ public class MyDownloadFragment extends Fragment {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
-            loadmoreLayout.setVisibility(View.GONE);          
+            loadmoreLayout.setVisibility(View.GONE);           
             
             if(novels !=null && novels.size()!=0){
           	  try{
-          		myGridViewAdapter = new GridViewDownloadAdapter(getActivity(), novels);
+          		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
           		myGrid.setAdapter(myGridViewAdapter);
           	  }catch(Exception e){
           		 

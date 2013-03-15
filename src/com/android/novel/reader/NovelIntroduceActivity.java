@@ -7,8 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -65,6 +68,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	private Novel theNovel;
 	private Boolean descriptionExpand = false;
 	private Boolean isNovelChecked;
+	private MenuItem  itemSearch;
 	
 	private TreeMap<String, ArrayList<Article>> myData = new  TreeMap<String, ArrayList<Article>>();
 //	private ArrayList<String> groupTitleList = new ArrayList<String>();
@@ -196,6 +200,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
             		NovelAPI.collecNovel(theNovel, NovelIntroduceActivity.this);
             	}else{
             		Toast.makeText(NovelIntroduceActivity.this, NovelIntroduceActivity.this.getResources().getString(R.string.remove_my_bookcase), Toast.LENGTH_SHORT).show();
+            		NovelAPI.removeNovelFromCollected(theNovel, NovelIntroduceActivity.this);
             		// need remove api
             	}
             }  
@@ -237,26 +242,44 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 //		menu.add("關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 //		menu.add("為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		
-        menu.add(0, ID_SEARCH, 4,"Search")
-        .setIcon(R.drawable.ic_search_inverse)
-        .setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+		itemSearch = menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            private EditText search;
+
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-             search = (EditText) item.getActionView();
-           	 search.requestFocus();
+                search = (EditText) item.getActionView();
+                search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+                search.setInputType(InputType.TYPE_CLASS_TEXT);
+                search.requestFocus();
+                search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    	if (actionId == EditorInfo.IME_ACTION_SEARCH || event.getKeyCode() == KeyEvent.KEYCODE_ENTER ) {                    	  
+                          Bundle bundle = new Bundle();
+                          bundle.putString("SearchKeyword", v.getText().toString());
+                          Intent intent = new Intent();
+                          intent.setClass(NovelIntroduceActivity.this, SearchActivity.class);
+                          intent.putExtras(bundle);
+                          startActivity(intent);
+                          itemSearch.collapseActionView();
+                          return true;
+                      }
+                        return false;
+                    }
+                });
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(null, InputMethodManager.SHOW_IMPLICIT);
                 return true;
             }
 
-			@Override
-			public boolean onMenuItemActionCollapse(MenuItem item) {
-				// TODO Auto-generated method stub
-				search.setText("");
-				return true;
-			}})
-        .setActionView(R.layout.collapsible_edittext)
-        .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // TODO Auto-generated method stub
+                search.setText("");
+                return true;
+            }
+        }).setActionView(R.layout.collapsible_edittext);
+		itemSearch.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
         
         return true;
     }

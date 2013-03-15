@@ -1,10 +1,14 @@
-package com.android.novel.reader;
+package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
+import com.android.novel.reader.R;
+import com.android.novel.reader.R.id;
+import com.android.novel.reader.R.layout;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
 
+import com.taiwan.imageload.ExpandListAdapter;
 import com.taiwan.imageload.GridViewAdapter;
 import com.taiwan.imageload.ListNothingAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
@@ -15,6 +19,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -28,6 +34,8 @@ public final class WeekFragment extends Fragment {
 	private Boolean checkLoad = true;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
+	private LinearLayout layoutReload;
+	private Button buttonReload;
 	
     public static WeekFragment newInstance() {     
    	 
@@ -56,6 +64,8 @@ public final class WeekFragment extends Fragment {
     	View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
     	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
+    	layoutReload = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
+    	buttonReload = (Button) myFragmentView.findViewById(R.id.button_reload);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
@@ -70,6 +80,15 @@ public final class WeekFragment extends Fragment {
 //				}
 			}
 		});
+    	
+    	buttonReload.setOnClickListener(new OnClickListener() {			 
+			@Override
+			public void onClick(View arg0) {
+				progressLayout.setVisibility(View.VISIBLE);
+				new DownloadChannelsTask().execute();
+			}
+		});
+    	
         return myFragmentView;
     }
 
@@ -108,6 +127,7 @@ public final class WeekFragment extends Fragment {
             
             
             if(novels !=null){
+              layoutReload.setVisibility(View.GONE);
           	  try{
           		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
           		myGrid.setAdapter(myGridViewAdapter);
@@ -115,8 +135,7 @@ public final class WeekFragment extends Fragment {
           		 
           	  }
             }else{
-          	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
-          	  myGrid.setAdapter(nothingAdapter);
+            	layoutReload.setVisibility(View.VISIBLE);
             }
 
         }

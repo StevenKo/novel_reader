@@ -19,6 +19,11 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.kosbrother.fragments.CategoryListFragment;
+import com.kosbrother.fragments.HotNovelsFragment;
+import com.kosbrother.fragments.MonthFragment;
+import com.kosbrother.fragments.MyNovelFragment;
+import com.kosbrother.fragments.WeekFragment;
 import com.viewpagerindicator.TitlePageIndicator;
 
 public class MainActivity extends SherlockFragmentActivity {
@@ -31,6 +36,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	
     private String[] CONTENT;
     private EditText search;
+    private MenuItem  itemSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,26 +69,29 @@ public class MainActivity extends SherlockFragmentActivity {
 		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		
-		menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+		
+		itemSearch = menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            private EditText search;
+
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                search = (EditText) item.getActionView();             
-                search.setInputType(InputType.TYPE_CLASS_TEXT);
+                search = (EditText) item.getActionView();
                 search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+                search.setInputType(InputType.TYPE_CLASS_TEXT);
                 search.requestFocus();
                 search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_SEARCH || event.getKeyCode() == KeyEvent.KEYCODE_ENTER ) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("SearchKeyword", v.getText().toString());
-                            Intent intent = new Intent();
-                            intent.setClass(MainActivity.this, SearchActivity.class);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            return true;
-                        }
-
+                    	if (actionId == EditorInfo.IME_ACTION_SEARCH || event.getKeyCode() == KeyEvent.KEYCODE_ENTER ) {                    	  
+                          Bundle bundle = new Bundle();
+                          bundle.putString("SearchKeyword", v.getText().toString());
+                          Intent intent = new Intent();
+                          intent.setClass(MainActivity.this, SearchActivity.class);
+                          intent.putExtras(bundle);
+                          startActivity(intent);
+                          itemSearch.collapseActionView();
+                          return true;
+                      }
                         return false;
                     }
                 });
@@ -97,7 +106,45 @@ public class MainActivity extends SherlockFragmentActivity {
                 search.setText("");
                 return true;
             }
-        }).setActionView(R.layout.collapsible_edittext).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        }).setActionView(R.layout.collapsible_edittext);
+		itemSearch.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+		
+		
+//		menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+//            @Override
+//            public boolean onMenuItemActionExpand(MenuItem item) {
+//                search = (EditText) item.getActionView();             
+//                search.setInputType(InputType.TYPE_CLASS_TEXT);
+//                search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+//                search.requestFocus();
+//                search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//                    @Override
+//                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                        if (actionId == EditorInfo.IME_ACTION_SEARCH || event.getKeyCode() == KeyEvent.KEYCODE_ENTER ) {
+//                            Bundle bundle = new Bundle();
+//                            bundle.putString("SearchKeyword", v.getText().toString());
+//                            Intent intent = new Intent();
+//                            intent.setClass(MainActivity.this, SearchActivity.class);
+//                            intent.putExtras(bundle);
+//                            startActivity(intent);
+//                            return true;
+//                        }
+//
+//                        return false;
+//                    }
+//                });
+//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.showSoftInput(null, InputMethodManager.SHOW_IMPLICIT);
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onMenuItemActionCollapse(MenuItem item) {
+//                // TODO Auto-generated method stub
+//                search.setText("");
+//                return true;
+//            }
+//        }).setActionView(R.layout.collapsible_edittext).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
         return true;
     }
@@ -157,6 +204,11 @@ public class MainActivity extends SherlockFragmentActivity {
         public int getCount() {
             return CONTENT.length;
         }
+    }
+    
+    @Override
+    protected void onPause() {
+     super.onPause();
     }
 
 }

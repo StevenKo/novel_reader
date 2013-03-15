@@ -1,4 +1,4 @@
-package com.android.novel.reader;
+package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
@@ -10,13 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.android.novel.reader.R;
+import com.android.novel.reader.R.id;
+import com.android.novel.reader.R.layout;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
 import com.taiwan.imageload.GridViewAdapter;
 import com.taiwan.imageload.ListNothingAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
-public class MonthFragment extends Fragment {
+public class HotNovelsFragment extends Fragment {
     
 	private ArrayList<Novel> novels = new ArrayList<Novel>();
 	private ArrayList<Novel> moreNovels = new ArrayList<Novel>();
@@ -26,14 +30,15 @@ public class MonthFragment extends Fragment {
 	private Boolean checkLoad = true;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
+	private LinearLayout layoutReload;
 	
-    public static MonthFragment newInstance() {     
+    public static HotNovelsFragment newInstance() {     
    	 
 
 //  	  myPage = page;
 //  	  novels = theNovels;
  
-    	MonthFragment fragment = new MonthFragment();
+    	HotNovelsFragment fragment = new HotNovelsFragment();
   	    
       return fragment;
         
@@ -54,6 +59,7 @@ public class MonthFragment extends Fragment {
     	View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
     	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
+    	layoutReload = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
@@ -91,8 +97,8 @@ public class MonthFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-        	novels = NovelAPI.getThisMonthHotNovels(); 
-//        	moreNovels = NovelAPI.getThisMonthHotNovels(); 
+        	novels =  NovelAPI.getHotNovels(); 
+//        	moreNovels = NovelAPI.getHotNovels(); 
 
             return null;
         }
@@ -103,6 +109,22 @@ public class MonthFragment extends Fragment {
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
             loadmoreLayout.setVisibility(View.GONE);
+   
+        	if(moreNovels!= null){
+	        	for(int i=0; i<moreNovels.size();i++){
+	        		novels.add(moreNovels.get(i));
+	            }
+	        	for(int i=0; i<moreNovels.size();i++){
+	        		novels.add(moreNovels.get(i));
+	            }
+	        	for(int i=0; i<moreNovels.size();i++){
+	        		novels.add(moreNovels.get(i));
+	            }
+	        	for(int i=0; i<moreNovels.size();i++){
+	        		novels.add(moreNovels.get(i));
+	            }
+        	}
+            
             
             if(novels !=null){
           	  try{
@@ -112,8 +134,7 @@ public class MonthFragment extends Fragment {
           		 
           	  }
             }else{
-          	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
-          	  myGrid.setAdapter(nothingAdapter);
+            	layoutReload.setVisibility(View.VISIBLE);
             }
 
         }
@@ -136,6 +157,7 @@ public class MonthFragment extends Fragment {
 
         	moreNovels = NovelAPI.getThisMonthHotNovels();
         	if(moreNovels!= null){
+        		
 	        	for(int i=0; i<moreNovels.size();i++){
 	        		novels.add(moreNovels.get(i));
 	            }

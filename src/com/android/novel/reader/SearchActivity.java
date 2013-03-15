@@ -259,16 +259,21 @@ public class SearchActivity extends SherlockListActivity {
         @Override
         protected void onPostExecute(String result) {
             progressdialogInit.dismiss();
-            if(novels.size()!=0 && novels != null){
+            if( novels != null &&  novels.size()!=0){
             	novelListView.setAdapter(new SearchAdapter(SearchActivity.this, novels));
             }else{
             	layoutNoSearch.setVisibility(View.VISIBLE);
             }
-            item.expandActionView();
-            EditText search = (EditText) item.getActionView();
-            search.setText(keyword);
+            try{
+            	item.expandActionView();
+            	EditText search = (EditText) item.getActionView();
+            	search.setText(keyword);
+            }catch(Exception e){
+            	
+            }
         }
 
     }
+   
 
 }
