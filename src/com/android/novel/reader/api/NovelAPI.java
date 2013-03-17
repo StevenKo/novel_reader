@@ -31,11 +31,6 @@ public class NovelAPI {
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
 
-    public static boolean deleteNovel(Novel novel, Context context) {
-        SQLiteNovel db = new SQLiteNovel(context);
-        return db.deleteNovel(novel);
-    }
-
     // public static ArrayList<Bookmark> getNovelBookmarks(int novelId, Context context) {
     // SQLiteNovel db = new SQLiteNovel(context);
     // return db.getNovelBookmarks(novelId);
@@ -64,6 +59,16 @@ public class NovelAPI {
 
     public static Bookmark insertBookmark(Bookmark bookmark, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
+        int id = (int) db.insertBookmark(bookmark);
+        bookmark.setId(id);
+        return bookmark;
+    }
+
+    public static Bookmark createRecentBookmark(Bookmark bookmark, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        Bookmark lastNovelBookmark = db.getNovelBookmark(bookmark.getNovelId());
+        if (lastNovelBookmark != null)
+            db.deleteBookmark(lastNovelBookmark);
         int id = (int) db.insertBookmark(bookmark);
         bookmark.setId(id);
         return bookmark;
@@ -139,6 +144,11 @@ public class NovelAPI {
 
     public static boolean removeNovelFromDownload(Novel novel, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
+        ArrayList<Article> articles = db.getNovelArticles(novel.getId(), true);
+        for (int i = 0; i < articles.size(); i++) {
+            Article article = articles.get(i);
+            db.deleteArticle(article);
+        }
         return db.removeNovelFromDownload(novel);
     }
 
@@ -164,7 +174,7 @@ public class NovelAPI {
     public static boolean downloadOrUpdateNovelInfo(int novelId, Context context, boolean isCollected, boolean isDownload) {
 
         Novel n = null;
-        ArrayList<Article> articles = new ArrayList<Article>();
+        // ArrayList<Article> articles = new ArrayList<Article>();
 
         String message = getMessageFromServer("GET", "/api/v1/novels/" + novelId + "/detail_for_save.json", null);
         if (message == null) {
@@ -187,16 +197,16 @@ public class NovelAPI {
 
                 n = new Novel(novel_id, name, author, description, pic, category_id, articleNum, lastUpdate, isSerializing, isCollected, isDownload);
 
-                JSONArray articlesArray = nObject.getJSONArray("articles");
-                for (int i = 0; i < articlesArray.length(); i++) {
-
-                    int article_id = articlesArray.getJSONObject(i).getInt("id");
-                    String subject = articlesArray.getJSONObject(i).getString("subject");
-                    String title = articlesArray.getJSONObject(i).getString("title");
-
-                    Article a = new Article(article_id, novelId, "", title, subject, false);
-                    articles.add(a);
-                }
+                // JSONArray articlesArray = nObject.getJSONArray("articles");
+                // for (int i = 0; i < articlesArray.length(); i++) {
+                //
+                // int article_id = articlesArray.getJSONObject(i).getInt("id");
+                // String subject = articlesArray.getJSONObject(i).getString("subject");
+                // String title = articlesArray.getJSONObject(i).getString("title");
+                //
+                // Article a = new Article(article_id, novelId, "", title, subject, false);
+                // articles.add(a);
+                // }
 
             } catch (JSONException e) {
 
@@ -211,12 +221,12 @@ public class NovelAPI {
         else
             db.insertNovel(n);
 
-        for (int i = 0; i < articles.size(); i++) {
-            if (db.isArticleExists(articles.get(i).getId()))
-                db.updateArticle(articles.get(i));
-            else
-                db.insertArticle(articles.get(i));
-        }
+        // for (int i = 0; i < articles.size(); i++) {
+        // if (db.isArticleExists(articles.get(i).getId()))
+        // db.updateArticle(articles.get(i));
+        // else
+        // db.insertArticle(articles.get(i));
+        // }
 
         return true;
     }

@@ -11,7 +11,7 @@ public class Bookmark {
     boolean is_recent_read;
 
     public Bookmark() {
-
+        this(1, 1, 1, 23, "test", "test2", "test", true);
     }
 
     public Bookmark(int id, int novelId, int articleId, int rate, String novelName, String articleTitle, String novelPic, Boolean is_recent_read) {

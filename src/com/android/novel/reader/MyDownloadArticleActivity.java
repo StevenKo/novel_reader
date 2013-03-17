@@ -103,6 +103,7 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
 					public void onClick(DialogInterface dialog, int which) {
 						Novel myNovel = new Novel(novelId, novelName, novelAuthor, "", novelPicUrl, 0, novelArticleNum, "", false, false,true);
 						NovelAPI.removeNovelFromDownload(myNovel, MyDownloadArticleActivity.this);
+						MyDownloadArticleActivity.this.finish();
 				}
 				})
 				.setNegativeButton("不刪除", new DialogInterface.OnClickListener() {
