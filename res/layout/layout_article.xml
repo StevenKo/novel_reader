@@ -12,6 +12,10 @@
 	    <TextView  android:id="@+id/article_text"
 	        android:layout_width="wrap_content"
 	    	android:layout_height="wrap_content"
+	    	android:layout_marginLeft="10dp"
+	    	android:layout_marginRight="10dp"
+	    	android:layout_marginTop="5dp"
+	    	android:layout_marginBottom="5dp"
 	        />
     </com.kosbrother.tool.DetectScrollView>
     
@@ -20,6 +24,7 @@
        	 android:layout_height="50dp"
        	 android:gravity="center_vertical"
        	 android:orientation="horizontal"
+       	 android:background="#E3E3E3"
 	      >
 	     <Button android:id="@+id/article_button_up"
 	        android:layout_width="wrap_content"
@@ -42,5 +47,11 @@
        	 	android:text="下一篇"
 	         />
 	  </RelativeLayout>
-
+	
+    <LinearLayout
+            android:id="@+id/adonView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+      		android:gravity="center_horizontal"
+            />
 </LinearLayout>

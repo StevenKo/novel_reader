@@ -13,11 +13,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.android.novel.reader.R;
+import com.android.novel.reader.R.drawable;
+import com.android.novel.reader.R.id;
+import com.android.novel.reader.R.layout;
+import com.android.novel.reader.R.string;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Article;
 import com.android.novel.reader.entity.Novel;
@@ -26,11 +30,6 @@ import com.taiwan.imageload.ImageLoader;
 import com.taiwan.imageload.ListArticleAdapter;
 
 public class MyDownloadArticleActivity extends SherlockFragmentActivity {
-	
-// 	API: 
-//	搜索: searchNovels(String), 
-//	取某篇章節: getArticle(Article), 
-//	取所有章節: getNovelArticles(int novelId, int page, boolean isOrderUp),
 	
 	private static final int ID_SETTING = 0;
     private static final int ID_RESPONSE = 1;
@@ -56,7 +55,7 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
 	
 	private ArrayList<Group> mGroups = new ArrayList<Group>();
 	private AlertDialog.Builder deleteDialog;
-	
+	private AlertDialog.Builder aboutUsDialog;	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +75,7 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         
         setViews();
+        setAboutUsDialog();
         
         new DownloadArticlesTask().execute();
         
@@ -139,13 +139,19 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
 	    		startActivity(intent); 
 	        break;
 	    case ID_RESPONSE: // response
-    			Toast.makeText(MyDownloadArticleActivity.this, "RESPONESE", Toast.LENGTH_SHORT).show();
+	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+	    	emailIntent.setType("plain/text");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "意見回餽 from 小說王");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     		break;
 	    case ID_ABOUT_US: // response
-			Toast.makeText(MyDownloadArticleActivity.this, "ABOUT_US", Toast.LENGTH_SHORT).show();
+	    	aboutUsDialog.show();
 			break;
 	    case ID_GRADE: // response
-			Toast.makeText(MyDownloadArticleActivity.this, "GRADE", Toast.LENGTH_SHORT).show();
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=KosBrother"));
+			startActivity(browserIntent);
 			break;
 	    case ID_DELETE_DOWNLOAD: // response
 	    	deleteDialog.show();
@@ -180,5 +186,17 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity {
 	        }
 	 }
     
+	 private void setAboutUsDialog() {
+			// TODO Auto-generated method stub
+	    	aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string))
+					.setIcon(R.drawable.play_store_icon)
+					.setMessage(getResources().getString(R.string.about_us))
+					.setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							
+						}
+					});
+		}
 
 }

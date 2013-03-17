@@ -2,11 +2,13 @@ package com.android.novel.reader;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
@@ -40,7 +42,6 @@ public class SearchActivity extends SherlockListActivity {
     private static final int ID_RESPONSE = 1;
     private static final int ID_ABOUT_US = 2;
     private static final int ID_GRADE = 3;
-    private static final int ID_DOWNLOAD = 4;
     private static final int ID_SEARCH = 5;
 	
     private Bundle           mBundle;
@@ -50,6 +51,7 @@ public class SearchActivity extends SherlockListActivity {
     private MenuItem         item;
     
     private LinearLayout layoutNoSearch;
+    private AlertDialog.Builder aboutUsDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,8 @@ public class SearchActivity extends SherlockListActivity {
 
         ab.setTitle("小說王");
         ab.setDisplayHomeAsUpEnabled(true);
+        
+        setAboutUsDialog();
         new LoadDataTask().execute();
     }
 
@@ -209,13 +213,19 @@ public class SearchActivity extends SherlockListActivity {
 	    		startActivity(intent); 
 	        break;
 	    case ID_RESPONSE: // response
-    			Toast.makeText(SearchActivity.this, "RESPONESE", Toast.LENGTH_SHORT).show();
+	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+	    	emailIntent.setType("plain/text");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "意見回餽 from 小說王");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     		break;
 	    case ID_ABOUT_US: // response
-			Toast.makeText(SearchActivity.this, "ABOUT_US", Toast.LENGTH_SHORT).show();
+	    	aboutUsDialog.show();
 			break;
 	    case ID_GRADE: // response
-			Toast.makeText(SearchActivity.this, "GRADE", Toast.LENGTH_SHORT).show();
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=KosBrother"));
+			startActivity(browserIntent);
 			break;
 	    case ID_SEARCH: // response
 			break;
@@ -274,6 +284,19 @@ public class SearchActivity extends SherlockListActivity {
         }
 
     }
+    
+    private void setAboutUsDialog() {
+		// TODO Auto-generated method stub
+    	aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string))
+				.setIcon(R.drawable.play_store_icon)
+				.setMessage(getResources().getString(R.string.about_us))
+				.setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+					}
+				});
+	}
    
 
 }

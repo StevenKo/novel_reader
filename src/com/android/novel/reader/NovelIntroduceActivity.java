@@ -3,8 +3,11 @@ package com.android.novel.reader;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
@@ -73,7 +76,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	private TreeMap<String, ArrayList<Article>> myData = new  TreeMap<String, ArrayList<Article>>();
 //	private ArrayList<String> groupTitleList = new ArrayList<String>();
 	private ArrayList<Group> mGroups = new ArrayList<Group>();
-	
+	private AlertDialog.Builder aboutUsDialog;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         isNovelChecked = NovelAPI.isNovelCollected(NovelIntroduceActivity.this, novelId);
         
         setViews();
+        setAboutUsDialog();
         
         new DownloadNovelTask().execute();
         new DownloadArticlesTask().execute();
@@ -291,13 +295,19 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	    		startActivity(intent); 
 	        break;
 	    case ID_RESPONSE: // response
-    			Toast.makeText(NovelIntroduceActivity.this, "RESPONESE", Toast.LENGTH_SHORT).show();
+	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+	    	emailIntent.setType("plain/text");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "意見回餽 from 小說王");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     		break;
 	    case ID_ABOUT_US: // response
-			Toast.makeText(NovelIntroduceActivity.this, "ABOUT_US", Toast.LENGTH_SHORT).show();
+	    	aboutUsDialog.show();
 			break;
 	    case ID_GRADE: // response
-			Toast.makeText(NovelIntroduceActivity.this, "GRADE", Toast.LENGTH_SHORT).show();
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=KosBrother"));
+			startActivity(browserIntent);
 			break;
 	    case ID_DOWNLOAD: // response
 		    	Intent intent_to_download = new Intent(NovelIntroduceActivity.this, DownloadActivity.class);
@@ -374,5 +384,17 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	        }
 	 }
     
+	 private void setAboutUsDialog() {
+			// TODO Auto-generated method stub
+	    	aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string))
+					.setIcon(R.drawable.play_store_icon)
+					.setMessage(getResources().getString(R.string.about_us))
+					.setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							
+						}
+					});
+		}
 
 }

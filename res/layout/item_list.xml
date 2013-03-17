@@ -16,8 +16,9 @@
   	  android:layout_width="fill_parent"
 	  android:layout_height="50dp"
 	  android:gravity="center_vertical" android:textSize="20dip" android:layout_marginLeft="10dip"
-	  android:textColor="#383938"
-	  android:text="text1"/>
+	  android:text="text1"
+	  android:textColor="#349FD9"
+	  />
   <TextView
   	  android:id="@+id/text_category_id"
   	  android:layout_width="fill_parent"

@@ -26,7 +26,7 @@
         <item>人氣排行</item>
         <item>推薦</item>
         <item>本週排行</item>
-        <item>最新小說</item>
+        <item>全部小說</item>
     </string-array>
     <string-array name="collections">
         <item>我的書櫃</item>

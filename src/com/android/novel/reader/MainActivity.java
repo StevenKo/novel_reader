@@ -1,25 +1,37 @@
 package com.android.novel.reader;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
+import android.view.Display;
 import android.view.KeyEvent;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.adwhirl.AdWhirlLayout;
+import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
+import com.adwhirl.AdWhirlManager;
+import com.adwhirl.AdWhirlTargeting;
 import com.android.novel.reader.api.Setting;
+import com.google.ads.AdView;
 import com.kosbrother.fragments.CategoryListFragment;
 import com.kosbrother.fragments.HotNovelsFragment;
 import com.kosbrother.fragments.MonthFragment;
@@ -27,7 +39,7 @@ import com.kosbrother.fragments.MyNovelFragment;
 import com.kosbrother.fragments.WeekFragment;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class MainActivity extends SherlockFragmentActivity {
+public class MainActivity extends SherlockFragmentActivity implements AdWhirlInterface{
 	
 	private static final int ID_SETTING = 0;
     private static final int ID_RESPONSE = 1;
@@ -39,8 +51,10 @@ public class MainActivity extends SherlockFragmentActivity {
     private EditText search;
     private MenuItem  itemSearch;
     private ViewPager pager;
+    private AlertDialog.Builder aboutUsDialog;
     
-
+    private String adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +73,20 @@ public class MainActivity extends SherlockFragmentActivity {
         
         pager.setCurrentItem(1);
        
-
+        setAboutUsDialog();
+        
+        try{
+			Display display = getWindowManager().getDefaultDisplay(); 
+			int width = display.getWidth();  // deprecated
+			int height = display.getHeight();  // deprecated
+		
+			if (width > 320){
+				setAdAdwhirl();
+			}
+		}catch(Exception e){
+			
+		}
+        
     }
 
     @Override
@@ -124,13 +151,19 @@ public class MainActivity extends SherlockFragmentActivity {
 	    		startActivity(intent); 
 	        break;
 	    case ID_RESPONSE: // response
-    			Toast.makeText(MainActivity.this, "RESPONESE", Toast.LENGTH_SHORT).show();
+	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+	    	emailIntent.setType("plain/text");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "意見回餽 from 小說王");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     		break;
 	    case ID_ABOUT_US: // response
-			Toast.makeText(MainActivity.this, "ABOUT_US", Toast.LENGTH_SHORT).show();
+	    	aboutUsDialog.show();
 			break;
 	    case ID_GRADE: // response
-			Toast.makeText(MainActivity.this, "GRADE", Toast.LENGTH_SHORT).show();
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=KosBrother"));
+			startActivity(browserIntent);
 			break;
 	    case ID_SEARCH: // response
 //			Toast.makeText(MainActivity.this, "SEARCH", Toast.LENGTH_SHORT).show();
@@ -180,5 +213,65 @@ public class MainActivity extends SherlockFragmentActivity {
     		pager.setCurrentItem(1, true);
     	}
     }
+    
+    private void setAboutUsDialog() {
+		// TODO Auto-generated method stub
+    	aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string))
+				.setIcon(R.drawable.play_store_icon)
+				.setMessage(getResources().getString(R.string.about_us))
+				.setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+					}
+				});
+	}
+    
+    private void setAdAdwhirl() {
+		// TODO Auto-generated method stub
+		AdWhirlManager.setConfigExpireTimeout(1000 * 60); 
+        AdWhirlTargeting.setAge(23);
+        AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
+        AdWhirlTargeting.setKeywords("online games gaming");
+        AdWhirlTargeting.setPostalCode("94123");
+        AdWhirlTargeting.setTestMode(false);
+   		
+        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);	
 
+        LinearLayout mainLayout = (LinearLayout)findViewById(R.id.adonView);
+        
+    	adwhirlLayout.setAdWhirlInterface(this);
+	 	 	
+	 	mainLayout.addView(adwhirlLayout);
+		
+		mainLayout.invalidate();
+    }
+
+	@Override
+	public void adWhirlGeneric() {
+			// TODO Auto-generated method stub
+			
+	}
+		
+	public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
+			final float centerX = 320 / 2.0f;
+			final float centerY = 48 / 2.0f;
+			final float zDepth = -0.50f * view.getHeight();
+		
+			Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
+			rotation.setDuration(1000);
+			rotation.setInterpolator(new AccelerateInterpolator());
+			rotation.setAnimationListener(new Animation.AnimationListener() {
+				public void onAnimationStart(Animation animation) {
+				}
+		
+				public void onAnimationEnd(Animation animation) {
+				}
+		
+				public void onAnimationRepeat(Animation animation) {
+				}
+			});
+			view.startAnimation(rotation);
+		}
+    
 }

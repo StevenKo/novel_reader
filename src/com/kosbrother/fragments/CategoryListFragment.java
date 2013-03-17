@@ -19,7 +19,7 @@ import android.widget.ListView;
 public class CategoryListFragment extends ListFragment {
 
   private ArrayList<Category> categories = new ArrayList<Category>();
-  private static Activity mActivity;
+//  private static Activity mActivity;
 	
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
@@ -28,13 +28,13 @@ public class CategoryListFragment extends ListFragment {
 //        "短篇" };
     
     categories = NovelAPI.getCategories();
-    ListAdapter adapter = new ListAdapter(mActivity, categories);
+    ListAdapter adapter = new ListAdapter(getActivity(), categories);
    
     setListAdapter(adapter);
   }
   
   public static ListFragment newInstance(Activity myActivity) {
-	  mActivity = myActivity;
+//	  mActivity = myActivity;
 	  CategoryListFragment fragment = new CategoryListFragment();
       return fragment;
   }
@@ -42,12 +42,12 @@ public class CategoryListFragment extends ListFragment {
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
     // Do something with the data
-	  	Intent intent = new Intent(mActivity, CategoryActivity.class);
+	  	Intent intent = new Intent(getActivity(), CategoryActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putInt("CategoryId", categories.get(position).getId()); 
 		bundle.putString("CategoryName", categories.get(position).getCateName());
 		intent.putExtras(bundle);
-		mActivity.startActivity(intent);
+		getActivity().startActivity(intent);
   }
 
 } 
