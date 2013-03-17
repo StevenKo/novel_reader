@@ -15,6 +15,9 @@ public class Setting {
 //	public static int clickToNextPage; // 0 for yes, 1 for no
 //	public static int stopSleeping;  // 0 for yes, 1 for no
 	
+	public final static String keyRemindLeaving = "Leaving";
+	public final static Boolean initialReindLeaving = true;
+	
 	public final static String keyPref = "pref";
 	public final static String keyTextSize = "TextSize";
 	public final static String keyTextLanguage = "TextLanguage";
@@ -47,6 +50,17 @@ public class Setting {
 	public static void saveSetting(String settingKey,int settingValue, Context context){
 		SharedPreferences sharePreference = context.getSharedPreferences(keyPref, 0);
 		sharePreference.edit().putInt(settingKey, settingValue).commit();
+	}
+	
+	public static Boolean getSettingRemind(Context context){
+		SharedPreferences sharePreference = context.getSharedPreferences(keyPref, 0);
+		Boolean settingValue = sharePreference.getBoolean(keyRemindLeaving, initialReindLeaving);
+		return settingValue;
+	}
+	
+	public static void saveSettingRemind(Boolean value,Context context){
+		SharedPreferences sharePreference = context.getSharedPreferences(keyPref, 0);
+		sharePreference.edit().putBoolean(keyRemindLeaving, value).commit();
 	}
 	
 

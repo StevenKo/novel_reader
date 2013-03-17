@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -15,7 +17,6 @@ import com.android.novel.reader.R;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
 import com.taiwan.imageload.GridViewAdapter;
-import com.taiwan.imageload.ListNothingAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
 public class CategroyHotNovelsFragment extends Fragment {
@@ -31,12 +32,10 @@ public class CategroyHotNovelsFragment extends Fragment {
 	private LinearLayout noDataLayout;
 	private LinearLayout layoutReload;
 	private static int id;
+	private Button buttonReload;
 	
     public static CategroyHotNovelsFragment newInstance(int categoryId) {     
    	 
-
-//  	  myPage = page;
-//  	  novels = theNovels;
     	id = categoryId;
     	CategroyHotNovelsFragment fragment = new CategroyHotNovelsFragment();
   	    
@@ -48,8 +47,6 @@ public class CategroyHotNovelsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-              
-        new DownloadChannelsTask().execute();
     }
 
     @Override
@@ -61,20 +58,29 @@ public class CategroyHotNovelsFragment extends Fragment {
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
     	noDataLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_no_data);
     	layoutReload = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
+    	buttonReload = (Button) myFragmentView.findViewById(R.id.button_reload);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
-				// Do the work to load more items at the end of list
-				
-//				if(checkLoad){
-//					myPage = myPage +1;
-//					loadmoreLayout.setVisibility(View.VISIBLE);
-//					new LoadMoreTask().execute();
-//				}else{
-//					myGrid.onLoadMoreComplete();
-//				}
 			}
 		});
+    	
+    	buttonReload.setOnClickListener(new OnClickListener() {			 
+			@Override
+			public void onClick(View arg0) {
+				progressLayout.setVisibility(View.VISIBLE);
+				new DownloadChannelsTask().execute();
+			}
+		});
+    	
+    	if (myGridViewAdapter != null){
+    		progressLayout.setVisibility(View.GONE);
+            loadmoreLayout.setVisibility(View.GONE);
+      		myGrid.setAdapter(myGridViewAdapter);
+    	}else{
+    		new DownloadChannelsTask().execute();
+    	}
+    	
         return myFragmentView;
     }
 
@@ -114,6 +120,7 @@ public class CategroyHotNovelsFragment extends Fragment {
             
             if(novels !=null && novels.size()!= 0){
           	  try{
+          		layoutReload.setVisibility(View.GONE);
           		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
           		myGrid.setAdapter(myGridViewAdapter);
           	  }catch(Exception e){
@@ -121,9 +128,6 @@ public class CategroyHotNovelsFragment extends Fragment {
           	  }
             }else{
               layoutReload.setVisibility(View.VISIBLE);
-//            noDataLayout.setVisibility(View.VISIBLE);
-//        	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
-//        	  myGrid.setAdapter(nothingAdapter);
             }
 
         }

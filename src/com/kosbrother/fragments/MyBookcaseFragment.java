@@ -11,12 +11,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.android.novel.reader.R;
-import com.android.novel.reader.R.id;
-import com.android.novel.reader.R.layout;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
 import com.taiwan.imageload.GridViewAdapter;
-import com.taiwan.imageload.ListNothingAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
 public class MyBookcaseFragment extends Fragment {
@@ -55,15 +52,7 @@ public class MyBookcaseFragment extends Fragment {
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
-//				// Do the work to load more items at the end of list
-//				
-//				if(checkLoad){
-//					myPage = myPage +1;
-//					loadmoreLayout.setVisibility(View.VISIBLE);
-//					new LoadMoreTask().execute();
-//				}else{
-//					myGrid.onLoadMoreComplete();
-//				}
+
 			}
 		});
         return myFragmentView;

@@ -135,12 +135,12 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 				if(novelButton.getText().equals("由後往前")){
 					novelButton.setText("由前往後");
 					reverseMGroups();
-					ExpandListAdapter mAdapter = new ExpandListAdapter( NovelIntroduceActivity.this, mGroups, novelName);
+					ExpandListAdapter mAdapter = new ExpandListAdapter( NovelIntroduceActivity.this, mGroups, theNovel);
 	            	novelListView.setAdapter(mAdapter);
 				}else{
 					novelButton.setText("由後往前");
 					reverseMGroups();	
-					ExpandListAdapter mAdapter = new ExpandListAdapter( NovelIntroduceActivity.this, mGroups, novelName);
+					ExpandListAdapter mAdapter = new ExpandListAdapter( NovelIntroduceActivity.this, mGroups, theNovel);
 	            	novelListView.setAdapter(mAdapter);
 				}
 			}
@@ -235,12 +235,6 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(0, ID_DOWNLOAD, 5, "下載").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		
-		
-//		menu.add("設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-//		menu.add("意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-//		menu.add("關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-//		menu.add("為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		
 		itemSearch = menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             private EditText search;
@@ -355,39 +349,9 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	            		}
 	            	}
 	            	
-	            	ExpandListAdapter mAdapter = new ExpandListAdapter( NovelIntroduceActivity.this, mGroups, novelName);
+	            	ExpandListAdapter mAdapter = new ExpandListAdapter( NovelIntroduceActivity.this, mGroups, theNovel);
 	            	novelListView.setAdapter(mAdapter);
 	            	
-	            	//FastScroller problem
-//	            	FastScroller newFastScroller = new FastScroller(NovelIntroduceActivity.this, novelListView);
-//	            	newFastScroller.setState(2);
-//	            	newFastScroller.draw(new Canvas());
-	            	
-//	            	novelListView.setFastScrollEnabled(true);
-//            	
-//	            	novelListView.setOnScrollListener(new OnScrollListener() {  
-//	                    
-//	                    @Override  
-//	                    public void onScrollStateChanged(AbsListView paramAbsListView, int paramInt) {  
-//	                          
-//	                          
-//	                    }  
-//	                      
-//	                    @Override  
-//	                    public void onScroll(AbsListView paramAbsListView, int firstVisibleItem,  
-//	                            int visibleItemCount, int totalItemCount) {  
-//	                    	
-//	                    	System.out.println("***first:"+firstVisibleItem);
-//	                    	System.out.println("***visible:"+visibleItemCount);
-//	                    	System.out.println("***Total:"+totalItemCount);
-//	                    	
-//	                    }  
-//	                });  
-	              
-	            	
-	            	
-//		            mListAdapter = new ListArticleAdapter(NovelIntroduceActivity.this, articleList);
-//		            novelListView.setAdapter(mListAdapter);
 	            }
 
 	        }

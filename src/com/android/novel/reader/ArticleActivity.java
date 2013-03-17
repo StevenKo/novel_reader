@@ -1,7 +1,9 @@
 package com.android.novel.reader;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
@@ -20,6 +22,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.api.Setting;
 import com.android.novel.reader.entity.Article;
+import com.android.novel.reader.entity.Bookmark;
 import com.kosbrother.tool.DetectScrollView;
 import com.kosbrother.tool.DetectScrollView.DetectScrollViewListener;
 
@@ -29,6 +32,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private static final int ID_RESPONSE = 1;
     private static final int ID_ABOUT_US = 2;
     private static final int ID_GRADE = 3;
+    private static final int ID_Bookmark = 4;
 
 	private int textSize;
 	private int textLanguage; // 0 for 繁體, 1 for 簡體
@@ -36,17 +40,23 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	private int clickToNextPage; // 0 for yes, 1 for no
 	private int stopSleeping;  // 0 for yes, 1 for no
 	
-	private Bundle mBundle;
-	private String novelName;
-	private String articleTitle;
-	private int articleId;
 	private TextView articleTextView;
 	private DetectScrollView articleScrollView;
 	private Button articleButtonUp;
 	private Button articleButtonDown;
 	private TextView articlePercent;
 	private Article myAricle; // uset to get article text
-	private Boolean downloadBoolean;
+	private Boolean downloadBoolean;	
+	private AlertDialog.Builder addBookMarkDialog;
+	private Bundle mBundle;
+	private String novelName;
+	private String articleTitle;
+	private int articleId;
+	private String novelPic;
+	private int novelId;
+	private int yRate;
+	private Bookmark mBookmark;
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +71,9 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         articleTitle = mBundle.getString("ArticleTitle");
         articleId = mBundle.getInt("ArticleId");
         downloadBoolean = mBundle.getBoolean("ArticleDownloadBoolean",false);
+        novelPic = mBundle.getString("NovelPic");
+        novelId = mBundle.getInt("NovelId");
+        yRate = mBundle.getInt("ReadingRate",0);
         
         ab.setTitle(novelName);
         ab.setDisplayHomeAsUpEnabled(true);
@@ -103,6 +116,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         articleButtonDown = (Button) findViewById (R.id.article_button_down);
         articlePercent = (TextView) findViewById (R.id.article_percent);
         
+        articleScrollView.setScrollViewListener(ArticleActivity.this);
+        
         articleTextView.setTextSize(textSize);
         
         articleButtonUp.setOnClickListener(new OnClickListener() {			 
@@ -119,7 +134,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 			}
 		});
         
-        articleScrollView.setScrollViewListener(ArticleActivity.this);
         
         if(clickToNextPage == 0){
         	articleTextView.setOnClickListener(new OnClickListener() {			 
@@ -130,6 +144,21 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     		});
         }
         
+        addBookMarkDialog = new AlertDialog.Builder(this).setTitle("加書籤")
+				.setMessage("要加入書籤嗎?")
+				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						 NovelAPI.insertBookmark(new Bookmark(0, novelId, articleId, yRate, novelName, articleTitle, novelPic, true), ArticleActivity.this);
+					}
+				})
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+		});
+        
 	}
 	
 	@Override
@@ -139,6 +168,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		int kk = articleScrollView.getHeight();
 		int tt = articleTextView.getHeight();
 		
+		yRate = (int)(((double)(y)/(double)(tt))*100);
 		int xx = (int)(((double)(y+kk)/(double)(tt))*100);
 		String yPositon = Integer.toString(xx);
 		articlePercent.setText(yPositon+"%");
@@ -159,7 +189,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		menu.add(0, ID_RESPONSE, 1, "意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        
+		menu.add(0, ID_Bookmark, 4, "加入書籤").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		
         return true;
     }
 	
@@ -183,6 +214,9 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 			break;
 	    case ID_GRADE: // response
 			Toast.makeText(ArticleActivity.this, "GRADE", Toast.LENGTH_SHORT).show();
+			break;
+	    case ID_Bookmark: // response
+	    	addBookMarkDialog.show();
 			break;
 	    }
 	    return true;
@@ -227,9 +261,15 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             int kk = articleScrollView.getHeight();
     		int tt = articleTextView.getHeight();
     		
-    		int xx = (int)(((double)(kk)/(double)(tt))*100);
-    		String yPositon = Integer.toString(xx);
-    		articlePercent.setText(yPositon+"%");
+    		if(yRate == 0){
+    			int xx = (int)(((double)(kk)/(double)(tt))*100);
+    			String yPositon = Integer.toString(xx);
+    			articlePercent.setText(yPositon+"%");
+    		}else{  	
+    			String yPositon = Integer.toString(yRate);
+    			articlePercent.setText(yPositon+"%");
+    			articleScrollView.scrollTo(0, yRate*tt/100);
+    		}
             
         }
 	}
@@ -246,8 +286,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		articleTextView.setTextSize(textSize);
 		if(stopSleeping == 0){
         	ArticleActivity.this.findViewById(android.R.id.content).setKeepScreenOn(true);
-        }
-		
+        }		
 	 }
 	
 }

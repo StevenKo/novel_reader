@@ -3,14 +3,9 @@ package com.kosbrother.fragments;
 import java.util.ArrayList;
 
 import com.android.novel.reader.R;
-import com.android.novel.reader.R.id;
-import com.android.novel.reader.R.layout;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
-
-import com.taiwan.imageload.ExpandListAdapter;
 import com.taiwan.imageload.GridViewAdapter;
-import com.taiwan.imageload.ListNothingAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
 import android.os.AsyncTask;
@@ -22,26 +17,18 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public final class WeekFragment extends Fragment {
     
 	private ArrayList<Novel> novels = new ArrayList<Novel>();
-	private ArrayList<Novel> moreNovels = new ArrayList<Novel>();
-	private static int myPage = 0;
 	private LoadMoreGridView  myGrid;
 	private GridViewAdapter myGridViewAdapter;
-	private Boolean checkLoad = true;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
 	private LinearLayout layoutReload;
 	private Button buttonReload;
 	
     public static WeekFragment newInstance() {     
-   	 
-
-//  	  myPage = page;
-//  	  novels = theNovels;
  
   	  WeekFragment fragment = new WeekFragment();
   	    
@@ -54,7 +41,7 @@ public final class WeekFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
               
-        new DownloadChannelsTask().execute();
+        
     }
 
     @Override
@@ -89,13 +76,20 @@ public final class WeekFragment extends Fragment {
 			}
 		});
     	
+    	if (myGridViewAdapter != null){
+    		progressLayout.setVisibility(View.GONE);
+            loadmoreLayout.setVisibility(View.GONE);
+      		myGrid.setAdapter(myGridViewAdapter);
+    	}else{
+    		new DownloadChannelsTask().execute();
+    	}
+    	
         return myFragmentView;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-       
     }
     
     private class DownloadChannelsTask extends AsyncTask {
@@ -113,7 +107,6 @@ public final class WeekFragment extends Fragment {
             // TODO Auto-generated method stub
 
         	novels = NovelAPI.getThisWeekHotNovels(); 
-//        	moreNovels = NovelAPI.getThisWeekHotNovels(); 
 
             return null;
         }
@@ -138,51 +131,6 @@ public final class WeekFragment extends Fragment {
             	layoutReload.setVisibility(View.VISIBLE);
             }
 
-        }
-    }
-    
-    
-    private class LoadMoreTask extends AsyncTask {
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            
-
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            // TODO Auto-generated method stub
-
-        	moreNovels = NovelAPI.getThisMonthHotNovels();
-        	if(moreNovels!= null){
-	        	for(int i=0; i<moreNovels.size();i++){
-	        		novels.add(moreNovels.get(i));
-	            }
-        	}
-        	
-        	
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            // TODO Auto-generated method stub
-            super.onPostExecute(result);
-            
-            loadmoreLayout.setVisibility(View.GONE);
-            
-            if(moreNovels!= null){
-            	myGridViewAdapter.notifyDataSetChanged();	                
-            }else{
-                checkLoad= false;
-                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();            	
-            }       
-            myGrid.onLoadMoreComplete();
-          	
-          	
         }
     }
     

@@ -16,6 +16,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -23,7 +25,7 @@ public final class CategoryNewNovelsFragment extends Fragment {
     
 	private ArrayList<Novel> novels = new ArrayList<Novel>();
 	private ArrayList<Novel> moreNovels = new ArrayList<Novel>();
-	private static int myPage = 0;
+	private static int myPage = 1;
 	private LoadMoreGridView  myGrid;
 	private GridViewAdapter myGridViewAdapter;
 	private Boolean checkLoad = true;
@@ -32,6 +34,7 @@ public final class CategoryNewNovelsFragment extends Fragment {
 	private LinearLayout noDataLayout;
 	private LinearLayout layoutReload;
 	private static int id;
+	private Button buttonReload;
 	
     public static CategoryNewNovelsFragment newInstance(int categoryId) {     
     	 
@@ -63,6 +66,7 @@ public final class CategoryNewNovelsFragment extends Fragment {
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
     	noDataLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_no_data);
     	layoutReload = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
+    	buttonReload = (Button) myFragmentView.findViewById(R.id.button_reload);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
@@ -77,6 +81,23 @@ public final class CategoryNewNovelsFragment extends Fragment {
 				}
 			}
 		});
+    	
+    	buttonReload.setOnClickListener(new OnClickListener() {			 
+			@Override
+			public void onClick(View arg0) {
+				progressLayout.setVisibility(View.VISIBLE);
+				new DownloadChannelsTask().execute();
+			}
+		});
+    	
+    	if (myGridViewAdapter != null){
+    		progressLayout.setVisibility(View.GONE);
+            loadmoreLayout.setVisibility(View.GONE);
+      		myGrid.setAdapter(myGridViewAdapter);
+    	}else{
+    		new DownloadChannelsTask().execute();
+    	}
+    	
         return myFragmentView;
     }
 
@@ -115,6 +136,7 @@ public final class CategoryNewNovelsFragment extends Fragment {
                    
             if(novels !=null && novels.size()!= 0){
           	  try{
+          		layoutReload.setVisibility(View.GONE);
           		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
           		myGrid.setAdapter(myGridViewAdapter);
           	  }catch(Exception e){

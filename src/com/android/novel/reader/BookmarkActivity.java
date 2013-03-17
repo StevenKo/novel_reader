@@ -239,6 +239,9 @@ public class BookmarkActivity extends SherlockActivity {
             newAct.putExtra("NovelName", bookmark.getNovelName());
             newAct.putExtra("ArticleTitle", bookmark.getArticleTitle());
             newAct.putExtra("ArticleId", bookmark.getArticleId());
+            newAct.putExtra("ReadingRate", bookmark.getReadRate());
+            newAct.putExtra("NovelPic", bookmark.getNovelPic());
+            newAct.putExtra("NovelId", bookmark.getNovelId());
             newAct.setClass(mContext, ArticleActivity.class);
             startActivity(newAct);
         }
@@ -256,6 +259,9 @@ public class BookmarkActivity extends SherlockActivity {
                         newAct.putExtra("NovelName", bookmark.getNovelName());
                         newAct.putExtra("ArticleTitle", bookmark.getArticleTitle());
                         newAct.putExtra("ArticleId", bookmark.getArticleId());
+                        newAct.putExtra("ReadingRate", bookmark.getReadRate());
+                        newAct.putExtra("NovelPic", bookmark.getNovelPic());
+                        newAct.putExtra("NovelId", bookmark.getNovelId());
                         newAct.setClass(mContext, ArticleActivity.class);
                         startActivity(newAct);
                     } else {

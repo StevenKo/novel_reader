@@ -5,6 +5,7 @@ import java.util.TreeMap;
 import com.android.novel.reader.ArticleActivity;
 import com.android.novel.reader.R;
 import com.android.novel.reader.entity.Article;
+import com.android.novel.reader.entity.Novel;
 import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.Group;
 
@@ -25,18 +26,18 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
  
 	 
 	 private static LayoutInflater inflater=null;
-	 private Activity activity;
-	 private String theNovelName;	 
+	 private Activity activity; 
 	 public ArrayList<Group> theGroups;
+	 private Novel theNovel;
 	 
-	 public ExpandListAdapter(Activity a, ArrayList<Group> mGroups, String novelName) {
+	 public ExpandListAdapter(Activity a, ArrayList<Group> mGroups, Novel mNovel) {
 		 
 		 activity = a;
 		 theGroups = mGroups;
 		 
 		 inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		 
-		 theNovelName = novelName;
+		 theNovel = mNovel;
 	 }
 
 	 @Override
@@ -68,7 +69,9 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
 	            Bundle bundle = new Bundle();
 	 			bundle.putInt("ArticleId", child.getId()); 
 	 			bundle.putString("ArticleTitle", child.getTitle());
-	 			bundle.putString("NovelName", theNovelName);
+	 			bundle.putString("NovelName", theNovel.getName());
+	 			bundle.putString("NovelPic", theNovel.getPic());
+	 			bundle.putInt("NovelId", theNovel.getId());
 	 			intent.putExtras(bundle);
 	 			activity.startActivity(intent);
 	        }

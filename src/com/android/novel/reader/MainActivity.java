@@ -6,7 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
 import android.view.KeyEvent;
@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.android.novel.reader.api.Setting;
 import com.kosbrother.fragments.CategoryListFragment;
 import com.kosbrother.fragments.HotNovelsFragment;
 import com.kosbrother.fragments.MonthFragment;
@@ -37,6 +38,8 @@ public class MainActivity extends SherlockFragmentActivity {
     private String[] CONTENT;
     private EditText search;
     private MenuItem  itemSearch;
+    private ViewPager pager;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +49,9 @@ public class MainActivity extends SherlockFragmentActivity {
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.sections);
 
-        FragmentStatePagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
+        FragmentPagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
 
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
         TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
@@ -108,43 +111,6 @@ public class MainActivity extends SherlockFragmentActivity {
             }
         }).setActionView(R.layout.collapsible_edittext);
 		itemSearch.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-		
-		
-//		menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-//            @Override
-//            public boolean onMenuItemActionExpand(MenuItem item) {
-//                search = (EditText) item.getActionView();             
-//                search.setInputType(InputType.TYPE_CLASS_TEXT);
-//                search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-//                search.requestFocus();
-//                search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//                    @Override
-//                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                        if (actionId == EditorInfo.IME_ACTION_SEARCH || event.getKeyCode() == KeyEvent.KEYCODE_ENTER ) {
-//                            Bundle bundle = new Bundle();
-//                            bundle.putString("SearchKeyword", v.getText().toString());
-//                            Intent intent = new Intent();
-//                            intent.setClass(MainActivity.this, SearchActivity.class);
-//                            intent.putExtras(bundle);
-//                            startActivity(intent);
-//                            return true;
-//                        }
-//
-//                        return false;
-//                    }
-//                });
-//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.showSoftInput(null, InputMethodManager.SHOW_IMPLICIT);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onMenuItemActionCollapse(MenuItem item) {
-//                // TODO Auto-generated method stub
-//                search.setText("");
-//                return true;
-//            }
-//        }).setActionView(R.layout.collapsible_edittext).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
         return true;
     }
@@ -173,7 +139,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	    return true;
 	}
 
-    class NovelPagerAdapter extends FragmentStatePagerAdapter {
+    class NovelPagerAdapter extends FragmentPagerAdapter {
         public NovelPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -207,8 +173,12 @@ public class MainActivity extends SherlockFragmentActivity {
     }
     
     @Override
-    protected void onPause() {
-     super.onPause();
+    public void  onBackPressed  () {
+    	if(pager.getCurrentItem() ==1){
+    		  finish();
+    	}else{
+    		pager.setCurrentItem(1, true);
+    	}
     }
 
 }

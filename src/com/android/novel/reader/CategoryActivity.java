@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
@@ -60,7 +61,7 @@ public class CategoryActivity extends SherlockFragmentActivity {
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.category_sections);
         
-        FragmentStatePagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
+        FragmentPagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
 
         ViewPager pager = (ViewPager)findViewById(R.id.pager);
         pager.setAdapter(adapter);
@@ -149,7 +150,7 @@ public class CategoryActivity extends SherlockFragmentActivity {
 	    return true;
 	}
     
-    class NovelPagerAdapter extends FragmentStatePagerAdapter {
+    class NovelPagerAdapter extends FragmentPagerAdapter {
         public NovelPagerAdapter(FragmentManager fm) {
             super(fm);
         }

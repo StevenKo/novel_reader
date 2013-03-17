@@ -8,35 +8,28 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.android.novel.reader.R;
-import com.android.novel.reader.R.id;
-import com.android.novel.reader.R.layout;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
 import com.taiwan.imageload.GridViewAdapter;
-import com.taiwan.imageload.ListNothingAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
 public class ClassicFragment extends Fragment {
     
 	private ArrayList<Novel> novels = new ArrayList<Novel>();
-	private ArrayList<Novel> moreNovels = new ArrayList<Novel>();
-	private static int myPage = 0;
 	private LoadMoreGridView  myGrid;
 	private GridViewAdapter myGridViewAdapter;
-	private Boolean checkLoad = true;
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
 	private static int classicType; // 0 for classic action, 1 for classic
+	private Button buttonReload;
+	private LinearLayout layoutReload;
 	
     public static ClassicFragment newInstance(int type) {     
-   	 
-
-//  	  myPage = page;
-//  	  novels = theNovels;
  
       ClassicFragment fragment = new ClassicFragment();
   	  classicType = type;
@@ -49,7 +42,6 @@ public class ClassicFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
               
-        new DownloadChannelsTask().execute();
     }
 
     @Override
@@ -59,20 +51,30 @@ public class ClassicFragment extends Fragment {
     	View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
     	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
+    	layoutReload = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
+    	buttonReload = (Button) myFragmentView.findViewById(R.id.button_reload);
     	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
     	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
 			public void onLoadMore() {
-				// Do the work to load more items at the end of list
-				
-//				if(checkLoad){
-//					myPage = myPage +1;
-//					loadmoreLayout.setVisibility(View.VISIBLE);
-//					new LoadMoreTask().execute();
-//				}else{
-//					myGrid.onLoadMoreComplete();
-//				}
 			}
 		});
+    	
+    	buttonReload.setOnClickListener(new OnClickListener() {			 
+			@Override
+			public void onClick(View arg0) {
+				progressLayout.setVisibility(View.VISIBLE);
+				new DownloadChannelsTask().execute();
+			}
+		});
+    	
+    	if (myGridViewAdapter != null){
+    		progressLayout.setVisibility(View.GONE);
+            loadmoreLayout.setVisibility(View.GONE);
+      		myGrid.setAdapter(myGridViewAdapter);
+    	}else{
+    		new DownloadChannelsTask().execute();
+    	}
+    	
         return myFragmentView;
     }
 
@@ -101,7 +103,6 @@ public class ClassicFragment extends Fragment {
         	}else if(classicType == 1){
         		novels = NovelAPI.getClassicNovels(); 
         	}
-//        	moreNovels = NovelAPI.getThisWeekHotNovels(); 
 
             return null;
         }
@@ -114,67 +115,20 @@ public class ClassicFragment extends Fragment {
             loadmoreLayout.setVisibility(View.GONE);
    
 
-            if(novels !=null){
-          	  try{
-          		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
-          		myGrid.setAdapter(myGridViewAdapter);
-          	  }catch(Exception e){
-          		 
-          	  }
+            if(novels !=null && novels.size()!= 0){
+            	  try{
+            		layoutReload.setVisibility(View.GONE);
+            		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
+            		myGrid.setAdapter(myGridViewAdapter);
+            	  }catch(Exception e){
+            		 
+            	  }
             }else{
-          	  ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
-          	  myGrid.setAdapter(nothingAdapter);
+                layoutReload.setVisibility(View.VISIBLE);
             }
 
         }
     }
     
-    
-//    private class LoadMoreTask extends AsyncTask {
-//
-//        @Override
-//        protected void onPreExecute() {
-//            // TODO Auto-generated method stub
-//            super.onPreExecute();
-//            
-//
-//        }
-//
-//        @Override
-//        protected Object doInBackground(Object... params) {
-//            // TODO Auto-generated method stub
-//
-//        	moreNovels = NovelAPI.getThisMonthHotNovels();
-//        	if(moreNovels!= null){
-//	        	for(int i=0; i<moreNovels.size();i++){
-//	        		novels.add(moreNovels.get(i));
-//	            }
-//	        	for(int i=0; i<moreNovels.size();i++){
-//	        		novels.add(moreNovels.get(i));
-//	            }
-//        	}
-//        	
-//        	
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Object result) {
-//            // TODO Auto-generated method stub
-//            super.onPostExecute(result);
-//            
-//            loadmoreLayout.setVisibility(View.GONE);
-//            
-//            if(moreNovels!= null){
-//            	myGridViewAdapter.notifyDataSetChanged();	                
-//            }else{
-//                checkLoad= false;
-//                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();            	
-//            }       
-//            myGrid.onLoadMoreComplete();
-//          	
-//          	
-//        }
-//    }
    
 }
