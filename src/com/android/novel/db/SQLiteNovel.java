@@ -401,6 +401,33 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         return exists;
     }
 
+    // public Boolean isNovelBookmarked(int novel_id) {
+    // Cursor cursor = db.rawQuery("select 1 from " + BookmarkSchema.TABLE_NAME + " where novel_id = " + novel_id + " and is_recent_read = 1", null);
+    // boolean exists = (cursor.getCount() > 0);
+    // cursor.close();
+    // return exists;
+    // }
+
+    public Bookmark getNovelBookmark(int novel_id) {
+        Cursor cursor = null;
+        Bookmark bookmark = null;
+        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " where novel_id = " + novel_id + " and is_recent_read = 1", null);
+
+        while (cursor.moveToNext()) {
+            int ID = cursor.getInt(0);
+            int NOVEL_ID = cursor.getInt(1);
+            int ARTICLE_ID = cursor.getInt(2);
+            int READ_RATE = cursor.getInt(3);
+            String NOVEL_NAME = cursor.getString(4);
+            String ARTICLE_TITLE = cursor.getString(5);
+            String NOVEL_PIC = cursor.getString(6);
+            Boolean IS_RECENT_READ = cursor.getInt(7) > 0;
+
+            bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC, IS_RECENT_READ);
+        }
+        return bookmark;
+    }
+
     public Boolean removeNovelFromCollected(Novel novel) {
         novel.setIsCollected(false);
         return updateNovel(novel);

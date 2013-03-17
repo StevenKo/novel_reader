@@ -69,6 +69,16 @@ public class NovelAPI {
         return bookmark;
     }
 
+    public static Bookmark createRecentBookmark(Bookmark bookmark, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        Bookmark lastNovelBookmark = db.getNovelBookmark(bookmark.getNovelId());
+        if (lastNovelBookmark != null)
+            db.deleteBookmark(lastNovelBookmark);
+        int id = (int) db.insertBookmark(bookmark);
+        bookmark.setId(id);
+        return bookmark;
+    }
+
     public static ArrayList<Novel> getCollectedNovels(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         return db.getCollectedNovels();
