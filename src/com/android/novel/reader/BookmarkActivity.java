@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -217,7 +218,8 @@ public class BookmarkActivity extends SherlockActivity {
             if (header == null) {
                 header = new TextView(mContext);
                 header.setTextSize(16);
-                header.setPadding(2, 1, 2, 1);
+                header.setPadding(12, 1, 2, 1);
+                header.setTypeface(Typeface.SERIF);
                 header.setBackgroundColor(mContext.getResources().getColor(R.color.bookmark_section_head));
                 header.setTextColor(mContext.getResources().getColor(R.color.bookmark_section_text));
             }

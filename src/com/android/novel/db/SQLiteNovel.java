@@ -112,7 +112,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         args.put(BookmarkSchema.READ_RATE, bookmark.getReadRate());
         args.put(BookmarkSchema.NOVEL_NAME, bookmark.getNovelName());
         args.put(BookmarkSchema.ARTICLE_TITLE, bookmark.getArticleTitle());
-        args.put(BookmarkSchema.NOVEL_PIC, bookmark.getArticleId());
+        args.put(BookmarkSchema.NOVEL_PIC, bookmark.getNovelPic());
         args.put(BookmarkSchema.IS_RECENT_READ, getSQLiteBoolean(bookmark.isRecentRead()));
         return db.insert(BookmarkSchema.TABLE_NAME, null, args);
     }
