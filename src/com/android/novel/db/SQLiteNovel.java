@@ -98,6 +98,13 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean deleteArticle(Article article) {
+        Cursor cursor = db.rawQuery("DELETE FROM articles WHERE `articles`.`id` = ?", new String[] { article.getId() + "" });
+        cursor.moveToFirst();
+        cursor.close();
+        return true;
+    }
+
     public long insertBookmark(Bookmark bookmark) {
         ContentValues args = new ContentValues();
         args.put(BookmarkSchema.NOVEL_ID, bookmark.getNovelId());
