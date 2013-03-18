@@ -1,5 +1,7 @@
 package com.android.novel.reader;
 
+import java.io.IOException;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import com.adwhirl.AdWhirlLayout;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
+import com.android.novel.reader.api.Setting;
 import com.google.ads.AdView;
 import com.kosbrother.fragments.MyBookcaseFragment;
 import com.kosbrother.fragments.MyDownloadFragment;
@@ -37,6 +40,8 @@ public class MyNovelActivity extends SherlockFragmentActivity implements AdWhirl
     private String[] CONTENT;
     private AlertDialog.Builder aboutUsDialog;	
     private String adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
+    private ViewPager pager;
+    private FragmentStatePagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +55,9 @@ public class MyNovelActivity extends SherlockFragmentActivity implements AdWhirl
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.collections);
 
-        FragmentStatePagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
+        adapter = new NovelPagerAdapter(getSupportFragmentManager());
 
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
         TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
@@ -70,7 +75,8 @@ public class MyNovelActivity extends SherlockFragmentActivity implements AdWhirl
 		}catch(Exception e){
 			
 		}
-
+        
+        
     }
 
     @Override
@@ -157,6 +163,15 @@ public class MyNovelActivity extends SherlockFragmentActivity implements AdWhirl
 					}
 				});
 	}
+    
+    @Override
+	 protected void onResume() {
+		super.onResume();
+		int position = pager.getCurrentItem();
+		pager.setAdapter(adapter);
+		pager.setCurrentItem(position);
+     }		
+	 
     
     private void setAdAdwhirl() {
 		// TODO Auto-generated method stub

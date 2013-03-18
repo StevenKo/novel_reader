@@ -1,5 +1,7 @@
 package com.android.novel.reader;
 
+import java.io.IOException;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -54,12 +56,14 @@ public class MainActivity extends SherlockFragmentActivity implements AdWhirlInt
     private AlertDialog.Builder aboutUsDialog;
     
     private String adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
+    private String bb;
+    private String kk;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_titles);
-
+        
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.sections);
 

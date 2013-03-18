@@ -1,5 +1,7 @@
 package com.android.novel.reader;
 
+import java.io.IOException;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -64,7 +66,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	private String novelPic;
 	private int novelId;
 	private int yRate;
-	private ProgressDialog progressDialog= null;
+//	private ProgressDialog progressDialog= null;
 	private AlertDialog.Builder aboutUsDialog;
 	private String adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
 	
@@ -272,9 +274,16 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         protected void onPostExecute(Object result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-//            if(progressDialog!= null &&progressDialog.isShowing()){
-//            	progressDialog.dismiss();
-//            }
+          
+//            String text ="";
+//            
+//            try {
+//				text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getTitle() + "\n\n" + myAricle.getText());
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//            articleTextView.setText(text);   
             articleTextView.setText(articleTitle + "\n\n" + myAricle.getText());           
             new GetLastPositionTask().execute();
        
@@ -287,8 +296,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
-	        progressDialog = ProgressDialog.show(ArticleActivity.this, "","小說下載中,...");
-	        progressDialog.setCancelable(true);
+	        
 	    }
 		
         @Override
@@ -303,9 +311,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         protected void onPostExecute(Object result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            if(progressDialog.isShowing()){
-            	progressDialog.dismiss();
-            }
+            
             articleTextView.setText(myAricle.getTitle() + "\n\n" + myAricle.getText());           
             new GetLastPositionTask().execute();
        
@@ -318,8 +324,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
-	        progressDialog = ProgressDialog.show(ArticleActivity.this, "","小說下載中,...");
-	        progressDialog.setCancelable(true);
+	        
 	    }
 		
         @Override
@@ -334,9 +339,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         protected void onPostExecute(Object result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            if(progressDialog.isShowing()){
-            	progressDialog.dismiss();
-            }
+            
             articleTextView.setText(myAricle.getTitle() + "\n\n" + myAricle.getText());           
             new GetLastPositionTask().execute();
        
@@ -400,7 +403,13 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		if(stopSleeping == 0){
         	ArticleActivity.this.findViewById(android.R.id.content).setKeepScreenOn(true);
         }		
-	 }	
+	 }
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		NovelAPI.createRecentBookmark(new Bookmark(0, novelId, articleId, yRate, novelName, articleTitle, novelPic, true), ArticleActivity.this);
+	 }
 	
 	private void setAdAdwhirl() {
 		// TODO Auto-generated method stub
@@ -447,6 +456,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 				}
 			});
 			view.startAnimation(rotation);
-		}
+	}
 	
 }

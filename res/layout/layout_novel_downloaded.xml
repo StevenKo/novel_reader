@@ -77,9 +77,17 @@
     
     <ListView android:id="@+id/novel_download_artiles_list"
         android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
 	    android:groupIndicator="@null"
         >      
     </ListView>
+    
+    <LinearLayout
+            android:id="@+id/adonView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+      		android:gravity="center_horizontal"
+            />
     
 </LinearLayout>
