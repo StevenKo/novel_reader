@@ -6,6 +6,7 @@ import java.util.TreeMap;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Article;
+import com.android.novel.reader.service.DownloadService;
 import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.ExpandListDownLoadAdapter;
 import com.kosbrother.tool.Group;
@@ -181,8 +183,8 @@ public class DownloadActivity extends SherlockFragmentActivity {
 			 @Override
 		    protected void onPreExecute() {
 		        super.onPreExecute();
-		        progressDialog = ProgressDialog.show(DownloadActivity.this, "",getResources().getString(R.string.toast_novel_downloading));
-		        progressDialog.setCancelable(true);
+//		        progressDialog = ProgressDialog.show(DownloadActivity.this, "",getResources().getString(R.string.toast_novel_downloading));
+//		        progressDialog.setCancelable(true);
 		    }
 		 
 	        @Override
@@ -192,12 +194,18 @@ public class DownloadActivity extends SherlockFragmentActivity {
 				for(int i=0; i< mGroups.size(); i++){
 					for(int j=0; j< mGroups.get(i).getChildrenCount(); j++){
 						ChildArticle aChildArticle = mGroups.get(i).getChildItem(j);
-						if(aChildArticle.getChecked()){
+						if(aChildArticle.getChecked() && !aChildArticle.isDownload()){
 							checkedArticles.add(new Article(aChildArticle.getId(), aChildArticle.getNovelId(),aChildArticle.getText(), aChildArticle.getTitle(), aChildArticle.getSubject(), aChildArticle.isDownload())); 
 						}
 					}
 				}
-				downloadBoolean = NovelAPI.downloadArticles(novelId, checkedArticles, DownloadActivity.this);				
+//				downloadBoolean = NovelAPI.downloadArticles(novelId, checkedArticles, DownloadActivity.this);
+				
+				Intent i = new Intent(DownloadActivity.this,DownloadService.class);
+				DownloadService.addArticles(checkedArticles);
+				DownloadActivity.this.startService(i);
+				
+				
 	            return null;
 	        }
 
@@ -205,12 +213,12 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	        protected void onPostExecute(Object result) {
 	            // TODO Auto-generated method stub
 	            super.onPostExecute(result);
-	            progressDialog.dismiss();
-	            if (downloadBoolean){
-					Toast.makeText(DownloadActivity.this,getResources().getString(R.string.toast_downloading_success), Toast.LENGTH_SHORT).show();
-				}else{
-					Toast.makeText(DownloadActivity.this,getResources().getString(R.string.toast_downloading_fail), Toast.LENGTH_SHORT).show();
-				}
+//	            progressDialog.dismiss();
+//	            if (downloadBoolean){
+//					Toast.makeText(DownloadActivity.this,getResources().getString(R.string.toast_downloading_success), Toast.LENGTH_SHORT).show();
+//				}else{
+//					Toast.makeText(DownloadActivity.this,getResources().getString(R.string.toast_downloading_fail), Toast.LENGTH_SHORT).show();
+//				}
 	        }
 	 }
     

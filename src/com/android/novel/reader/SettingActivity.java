@@ -95,9 +95,11 @@ public class SettingActivity extends SherlockFragmentActivity {
 			}
 		});
 					
-		
+		setFinishDialog();
 		
 	}
+
+	
 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,15 +113,15 @@ public class SettingActivity extends SherlockFragmentActivity {
 	    int itemId = item.getItemId();
 	    switch (itemId) {
 	    case android.R.id.home:
-	        finish();
-	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+//	        finish();
+	    	finishDialog.show();  
 	        break;
 	    }
 	    return true;
 	}
 	
 	private void saveRadioGroupValue(RadioGroup theRadioGroup, String key) {
-		// TODO Auto-generated method stub
+		
 		int radioButtonID = theRadioGroup.getCheckedRadioButtonId();
 		View radioButton = theRadioGroup.findViewById(radioButtonID);
 		int idx = theRadioGroup.indexOfChild(radioButton);
@@ -127,36 +129,38 @@ public class SettingActivity extends SherlockFragmentActivity {
 		
 	}
 	
+	private void setFinishDialog() {
+		finishDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.setting_living))
+				.setMessage(getResources().getString(R.string.setting_message))
+				.setPositiveButton(getResources().getString(R.string.setting_yes), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+													
+					    Setting.saveSetting(Setting.keyTextSize, mSeekBar.getProgress(), SettingActivity.this);							
+						saveRadioGroupValue(langRadioGroup, Setting.keyTextLanguage);
+						saveRadioGroupValue(directionRadioGroup, Setting.keyReadingDirection);
+						saveRadioGroupValue(tapRadioGroup, Setting.keyClickToNextPage);
+						saveRadioGroupValue(stopSleepRadioGroup, Setting.keyStopSleeping);													
+						finish();
+						
+					}					
+				})
+				.setNeutralButton(getResources().getString(R.string.setting_neutral), new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {						
+						dialog.cancel();
+				}
+				})
+				.setNegativeButton(getResources().getString(R.string.setting_no), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+					}
+				});
+	}
+	
 	@Override
     public void  onBackPressed  () {  
-			finishDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.setting_living))
-					.setMessage(getResources().getString(R.string.setting_message))
-					.setPositiveButton(getResources().getString(R.string.setting_yes), new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-														
-						    Setting.saveSetting(Setting.keyTextSize, mSeekBar.getProgress(), SettingActivity.this);							
-							saveRadioGroupValue(langRadioGroup, Setting.keyTextLanguage);
-							saveRadioGroupValue(directionRadioGroup, Setting.keyReadingDirection);
-							saveRadioGroupValue(tapRadioGroup, Setting.keyClickToNextPage);
-							saveRadioGroupValue(stopSleepRadioGroup, Setting.keyStopSleeping);
-														
-							finish();
-							
-						}					
-					})
-					.setNeutralButton(getResources().getString(R.string.setting_neutral), new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {						
-							dialog.cancel();
-					}
-					})
-					.setNegativeButton(getResources().getString(R.string.setting_no), new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							finish();
-						}
-					});
 			finishDialog.show();          
     }
 

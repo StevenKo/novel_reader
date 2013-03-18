@@ -61,7 +61,7 @@ public class Group {
     public int getGroupCheckedCount() {
     	int checkCount = 0;
     	for(int i=0; i< children.size(); i++){
-    		if(children.get(i).getChecked()){
+    		if(children.get(i).getChecked() && !children.get(i).isDownloaded){
     			checkCount = checkCount +1;
     		}
     	}   	

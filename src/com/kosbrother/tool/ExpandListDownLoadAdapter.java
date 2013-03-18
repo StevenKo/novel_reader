@@ -46,14 +46,25 @@ public class ExpandListDownLoadAdapter extends BaseExpandableListAdapter {
 		 
 		 ChildArticle child = theGroups.get(groupPosition).getChildItem(childPosition);
 		 
+		 
+		 
 		 View vi=convertView;
 	     vi = inflater.inflate(R.layout.item_expandable_download_child, null);
 	     TextView text=(TextView)vi.findViewById(R.id.expandlist_child);
 	     String childString = child.getTitle();
 	     text.setText(childString);
-	    
-	     // 重新產生 CheckBox 時，將存起來的 isChecked 狀態重新設定
+	     
 	     CheckBox checkBox = (CheckBox) vi.findViewById(R.id.checkbox_child);
+	     TextView textDownload = (TextView)vi.findViewById(R.id.text_child_downloaded);
+	     
+	     // check downloaded or not
+	     Boolean isDownloaded = child.isDownloaded;
+	     if(isDownloaded){
+	    	 checkBox.setVisibility(View.GONE);
+	    	 textDownload.setVisibility(View.VISIBLE);
+	     }
+	    
+	     // 重新產生 CheckBox 時，將存起來的 isChecked 狀態重新設定	     
 	     checkBox.setChecked(child.getChecked());
 	 
 	     // 點擊 CheckBox 時，將狀態存起來
@@ -120,8 +131,21 @@ public class ExpandListDownLoadAdapter extends BaseExpandableListAdapter {
 	     
 	    // 重新產生 CheckBox 時，將存起來的 isChecked 狀態重新設定
 	    CheckBox checkBox = (CheckBox) vi.findViewById(R.id.checkbox_parent);
+	    TextView textDownload = (TextView)vi.findViewById(R.id.text_parent_downloaded);
+	    
+	    // check 是否都下載了
+	    Boolean isAllDownloaded = true;
+	    for(int i=0; i< group.getChildrenCount(); i++){
+	    	if(!group.getChildItem(i).isDownloaded)
+	    		isAllDownloaded = false;
+	    }
+	    
+	    if(isAllDownloaded){
+	    	checkBox.setVisibility(View.GONE);
+	    	textDownload.setVisibility(View.VISIBLE);
+	    }
+	    
 	    checkBox.setChecked(group.getChecked());
-	 
 	    // 點擊 CheckBox 時，將狀態存起來
 	    checkBox.setOnClickListener(new Group_CheckBox_Click(Integer.valueOf(groupPosition)));
 	    

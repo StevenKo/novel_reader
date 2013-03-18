@@ -32,6 +32,15 @@
 	   		android:focusable="false"
 		    />
 		
+		<TextView  android:id="@+id/text_parent_downloaded"
+    	    android:layout_width="wrap_content"	 
+		   	android:layout_height="wrap_content"
+		   	android:text="@string/novel_downloaded"
+		   	android:textColor="#0B6196"
+		   	android:paddingRight="5dp"
+		   	android:visibility="gone"
+    	    />
+		
 	</LinearLayout>
 
 </LinearLayout>
