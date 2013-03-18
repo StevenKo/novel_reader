@@ -94,7 +94,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         novelPicUrl = mBundle.getString("NovelPicUrl");
         novelArticleNum = mBundle.getString("NovelArticleNum");
         
-        ab.setTitle("小說介紹");
+        ab.setTitle(getResources().getString(R.string.title_novel_introduce));
         ab.setDisplayHomeAsUpEnabled(true);
         
         isNovelChecked = NovelAPI.isNovelCollected(NovelIntroduceActivity.this, novelId);
@@ -126,9 +126,9 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 		}
 		
 		novelTextName.setText(novelName + "(" + novelArticleNum + ")");
-		novelTextAuthor.setText("作者:"+novelAuthor);
+		novelTextAuthor.setText(getResources().getString(R.string.novel_author)+novelAuthor);
 		novelTextDescription.setText(novelDescription);
-		novelTextUpdate.setText("更新:"+ novelUpdate );
+		novelTextUpdate.setText(getResources().getString(R.string.novel_update_time)+ novelUpdate );
 		
 		mImageLoader = new ImageLoader(NovelIntroduceActivity.this, 70);
 		mImageLoader.DisplayImage(novelPicUrl, novelImageView);
@@ -136,13 +136,13 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 		novelButton.setOnClickListener(new OnClickListener() {			 
 			@Override
 			public void onClick(View arg0) {
-				if(novelButton.getText().equals("由後往前")){
-					novelButton.setText("由前往後");
+				if(novelButton.getText().equals(getResources().getString(R.string.novel_back))){
+					novelButton.setText(getResources().getString(R.string.novel_front));
 					reverseMGroups();
 					ExpandListAdapter mAdapter = new ExpandListAdapter( NovelIntroduceActivity.this, mGroups, theNovel);
 	            	novelListView.setAdapter(mAdapter);
 				}else{
-					novelButton.setText("由後往前");
+					novelButton.setText(getResources().getString(R.string.novel_back));
 					reverseMGroups();	
 					ExpandListAdapter mAdapter = new ExpandListAdapter( NovelIntroduceActivity.this, mGroups, theNovel);
 	            	novelListView.setAdapter(mAdapter);
@@ -234,13 +234,13 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 //        getMenuInflater().inflate(R.menu.activity_main, menu);
 		
 		
-		menu.add(0, ID_SETTING, 0, "設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_RESPONSE, 1, "意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_DOWNLOAD, 5, "下載").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(0, ID_SETTING, 0, getResources().getString(R.string.menu_settings)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_DOWNLOAD, 5, getResources().getString(R.string.menu_download)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		
-		itemSearch = menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+		itemSearch = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             private EditText search;
 
             @Override
@@ -290,23 +290,19 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	        finish();
 	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
 	        break;
-	    case ID_SETTING: // setting
-	    		Intent intent = new Intent(NovelIntroduceActivity.this, SettingActivity.class);
-	    		startActivity(intent); 
-	        break;
 	    case ID_RESPONSE: // response
 	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 	    	emailIntent.setType("plain/text");
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "意見回餽 from 小說王");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getResources().getString(R.string.respond_mail_address)});
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.respond_mail_title));
 	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
 	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-    		break;
-	    case ID_ABOUT_US: // response
+			break;
+	    case ID_ABOUT_US: 
 	    	aboutUsDialog.show();
 			break;
-	    case ID_GRADE: // response
-	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=KosBrother"));
+	    case ID_GRADE: 
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
 			startActivity(browserIntent);
 			break;
 	    case ID_DOWNLOAD: // response

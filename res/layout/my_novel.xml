@@ -31,7 +31,7 @@
             <TextView 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我的書櫃"
+                android:text="@string/my_bookcase"
                 />
         </LinearLayout>
         <LinearLayout
@@ -54,7 +54,7 @@
             <TextView 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我的書籤"
+                android:text="@string/my_bookmark"
                 />
         </LinearLayout>
     </LinearLayout>
@@ -86,7 +86,7 @@
             <TextView 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="最近閱讀"
+                android:text="@string/my_recent_reading"
                 />
         </LinearLayout>
         <LinearLayout  android:id="@+id/my_setting"
@@ -108,7 +108,7 @@
             <TextView 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="閱讀設定"
+                android:text="@string/my_read_setting"
                 />
         </LinearLayout>      
     </LinearLayout>
@@ -139,7 +139,7 @@
             <TextView 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="經典武俠"
+                android:text="@string/my_classic_action_novel"
                 />
         </LinearLayout>
         <LinearLayout	android:id="@+id/classic_novel"
@@ -161,7 +161,7 @@
             <TextView 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="經典小說"
+                android:text="@string/my_classic_novel"
                 />
         </LinearLayout>      
     </LinearLayout>

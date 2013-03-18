@@ -80,7 +80,7 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
         novelPicUrl = mBundle.getString("NovelPicUrl");
         novelArticleNum = mBundle.getString("NovelArticleNum");
         
-        ab.setTitle(" 我的下載");
+        ab.setTitle(getResources().getString(R.string.title_my_downloading));
         ab.setDisplayHomeAsUpEnabled(true);
         
         setViews();
@@ -111,15 +111,15 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
 		novelLayoutProgress = (LinearLayout) findViewById (R.id.novel_layout_progress);
 		
 		novelTextName.setText(novelName + "(" + novelArticleNum + ")");
-		novelTextAuthor.setText("作者:"+novelAuthor);
+		novelTextAuthor.setText(getResources().getString(R.string.novel_author)+novelAuthor);
 		
 		mImageLoader = new ImageLoader(MyDownloadArticleActivity.this, 70);
 		mImageLoader.DisplayImage(novelPicUrl, novelImageView);
 		
-		deleteDialog = new AlertDialog.Builder(this).setTitle("刪除")
-				.setMessage("是否刪除此小說")
+		deleteDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.delete_title))
+				.setMessage(getResources().getString(R.string.delete_message))
 				.setIcon(R.drawable.app_icon)
-				.setPositiveButton("刪除", new DialogInterface.OnClickListener() {
+				.setPositiveButton(getResources().getString(R.string.delete_yes), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						Novel myNovel = new Novel(novelId, novelName, novelAuthor, "", novelPicUrl, 0, novelArticleNum, "", false, false,true);
@@ -127,7 +127,7 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
 						MyDownloadArticleActivity.this.finish();
 				}
 				})
-				.setNegativeButton("不刪除", new DialogInterface.OnClickListener() {
+				.setNegativeButton(getResources().getString(R.string.delete_no), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 				}

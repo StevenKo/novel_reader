@@ -58,9 +58,9 @@ public class BookmarkActivity extends SherlockActivity {
         bookmarkListView = (SectionListView) findViewById(R.id.bookmark_listview);
 
         if (isRecent) {
-            ab.setTitle("最近閱讀");
+            ab.setTitle(getResources().getString(R.string.my_recent_reading));
         } else {
-            ab.setTitle("我的書籤");
+            ab.setTitle(getResources().getString(R.string.my_bookmark));
         }
 
         ab.setDisplayHomeAsUpEnabled(true);
@@ -101,7 +101,7 @@ public class BookmarkActivity extends SherlockActivity {
             bookmarks = NovelAPI.getAllBookmarks(BookmarkActivity.this);
 
         if (bookmarks.size() == 0)
-            bookmarks.add(new Bookmark(0, 0, 0, 0, "目前沒有書籤！", "", "", false));
+            bookmarks.add(new Bookmark(0, 0, 0, 0, getResources().getString(R.string.my_bookmark_none), "", "", false));
         bookmarksMap = getBookmarksMap(bookmarks);
     }
 
@@ -251,7 +251,7 @@ public class BookmarkActivity extends SherlockActivity {
         @Override
         public void onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
             final Bookmark bookmark = bookList.get(position);
-            final String[] ListStr = { "觀看小說", "刪除書籤" };
+            final String[] ListStr = { getResources().getString(R.string.reading_novel), getResources().getString(R.string.remove_bookmark)};
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle(bookmark.getArticleTitle());
             builder.setItems(ListStr, new DialogInterface.OnClickListener() {

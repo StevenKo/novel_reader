@@ -84,7 +84,6 @@ public class SearchActivity extends SherlockListActivity {
 
         });
 
-        ab.setTitle("小說王");
         ab.setDisplayHomeAsUpEnabled(true);
         
         setAboutUsDialog();
@@ -155,12 +154,12 @@ public class SearchActivity extends SherlockListActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         // getMenuInflater().inflate(R.menu.activity_main, menu);
 
-    	menu.add(0, ID_SETTING, 0, "設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_RESPONSE, 1, "意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+    	menu.add(0, ID_SETTING, 0, getResources().getString(R.string.menu_settings)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
-        item = menu.add(0, ID_SEARCH, 4, "搜索").setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+        item = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             private EditText search;
 
             @Override
@@ -215,16 +214,16 @@ public class SearchActivity extends SherlockListActivity {
 	    case ID_RESPONSE: // response
 	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 	    	emailIntent.setType("plain/text");
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "意見回餽 from 小說王");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getResources().getString(R.string.respond_mail_address)});
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.respond_mail_title));
 	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
 	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-    		break;
-	    case ID_ABOUT_US: // response
+			break;
+	    case ID_ABOUT_US: 
 	    	aboutUsDialog.show();
 			break;
-	    case ID_GRADE: // response
-	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=KosBrother"));
+	    case ID_GRADE: 
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
 			startActivity(browserIntent);
 			break;
 	    case ID_SEARCH: // response

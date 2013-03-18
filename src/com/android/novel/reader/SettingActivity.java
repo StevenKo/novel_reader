@@ -50,7 +50,7 @@ public class SettingActivity extends SherlockFragmentActivity {
         setViews();
         
         final ActionBar ab = getSupportActionBar();		             
-        ab.setTitle(" 閱讀設定");
+        ab.setTitle(getResources().getString(R.string.title_reading_setting));
         ab.setDisplayHomeAsUpEnabled(true);
         
         
@@ -129,9 +129,9 @@ public class SettingActivity extends SherlockFragmentActivity {
 	
 	@Override
     public void  onBackPressed  () {  
-			finishDialog = new AlertDialog.Builder(this).setTitle("離開設定")
-					.setMessage("是否要儲存設定?")
-					.setPositiveButton("儲存", new DialogInterface.OnClickListener() {
+			finishDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.setting_living))
+					.setMessage(getResources().getString(R.string.setting_message))
+					.setPositiveButton(getResources().getString(R.string.setting_yes), new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 														
@@ -143,20 +143,18 @@ public class SettingActivity extends SherlockFragmentActivity {
 														
 							finish();
 							
-						}
-
-						
+						}					
 					})
-					.setNeutralButton("不儲存", new DialogInterface.OnClickListener() {
+					.setNeutralButton(getResources().getString(R.string.setting_neutral), new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog, int which) {
-							finish();
+					public void onClick(DialogInterface dialog, int which) {						
+							dialog.cancel();
 					}
 					})
-					.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					.setNegativeButton(getResources().getString(R.string.setting_no), new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							dialog.cancel();
+							finish();
 						}
 					});
 			finishDialog.show();          

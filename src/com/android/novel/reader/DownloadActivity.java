@@ -86,8 +86,8 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.	
-		menu.add(0, ID_SELECT_ALL, 0, "全選").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		menu.add(0, ID_SELECT_NONE, 1, "全取消").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(0, ID_SELECT_ALL, 0, getResources().getString(R.string.menu_add_all)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(0, ID_SELECT_NONE, 1, getResources().getString(R.string.menu_remove_all)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		
         
         return true;
@@ -102,7 +102,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
 	        break;
 	    case ID_SELECT_ALL: // setting
-	    		Toast.makeText(DownloadActivity.this, "全選", Toast.LENGTH_SHORT).show();
+	    		Toast.makeText(DownloadActivity.this, getResources().getString(R.string.menu_add_all), Toast.LENGTH_SHORT).show();
 	    		downloadCount = 0;
 	    	    for(int i=0; i<mGroups.size(); i++){
 	    	    	mGroups.get(i).setChecked(true);
@@ -112,10 +112,10 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	    	    	}
 	    	    }
 	    	    mAdapter.notifyDataSetChanged();
-	    	    downLoadCountText.setText("共選了 "+Integer.toString(downloadCount)+" 項");
+	    	    downLoadCountText.setText(getResources().getString(R.string.toast_all_collect_title)+Integer.toString(downloadCount)+getResources().getString(R.string.toast_all_collect_final));
 	        break;
 	    case ID_SELECT_NONE: // response
-    			Toast.makeText(DownloadActivity.this, "全部取消", Toast.LENGTH_SHORT).show();
+    			Toast.makeText(DownloadActivity.this, getResources().getString(R.string.menu_remove_all), Toast.LENGTH_SHORT).show();
     			downloadCount = 0;
     			for(int i=0; i<mGroups.size(); i++){
 	    	    	mGroups.get(i).setChecked(false);
@@ -124,7 +124,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	    	    	}
 	    	    }
     			mAdapter.notifyDataSetChanged();
-    			downLoadCountText.setText("共選了 "+Integer.toString(downloadCount)+" 項");
+    			downLoadCountText.setText(getResources().getString(R.string.toast_all_collect_title)+Integer.toString(downloadCount)+getResources().getString(R.string.toast_all_collect_final));
     		break;
 	    }
 	    return true;
@@ -181,7 +181,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
 			 @Override
 		    protected void onPreExecute() {
 		        super.onPreExecute();
-		        progressDialog = ProgressDialog.show(DownloadActivity.this, "","小說下載中,...");
+		        progressDialog = ProgressDialog.show(DownloadActivity.this, "",getResources().getString(R.string.toast_novel_downloading));
 		        progressDialog.setCancelable(true);
 		    }
 		 
@@ -207,9 +207,9 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	            super.onPostExecute(result);
 	            progressDialog.dismiss();
 	            if (downloadBoolean){
-					Toast.makeText(DownloadActivity.this, "成功下載", Toast.LENGTH_SHORT).show();
+					Toast.makeText(DownloadActivity.this,getResources().getString(R.string.toast_downloading_success), Toast.LENGTH_SHORT).show();
 				}else{
-					Toast.makeText(DownloadActivity.this, "出現錯誤, 請重新下載", Toast.LENGTH_SHORT).show();
+					Toast.makeText(DownloadActivity.this,getResources().getString(R.string.toast_downloading_fail), Toast.LENGTH_SHORT).show();
 				}
 	        }
 	 }

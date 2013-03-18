@@ -49,7 +49,7 @@ public class MyNovelActivity extends SherlockFragmentActivity implements AdWhirl
         setContentView(R.layout.simple_titles);
         
         final ActionBar ab = getSupportActionBar();
-        ab.setTitle(" 我的書櫃");
+        ab.setTitle(getResources().getString(R.string.title_my_bookcase));
         ab.setDisplayHomeAsUpEnabled(true);
         
         Resources res = getResources();
@@ -84,10 +84,10 @@ public class MyNovelActivity extends SherlockFragmentActivity implements AdWhirl
         // Inflate the menu; this adds items to the action bar if it is present.
         // getMenuInflater().inflate(R.menu.activity_main, menu);
 
-    	menu.add(0, ID_SETTING, 0, "設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_RESPONSE, 1, "意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+    	menu.add(0, ID_SETTING, 0, getResources().getString(R.string.menu_settings)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         return true;
     }
@@ -101,22 +101,22 @@ public class MyNovelActivity extends SherlockFragmentActivity implements AdWhirl
 	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
 	        break;
 	    case ID_SETTING: // setting
-	    		Intent intent = new Intent(MyNovelActivity.this, SettingActivity.class);
-	    		startActivity(intent); 
-	        break;
+    		Intent intent = new Intent(MyNovelActivity.this, SettingActivity.class);
+    		startActivity(intent); 
+    		break;
 	    case ID_RESPONSE: // response
 	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 	    	emailIntent.setType("plain/text");
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "意見回餽 from 小說王");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getResources().getString(R.string.respond_mail_address)});
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.respond_mail_title));
 	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
 	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-    		break;
-	    case ID_ABOUT_US: // response
+			break;
+	    case ID_ABOUT_US: 
 	    	aboutUsDialog.show();
 			break;
-	    case ID_GRADE: // response
-	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=KosBrother"));
+	    case ID_GRADE: 
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
 			startActivity(browserIntent);
 			break;
 	    }

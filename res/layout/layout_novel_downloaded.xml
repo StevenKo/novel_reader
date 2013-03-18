@@ -50,7 +50,7 @@
     <TextView  android:id="@+id/text_downloaded_count"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
-       android:text="共 0 個下載"
+       android:text="@string/novel_download_zero"
        android:background="#82B5E8"
        android:paddingTop="1dp"
        android:paddingBottom="1dp"

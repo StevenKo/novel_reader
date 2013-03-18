@@ -3,7 +3,6 @@ package com.android.novel.reader;
 import java.io.IOException;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,7 +18,6 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -115,7 +113,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     }
 
 	private void restorePreValues() {
-		// TODO Auto-generated method stub
 		textSize = Setting.getSetting(Setting.keyTextSize, ArticleActivity.this);
         textLanguage = Setting.getSetting(Setting.keyTextLanguage, ArticleActivity.this);
         readingDirection = Setting.getSetting(Setting.keyReadingDirection, ArticleActivity.this);
@@ -134,7 +131,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	}
 
 	private void setViews() {		
-		// TODO Auto-generated method stub
+		
 		articleTextView = (TextView) findViewById (R.id.article_text);
         articleScrollView = (DetectScrollView) findViewById (R.id.article_scrollview);
         articleButtonUp = (Button) findViewById (R.id.article_button_up);
@@ -164,13 +161,13 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         	articleTextView.setOnClickListener(new OnClickListener() {			 
     			@Override
     			public void onClick(View arg0) {
-    				
+    				new GetNextArticleTask().execute();
     			}
     		});
         }
         
-        addBookMarkDialog = new AlertDialog.Builder(this).setTitle("加書籤")
-				.setMessage("要加入書籤嗎?")
+        addBookMarkDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.add_my_bookmark_title))
+				.setMessage(getResources().getString(R.string.add_my_bookmark_content))
 				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -189,7 +186,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	@Override
 	public void onScrollChanged(DetectScrollView scrollView, int x, int y,
 			int oldx, int oldy) {
-		// TODO Auto-generated method stub
 		int kk = articleScrollView.getHeight();
 		int tt = articleTextView.getHeight();
 		
@@ -210,11 +206,11 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.activity_main, menu);
 		
-		menu.add(0, ID_SETTING, 0, "設定").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_RESPONSE, 1, "意見回餽").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_ABOUT_US, 2, "關於我們").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_GRADE, 3, "為App評分").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_Bookmark, 4, "加入書籤").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(0, ID_SETTING, 0, getResources().getString(R.string.menu_settings)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, ID_Bookmark, 4, getResources().getString(R.string.menu_add_bookmark)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		
         return true;
     }
@@ -234,19 +230,19 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	    case ID_RESPONSE: // response
 	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 	    	emailIntent.setType("plain/text");
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "意見回餽 from 小說王");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getResources().getString(R.string.respond_mail_address)});
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.respond_mail_title));
 	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
 	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     		break;
-	    case ID_ABOUT_US: // response
+	    case ID_ABOUT_US: 
 	    	aboutUsDialog.show();
 			break;
-	    case ID_GRADE: // response
-	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=KosBrother"));
+	    case ID_GRADE: 
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
 			startActivity(browserIntent);
 			break;
-	    case ID_Bookmark: // response
+	    case ID_Bookmark: 
 	    	addBookMarkDialog.show();
 			break;
 	    }
@@ -258,13 +254,10 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
-//	        progressDialog = ProgressDialog.show(ArticleActivity.this, "","小說下載中,...");
-//	        progressDialog.setCancelable(true);
 	    }
 		
         @Override
         protected Object doInBackground(Object... params) {
-            // TODO Auto-generated method stub
         	Article theArticle = NovelAPI.getArticle(myAricle, ArticleActivity.this);
         	myAricle = theArticle;
             return null;
@@ -272,19 +265,20 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         @Override
         protected void onPostExecute(Object result) {
-            // TODO Auto-generated method stub
             super.onPostExecute(result);
           
-//            String text ="";
-//            
-//            try {
-//				text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getTitle() + "\n\n" + myAricle.getText());
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//            articleTextView.setText(text);   
-            articleTextView.setText(articleTitle + "\n\n" + myAricle.getText());           
+            if(textLanguage ==1){           
+	            String text ="";          
+	            try {
+					text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getTitle() + "\n\n" + myAricle.getText());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	            articleTextView.setText(text);
+            }else{            
+            	articleTextView.setText(articleTitle + "\n\n" + myAricle.getText());
+            }
+            
             new GetLastPositionTask().execute();
        
             
@@ -301,7 +295,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		
         @Override
         protected Object doInBackground(Object... params) {
-            // TODO Auto-generated method stub
         	Article theArticle = NovelAPI.getPreviousArticle(myAricle, ArticleActivity.this);
         	myAricle = theArticle;
             return null;
@@ -309,18 +302,28 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         @Override
         protected void onPostExecute(Object result) {
-            // TODO Auto-generated method stub
+
             super.onPostExecute(result);
             
-            articleTextView.setText(myAricle.getTitle() + "\n\n" + myAricle.getText());           
+            if(textLanguage ==1){           
+	            String text ="";          
+	            try {
+					text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getTitle() + "\n\n" + myAricle.getText());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	            articleTextView.setText(text);
+            }else{            
+            	articleTextView.setText(articleTitle + "\n\n" + myAricle.getText());
+            }
+            
             new GetLastPositionTask().execute();
        
             
         }
 	}
 	
-	private class GetNextArticleTask extends AsyncTask {
-		
+	private class GetNextArticleTask extends AsyncTask {		
 		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
@@ -329,18 +332,27 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		
         @Override
         protected Object doInBackground(Object... params) {
-            // TODO Auto-generated method stub
         	Article theArticle = NovelAPI.getNextArticle(myAricle, ArticleActivity.this);
         	myAricle = theArticle;
             return null;
         }
 
         @Override
-        protected void onPostExecute(Object result) {
-            // TODO Auto-generated method stub
+        protected void onPostExecute(Object result) {            
             super.onPostExecute(result);
             
-            articleTextView.setText(myAricle.getTitle() + "\n\n" + myAricle.getText());           
+            if(textLanguage ==1){           
+	            String text ="";          
+	            try {
+					text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getTitle() + "\n\n" + myAricle.getText());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	            articleTextView.setText(text);
+            }else{            
+            	articleTextView.setText(articleTitle + "\n\n" + myAricle.getText());
+            }
+            
             new GetLastPositionTask().execute();
        
             
@@ -351,13 +363,13 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         @Override
         protected Object doInBackground(Object... params) {
-            // TODO Auto-generated method stub
+          
             return null;
         }
 
         @Override
         protected void onPostExecute(Object result) {
-            // TODO Auto-generated method stub
+            
             super.onPostExecute(result);
             
            
@@ -378,7 +390,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	}
 	
 	private void setAboutUsDialog() {
-		// TODO Auto-generated method stub
+		
     	aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string))
 				.setIcon(R.drawable.play_store_icon)
 				.setMessage(getResources().getString(R.string.about_us))
@@ -393,16 +405,56 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	@Override
 	 protected void onResume() {
 		super.onResume();
+		int originTextLan = textLanguage;
+		
 		textSize = Setting.getSetting(Setting.keyTextSize, ArticleActivity.this);
         textLanguage = Setting.getSetting(Setting.keyTextLanguage, ArticleActivity.this);
         readingDirection = Setting.getSetting(Setting.keyReadingDirection, ArticleActivity.this);
         clickToNextPage = Setting.getSetting(Setting.keyClickToNextPage, ArticleActivity.this);
         stopSleeping = Setting.getSetting(Setting.keyStopSleeping, ArticleActivity.this);
         
-		articleTextView.setTextSize(textSize);
+		articleTextView.setTextSize(textSize);		
+		
+		if(originTextLan!= textLanguage){
+			if(textLanguage ==1){           
+	            String text ="";          
+	            try {
+					text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getTitle() + "\n\n" + myAricle.getText());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	            articleTextView.setText(text);
+            }else{            
+            	articleTextView.setText(articleTitle + "\n\n" + myAricle.getText());
+            }
+		}
+		
+		if(readingDirection == 0){
+        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }else if (readingDirection == 1){
+        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+		
+		if(clickToNextPage == 0){
+        	articleTextView.setOnClickListener(new OnClickListener() {			 
+    			@Override
+    			public void onClick(View arg0) {
+    				new GetNextArticleTask().execute();
+    			}
+    		});
+        }else{
+        	articleTextView.setOnClickListener(new OnClickListener() {			 
+    			@Override
+    			public void onClick(View arg0) {
+    				// do nothing
+    			}
+    		});
+        }
+		
 		if(stopSleeping == 0){
         	ArticleActivity.this.findViewById(android.R.id.content).setKeepScreenOn(true);
-        }		
+        }
+		
 	 }
 	
 	@Override
@@ -412,7 +464,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	 }
 	
 	private void setAdAdwhirl() {
-		// TODO Auto-generated method stub
+		
 		AdWhirlManager.setConfigExpireTimeout(1000 * 60); 
         AdWhirlTargeting.setAge(23);
         AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
@@ -433,7 +485,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
 	@Override
 	public void adWhirlGeneric() {
-			// TODO Auto-generated method stub
 			
 	}
 		

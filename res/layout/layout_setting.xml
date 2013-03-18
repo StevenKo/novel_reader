@@ -52,7 +52,7 @@
 		    <TextView 
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:text="繁簡字體選擇:"
+		    	android:text="@string/setting_select_lan"
 		    	android:layout_marginLeft="10dp"
 		    	android:textSize="18dp"
 		    	android:layout_marginTop="10dp"
@@ -71,7 +71,7 @@
 			      android:id="@+id/myRadioButton1"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="繁體"
+			      android:text="@string/setting_lan_tra"
 			      android:checked="true"
 			    />
 			    <!--第二個RadioButton -->
@@ -79,7 +79,7 @@
 			      android:id="@+id/myRadioButton2"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="簡體"
+			      android:text="@string/setting_lan_sim"
 			    />
 			</RadioGroup>
 			
@@ -94,7 +94,7 @@
 		    <TextView 
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:text="閱讀方向:"
+		    	android:text="@string/setting_select_direction"
 		    	android:layout_marginLeft="10dp"
 		    	android:textSize="18dp"
 		    	android:layout_marginTop="10dp"
@@ -113,7 +113,7 @@
 			      android:id="@+id/myRadioButton_reading_direction"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="直向"
+			      android:text="@string/setting_direction_portrait"
 			      android:checked="true"
 			    />
 			    <!--第二個RadioButton -->
@@ -121,7 +121,7 @@
 			      android:id="@+id/myRadioButton2_reading_direction"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="橫向"
+			      android:text="@string/setting_direction_horizontal"
 			    />
 			</RadioGroup>
 			
@@ -136,7 +136,7 @@
 		    <TextView 
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:text="點擊換頁:"
+		    	android:text="@string/setting_select_tap"
 		    	android:layout_marginLeft="10dp"
 		    	android:textSize="18dp"
 		    	android:layout_marginTop="10dp"
@@ -155,14 +155,14 @@
 			      android:id="@+id/myRadioButton_reading_direction"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="開啟"		      
+			      android:text="@string/setting_tap_open"	      
 			    />
 			    <!--第二個RadioButton -->
 			    <RadioButton
 			      android:id="@+id/myRadioButton2_reading_direction"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="關閉"
+			      android:text="@string/setting_tap_close"
 			      android:checked="true"
 			    />
 			</RadioGroup>
@@ -178,7 +178,7 @@
 		    <TextView 
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:text="閱讀時停止休眠:"
+		    	android:text="@string/setting_select_sleeping"
 		    	android:layout_marginLeft="10dp"
 		    	android:textSize="18dp"
 		    	android:layout_marginTop="10dp"
@@ -197,14 +197,14 @@
 			      android:id="@+id/myRadioButton_reading_direction"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="開啟停止休眠"
+			      android:text="@string/setting_sleeping_open"
 			    />
 			    <!--第二個RadioButton -->
 			    <RadioButton
 			      android:id="@+id/myRadioButton2_reading_direction"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="關閉停止休眠"
+			      android:text="@string/setting_sleeping_close"
 			      android:checked="true"
 			    />
 			</RadioGroup>
