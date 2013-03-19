@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">小说王</string>
-
+	<string name="remind_title">小提醒</string>
+	<string name="remind_string">下载后请至我的书柜观看</string>
+    
     <string name="novel_author">作者:</string>
     <string name="novel_update_time">更新:</string>
     <string name="novel_front">由前往后</string>
@@ -11,6 +13,7 @@
     <string name="novel_download_zero">共0 个下载</string>
     <string name="novel_select_zero">共选了0 项</string>
     <string name="novel_start_download">开始下载</string>
+    <string name="novel_downloaded">已下载</string>
     
     <string name="article_up">上一篇</string>
 	<string name="article_down">下一篇</string>

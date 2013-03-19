@@ -75,13 +75,21 @@
     </LinearLayout>
     
     
-    <ListView android:id="@+id/novel_download_artiles_list"
+ <!--    <ListView android:id="@+id/novel_download_artiles_list"
         android:layout_width="fill_parent"
 	    android:layout_height="0dp"
 	    android:layout_weight="1"
 	    android:groupIndicator="@null"
         >      
-    </ListView>
+    </ListView> -->
+    
+    <ExpandableListView android:id="@+id/novel_download_artiles_list"
+        android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+	    android:groupIndicator="@null"
+        >      
+    </ExpandableListView>
     
     <LinearLayout
             android:id="@+id/adonView"

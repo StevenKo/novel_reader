@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.novel.reader.api.NovelAPI;
+import com.android.novel.reader.api.Setting;
 import com.android.novel.reader.entity.Article;
 import com.android.novel.reader.service.DownloadService;
 import com.kosbrother.tool.ChildArticle;
@@ -48,6 +51,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	private ProgressDialog progressDialog= null;
 	private ExpandListDownLoadAdapter mAdapter;
 	private int downloadCount;
+	private AlertDialog.Builder remindDialog;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,11 @@ public class DownloadActivity extends SherlockFragmentActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         
         setViews();
+        
+        if(Setting.getSetting(Setting.keyOpenDownloadPage, DownloadActivity.this) == 0){
+        	remindDialog.show();
+        	Setting.saveSetting(Setting.keyOpenDownloadPage, 1, DownloadActivity.this);
+        }
         
         new DownloadArticlesTask().execute();
         
@@ -81,9 +90,23 @@ public class DownloadActivity extends SherlockFragmentActivity {
 				new DownloadToDBTask().execute();
 			}
 		});
+		
+		setRemindDialog();
 	
 	}	
 		
+
+	private void setRemindDialog() {
+		remindDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.remind_title))
+				.setMessage(getResources().getString(R.string.remind_string))
+				.setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+					}
+				});
+		
+	}
 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {

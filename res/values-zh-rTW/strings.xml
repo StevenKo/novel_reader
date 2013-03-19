@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">小說王</string>
+    <string name="remind_title">小提醒</string>
+    <string name="remind_string">下載後請至我的書櫃觀看</string>
     
     <string name="novel_author">作者:</string>
     <string name="novel_update_time">更新:</string>
@@ -11,6 +13,7 @@
     <string name="novel_download_zero">共 0 個下載</string>
     <string name="novel_select_zero">共選了 0 項</string>
     <string name="novel_start_download">開始下載</string>
+    <string name="novel_downloaded">已下載</string>
     
     <string name="article_up">上一篇</string>
     <string name="article_down">下一篇</string>

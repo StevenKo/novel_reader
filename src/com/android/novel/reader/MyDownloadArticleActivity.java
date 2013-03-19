@@ -1,6 +1,7 @@
 package com.android.novel.reader;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,9 +13,9 @@ import android.view.Display;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -25,15 +26,13 @@ import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.android.novel.reader.R;
-import com.android.novel.reader.R.drawable;
-import com.android.novel.reader.R.id;
-import com.android.novel.reader.R.layout;
-import com.android.novel.reader.R.string;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Article;
 import com.android.novel.reader.entity.Novel;
 import com.google.ads.AdView;
+import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.Group;
+import com.taiwan.imageload.ExpandListAdapter;
 import com.taiwan.imageload.ImageLoader;
 import com.taiwan.imageload.ListArticleAdapter;
 
@@ -59,11 +58,13 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
 	private ImageLoader mImageLoader;
 	private LinearLayout novelLayoutProgress;
 	private ArrayList<Article> articleList = new ArrayList<Article>();
-	private ListView novelListView;
+	private ExpandableListView novelListView;
+	private Novel theNovel;
 	
+	private TreeMap<String, ArrayList<Article>> myData = new  TreeMap<String, ArrayList<Article>>();
 	private ArrayList<Group> mGroups = new ArrayList<Group>();
 	private AlertDialog.Builder deleteDialog;
-	private AlertDialog.Builder aboutUsDialog;	
+	private AlertDialog.Builder aboutUsDialog;
 	private String adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
 	
     @Override
@@ -79,6 +80,8 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
         novelAuthor = mBundle.getString("NovelAuthor");
         novelPicUrl = mBundle.getString("NovelPicUrl");
         novelArticleNum = mBundle.getString("NovelArticleNum");
+        
+        theNovel = new Novel(novelId, novelName, novelAuthor, "", novelPicUrl, 0, novelArticleNum, "", false, false,false);
         
         ab.setTitle(getResources().getString(R.string.title_my_downloading));
         ab.setDisplayHomeAsUpEnabled(true);
@@ -106,7 +109,7 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
 		novelImageView = (ImageView) findViewById (R.id.novel_image);
 		novelTextName = (TextView) findViewById (R.id.novel_name);
 		novelTextAuthor = (TextView) findViewById (R.id.novel_author);
-		novelListView = (ListView) findViewById (R.id.novel_download_artiles_list);
+		novelListView = (ExpandableListView) findViewById (R.id.novel_download_artiles_list);
 		downloadedCount =  (TextView) findViewById (R.id.text_downloaded_count);
 		novelLayoutProgress = (LinearLayout) findViewById (R.id.novel_layout_progress);
 		
@@ -196,12 +199,40 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
 	          
 	            super.onPostExecute(result);
 	            novelLayoutProgress.setVisibility(View.GONE);
+//	            if(articleList!= null && articleList.size()!= 0){
+//	            	
+//	            	ExpandListAdapter mAdapter = new ExpandListAdapter( MyDownloadArticleActivity.this, mGroups, theNovel);	            	
+////	            	ListArticleAdapter mAdapter = new ListArticleAdapter( MyDownloadArticleActivity.this, articleList, novelName);
+//	            	novelListView.setAdapter(mAdapter);
+//	            
+//	            }
+	            
 	            if(articleList!= null && articleList.size()!= 0){
 	            	
-	            	ListArticleAdapter mAdapter = new ListArticleAdapter( MyDownloadArticleActivity.this, articleList, novelName);
+	            	// use HashMap || TreeMap to make a parent key
+	            	for(int i=0; i<articleList.size(); i++){
+	            		if(myData.containsKey(articleList.get(i).getSubject())){
+	            			myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
+	            		}else{
+//	            			groupTitleList.add(articleList.get(i).getSubject());
+	            			mGroups.add(new Group(articleList.get(i).getSubject()));
+	            			myData.put(articleList.get(i).getSubject(), new ArrayList<Article>());
+	            			myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
+	            		}
+	            	}
+	            	 
+	            	for(int i= 0; i< mGroups.size(); i++){
+	            		ArrayList<Article> articles = myData.get(mGroups.get(i).getTitle());
+	            		for(int j=0; j< articles.size(); j++){
+	            			mGroups.get(i).addChildrenItem(new ChildArticle(articles.get(j).getId(), articles.get(j).getNovelId(), "", articles.get(j).getTitle(), articles.get(j).getSubject(), articles.get(j).isDownload()));
+	            		}
+	            	}
+	            	
+	            	ExpandListAdapter mAdapter = new ExpandListAdapter( MyDownloadArticleActivity.this, mGroups, theNovel);
 	            	novelListView.setAdapter(mAdapter);
-	            
+	            	
 	            }
+	            
 	            String txtCount = Integer.toString(articleList.size());
 	            downloadedCount.setText("共 "+txtCount+" 個下載");
 

@@ -24,12 +24,15 @@ public class Setting {
 	public final static String keyReadingDirection = "ReadingDirection";
 	public final static String keyClickToNextPage = "ClickToNextPage";
 	public final static String keyStopSleeping = "StopSleeping";
+	public final static String keyOpenDownloadPage = "OpenDownloadPage";
 	
 	public final static int initialTextSize = 20; // textsize in pixel
 	public final static int initialTextLanguage = 0;
 	public final static int initialReadingDirection = 0;
 	public final static int initialClickToNextPage = 1;
 	public final static int initialStopSleeping = 1;
+	public final static int initialOpenDownloadPage = 0;
+	
 	private static final HashMap<String,Integer> initMap = new HashMap<String,Integer>(){
 		{
 			put(keyTextSize,initialTextSize);
@@ -37,6 +40,7 @@ public class Setting {
 			put(keyReadingDirection,initialReadingDirection);
 			put(keyClickToNextPage,initialClickToNextPage);
 			put(keyStopSleeping,initialStopSleeping);
+			put(keyOpenDownloadPage,initialOpenDownloadPage);
 		}
 	};
 	
