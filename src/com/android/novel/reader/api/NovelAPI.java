@@ -305,7 +305,27 @@ public class NovelAPI {
             }
         }
 
-        return null;
+        String message = getMessageFromServer("GET", "/api/v1/articles/previous_article.json?novel_id=" + orginArticle.getNovelId() + "&article_id="
+                + orginArticle.getId(), null);
+        if (message == null) {
+            return null;
+        } else {
+            try {
+
+                JSONObject nObject;
+                nObject = new JSONObject(message.toString());
+                String text = nObject.getString("text");
+                int id = nObject.getInt("id");
+                int novelId = nObject.getInt("novel_id");
+                String title = nObject.getString("title");
+                return new Article(id, novelId, text, title, "", false);
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+                return null;
+            }
+        }
     }
 
     public static Article getNextArticle(Article orginArticle, Context context) {
@@ -317,7 +337,27 @@ public class NovelAPI {
             }
         }
 
-        return null;
+        String message = getMessageFromServer("GET",
+                "/api/v1/articles/next_article.json?novel_id=" + orginArticle.getNovelId() + "&article_id=" + orginArticle.getId(), null);
+        if (message == null) {
+            return null;
+        } else {
+            try {
+
+                JSONObject nObject;
+                nObject = new JSONObject(message.toString());
+                String text = nObject.getString("text");
+                int id = nObject.getInt("id");
+                int novelId = nObject.getInt("novel_id");
+                String title = nObject.getString("title");
+                return new Article(id, novelId, text, title, "", false);
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+                return null;
+            }
+        }
     }
 
     public static ArrayList<Article> getDownloadedNovelArticles(int novelId, boolean isOrderUp, Context context) {
