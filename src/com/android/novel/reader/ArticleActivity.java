@@ -11,13 +11,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -67,6 +70,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 //	private ProgressDialog progressDialog= null;
 	private AlertDialog.Builder aboutUsDialog;
 	private String adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
+	private ActionBar ab;
+	private LinearLayout layoutProgress;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +80,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         restorePreValues();
         setViews();
         
-        final ActionBar ab = getSupportActionBar();		     
+        ab = getSupportActionBar();		     
         mBundle = this.getIntent().getExtras();
         novelName = mBundle.getString("NovelName");
         articleTitle = mBundle.getString("ArticleTitle");
@@ -85,7 +90,13 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         novelId = mBundle.getInt("NovelId");
         yRate = mBundle.getInt("ReadingRate",0);
         
-        ab.setTitle(novelName);
+        ab.setDisplayShowCustomEnabled(true);
+        ab.setDisplayShowTitleEnabled(false);
+        
+        setActionBarTitle(articleTitle);
+        
+        
+//       ab.setTitle(novelName);
         ab.setDisplayHomeAsUpEnabled(true);
         
         if(downloadBoolean){
@@ -112,6 +123,14 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         
     }
 
+	private void setActionBarTitle(String articleTitle) {
+		 LayoutInflater inflator = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	     View v = inflator.inflate(R.layout.item_title, null);
+	     TextView titleText = ((TextView)v.findViewById(R.id.title));
+	     titleText.setText(novelName+":"+ articleTitle);  
+	     ab.setCustomView(v);		
+	}
+
 	private void restorePreValues() {
 		textSize = Setting.getSetting(Setting.keyTextSize, ArticleActivity.this);
         textLanguage = Setting.getSetting(Setting.keyTextLanguage, ArticleActivity.this);
@@ -132,6 +151,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
 	private void setViews() {		
 		
+		layoutProgress = (LinearLayout) findViewById (R.id.layout_progress);
 		articleTextView = (TextView) findViewById (R.id.article_text);
         articleScrollView = (DetectScrollView) findViewById (R.id.article_scrollview);
         articleButtonUp = (Button) findViewById (R.id.article_button_up);
@@ -267,16 +287,17 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
           
+            layoutProgress.setVisibility(View.GONE);
             if(textLanguage ==1){           
 	            String text ="";          
 	            try {
-					text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getTitle() + "\n\n" + myAricle.getText());
+					text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getText());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 	            articleTextView.setText(text);
             }else{            
-            	articleTextView.setText(articleTitle + "\n\n" + myAricle.getText());
+            	articleTextView.setText(myAricle.getText());
             }
             
             new GetLastPositionTask().execute();
@@ -290,7 +311,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
-	        
+	        layoutProgress.setVisibility(View.VISIBLE);
 	    }
 		
         @Override
@@ -304,18 +325,28 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         protected void onPostExecute(Object result) {
 
             super.onPostExecute(result);
-            
-            if(textLanguage ==1){           
-	            String text ="";          
-	            try {
-					text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getTitle() + "\n\n" + myAricle.getText());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-	            articleTextView.setText(text);
-            }else{            
-            	articleTextView.setText(articleTitle + "\n\n" + myAricle.getText());
+            layoutProgress.setVisibility(View.GONE);
+            if (myAricle != null){
+	            if(textLanguage ==1){           
+		            String text ="";          
+		            try {
+						text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s( myAricle.getText());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+		            articleTextView.setText(text);
+	            }else{            
+	            	articleTextView.setText(myAricle.getText());
+	            }
+	            
+	            articleScrollView.fullScroll(ScrollView.FOCUS_UP);
+	            setActionBarTitle(myAricle.getTitle());
+	            articlePercent.setText("0%");
+	            
+            }else{
+            	Toast.makeText( ArticleActivity.this, getResources().getString(R.string.article_no_up), Toast.LENGTH_SHORT).show();
             }
+            
             
             new GetLastPositionTask().execute();
        
@@ -327,7 +358,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
-	        
+	        layoutProgress.setVisibility(View.VISIBLE);
 	    }
 		
         @Override
@@ -340,17 +371,25 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         @Override
         protected void onPostExecute(Object result) {            
             super.onPostExecute(result);
-            
-            if(textLanguage ==1){           
-	            String text ="";          
-	            try {
-					text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getTitle() + "\n\n" + myAricle.getText());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-	            articleTextView.setText(text);
-            }else{            
-            	articleTextView.setText(articleTitle + "\n\n" + myAricle.getText());
+            layoutProgress.setVisibility(View.GONE);
+            if (myAricle != null){
+	            if(textLanguage ==1){           
+		            String text ="";          
+		            try {
+						text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s( myAricle.getText());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+		            articleTextView.setText(text);
+	            }else{            
+	            	articleTextView.setText(myAricle.getText());
+	            }
+	            
+	            articleScrollView.fullScroll(ScrollView.FOCUS_UP);
+	            setActionBarTitle(myAricle.getTitle());
+	            articlePercent.setText("0%");
+            }else{
+            	Toast.makeText( ArticleActivity.this, getResources().getString(R.string.article_no_down), Toast.LENGTH_SHORT).show();
             }
             
             new GetLastPositionTask().execute();

@@ -1,7 +1,5 @@
 package com.android.novel.reader;
 
-import java.io.IOException;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,7 +21,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -32,7 +29,6 @@ import com.adwhirl.AdWhirlLayout;
 import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
-import com.android.novel.reader.api.Setting;
 import com.google.ads.AdView;
 import com.kosbrother.fragments.CategoryListFragment;
 import com.kosbrother.fragments.HotNovelsFragment;
