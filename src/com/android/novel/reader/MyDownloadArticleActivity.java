@@ -121,7 +121,6 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
 		
 		deleteDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.delete_title))
 				.setMessage(getResources().getString(R.string.delete_message))
-				.setIcon(R.drawable.app_icon)
 				.setPositiveButton(getResources().getString(R.string.delete_yes), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {

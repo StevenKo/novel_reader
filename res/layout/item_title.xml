@@ -20,6 +20,7 @@
         android:fadingEdge="horizontal"
     	android:focusable="true"
     	android:focusableInTouchMode="true"
+    	android:duplicateParentState="true"
         />
     
 </RelativeLayout>
