@@ -130,7 +130,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     public ArrayList<Bookmark> getAllRecentReadBookmarks() {
         Cursor cursor = null;
         ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
-        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE is_recent_read != 0", null);
+        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE is_recent_read != 0 ORDER BY id DESC", null);
 
         while (cursor.moveToNext()) {
             int ID = cursor.getInt(0);
@@ -151,7 +151,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     public ArrayList<Bookmark> getAllBookmarks() {
         Cursor cursor = null;
         ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
-        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE is_recent_read = 0", null);
+        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE is_recent_read = 0 ORDER BY id DESC", null);
 
         while (cursor.moveToNext()) {
             int ID = cursor.getInt(0);
