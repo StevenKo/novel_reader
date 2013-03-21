@@ -52,4 +52,8 @@ public class Article {
     public boolean isDownload() {
         return isDownloaded;
     }
+    
+    public void setNovelId(int id){
+    	novelId = id;
+    }
 }

@@ -58,6 +58,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	private Button articleButtonDown;
 	private TextView articlePercent;
 	private Article myAricle; // uset to get article text
+	private Article theGottenArticle;
 	private Boolean downloadBoolean;	
 	private AlertDialog.Builder addBookMarkDialog;
 	private Bundle mBundle;
@@ -127,7 +128,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		 LayoutInflater inflator = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	     View v = inflator.inflate(R.layout.item_title, null);
 	     TextView titleText = ((TextView)v.findViewById(R.id.title));
-	     titleText.setText(novelName+":"+ articleTitle);  
+	     titleText.setText(novelName+":"+ articleTitle);
+	     titleText.setSelected(true);
 	     ab.setCustomView(v);		
 	}
 
@@ -278,8 +280,12 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		
         @Override
         protected Object doInBackground(Object... params) {
-        	Article theArticle = NovelAPI.getArticle(myAricle, ArticleActivity.this);
-        	myAricle = theArticle;
+        	if(myAricle!=null){
+        		theGottenArticle = NovelAPI.getArticle(myAricle, ArticleActivity.this);
+        		if (theGottenArticle != null){
+        			myAricle = theGottenArticle;
+        		}
+        	}
             return null;
         }
 
@@ -300,6 +306,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             	articleTextView.setText(myAricle.getText());
             }
             
+            myAricle.setNovelId(novelId);
+            
             new GetLastPositionTask().execute();
        
             
@@ -316,8 +324,12 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		
         @Override
         protected Object doInBackground(Object... params) {
-        	Article theArticle = NovelAPI.getPreviousArticle(myAricle, ArticleActivity.this);
-        	myAricle = theArticle;
+        	if(myAricle!=null){
+        		theGottenArticle= NovelAPI.getPreviousArticle(myAricle, ArticleActivity.this);
+        		if (theGottenArticle != null){
+        			myAricle = theGottenArticle;
+        		}
+        	}
             return null;
         }
 
@@ -326,7 +338,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
             super.onPostExecute(result);
             layoutProgress.setVisibility(View.GONE);
-            if (myAricle != null){
+            if (theGottenArticle != null){
 	            if(textLanguage ==1){           
 		            String text ="";          
 		            try {
@@ -339,6 +351,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	            	articleTextView.setText(myAricle.getText());
 	            }
 	            
+	            myAricle.setNovelId(novelId);
 	            articleScrollView.fullScroll(ScrollView.FOCUS_UP);
 	            setActionBarTitle(myAricle.getTitle());
 	            articlePercent.setText("0%");
@@ -363,8 +376,12 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		
         @Override
         protected Object doInBackground(Object... params) {
-        	Article theArticle = NovelAPI.getNextArticle(myAricle, ArticleActivity.this);
-        	myAricle = theArticle;
+        	if(myAricle!=null){
+        		theGottenArticle = NovelAPI.getNextArticle(myAricle, ArticleActivity.this);
+        		if (theGottenArticle != null){
+        			myAricle = theGottenArticle;
+        		}
+        	}
             return null;
         }
 
@@ -372,7 +389,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         protected void onPostExecute(Object result) {            
             super.onPostExecute(result);
             layoutProgress.setVisibility(View.GONE);
-            if (myAricle != null){
+            if (theGottenArticle != null){
 	            if(textLanguage ==1){           
 		            String text ="";          
 		            try {
@@ -385,6 +402,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	            	articleTextView.setText(myAricle.getText());
 	            }
 	            
+	            myAricle.setNovelId(novelId);
 	            articleScrollView.fullScroll(ScrollView.FOCUS_UP);
 	            setActionBarTitle(myAricle.getTitle());
 	            articlePercent.setText("0%");
