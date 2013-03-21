@@ -283,13 +283,16 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
     }
 	
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-
 	    int itemId = item.getItemId();
 	    switch (itemId) {
 	    case android.R.id.home:
 	        finish();
 	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
 	        break;
+	    case ID_SETTING: // setting
+    		Intent intent = new Intent(NovelIntroduceActivity.this, SettingActivity.class);
+    		startActivity(intent); 
+    		break;
 	    case ID_RESPONSE: // response
 	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 	    	emailIntent.setType("plain/text");
@@ -323,8 +326,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 	 private class DownloadArticlesTask extends AsyncTask {
 
 	        @Override
-	        protected Object doInBackground(Object... params) {
-	            
+	        protected Object doInBackground(Object... params) {	            
 	        	articleList = NovelAPI.getNovelArticles(novelId, true, NovelIntroduceActivity.this);
 	            return null;
 	        }

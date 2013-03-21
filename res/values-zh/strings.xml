@@ -17,6 +17,8 @@
     
     <string name="article_up">上一篇</string>
 	<string name="article_down">下一篇</string>
+	<string name="article_no_up">无上一篇</string>
+	<string name="article_no_down">无下一篇</string>
     
 	<string name="setting_text">文字大小:</string>
 	<string name="setting_text_preview">文字预览:小说王</string>
