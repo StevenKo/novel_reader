@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,27 +31,30 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.adwhirl.AdWhirlLayout;
+import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
-import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.android.novel.reader.api.NovelAPI;
+import com.android.novel.reader.api.Setting;
 import com.android.novel.reader.entity.Bookmark;
 import com.google.ads.AdView;
 import com.ifixit.android.sectionheaders.Section;
 import com.ifixit.android.sectionheaders.SectionHeadersAdapter;
 import com.ifixit.android.sectionheaders.SectionListView;
-import com.kosbrother.tool.DetectScrollView.DetectScrollViewListener;
 import com.taiwan.imageload.ImageLoader;
 
-public class BookmarkActivity extends SherlockActivity implements AdWhirlInterface{
+public class BookmarkActivity extends SherlockActivity implements AdWhirlInterface {
 
     private SectionListView                      bookmarkListView;
     private ArrayList<Bookmark>                  bookmarks;
     private TreeMap<String, ArrayList<Bookmark>> bookmarksMap;
     private Bundle                               mBundle;
     private boolean                              isRecent;
-    private String adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
-    
+    private boolean                              alertDeleteBookmark;
+    SharedPreferences                            settings;
+    private final String                         alertKey   = "alertDeleteBookmark";
+    private final String                         adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,18 +81,21 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
         ab.setDisplayHomeAsUpEnabled(true);
 
         new LoadDataTask().execute();
-        
-        try{
-			Display display = getWindowManager().getDefaultDisplay(); 
-			int width = display.getWidth();  // deprecated
-			int height = display.getHeight();  // deprecated
-		
-			if (width > 320){
-				setAdAdwhirl();
-			}
-		}catch(Exception e){
-			
-		}
+
+        settings = getSharedPreferences(Setting.keyPref, 0);
+        alertDeleteBookmark = settings.getBoolean(alertKey, true);
+
+        try {
+            Display display = getWindowManager().getDefaultDisplay();
+            int width = display.getWidth(); // deprecated
+            int height = display.getHeight(); // deprecated
+
+            if (width > 320) {
+                setAdAdwhirl();
+            }
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -184,7 +191,31 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
         protected void onPostExecute(String result) {
             progressdialogInit.dismiss();
             setListAdatper();
+            if (alertDeleteBookmark)
+                showArticleDeleteDialog();
         }
+
+    }
+
+    private void showArticleDeleteDialog() {
+        new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.reminder)).setIcon(R.drawable.noti_app_icon)
+                .setMessage(getResources().getString(R.string.delete_bookmark_reminder))
+                .setPositiveButton(getResources().getString(R.string.do_not_reminder), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        settings.edit().putBoolean(alertKey, false).commit();
+
+                    }
+
+                }).setNegativeButton(getResources().getString(R.string.reminder_next), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                    }
+
+                }).show();
 
     }
 
@@ -274,7 +305,7 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
         @Override
         public void onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
             final Bookmark bookmark = bookList.get(position);
-            final String[] ListStr = { getResources().getString(R.string.reading_novel), getResources().getString(R.string.remove_bookmark)};
+            final String[] ListStr = { getResources().getString(R.string.reading_novel), getResources().getString(R.string.remove_bookmark) };
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle(bookmark.getArticleTitle());
             builder.setItems(ListStr, new DialogInterface.OnClickListener() {
@@ -299,51 +330,51 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
             alert.show();
         }
     }
-    
-private void setAdAdwhirl() {
-		
-		AdWhirlManager.setConfigExpireTimeout(1000 * 60); 
+
+    private void setAdAdwhirl() {
+
+        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
         AdWhirlTargeting.setAge(23);
         AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
         AdWhirlTargeting.setKeywords("online games gaming");
         AdWhirlTargeting.setPostalCode("94123");
         AdWhirlTargeting.setTestMode(false);
-   		
-        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);	
 
-        LinearLayout mainLayout = (LinearLayout)findViewById(R.id.adonView);
-        
-    	adwhirlLayout.setAdWhirlInterface(this);
-	 	 	
-	 	mainLayout.addView(adwhirlLayout);
-		
-		mainLayout.invalidate();
+        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
+
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
+
+        adwhirlLayout.setAdWhirlInterface(this);
+
+        mainLayout.addView(adwhirlLayout);
+
+        mainLayout.invalidate();
     }
 
-	@Override
-	public void adWhirlGeneric() {
-			
-	}
-		
-	public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
-			final float centerX = 320 / 2.0f;
-			final float centerY = 48 / 2.0f;
-			final float zDepth = -0.50f * view.getHeight();
-		
-			Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
-			rotation.setDuration(1000);
-			rotation.setInterpolator(new AccelerateInterpolator());
-			rotation.setAnimationListener(new Animation.AnimationListener() {
-				public void onAnimationStart(Animation animation) {
-				}
-		
-				public void onAnimationEnd(Animation animation) {
-				}
-		
-				public void onAnimationRepeat(Animation animation) {
-				}
-			});
-			view.startAnimation(rotation);
-	}
+    @Override
+    public void adWhirlGeneric() {
+
+    }
+
+    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
+        final float centerX = 320 / 2.0f;
+        final float centerY = 48 / 2.0f;
+        final float zDepth = -0.50f * view.getHeight();
+
+        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
+        rotation.setDuration(1000);
+        rotation.setInterpolator(new AccelerateInterpolator());
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        view.startAnimation(rotation);
+    }
 
 }

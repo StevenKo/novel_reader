@@ -86,6 +86,11 @@
 	<string name="my_read_setting">阅读设定</string>
 	<string name="my_classic_novel">经典小说</string>
 	<string name="my_classic_action_novel">经典武侠</string>
+    
+    <string name="reminder">提醒</string>
+    <string name="delete_bookmark_reminder">长按书签可以删除书签哦！</string>
+    <string name="reminder_next">下次再提醒</string>
+    <string name="do_not_reminder">不要再提醒</string>
 	
     <!-- for vpon -->
     <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
