@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.novel.reader.api.NovelAPI;
+import com.android.novel.reader.api.Setting;
 import com.android.novel.reader.entity.Bookmark;
 import com.ifixit.android.sectionheaders.Section;
 import com.ifixit.android.sectionheaders.SectionHeadersAdapter;
@@ -39,6 +41,9 @@ public class BookmarkActivity extends SherlockActivity {
     private TreeMap<String, ArrayList<Bookmark>> bookmarksMap;
     private Bundle                               mBundle;
     private boolean                              isRecent;
+    private boolean                              alertDeleteBookmark;
+    SharedPreferences                            settings;
+    private final String                         alertKey = "alertDeleteBookmark";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,9 @@ public class BookmarkActivity extends SherlockActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         new LoadDataTask().execute();
+
+        settings = getSharedPreferences(Setting.keyPref, 0);
+        alertDeleteBookmark = settings.getBoolean(alertKey, true);
 
     }
 
@@ -161,7 +169,31 @@ public class BookmarkActivity extends SherlockActivity {
         protected void onPostExecute(String result) {
             progressdialogInit.dismiss();
             setListAdatper();
+            if (alertDeleteBookmark)
+                showArticleDeleteDialog();
         }
+
+    }
+
+    private void showArticleDeleteDialog() {
+        new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.reminder)).setIcon(R.drawable.noti_app_icon)
+                .setMessage(getResources().getString(R.string.delete_bookmark_reminder))
+                .setPositiveButton(getResources().getString(R.string.do_not_reminder), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        settings.edit().putBoolean(alertKey, false).commit();
+
+                    }
+
+                }).setNegativeButton(getResources().getString(R.string.reminder_next), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                    }
+
+                }).show();
 
     }
 
@@ -251,7 +283,7 @@ public class BookmarkActivity extends SherlockActivity {
         @Override
         public void onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
             final Bookmark bookmark = bookList.get(position);
-            final String[] ListStr = { getResources().getString(R.string.reading_novel), getResources().getString(R.string.remove_bookmark)};
+            final String[] ListStr = { getResources().getString(R.string.reading_novel), getResources().getString(R.string.remove_bookmark) };
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle(bookmark.getArticleTitle());
             builder.setItems(ListStr, new DialogInterface.OnClickListener() {
