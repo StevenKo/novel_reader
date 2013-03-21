@@ -215,6 +215,12 @@ public class CategoryActivity extends SherlockFragmentActivity implements AdWhir
         }
     }
     
+    @Override
+	 protected void onResume() {
+		super.onResume();
+		
+	}
+    
     private void setAboutUsDialog() {
 		// TODO Auto-generated method stub
     	aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string))

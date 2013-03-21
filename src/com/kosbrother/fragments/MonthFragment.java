@@ -62,6 +62,7 @@ public class MonthFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				progressLayout.setVisibility(View.VISIBLE);
+				layoutReload.setVisibility(View.GONE);
 				new DownloadChannelsTask().execute();
 			}
 		});

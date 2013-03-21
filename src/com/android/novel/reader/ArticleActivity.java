@@ -73,6 +73,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	private String adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
 	private ActionBar ab;
 	private LinearLayout layoutProgress;
+	private int currentY = 0;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,7 +184,10 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         	articleTextView.setOnClickListener(new OnClickListener() {			 
     			@Override
     			public void onClick(View arg0) {
-    				new GetNextArticleTask().execute();
+//    				new GetNextArticleTask().execute();
+    				int kk = articleScrollView.getHeight();
+    				int tt = articleTextView.getHeight();
+    				articleScrollView.scrollTo(0, currentY + kk - 8);
     			}
     		});
         }
@@ -211,6 +215,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 		int kk = articleScrollView.getHeight();
 		int tt = articleTextView.getHeight();
 		
+		currentY = y;
 		yRate = (int)(((double)(y)/(double)(tt))*100);
 		int xx = (int)(((double)(y+kk)/(double)(tt))*100);
 		String yPositon = Integer.toString(xx);
@@ -440,7 +445,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     		}else{  	
     			String yPositon = Integer.toString(yRate);
     			articlePercent.setText(yPositon+"%");
-    			articleScrollView.scrollTo(0, yRate*tt/100);
+    			currentY = yRate*tt/100;
+    			articleScrollView.scrollTo(0, currentY);
     		}
             
         }
@@ -496,7 +502,10 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         	articleTextView.setOnClickListener(new OnClickListener() {			 
     			@Override
     			public void onClick(View arg0) {
-    				new GetNextArticleTask().execute();
+//    				new GetNextArticleTask().execute();
+    				int kk = articleScrollView.getHeight();
+    				int tt = articleTextView.getHeight();
+    				articleScrollView.scrollTo(0, currentY + kk - 8);
     			}
     		});
         }else{
