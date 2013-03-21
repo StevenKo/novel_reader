@@ -1,7 +1,6 @@
 package com.android.novel.reader;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.TreeMap;
 
 import android.app.AlertDialog;
@@ -54,6 +53,7 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
     SharedPreferences                            settings;
     private final String                         alertKey   = "alertDeleteBookmark";
     private final String                         adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
+    private ArrayList<String>                    arrayKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,10 +114,9 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
 
     private void setListAdatper() {
         SectionHeadersAdapter adapter = new SectionHeadersAdapter();
-        Iterator<String> iterator = bookmarksMap.keySet().iterator();
-        while (iterator.hasNext()) {
-            String key = iterator.next();
-            adapter.addSection(new BookmarkSectionAdapter(this, bookmarksMap.get(key), key));
+
+        for (int i = 0; i < arrayKey.size(); i++) {
+            adapter.addSection(new BookmarkSectionAdapter(this, bookmarksMap.get(arrayKey.get(i)), arrayKey.get(i)));
         }
         bookmarkListView.setAdapter(adapter);
         bookmarkListView.getListView().setOnItemClickListener(adapter);
@@ -136,6 +135,7 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
     }
 
     private TreeMap<String, ArrayList<Bookmark>> getBookmarksMap(ArrayList<Bookmark> bs) {
+        arrayKey = new ArrayList<String>();
         TreeMap bookMap = new TreeMap<String, ArrayList<Bookmark>>();
         for (int i = 0; i < bs.size(); i++) {
             Bookmark bookmark = bs.get(i);
@@ -147,7 +147,7 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
                 // 沒有的話就建一個加進去
                 ArrayList<Bookmark> newBookList = new ArrayList<Bookmark>(10);
                 newBookList.add(bookmark);
-
+                arrayKey.add(bookmark.getNovelName());
                 bookMap.put(bookmark.getNovelName(), newBookList);
             }
         }
