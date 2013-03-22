@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.novel.reader.CategoryActivity;
 import com.android.novel.reader.R;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
@@ -34,9 +35,9 @@ public class CategroyHotNovelsFragment extends Fragment {
 	private static int id;
 	private Button buttonReload;
 	
-    public static CategroyHotNovelsFragment newInstance(int categoryId) {     
+    public static CategroyHotNovelsFragment newInstance() {     
    	 
-    	id = categoryId;
+//    	id = categoryId;
     	CategroyHotNovelsFragment fragment = new CategroyHotNovelsFragment();
   	    
       return fragment;
@@ -105,7 +106,7 @@ public class CategroyHotNovelsFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-        	novels =  NovelAPI.getCategoryHotNovels(id); 
+        	novels =  NovelAPI.getCategoryHotNovels(CategoryActivity.categoryId); 
 //        	moreNovels = NovelAPI.getHotNovels(); 
 
             return null;

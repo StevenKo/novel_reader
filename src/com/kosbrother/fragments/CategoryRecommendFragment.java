@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.android.novel.reader.CategoryActivity;
 import com.android.novel.reader.R;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
@@ -26,12 +27,12 @@ public class CategoryRecommendFragment extends Fragment {
 	private LinearLayout progressLayout;
 	private LinearLayout loadmoreLayout;
 	private LinearLayout layoutReload;
-	private static int id;
+//	private static int id;
 	private Button buttonReload;
 	
-    public static CategoryRecommendFragment newInstance(int categoryId) {     
+    public static CategoryRecommendFragment newInstance() {     
       	 
-    	id = categoryId;
+//    	id = categoryId;
     	CategoryRecommendFragment fragment = new CategoryRecommendFragment();
   	    
       return fragment;
@@ -100,7 +101,7 @@ public class CategoryRecommendFragment extends Fragment {
         @Override
         protected Object doInBackground(Object... params) {
 
-        	novels = NovelAPI.getCategoryRecommendNovels(id); 
+        	novels = NovelAPI.getCategoryRecommendNovels(CategoryActivity.categoryId); 
 
             return null;
         }

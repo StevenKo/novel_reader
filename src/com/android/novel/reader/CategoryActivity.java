@@ -52,7 +52,7 @@ public class CategoryActivity extends SherlockFragmentActivity implements AdWhir
 	private EditText search;
 	private Bundle mBundle;
 	private String categoryName;
-	private int categoryId;
+	public static int categoryId;
 	private MenuItem  itemSearch;
 	
 	private AlertDialog.Builder aboutUsDialog;
@@ -193,13 +193,13 @@ public class CategoryActivity extends SherlockFragmentActivity implements AdWhir
         public Fragment getItem(int position) {        	
         	Fragment kk = new Fragment();
         	if( position == 0){
-        		kk = CategroyHotNovelsFragment.newInstance(categoryId);
+        		kk = CategroyHotNovelsFragment.newInstance();
         	}else if(position == 1){
-        		kk = CategoryRecommendFragment.newInstance(categoryId);
+        		kk = CategoryRecommendFragment.newInstance();
         	}else if(position == 2) {
-        		kk = CategoryWeekFragment.newInstance(categoryId);
+        		kk = CategoryWeekFragment.newInstance();
         	}else if(position == 3){
-        		kk = CategoryNewNovelsFragment.newInstance(categoryId);
+        		kk = CategoryNewNovelsFragment.newInstance();
         	}
             return kk;
         }

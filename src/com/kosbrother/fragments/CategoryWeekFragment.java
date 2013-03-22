@@ -2,6 +2,7 @@ package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
+import com.android.novel.reader.CategoryActivity;
 import com.android.novel.reader.R;
 import com.android.novel.reader.api.NovelAPI;
 import com.android.novel.reader.entity.Novel;
@@ -33,12 +34,12 @@ public final class CategoryWeekFragment extends Fragment {
 	private LinearLayout loadmoreLayout;
 	private LinearLayout noDataLayout;
 	private LinearLayout layoutReload;
-	private static int id;
+//	private static int id;
 	private Button buttonReload;
 	
-    public static CategoryWeekFragment newInstance(int categoryId) {     
+    public static CategoryWeekFragment newInstance() {     
      	 
-      id = categoryId;
+//      id = categoryId;
   	  CategoryWeekFragment fragment = new CategoryWeekFragment();
   	    
       return fragment;
@@ -108,7 +109,7 @@ public final class CategoryWeekFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-        	novels = NovelAPI.getCategoryThisWeekHotNovels(id); 
+        	novels = NovelAPI.getCategoryThisWeekHotNovels(CategoryActivity.categoryId); 
 
             return null;
         }
