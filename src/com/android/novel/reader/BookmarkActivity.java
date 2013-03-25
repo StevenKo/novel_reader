@@ -80,8 +80,6 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
 
         ab.setDisplayHomeAsUpEnabled(true);
 
-        new LoadDataTask().execute();
-
         settings = getSharedPreferences(Setting.keyPref, 0);
         alertDeleteBookmark = settings.getBoolean(alertKey, true);
 
@@ -97,6 +95,12 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
 
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new LoadDataTask().execute();
     }
 
     @Override
