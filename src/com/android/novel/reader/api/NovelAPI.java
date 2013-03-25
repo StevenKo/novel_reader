@@ -274,7 +274,8 @@ public class NovelAPI {
         if (db.isArticleExists(article.getId())) {
             Article articleFromDB = db.getArticle(article.getId());
             if (articleFromDB.getText().length() > 0)
-                return articleFromDB;
+                articleFromDB.setText(articleFromDB.getText() + "\n");
+            return articleFromDB;
         }
 
         String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
@@ -284,7 +285,7 @@ public class NovelAPI {
             try {
                 JSONObject nObject;
                 nObject = new JSONObject(message.toString());
-                String text = nObject.getString("text");
+                String text = nObject.getString("text") + "\n";
                 article.setText(text);
 
             } catch (JSONException e) {
