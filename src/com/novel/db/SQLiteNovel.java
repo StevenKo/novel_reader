@@ -1,4 +1,4 @@
-package com.android.novel.db;
+package com.novel.db;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +9,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.android.novel.reader.entity.Article;
-import com.android.novel.reader.entity.Bookmark;
-import com.android.novel.reader.entity.Novel;
+import com.novel.reader.entity.Article;
+import com.novel.reader.entity.Bookmark;
+import com.novel.reader.entity.Novel;
 
 public class SQLiteNovel extends SQLiteOpenHelper {
 

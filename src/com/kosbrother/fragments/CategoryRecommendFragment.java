@@ -7,38 +7,37 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.android.novel.reader.CategoryActivity;
-import com.android.novel.reader.R;
-import com.android.novel.reader.api.NovelAPI;
-import com.android.novel.reader.entity.Novel;
+import com.novel.reader.CategoryActivity;
+import com.novel.reader.R;
+import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.GridViewAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
 public class CategoryRecommendFragment extends Fragment {
-    
-	private ArrayList<Novel> novels = new ArrayList<Novel>();
-	private LoadMoreGridView  myGrid;
-	private GridViewAdapter myGridViewAdapter;
-	private LinearLayout progressLayout;
-	private LinearLayout loadmoreLayout;
-	private LinearLayout layoutReload;
-//	private static int id;
-	private Button buttonReload;
-	
-    public static CategoryRecommendFragment newInstance() {     
-      	 
-//    	id = categoryId;
-    	CategoryRecommendFragment fragment = new CategoryRecommendFragment();
-  	    
-      return fragment;
-        
-    }
 
+    private ArrayList<Novel> novels = new ArrayList<Novel>();
+    private LoadMoreGridView myGrid;
+    private GridViewAdapter  myGridViewAdapter;
+    private LinearLayout     progressLayout;
+    private LinearLayout     loadmoreLayout;
+    private LinearLayout     layoutReload;
+    // private static int id;
+    private Button           buttonReload;
+
+    public static CategoryRecommendFragment newInstance() {
+
+        // id = categoryId;
+        CategoryRecommendFragment fragment = new CategoryRecommendFragment();
+
+        return fragment;
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,89 +46,85 @@ public class CategoryRecommendFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        
-    	
-    	View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
-    	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
-    	loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
-    	layoutReload = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
-    	myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
-    	buttonReload = (Button) myFragmentView.findViewById(R.id.button_reload);
-    	myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
-			public void onLoadMore() {
 
-			}
-		});
-    	
-    	buttonReload.setOnClickListener(new OnClickListener() {			 
-			@Override
-			public void onClick(View arg0) {
-				progressLayout.setVisibility(View.VISIBLE);
-				layoutReload.setVisibility(View.GONE);
-				new DownloadChannelsTask().execute();
-			}
-		});
-    	
-    	if (myGridViewAdapter != null){
-    		progressLayout.setVisibility(View.GONE);
+        View myFragmentView = inflater.inflate(R.layout.loadmore_grid, container, false);
+        progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
+        loadmoreLayout = (LinearLayout) myFragmentView.findViewById(R.id.load_more_grid);
+        layoutReload = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
+        myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
+        buttonReload = (Button) myFragmentView.findViewById(R.id.button_reload);
+        myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
+            public void onLoadMore() {
+
+            }
+        });
+
+        buttonReload.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                progressLayout.setVisibility(View.VISIBLE);
+                layoutReload.setVisibility(View.GONE);
+                new DownloadChannelsTask().execute();
+            }
+        });
+
+        if (myGridViewAdapter != null) {
+            progressLayout.setVisibility(View.GONE);
             loadmoreLayout.setVisibility(View.GONE);
-      		myGrid.setAdapter(myGridViewAdapter);
-    	}else{
-    		new DownloadChannelsTask().execute();
-    	}
-    	
+            myGrid.setAdapter(myGridViewAdapter);
+        } else {
+            new DownloadChannelsTask().execute();
+        }
+
         return myFragmentView;
-    	
+
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-       
+
     }
-    
+
     private class DownloadChannelsTask extends AsyncTask {
 
         @Override
         protected void onPreExecute() {
-          
+
             super.onPreExecute();
-            
 
         }
 
         @Override
         protected Object doInBackground(Object... params) {
 
-        	novels = NovelAPI.getCategoryRecommendNovels(CategoryActivity.categoryId); 
+            novels = NovelAPI.getCategoryRecommendNovels(CategoryActivity.categoryId);
 
             return null;
         }
 
         @Override
         protected void onPostExecute(Object result) {
-            
+
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
-            loadmoreLayout.setVisibility(View.GONE);            
-            
-            if(novels !=null && novels.size()!= 0){
-          	  try{
-          		layoutReload.setVisibility(View.GONE);
-          		myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
-          		myGrid.setAdapter(myGridViewAdapter);
-          	  }catch(Exception e){
-          		 
-          	  }
-            }else{
-            	
-            	layoutReload.setVisibility(View.VISIBLE);
+            loadmoreLayout.setVisibility(View.GONE);
+
+            if (novels != null && novels.size() != 0) {
+                try {
+                    layoutReload.setVisibility(View.GONE);
+                    myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
+                    myGrid.setAdapter(myGridViewAdapter);
+                } catch (Exception e) {
+
+                }
+            } else {
+
+                layoutReload.setVisibility(View.VISIBLE);
 
             }
 
         }
     }
-    
-    
-    
+
 }

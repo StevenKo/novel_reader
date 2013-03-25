@@ -1,6 +1,5 @@
 package com.ifixit.android.sectionheaders;
 
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -9,7 +8,7 @@ import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
-import com.android.novel.reader.R;
+import com.novel.reader.R;
 
 public class SectionListView extends FrameLayout implements AbsListView.OnScrollListener {
     private ListView              mListView;

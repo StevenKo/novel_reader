@@ -1,4 +1,4 @@
-package com.android.novel.reader;
+package com.novel.reader;
 
 import java.io.IOException;
 
@@ -30,13 +30,13 @@ import com.adwhirl.AdWhirlLayout;
 import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
-import com.android.novel.reader.api.NovelAPI;
-import com.android.novel.reader.api.Setting;
-import com.android.novel.reader.entity.Article;
-import com.android.novel.reader.entity.Bookmark;
 import com.google.ads.AdView;
 import com.kosbrother.tool.DetectScrollView;
 import com.kosbrother.tool.DetectScrollView.DetectScrollViewListener;
+import com.novel.reader.api.NovelAPI;
+import com.novel.reader.api.Setting;
+import com.novel.reader.entity.Article;
+import com.novel.reader.entity.Bookmark;
 
 public class ArticleActivity extends SherlockFragmentActivity implements DetectScrollViewListener, AdWhirlInterface {
 

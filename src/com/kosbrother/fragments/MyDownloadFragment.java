@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.android.novel.reader.R;
-import com.android.novel.reader.api.NovelAPI;
-import com.android.novel.reader.entity.Novel;
+import com.novel.reader.R;
+import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.GridViewDownloadAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 

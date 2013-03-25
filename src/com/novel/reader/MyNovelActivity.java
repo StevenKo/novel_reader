@@ -1,4 +1,4 @@
-package com.android.novel.reader;
+package com.novel.reader;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

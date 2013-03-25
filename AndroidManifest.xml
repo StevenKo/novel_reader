@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.novel.reader"
+    package="com.novel.reader"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -18,7 +18,7 @@
         android:windowSoftInputMode="adjustPan"
         >
         <activity
-            android:name="com.android.novel.reader.MainActivity"
+            android:name="com.novel.reader.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
@@ -28,64 +28,64 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CategoryActivity"
+            android:name="com.novel.reader.CategoryActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" 
             >
         </activity>
         <activity
-            android:name=".NovelIntroduceActivity"
+            android:name="com.novel.reader.NovelIntroduceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" 
             >
         </activity>
         <activity
-            android:name=".ArticleActivity"
+            android:name="com.novel.reader.ArticleActivity"
             android:configChanges="keyboardHidden|orientation"
             >
         </activity>
         <activity
-            android:name=".SettingActivity"
+            android:name="com.novel.reader.SettingActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" 
             >
         </activity>
         <activity      
-            android:name=".SearchActivity"
+            android:name="com.novel.reader.SearchActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" 
             >
         </activity>
         <activity
-            android:name=".BookmarkActivity"
+            android:name="com.novel.reader.BookmarkActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" 
             >
         </activity>
         <activity
-            android:name=".DownloadActivity"
+            android:name="com.novel.reader.DownloadActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" 
             >
         </activity>
         <activity
-            android:name=".MyNovelActivity"
+            android:name="com.novel.reader.MyNovelActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" 
             >
         </activity>
         <activity
-            android:name=".ClassicNovelsActivity"
+            android:name="com.novel.reader.ClassicNovelsActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" 
             >
         </activity>
         <activity
-            android:name=".MyDownloadArticleActivity"
+            android:name="com.novel.reader.MyDownloadArticleActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" 
             >
@@ -126,7 +126,7 @@
 		        </intent-filter>
 		</activity>
             <service
-              android:name=".service.DownloadService"
+              android:name="com.novel.reader.service.DownloadService"
               >
             </service> 
     </application>

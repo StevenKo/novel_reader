@@ -1,4 +1,4 @@
-package com.android.novel.reader.api;
+package com.novel.reader.api;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,11 +19,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.android.novel.db.SQLiteNovel;
-import com.android.novel.reader.entity.Article;
-import com.android.novel.reader.entity.Bookmark;
-import com.android.novel.reader.entity.Category;
-import com.android.novel.reader.entity.Novel;
+import com.novel.db.SQLiteNovel;
+import com.novel.reader.entity.Article;
+import com.novel.reader.entity.Bookmark;
+import com.novel.reader.entity.Category;
+import com.novel.reader.entity.Novel;
 
 public class NovelAPI {
 

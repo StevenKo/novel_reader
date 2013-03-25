@@ -14,9 +14,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.android.novel.reader.NovelIntroduceActivity;
-import com.android.novel.reader.R;
-import com.android.novel.reader.entity.Novel;
+
+import com.novel.reader.NovelIntroduceActivity;
+import com.novel.reader.R;
+import com.novel.reader.entity.Novel;
 
 public class GridViewAdapter extends BaseAdapter {
 
@@ -48,19 +49,18 @@ public class GridViewAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         // if (convertView == null)
-//        vi = inflater.inflate(R.layout.item_gridview_novel, null);
-        
-        Display display = activity.getWindowManager().getDefaultDisplay(); 
-		int width = display.getWidth();  // deprecated
-		int height = display.getHeight();  // deprecated
-	
-		if (width > 480){
-			vi = inflater.inflate(R.layout.item_gridview_novel, null);
-		}else{
-			vi = inflater.inflate(R.layout.item_gridview_novel_small, null);
-		}
-        
-        
+        // vi = inflater.inflate(R.layout.item_gridview_novel, null);
+
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int width = display.getWidth(); // deprecated
+        int height = display.getHeight(); // deprecated
+
+        if (width > 480) {
+            vi = inflater.inflate(R.layout.item_gridview_novel, null);
+        } else {
+            vi = inflater.inflate(R.layout.item_gridview_novel_small, null);
+        }
+
         vi.setClickable(true);
         vi.setFocusable(true);
         // vi.setBackgroundResource(android.R.drawable.menuitem_background);

@@ -1,4 +1,4 @@
-package com.android.novel.reader;
+package com.novel.reader;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -33,13 +33,13 @@ import com.adwhirl.AdWhirlLayout;
 import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
-import com.android.novel.reader.api.NovelAPI;
-import com.android.novel.reader.api.Setting;
-import com.android.novel.reader.entity.Bookmark;
 import com.google.ads.AdView;
 import com.ifixit.android.sectionheaders.Section;
 import com.ifixit.android.sectionheaders.SectionHeadersAdapter;
 import com.ifixit.android.sectionheaders.SectionListView;
+import com.novel.reader.api.NovelAPI;
+import com.novel.reader.api.Setting;
+import com.novel.reader.entity.Bookmark;
 import com.taiwan.imageload.ImageLoader;
 
 public class BookmarkActivity extends SherlockActivity implements AdWhirlInterface {

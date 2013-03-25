@@ -1,4 +1,4 @@
-package com.android.novel.reader.entity;
+package com.novel.reader.entity;
 
 public class Novel {
     int     id;

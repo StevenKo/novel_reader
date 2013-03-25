@@ -1,4 +1,4 @@
-package com.android.novel.reader.service;
+package com.novel.reader.service;
 
 import java.util.ArrayList;
 
@@ -11,10 +11,10 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.android.novel.reader.MyNovelActivity;
-import com.android.novel.reader.R;
-import com.android.novel.reader.api.NovelAPI;
-import com.android.novel.reader.entity.Article;
+import com.novel.reader.MyNovelActivity;
+import com.novel.reader.R;
+import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.Article;
 
 public class DownloadService extends IntentService {
 

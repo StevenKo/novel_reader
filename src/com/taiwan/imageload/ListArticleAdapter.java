@@ -1,34 +1,33 @@
 package com.taiwan.imageload;
 
 import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.android.novel.reader.ArticleActivity;
-import com.android.novel.reader.NovelIntroduceActivity;
-import com.android.novel.reader.R;
-import com.android.novel.reader.entity.Article;
+import com.novel.reader.ArticleActivity;
+import com.novel.reader.R;
+import com.novel.reader.entity.Article;
 
 public class ListArticleAdapter extends BaseAdapter {
-    
-    private Activity activity;
-    private ArrayList<Article> data;
-    private static LayoutInflater inflater=null;
-    private String novelName;
-   
-    
+
+    private final Activity           activity;
+    private final ArrayList<Article> data;
+    private static LayoutInflater    inflater = null;
+    private final String             novelName;
+
     public ListArticleAdapter(Activity a, ArrayList<Article> d, String theNovelName) {
         activity = a;
-        data=d;
-        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        data = d;
+        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         novelName = theNovelName;
     }
 
@@ -43,14 +42,14 @@ public class ListArticleAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-    
+
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View vi=convertView;
+        View vi = convertView;
         vi = inflater.inflate(R.layout.item_expandible_child, null);
-        TextView text=(TextView)vi.findViewById(R.id.expandlist_child);
-	    text.setText(data.get(position).getTitle());
-	        
-	    vi.setOnClickListener(new OnClickListener() {
+        TextView text = (TextView) vi.findViewById(R.id.expandlist_child);
+        text.setText(data.get(position).getTitle());
+
+        vi.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -67,8 +66,7 @@ public class ListArticleAdapter extends BaseAdapter {
             }
 
         });
-	        
-	        
+
         return vi;
     }
 }
