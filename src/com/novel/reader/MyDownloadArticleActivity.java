@@ -225,7 +225,7 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
                     }
                 }
 
-                ExpandListAdapter mAdapter = new ExpandListAdapter(MyDownloadArticleActivity.this, mGroups, theNovel);
+                ExpandListAdapter mAdapter = new ExpandListAdapter(MyDownloadArticleActivity.this, mGroups, theNovel, -1);
                 novelListView.setAdapter(mAdapter);
 
             }

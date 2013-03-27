@@ -33,68 +33,73 @@ import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.Group;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Article;
+import com.novel.reader.entity.Bookmark;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.ExpandListAdapter;
 import com.taiwan.imageload.ImageLoader;
 
 public class NovelIntroduceActivity extends SherlockFragmentActivity {
 
-    private static final int                          ID_SETTING        = 0;
-    private static final int                          ID_RESPONSE       = 1;
-    private static final int                          ID_ABOUT_US       = 2;
-    private static final int                          ID_GRADE          = 3;
-    private static final int                          ID_DOWNLOAD       = 4;
-    private static final int                          ID_SEARCH         = 5;
+    private static final int                    ID_SETTING        = 0;
+    private static final int                    ID_RESPONSE       = 1;
+    private static final int                    ID_ABOUT_US       = 2;
+    private static final int                    ID_GRADE          = 3;
+    private static final int                    ID_DOWNLOAD       = 4;
+    private static final int                    ID_SEARCH         = 5;
 
-    private EditText                                  search;
-    private Bundle                                    mBundle;
-    private String                                    novelName;
-    private int                                       novelId;
-    private String                                    novelAuthor;
-    private String                                    novelDescription;
-    private String                                    novelUpdate;
-    private String                                    novelPicUrl;
-    private String                                    novelArticleNum;
-    private ImageView                                 novelImageView;
-    private TextView                                  novelTextName;
-    private TextView                                  novelTextAuthor;
-    private TextView                                  novelTextDescription;
-    private TextView                                  novelTextUpdate;
-    private Button                                    novelButton;
-    private ImageLoader                               mImageLoader;
-    private LinearLayout                              novelLayoutProgress;
-    private LinearLayout                              layoutTextArrow;
-    private CheckBox                                  checkBoxAddBookcase;
-    private ImageView                                 imageArrow;
-    private ArrayList<Article>                        articleList       = new ArrayList<Article>();
-    private ExpandableListView                        novelListView;
-    private Novel                                     theNovel;
-    private Boolean                                   descriptionExpand = false;
-    private Boolean                                   isNovelChecked;
-    private MenuItem                                  itemSearch;
+    private EditText                            search;
+    private Bundle                              mBundle;
+    private String                              novelName;
+    private int                                 novelId;
+    private String                              novelAuthor;
+    private String                              novelDescription;
+    private String                              novelUpdate;
+    private String                              novelPicUrl;
+    private String                              novelArticleNum;
+    private ImageView                           novelImageView;
+    private TextView                            novelTextName;
+    private TextView                            novelTextAuthor;
+    private TextView                            novelTextDescription;
+    private TextView                            novelTextUpdate;
+    private Button                              novelButton;
+    private ImageLoader                         mImageLoader;
+    private LinearLayout                        novelLayoutProgress;
+    private LinearLayout                        layoutTextArrow;
+    private CheckBox                            checkBoxAddBookcase;
+    private ImageView                           imageArrow;
+    private ArrayList<Article>                  articleList       = new ArrayList<Article>();
+    private ExpandableListView                  novelListView;
+    private Novel                               theNovel;
+    private Boolean                             descriptionExpand = false;
+    private Boolean                             isNovelChecked;
+    private MenuItem                            itemSearch;
+    private int                                 expandGroup       = -1;
 
-    private final TreeMap<String, ArrayList<Article>> myData            = new TreeMap<String, ArrayList<Article>>();
+    private TreeMap<String, ArrayList<Article>> myData            = new TreeMap<String, ArrayList<Article>>();
     // private ArrayList<String> groupTitleList = new ArrayList<String>();
-    private ArrayList<Group>                          mGroups           = new ArrayList<Group>();
-    private AlertDialog.Builder                       aboutUsDialog;
+    private ArrayList<Group>                    mGroups           = new ArrayList<Group>();
+    private AlertDialog.Builder                 aboutUsDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_novel_introduce);
         findViews();
+        mBundle = this.getIntent().getExtras();
+        novelId = mBundle.getInt("NovelId");
+
         new DownloadArticlesTask().execute();
         new DownloadNovelTask().execute();
 
         final ActionBar ab = getSupportActionBar();
-        mBundle = this.getIntent().getExtras();
         novelName = mBundle.getString("NovelName");
-        novelId = mBundle.getInt("NovelId");
         novelAuthor = mBundle.getString("NovelAuthor");
         novelDescription = mBundle.getString("NovelDescription");
         novelUpdate = mBundle.getString("NovelUpdate");
         novelPicUrl = mBundle.getString("NovelPicUrl");
         novelArticleNum = mBundle.getString("NovelArticleNum");
+
+        theNovel = new Novel(novelId, novelName, novelAuthor, novelDescription, novelPicUrl, 0, novelArticleNum, novelUpdate, false, false, false);
 
         ab.setTitle(getResources().getString(R.string.title_novel_introduce));
         ab.setDisplayHomeAsUpEnabled(true);
@@ -103,6 +108,13 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 
         setViews();
         setAboutUsDialog();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setGroupsAndAdatper();
 
     }
 
@@ -142,12 +154,12 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
                 if (novelButton.getText().equals(getResources().getString(R.string.novel_back))) {
                     novelButton.setText(getResources().getString(R.string.novel_front));
                     reverseMGroups();
-                    ExpandListAdapter mAdapter = new ExpandListAdapter(NovelIntroduceActivity.this, mGroups, theNovel);
+                    ExpandListAdapter mAdapter = new ExpandListAdapter(NovelIntroduceActivity.this, mGroups, theNovel, expandGroup);
                     novelListView.setAdapter(mAdapter);
                 } else {
                     novelButton.setText(getResources().getString(R.string.novel_back));
                     reverseMGroups();
-                    ExpandListAdapter mAdapter = new ExpandListAdapter(NovelIntroduceActivity.this, mGroups, theNovel);
+                    ExpandListAdapter mAdapter = new ExpandListAdapter(NovelIntroduceActivity.this, mGroups, theNovel, expandGroup);
                     novelListView.setAdapter(mAdapter);
                 }
             }
@@ -230,6 +242,49 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         }
         mGroups.clear();
         mGroups = aGroups;
+        expandGroup = mGroups.size() - expandGroup - 1;
+    }
+
+    private void setGroupsAndAdatper() {
+
+        mGroups = new ArrayList<Group>();
+        myData = new TreeMap<String, ArrayList<Article>>();
+
+        if (articleList != null && articleList.size() != 0) {
+
+            // use HashMap || TreeMap to make a parent key
+            for (int i = 0; i < articleList.size(); i++) {
+                if (myData.containsKey(articleList.get(i).getSubject())) {
+                    myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
+                } else {
+                    // groupTitleList.add(articleList.get(i).getSubject());
+                    mGroups.add(new Group(articleList.get(i).getSubject()));
+                    myData.put(articleList.get(i).getSubject(), new ArrayList<Article>());
+                    myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
+                }
+            }
+
+            Bookmark theNovelBookmark = NovelAPI.getNovelBookmark(theNovel.getId(), NovelIntroduceActivity.this);
+
+            for (int i = 0; i < mGroups.size(); i++) {
+                ArrayList<Article> articles = myData.get(mGroups.get(i).getTitle());
+                for (int j = 0; j < articles.size(); j++) {
+                    mGroups.get(i).addChildrenItem(
+                            new ChildArticle(articles.get(j).getId(), articles.get(j).getNovelId(), "", articles.get(j).getTitle(), articles.get(j)
+                                    .getSubject(), articles.get(j).isDownload()));
+
+                    if (theNovelBookmark != null) {
+                        if (theNovelBookmark.getArticleTitle().equals(articles.get(j).getTitle()))
+                            expandGroup = i;
+                    }
+                }
+            }
+
+        }
+        if (novelButton.getText().equals(getResources().getString(R.string.novel_front)))
+            reverseMGroups();
+        ExpandListAdapter mAdapter = new ExpandListAdapter(NovelIntroduceActivity.this, mGroups, theNovel, expandGroup);
+        novelListView.setAdapter(mAdapter);
     }
 
     @Override
@@ -341,33 +396,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 
             super.onPostExecute(result);
             novelLayoutProgress.setVisibility(View.GONE);
-            if (articleList != null && articleList.size() != 0) {
-
-                // use HashMap || TreeMap to make a parent key
-                for (int i = 0; i < articleList.size(); i++) {
-                    if (myData.containsKey(articleList.get(i).getSubject())) {
-                        myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
-                    } else {
-                        // groupTitleList.add(articleList.get(i).getSubject());
-                        mGroups.add(new Group(articleList.get(i).getSubject()));
-                        myData.put(articleList.get(i).getSubject(), new ArrayList<Article>());
-                        myData.get(articleList.get(i).getSubject()).add(articleList.get(i));
-                    }
-                }
-
-                for (int i = 0; i < mGroups.size(); i++) {
-                    ArrayList<Article> articles = myData.get(mGroups.get(i).getTitle());
-                    for (int j = 0; j < articles.size(); j++) {
-                        mGroups.get(i).addChildrenItem(
-                                new ChildArticle(articles.get(j).getId(), articles.get(j).getNovelId(), "", articles.get(j).getTitle(), articles.get(j)
-                                        .getSubject(), articles.get(j).isDownload()));
-                    }
-                }
-
-                ExpandListAdapter mAdapter = new ExpandListAdapter(NovelIntroduceActivity.this, mGroups, theNovel);
-                novelListView.setAdapter(mAdapter);
-
-            }
+            setGroupsAndAdatper();
 
         }
     }

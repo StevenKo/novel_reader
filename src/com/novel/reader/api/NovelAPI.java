@@ -46,6 +46,11 @@ public class NovelAPI {
         return db.getAllBookmarks();
     }
 
+    public static Bookmark getNovelBookmark(int novel_id, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.getNovelBookmark(novel_id);
+    }
+
     public static boolean updateBookmark(Bookmark bookmark, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         return db.updateBookmark(bookmark);

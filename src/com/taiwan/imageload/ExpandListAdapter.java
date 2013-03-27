@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +20,8 @@ import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.Group;
 import com.novel.reader.ArticleActivity;
 import com.novel.reader.R;
+import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.Bookmark;
 import com.novel.reader.entity.Novel;
 
 public class ExpandListAdapter extends BaseExpandableListAdapter {
@@ -26,8 +30,10 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
     private final Activity        activity;
     public ArrayList<Group>       theGroups;
     private final Novel           theNovel;
+    private final Bookmark        theNovelBookmark;
+    private final int             expandGroup;
 
-    public ExpandListAdapter(Activity a, ArrayList<Group> mGroups, Novel mNovel) {
+    public ExpandListAdapter(Activity a, ArrayList<Group> mGroups, Novel mNovel, int expandGroup) {
 
         activity = a;
         theGroups = mGroups;
@@ -35,6 +41,8 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         theNovel = mNovel;
+        theNovelBookmark = NovelAPI.getNovelBookmark(theNovel.getId(), a);
+        this.expandGroup = expandGroup;
     }
 
     @Override
@@ -72,6 +80,11 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
                 activity.startActivity(intent);
             }
         });
+
+        if (theNovelBookmark != null) {
+            if (theNovelBookmark.getArticleTitle().equals(childString))
+                text.setTextColor(Color.parseColor("#FF1919"));
+        }
 
         return vi;
     }
@@ -120,6 +133,11 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         int id = (!isExpanded) ? R.drawable.right_arrow : R.drawable.up_arrow;
         ImageView image = (ImageView) vi.findViewById(R.id.expandlist_parent_button);
         image.setImageResource(id);
+
+        if ((expandGroup != -1) && (expandGroup == groupPosition)) {
+            ExpandableListView eLV = (ExpandableListView) parent;
+            eLV.expandGroup(expandGroup);
+        }
 
         return vi;
     }
