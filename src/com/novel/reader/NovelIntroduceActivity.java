@@ -82,6 +82,9 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_novel_introduce);
+        findViews();
+        new DownloadArticlesTask().execute();
+        new DownloadNovelTask().execute();
 
         final ActionBar ab = getSupportActionBar();
         mBundle = this.getIntent().getExtras();
@@ -101,12 +104,9 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         setViews();
         setAboutUsDialog();
 
-        new DownloadNovelTask().execute();
-        new DownloadArticlesTask().execute();
-
     }
 
-    private void setViews() {
+    private void findViews() {
         novelImageView = (ImageView) findViewById(R.id.novel_image);
         novelTextName = (TextView) findViewById(R.id.novel_name);
         novelTextAuthor = (TextView) findViewById(R.id.novel_author);
@@ -118,6 +118,10 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         layoutTextArrow = (LinearLayout) findViewById(R.id.layout_text_arrow);
         imageArrow = (ImageView) findViewById(R.id.image_arrow);
         checkBoxAddBookcase = (CheckBox) findViewById(R.id.checkbox_add_bookcase);
+    }
+
+    private void setViews() {
+
         if (isNovelChecked) {
             checkBoxAddBookcase.setChecked(true);
         } else {
@@ -379,7 +383,10 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            novelTextDescription.setText(theNovel.getDescription());
+
+            if (theNovel != null)
+                novelTextDescription.setText(theNovel.getDescription());
+
             novelTextDescription.setMaxLines(3);
             descriptionExpand = false;
         }
