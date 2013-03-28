@@ -395,7 +395,6 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         protected void onPostExecute(Object result) {
 
             super.onPostExecute(result);
-            novelLayoutProgress.setVisibility(View.GONE);
             setGroupsAndAdatper();
 
         }
@@ -418,6 +417,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 
             novelTextDescription.setMaxLines(3);
             descriptionExpand = false;
+            novelLayoutProgress.setVisibility(View.GONE);
         }
     }
 
