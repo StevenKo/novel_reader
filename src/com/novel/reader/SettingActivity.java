@@ -1,9 +1,13 @@
 package com.novel.reader;
 
+import yuku.ambilwarna.AmbilWarnaDialog;
+import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -15,6 +19,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.novel.reader.api.Setting;
+import com.taiwan.imageload.ExpandListAdapter;
 
 public class SettingActivity extends SherlockFragmentActivity {
 
@@ -30,6 +35,10 @@ public class SettingActivity extends SherlockFragmentActivity {
     private RadioGroup          tapRadioGroup;
     private RadioGroup          stopSleepRadioGroup;
     private TextView            textPreView;
+    private ImageView 			imageviewTextColor;
+    private ImageView 			imageviewTextBackground;
+    private int 				textColor;
+    private int 				textBackground;
 
     private AlertDialog.Builder finishDialog;
 
@@ -43,7 +52,9 @@ public class SettingActivity extends SherlockFragmentActivity {
         readingDirection = Setting.getSetting(Setting.keyReadingDirection, SettingActivity.this);
         clickToNextPage = Setting.getSetting(Setting.keyClickToNextPage, SettingActivity.this);
         stopSleeping = Setting.getSetting(Setting.keyStopSleeping, SettingActivity.this);
-
+        textColor = Setting.getSetting(Setting.keyTextColor, SettingActivity.this);
+        textBackground = Setting.getSetting(Setting.keyTextBackground, SettingActivity.this);
+        
         setViews();
 
         final ActionBar ab = getSupportActionBar();
@@ -60,15 +71,36 @@ public class SettingActivity extends SherlockFragmentActivity {
         tapRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_tap);
         stopSleepRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_stop_sleep);
         textPreView = (TextView) findViewById(R.id.text_preview);
-
+        imageviewTextColor = (ImageView) findViewById(R.id.imageview_textcolor);
+        imageviewTextBackground = (ImageView) findViewById(R.id.imageview_textbackground);
+        
         textPreView.setTextSize(textSize);
+        textPreView.setTextColor(textColor);
+        textPreView.setBackgroundColor(textBackground);
         mSeekBar.setProgress(textSize);
+        imageviewTextColor.setBackgroundColor(textColor);
+        imageviewTextBackground.setBackgroundColor(textBackground);
 
         ((RadioButton) langRadioGroup.getChildAt(textLanguage)).setChecked(true);
         ((RadioButton) directionRadioGroup.getChildAt(readingDirection)).setChecked(true);
         ((RadioButton) tapRadioGroup.getChildAt(clickToNextPage)).setChecked(true);
         ((RadioButton) stopSleepRadioGroup.getChildAt(textLanguage)).setChecked(true);
-
+        
+        imageviewTextColor.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+            	showTextColorPicker();
+            }
+        });
+        
+        imageviewTextBackground.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+            	showTextBackgroundPicker();
+            }
+        });
+        
+        
         mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             public void onProgressChanged(SeekBar arg0, int progress, boolean arg2) {
@@ -91,11 +123,48 @@ public class SettingActivity extends SherlockFragmentActivity {
         setFinishDialog();
 
     }
-
+    
+    private void showTextColorPicker() {
+    	AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, textColor,
+                new OnAmbilWarnaListener() {
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+                    // color is the color selected by the user.
+            	textColor = color;
+            	imageviewTextColor.setBackgroundColor(textColor);
+            	textPreView.setTextColor(textColor);
+            }
+                    
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+                    // cancel was selected by the user
+            }
+        });
+        dialog.show();	
+	}
+    
+    private void showTextBackgroundPicker() {
+    	AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, textBackground,
+                new OnAmbilWarnaListener() {
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+                    // color is the color selected by the user.
+            	textBackground = color;
+            	imageviewTextBackground.setBackgroundColor(textBackground);
+            	textPreView.setBackgroundColor(textBackground);
+            }
+                    
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+                    // cancel was selected by the user
+            }
+        });
+        dialog.show();	
+	}
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        // getMenuInflater().inflate(R.menu.activity_main, menu);
+        
         return true;
     }
 
@@ -129,6 +198,8 @@ public class SettingActivity extends SherlockFragmentActivity {
                     public void onClick(DialogInterface dialog, int which) {
 
                         Setting.saveSetting(Setting.keyTextSize, mSeekBar.getProgress(), SettingActivity.this);
+                        Setting.saveSetting(Setting.keyTextColor, textColor, SettingActivity.this);
+                        Setting.saveSetting(Setting.keyTextBackground, textBackground, SettingActivity.this);
                         saveRadioGroupValue(langRadioGroup, Setting.keyTextLanguage);
                         saveRadioGroupValue(directionRadioGroup, Setting.keyReadingDirection);
                         saveRadioGroupValue(tapRadioGroup, Setting.keyClickToNextPage);

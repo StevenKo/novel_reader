@@ -51,6 +51,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private int                 readingDirection;                                // 0 for 直向, 1 for 橫向
     private int                 clickToNextPage;                                 // 0 for yes, 1 for no
     private int                 stopSleeping;                                    // 0 for yes, 1 for no
+    private int 				textColor;
+    private int 				textBackground;
 
     private TextView            articleTextView;
     private DetectScrollView    articleScrollView;
@@ -135,6 +137,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
     private void restorePreValues() {
         textSize = Setting.getSetting(Setting.keyTextSize, ArticleActivity.this);
+        textColor = Setting.getSetting(Setting.keyTextColor, ArticleActivity.this);
+        textBackground = Setting.getSetting(Setting.keyTextBackground, ArticleActivity.this);
         textLanguage = Setting.getSetting(Setting.keyTextLanguage, ArticleActivity.this);
         readingDirection = Setting.getSetting(Setting.keyReadingDirection, ArticleActivity.this);
         clickToNextPage = Setting.getSetting(Setting.keyClickToNextPage, ArticleActivity.this);
@@ -163,6 +167,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         articleScrollView.setScrollViewListener(ArticleActivity.this);
 
         articleTextView.setTextSize(textSize);
+        articleTextView.setTextColor(textColor);
+        articleScrollView.setBackgroundColor(textBackground);
 
         articleButtonUp.setOnClickListener(new OnClickListener() {
             @Override
@@ -460,12 +466,16 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         int originTextLan = textLanguage;
 
         textSize = Setting.getSetting(Setting.keyTextSize, ArticleActivity.this);
+        textColor = Setting.getSetting(Setting.keyTextColor, ArticleActivity.this);
+        textBackground = Setting.getSetting(Setting.keyTextBackground, ArticleActivity.this);
         textLanguage = Setting.getSetting(Setting.keyTextLanguage, ArticleActivity.this);
         readingDirection = Setting.getSetting(Setting.keyReadingDirection, ArticleActivity.this);
         clickToNextPage = Setting.getSetting(Setting.keyClickToNextPage, ArticleActivity.this);
         stopSleeping = Setting.getSetting(Setting.keyStopSleeping, ArticleActivity.this);
 
         articleTextView.setTextSize(textSize);
+        articleTextView.setTextColor(textColor);
+        articleScrollView.setBackgroundColor(textBackground);
 
         if (originTextLan != textLanguage) {
             if (textLanguage == 1) {
