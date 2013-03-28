@@ -46,7 +46,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
     private final ArrayList<Group>                    mGroups        = new ArrayList<Group>();
 
     private Boolean                                   downloadBoolean;
-    private final ProgressDialog                      progressDialog = null;
+    private ProgressDialog                      	  progressDialog = null;
     private ExpandListDownLoadAdapter                 mAdapter;
     private int                                       downloadCount;
     private AlertDialog.Builder                       remindDialog;
@@ -124,31 +124,39 @@ public class DownloadActivity extends SherlockFragmentActivity {
             // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
             break;
         case ID_SELECT_ALL: // setting
-            Toast.makeText(DownloadActivity.this, getResources().getString(R.string.menu_add_all), Toast.LENGTH_SHORT).show();
-            downloadCount = 0;
-            for (int i = 0; i < mGroups.size(); i++) {
-                mGroups.get(i).setChecked(true);
-                for (int j = 0; j < mGroups.get(i).getChildrenCount(); j++) {
-                    downloadCount = downloadCount + 1;
-                    mGroups.get(i).getChildItem(j).setChecked(true);
-                }
-            }
-            mAdapter.notifyDataSetChanged();
-            downLoadCountText.setText(getResources().getString(R.string.toast_all_collect_title) + Integer.toString(downloadCount)
-                    + getResources().getString(R.string.toast_all_collect_final));
+        	if(articleList.size() != 0){
+	            Toast.makeText(DownloadActivity.this, getResources().getString(R.string.menu_add_all), Toast.LENGTH_SHORT).show();
+	            downloadCount = 0;
+	            for (int i = 0; i < mGroups.size(); i++) {
+	                mGroups.get(i).setChecked(true);
+	                for (int j = 0; j < mGroups.get(i).getChildrenCount(); j++) {
+	                    downloadCount = downloadCount + 1;
+	                    mGroups.get(i).getChildItem(j).setChecked(true);
+	                }
+	            }
+	            mAdapter.notifyDataSetChanged();
+	            downLoadCountText.setText(getResources().getString(R.string.toast_all_collect_title) + Integer.toString(downloadCount)
+	                    + getResources().getString(R.string.toast_all_collect_final));
+        	}else{
+        		Toast.makeText(DownloadActivity.this, "資料下載中,請稍等", Toast.LENGTH_SHORT).show();
+        	}
             break;
         case ID_SELECT_NONE: // response
-            Toast.makeText(DownloadActivity.this, getResources().getString(R.string.menu_remove_all), Toast.LENGTH_SHORT).show();
-            downloadCount = 0;
-            for (int i = 0; i < mGroups.size(); i++) {
-                mGroups.get(i).setChecked(false);
-                for (int j = 0; j < mGroups.get(i).getChildrenCount(); j++) {
-                    mGroups.get(i).getChildItem(j).setChecked(false);
-                }
-            }
-            mAdapter.notifyDataSetChanged();
-            downLoadCountText.setText(getResources().getString(R.string.toast_all_collect_title) + Integer.toString(downloadCount)
-                    + getResources().getString(R.string.toast_all_collect_final));
+        	if(articleList.size() != 0){
+	            Toast.makeText(DownloadActivity.this, getResources().getString(R.string.menu_remove_all), Toast.LENGTH_SHORT).show();
+	            downloadCount = 0;
+	            for (int i = 0; i < mGroups.size(); i++) {
+	                mGroups.get(i).setChecked(false);
+	                for (int j = 0; j < mGroups.get(i).getChildrenCount(); j++) {
+	                    mGroups.get(i).getChildItem(j).setChecked(false);
+	                }
+	            }
+	            mAdapter.notifyDataSetChanged();
+	            downLoadCountText.setText(getResources().getString(R.string.toast_all_collect_title) + Integer.toString(downloadCount)
+	                    + getResources().getString(R.string.toast_all_collect_final));
+        	}else{
+        		Toast.makeText(DownloadActivity.this, "資料下載中,請稍等", Toast.LENGTH_SHORT).show();
+        	}
             break;
         }
         return true;
@@ -156,6 +164,14 @@ public class DownloadActivity extends SherlockFragmentActivity {
 
     private class DownloadArticlesTask extends AsyncTask {
 
+    	
+    	@Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+             progressDialog = ProgressDialog.show(DownloadActivity.this, "",getResources().getString(R.string.toast_novel_downloading));
+             progressDialog.setCancelable(true);
+        }
+    	
         @Override
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
@@ -168,6 +184,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
             novelLayoutProgress.setVisibility(View.GONE);
+            progressDialog.cancel();
             if (articleList != null && articleList.size() != 0) {
 
                 // use HashMap || TreeMap to make a parent key
