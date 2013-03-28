@@ -15,10 +15,10 @@ import com.novel.reader.entity.Novel;
 
 public class SQLiteNovel extends SQLiteOpenHelper {
 
-    private static final String  DB_NAME          = "kosnovel.sqlite"; // 資料庫名稱
-    private static final int     DATABASE_VERSION = 1;                // 資料庫版本
-    private final SQLiteDatabase db;
-    private final Context        ctx;
+    private static final String DB_NAME          = "kosnovel.sqlite"; // 資料庫名稱
+    private static final int    DATABASE_VERSION = 1;                // 資料庫版本
+    private SQLiteDatabase      db;
+    private final Context       ctx;
 
     // Define database schema
     public interface NovelSchema {
@@ -61,7 +61,9 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     public SQLiteNovel(Context context) {
         super(context, DB_NAME, null, DATABASE_VERSION);
         ctx = context;
-        db = this.getWritableDatabase();
+
+        if (db == null)
+            db = this.getWritableDatabase();
     }
 
     @Override
