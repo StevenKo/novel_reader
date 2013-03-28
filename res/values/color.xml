@@ -6,6 +6,11 @@
     <color name="bookmark_section_head">#29A3CC</color>
     <color name="bookmark_section_text">#041014</color>
     
+    <color name="dark_slate_gray">#2F4F4F</color>
+	<color name="gray_2">#AFAFAF</color>
+	<color name="gray_1">#C0C0C0</color>
+	<color name="black">#000000</color>
+    
      <!-- Add for Report -->
     <color name="report_view_1">#f6c737</color>
     <color name="report_view_2">#e1e1e1</color>

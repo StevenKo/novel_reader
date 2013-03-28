@@ -27,6 +27,7 @@
 	<string name="setting_lan_sim">简体</string>
 	<string name="setting_select_direction">阅读方向:</string>
 	<string name="setting_direction_portrait">直向</string>
+	<string name="setting_direction_horizontal">橫向</string>
 	<string name="setting_select_tap">点击换页:</string>
 	<string name="setting_tap_open">开启</string>
 	<string name="setting_tap_close">关闭</string>
@@ -44,6 +45,11 @@
 	<string name="setting_yes">储存</string>
 	<string name="setting_neutral">取消</string>
 	<string name="setting_no">不储存</string>
+	
+	<string name="delete_title">删除</string>
+	<string name="delete_message">是否删除此小说</string>
+	<string name="delete_yes">删除</string>
+	<string name="delete_no">不删除</string>
 	
 	<string name="add_my_bookcase1">加入书柜</string>
 	<string name="add_my_bookcase">已加入我的书柜</string>
@@ -92,6 +98,13 @@
     <string name="reminder_next">下次再提醒</string>
     <string name="do_not_reminder">不要再提醒</string>
 	
+    <!-- for load more -->
+    <string name="hello">Hello World, LoadMoreListView!</string>
+    <string name="pull_to_refresh_pull_label">Pull to refresh...</string>
+    <string name="pull_to_refresh_release_label">Release to refresh...</string>
+    <string name="pull_to_refresh_refreshing_label">Loading...</string>
+    <string name="pull_to_refresh_tap_label">Tap to refresh...</string>
+    
     <!-- for vpon -->
     <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
