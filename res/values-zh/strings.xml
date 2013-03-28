@@ -27,15 +27,15 @@
 	<string name="setting_lan_sim">简体</string>
 	<string name="setting_select_direction">阅读方向:</string>
 	<string name="setting_direction_portrait">直向</string>
-
 	<string name="setting_direction_horizontal">橫向</string>
-
 	<string name="setting_select_tap">点击换页:</string>
 	<string name="setting_tap_open">开启</string>
 	<string name="setting_tap_close">关闭</string>
 	<string name="setting_select_sleeping">阅读时停止休眠:</string>
 	<string name="setting_sleeping_open">开启停止休眠</string>
 	<string name="setting_sleeping_close">关闭停止休眠</string>
+	<string name="setting_select_text_color">选择阅读字体颜色</string>
+	<string name="setting_select_text_background">选择阅读背景颜色:</string>
 	
 	<string name="title_my_downloading"> 我的下载</string>
 	<string name="title_my_bookcase"> 我的书柜</string>
@@ -67,6 +67,8 @@
 	<string name="toast_novel_downloading">小说下载中,...</string>
 	<string name="toast_downloading_success">成功下载</string>
 	<string name="toast_downloading_fail">出现错误, 请重新下载</string>
+	<string name="toast_downloading_wait">资料下载中,请稍候</string>
+	
 	
 	<string name="respond_mail_address">brotherkos@gmail.com</string>
 	<string name="respond_mail_title">意见回馈from 小说王</string>

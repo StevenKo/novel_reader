@@ -34,6 +34,8 @@
     <string name="setting_select_sleeping">閱讀時停止休眠:</string>
     <string name="setting_sleeping_open">開啟停止休眠</string>
     <string name="setting_sleeping_close">關閉停止休眠</string>
+    <string name="setting_select_text_color">選擇閱讀字體顏色:</string>
+	<string name="setting_select_text_background">選擇閱讀背景顏色:</string>
     
     <string name="title_my_downloading"> 我的下載</string>
     <string name="title_my_bookcase"> 我的書櫃</string>
@@ -65,6 +67,7 @@
     <string name="toast_novel_downloading">小說下載中,...</string>
     <string name="toast_downloading_success">成功下載</string>
     <string name="toast_downloading_fail">出現錯誤, 請重新下載</string>
+    <string name="toast_downloading_wait">資料下載中,請稍候</string>
     
     <string name="respond_mail_address">brotherkos@gmail.com</string>
     <string name="respond_mail_title">意見回餽 from 小說王</string>

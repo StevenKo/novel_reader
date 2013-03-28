@@ -222,7 +222,7 @@
 		    <TextView 
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:text="選擇閱讀背景顏色:"
+		    	android:text="@string/setting_select_text_background"
 		    	android:layout_marginLeft="10dp"
 		    	android:textSize="18dp"
 		    	android:layout_marginTop="10dp"
@@ -245,7 +245,7 @@
 		    <TextView 
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:text="選擇閱讀字體顏色:"
+		    	android:text="@string/setting_select_text_color"
 		    	android:layout_marginLeft="10dp"
 		    	android:textSize="18dp"
 		    	android:layout_marginTop="10dp"

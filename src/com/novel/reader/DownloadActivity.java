@@ -138,7 +138,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	            downLoadCountText.setText(getResources().getString(R.string.toast_all_collect_title) + Integer.toString(downloadCount)
 	                    + getResources().getString(R.string.toast_all_collect_final));
         	}else{
-        		Toast.makeText(DownloadActivity.this, "資料下載中,請稍等", Toast.LENGTH_SHORT).show();
+        		Toast.makeText(DownloadActivity.this, getResources().getString(R.string.toast_downloading_wait), Toast.LENGTH_SHORT).show();
         	}
             break;
         case ID_SELECT_NONE: // response
@@ -155,7 +155,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
 	            downLoadCountText.setText(getResources().getString(R.string.toast_all_collect_title) + Integer.toString(downloadCount)
 	                    + getResources().getString(R.string.toast_all_collect_final));
         	}else{
-        		Toast.makeText(DownloadActivity.this, "資料下載中,請稍等", Toast.LENGTH_SHORT).show();
+        		Toast.makeText(DownloadActivity.this, getResources().getString(R.string.toast_downloading_wait), Toast.LENGTH_SHORT).show();
         	}
             break;
         }
