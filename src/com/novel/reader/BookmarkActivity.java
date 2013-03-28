@@ -1,4 +1,4 @@
-package com.android.novel.reader;
+package com.novel.reader;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -33,13 +33,13 @@ import com.adwhirl.AdWhirlLayout;
 import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
-import com.android.novel.reader.api.NovelAPI;
-import com.android.novel.reader.api.Setting;
-import com.android.novel.reader.entity.Bookmark;
 import com.google.ads.AdView;
 import com.ifixit.android.sectionheaders.Section;
 import com.ifixit.android.sectionheaders.SectionHeadersAdapter;
 import com.ifixit.android.sectionheaders.SectionListView;
+import com.novel.reader.api.NovelAPI;
+import com.novel.reader.api.Setting;
+import com.novel.reader.entity.Bookmark;
 import com.taiwan.imageload.ImageLoader;
 
 public class BookmarkActivity extends SherlockActivity implements AdWhirlInterface {
@@ -80,8 +80,6 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
 
         ab.setDisplayHomeAsUpEnabled(true);
 
-        new LoadDataTask().execute();
-
         settings = getSharedPreferences(Setting.keyPref, 0);
         alertDeleteBookmark = settings.getBoolean(alertKey, true);
 
@@ -97,6 +95,12 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
 
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new LoadDataTask().execute();
     }
 
     @Override

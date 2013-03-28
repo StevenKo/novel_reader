@@ -1,4 +1,4 @@
-package com.android.novel.reader.api;
+package com.novel.reader.api;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,11 +19,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.android.novel.db.SQLiteNovel;
-import com.android.novel.reader.entity.Article;
-import com.android.novel.reader.entity.Bookmark;
-import com.android.novel.reader.entity.Category;
-import com.android.novel.reader.entity.Novel;
+import com.novel.db.SQLiteNovel;
+import com.novel.reader.entity.Article;
+import com.novel.reader.entity.Bookmark;
+import com.novel.reader.entity.Category;
+import com.novel.reader.entity.Novel;
 
 public class NovelAPI {
 
@@ -44,6 +44,11 @@ public class NovelAPI {
     public static ArrayList<Bookmark> getAllBookmarks(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         return db.getAllBookmarks();
+    }
+
+    public static Bookmark getNovelBookmark(int novel_id, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.getNovelBookmark(novel_id);
     }
 
     public static boolean updateBookmark(Bookmark bookmark, Context context) {
@@ -274,7 +279,8 @@ public class NovelAPI {
         if (db.isArticleExists(article.getId())) {
             Article articleFromDB = db.getArticle(article.getId());
             if (articleFromDB.getText().length() > 0)
-                return articleFromDB;
+                articleFromDB.setText(articleFromDB.getText() + "\n");
+            return articleFromDB;
         }
 
         String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
@@ -284,7 +290,7 @@ public class NovelAPI {
             try {
                 JSONObject nObject;
                 nObject = new JSONObject(message.toString());
-                String text = nObject.getString("text");
+                String text = nObject.getString("text") + "\n";
                 article.setText(text);
 
             } catch (JSONException e) {

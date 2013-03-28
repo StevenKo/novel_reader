@@ -1,13 +1,5 @@
 package com.kosbrother.fragments;
 
-import com.android.novel.reader.BookmarkActivity;
-import com.android.novel.reader.ClassicNovelsActivity;
-import com.android.novel.reader.MyNovelActivity;
-import com.android.novel.reader.R;
-import com.android.novel.reader.SettingActivity;
-import com.android.novel.reader.R.id;
-import com.android.novel.reader.R.layout;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +8,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import com.novel.reader.BookmarkActivity;
+import com.novel.reader.ClassicNovelsActivity;
+import com.novel.reader.MyNovelActivity;
+import com.novel.reader.R;
+import com.novel.reader.SettingActivity;
 
 public final class MyNovelFragment extends Fragment {
 
@@ -70,48 +68,46 @@ public final class MyNovelFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        
+
         myBookcase.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Intent intent = new Intent(getActivity(), MyNovelActivity.class);
-            	startActivity(intent);
+                Intent intent = new Intent(getActivity(), MyNovelActivity.class);
+                startActivity(intent);
             }
         });
-        
+
         mySetting.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Intent intent = new Intent(getActivity(), SettingActivity.class);
-            	startActivity(intent);
+                Intent intent = new Intent(getActivity(), SettingActivity.class);
+                startActivity(intent);
             }
         });
-        
+
         classicKongFu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Intent intent = new Intent(getActivity(), ClassicNovelsActivity.class);
-            	Bundle bundle = new Bundle();
+                Intent intent = new Intent(getActivity(), ClassicNovelsActivity.class);
+                Bundle bundle = new Bundle();
                 bundle.putString("ClassTitle", "經典武俠");
                 bundle.putInt("ClassicId", 0);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
-        
+
         classicNovel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Intent intent = new Intent(getActivity(), ClassicNovelsActivity.class);
-            	Bundle bundle = new Bundle();
+                Intent intent = new Intent(getActivity(), ClassicNovelsActivity.class);
+                Bundle bundle = new Bundle();
                 bundle.putString("ClassTitle", "經典小說");
                 bundle.putInt("ClassicId", 1);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
-        
-        
 
     }
 

@@ -61,8 +61,6 @@ package com.kosbrother.tool;
  * limitations under the License.
  */
 
-import com.android.novel.reader.R;
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -85,149 +83,150 @@ import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 
+import com.novel.reader.R;
+
 /**
  * Helper class for AbsListView to draw and control the Fast Scroll thumb
  */
 public class FastScroller {
-   
+
     // Minimum number of pages to justify showing a fast scroll thumb
-    private static int MIN_PAGES = 4;
+    private static int        MIN_PAGES      = 4;
     // Scroll thumb not showing
-    private static final int STATE_NONE = 0;
+    private static final int  STATE_NONE     = 0;
     // Not implemented yet - fade-in transition
-    private static final int STATE_ENTER = 1;
+    private static final int  STATE_ENTER    = 1;
     // Scroll thumb visible and moving along with the scrollbar
-    private static final int STATE_VISIBLE = 2;
+    private static final int  STATE_VISIBLE  = 2;
     // Scroll thumb being dragged by user
-    private static final int STATE_DRAGGING = 3;
+    private static final int  STATE_DRAGGING = 3;
     // Scroll thumb fading out due to inactivity timeout
-    private static final int STATE_EXIT = 4;
-    
-    private Drawable mThumbDrawable;
-    private Drawable mOverlayDrawable;
+    private static final int  STATE_EXIT     = 4;
 
-    private int mThumbH;
-    private int mThumbW;
-    private int mThumbY;
+    private Drawable          mThumbDrawable;
+    private Drawable          mOverlayDrawable;
 
-    private RectF mOverlayPos;
-    private int mOverlaySize = 104;
+    private int               mThumbH;
+    private int               mThumbW;
+    private int               mThumbY;
 
-    private AbsListView mList;
-    private boolean mScrollCompleted;
-    private int mVisibleItem;
-    private TextPaint mPaint;
-    private int mListOffset;
-    private int mItemCount = -1;
-    private boolean mLongList;
-    
-    private Object [] mSections;
-    private String mSectionText;
-    private boolean mDrawOverlay;
-    private ScrollFade mScrollFade;
-    
-    private int mState;
-    
-    private Handler mHandler = new Handler();
-    
-    private BaseAdapter mListAdapter;
-    private SectionIndexer mSectionIndexer;
+    private RectF             mOverlayPos;
+    private final int         mOverlaySize   = 104;
 
-    private boolean mChangedBounds;
-    
+    private final AbsListView mList;
+    private boolean           mScrollCompleted;
+    private int               mVisibleItem;
+    private TextPaint         mPaint;
+    private int               mListOffset;
+    private int               mItemCount     = -1;
+    private boolean           mLongList;
+
+    private Object[]          mSections;
+    private String            mSectionText;
+    private boolean           mDrawOverlay;
+    private ScrollFade        mScrollFade;
+
+    private int               mState;
+
+    private final Handler     mHandler       = new Handler();
+
+    private BaseAdapter       mListAdapter;
+    private SectionIndexer    mSectionIndexer;
+
+    private boolean           mChangedBounds;
+
     public FastScroller(Context context, AbsListView listView) {
         mList = listView;
         init(context);
     }
 
     public void setState(int state) {
-    	
-    	System.out.println("State: " + state);
+
+        System.out.println("State: " + state);
         switch (state) {
-            case STATE_NONE:
-                mHandler.removeCallbacks(mScrollFade);
-                mList.invalidate();
-                break;
-            case STATE_VISIBLE:
-                if (mState != STATE_VISIBLE) { // Optimization
-                    resetThumbPos();
-                }
-                // Fall through
-            case STATE_DRAGGING:
-                mHandler.removeCallbacks(mScrollFade);
-                break;
-            case STATE_EXIT:
-                int viewWidth = mList.getWidth();
-                mList.invalidate(viewWidth - mThumbW, mThumbY, viewWidth, mThumbY + mThumbH);
-                break;
+        case STATE_NONE:
+            mHandler.removeCallbacks(mScrollFade);
+            mList.invalidate();
+            break;
+        case STATE_VISIBLE:
+            if (mState != STATE_VISIBLE) { // Optimization
+                resetThumbPos();
+            }
+            // Fall through
+        case STATE_DRAGGING:
+            mHandler.removeCallbacks(mScrollFade);
+            break;
+        case STATE_EXIT:
+            int viewWidth = mList.getWidth();
+            mList.invalidate(viewWidth - mThumbW, mThumbY, viewWidth, mThumbY + mThumbH);
+            break;
         }
         mState = state;
     }
-    
+
     public int getState() {
         return mState;
     }
-    
+
     private void resetThumbPos() {
         final int viewWidth = mList.getWidth();
         // Bounds are always top right. Y coordinate get's translated during draw
         mThumbDrawable.setBounds(viewWidth - mThumbW, 0, viewWidth, mThumbH);
         mThumbDrawable.setAlpha(ScrollFade.ALPHA_MAX);
     }
-    
+
     private void useThumbDrawable(Drawable drawable) {
         mThumbDrawable = drawable;
-        mThumbW = mOverlaySize *3/4 ; //64; //mCurrentThumb.getIntrinsicWidth();
-        mThumbH = mOverlaySize *3/4; //52; //mCurrentThumb.getIntrinsicHeight();
+        mThumbW = mOverlaySize * 3 / 4; // 64; //mCurrentThumb.getIntrinsicWidth();
+        mThumbH = mOverlaySize * 3 / 4; // 52; //mCurrentThumb.getIntrinsicHeight();
         mChangedBounds = true;
     }
 
     private void init(Context context) {
         // Get both the scrollbar states drawables
         final Resources res = context.getResources();
-        useThumbDrawable(res.getDrawable( R.drawable.scroll_icon));
-        
-        mOverlayDrawable = res.getDrawable( R.drawable.scroll_line);
-        
+        useThumbDrawable(res.getDrawable(R.drawable.scroll_icon));
+
+        mOverlayDrawable = res.getDrawable(R.drawable.scroll_line);
+
         mScrollCompleted = true;
 
         getSections();
-        
+
         mOverlayPos = new RectF();
         mScrollFade = new ScrollFade();
         mPaint = new TextPaint();
         mPaint.setAntiAlias(true);
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(mOverlaySize / 3);
-        TypedArray ta = context.getTheme().obtainStyledAttributes(new int[] { 
-                android.R.attr.textColorPrimary });
+        TypedArray ta = context.getTheme().obtainStyledAttributes(new int[] { android.R.attr.textColorPrimary });
         ColorStateList textColor = ta.getColorStateList(ta.getIndex(0));
         int textColorNormal = textColor.getDefaultColor();
         mPaint.setColor(textColorNormal);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        
+
         mState = STATE_NONE;
 
         // Send a fake onSizeChanged so that overlay position is correct if
         // this is called after Activity is stable
         final int w = mList.getWidth();
         final int h = mList.getHeight();
-        onSizeChanged(w,h,w,h);
+        onSizeChanged(w, h, w, h);
     }
-    
+
     void stop() {
         setState(STATE_NONE);
         // No need for these any more.
         mOverlayDrawable = null;
         mThumbDrawable = null;
     }
-    
+
     boolean isVisible() {
         return !(mState == STATE_NONE);
     }
-    
+
     public void draw(final Canvas canvas) {
-        
+
         if (mState == STATE_NONE) {
             // No need to draw anything
             return;
@@ -260,14 +259,13 @@ public class FastScroller {
             final RectF rectF = mOverlayPos;
             final String text = TextUtils.ellipsize(mSectionText, paint, (mOverlayPos.right - mOverlayPos.left) * 0.8f, TextUtils.TruncateAt.END).toString();
             canvas.drawText(text, (int) (rectF.left + rectF.right) / 2,
-            					  // Base of text at: (middle) + (half text height) - descent : so it is vertically centred
-                    			  (int) (rectF.bottom + rectF.top) / 2 + mOverlaySize / 6 - descent, 
-                    			  paint);
+            // Base of text at: (middle) + (half text height) - descent : so it is vertically centred
+                    (int) (rectF.bottom + rectF.top) / 2 + mOverlaySize / 6 - descent, paint);
         } else if (mState == STATE_EXIT) {
             if (alpha == 0) { // Done with exit
                 setState(STATE_NONE);
             } else {
-                mList.invalidate(viewWidth - mThumbW, y, viewWidth, y + mThumbH);            
+                mList.invalidate(viewWidth - mThumbW, y, viewWidth, y + mThumbH);
             }
         }
     }
@@ -278,8 +276,8 @@ public class FastScroller {
         }
         final RectF pos = mOverlayPos;
         // Original: width was equal to height, controlled by mOverlaySize.
-        //    pos.left = (w - mOverlaySize) / 2;
-        //    pos.right = pos.left + mOverlaySize;
+        // pos.left = (w - mOverlaySize) / 2;
+        // pos.right = pos.left + mOverlaySize;
         //
         // Now, Make it 75% of total available space
         pos.left = (w / 8);
@@ -287,13 +285,11 @@ public class FastScroller {
         pos.top = h / 10; // 10% from top
         pos.bottom = pos.top + mOverlaySize;
         if (mOverlayDrawable != null) {
-            mOverlayDrawable.setBounds((int) pos.left, (int) pos.top,
-                (int) pos.right, (int) pos.bottom);
+            mOverlayDrawable.setBounds((int) pos.left, (int) pos.top, (int) pos.right, (int) pos.bottom);
         }
     }
-    
-    void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, 
-            int totalItemCount) {
+
+    void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         // Are there enough pages to require fast scroll? Recompute only if total count changes
         if (mItemCount != totalItemCount && visibleItemCount > 0) {
             mItemCount = totalItemCount;
@@ -305,9 +301,8 @@ public class FastScroller {
             }
             return;
         }
-        if (totalItemCount - visibleItemCount > 0 && mState != STATE_DRAGGING ) {
-            mThumbY = ((mList.getHeight() - mThumbH) * firstVisibleItem) 
-                    / (totalItemCount - visibleItemCount);
+        if (totalItemCount - visibleItemCount > 0 && mState != STATE_DRAGGING) {
+            mThumbY = ((mList.getHeight() - mThumbH) * firstVisibleItem) / (totalItemCount - visibleItemCount);
             if (mChangedBounds) {
                 resetThumbPos();
                 mChangedBounds = false;
@@ -328,11 +323,11 @@ public class FastScroller {
         Adapter adapter = mList.getAdapter();
         mSectionIndexer = null;
         if (adapter instanceof HeaderViewListAdapter) {
-            mListOffset = ((HeaderViewListAdapter)adapter).getHeadersCount();
-            adapter = ((HeaderViewListAdapter)adapter).getWrappedAdapter();
+            mListOffset = ((HeaderViewListAdapter) adapter).getHeadersCount();
+            adapter = ((HeaderViewListAdapter) adapter).getWrappedAdapter();
         }
         if (mList instanceof ExpandableListView) {
-            ExpandableListAdapter expAdapter = ((ExpandableListView)mList).getExpandableListAdapter();
+            ExpandableListAdapter expAdapter = ((ExpandableListView) mList).getExpandableListAdapter();
             if (expAdapter instanceof SectionIndexer) {
                 mSectionIndexer = (SectionIndexer) expAdapter;
                 mListAdapter = (BaseAdapter) adapter;
@@ -343,7 +338,7 @@ public class FastScroller {
                 mListAdapter = (BaseAdapter) adapter;
                 mSectionIndexer = (SectionIndexer) adapter;
                 mSections = mSectionIndexer.getSections();
-                
+
             } else {
                 mListAdapter = (BaseAdapter) adapter;
                 mSections = new String[] { " " };
@@ -351,32 +346,31 @@ public class FastScroller {
         }
     }
 
-	private void scrollTo(float position) {
-		int count = mList.getCount();
-		mScrollCompleted = false;
-		float fThreshold = (1.0f / count) / 8;
-		final Object[] sections = mSections;
-		int sectionIndex;
+    private void scrollTo(float position) {
+        int count = mList.getCount();
+        mScrollCompleted = false;
+        float fThreshold = (1.0f / count) / 8;
+        final Object[] sections = mSections;
+        int sectionIndex;
 
-		int index = (int) (position * count);
-		if (mList instanceof ListView) { // This INCLUDES ExpandableListView
-			((ListView) mList).setSelectionFromTop(index + mListOffset, 0);
-		} else {
-			mList.setSelection(index + mListOffset);
-		}
-		if (sections != null && sections.length > 1) {
-			sectionIndex = mSectionIndexer.getSectionForPosition(index);
-		} else
-			sectionIndex = -1;
+        int index = (int) (position * count);
+        if (mList instanceof ListView) { // This INCLUDES ExpandableListView
+            ((ListView) mList).setSelectionFromTop(index + mListOffset, 0);
+        } else {
+            mList.setSelection(index + mListOffset);
+        }
+        if (sections != null && sections.length > 1) {
+            sectionIndex = mSectionIndexer.getSectionForPosition(index);
+        } else
+            sectionIndex = -1;
 
-		if (sectionIndex >= 0) {
-			String text = mSectionText = sections[sectionIndex].toString();
-			mDrawOverlay = (text.length() != 1 || text.charAt(0) != ' ')
-					&& sectionIndex < sections.length;
-		} else {
-			mDrawOverlay = false;
-		}
-	}
+        if (sectionIndex >= 0) {
+            String text = mSectionText = sections[sectionIndex].toString();
+            mDrawOverlay = (text.length() != 1 || text.charAt(0) != ' ') && sectionIndex < sections.length;
+        } else {
+            mDrawOverlay = false;
+        }
+    }
 
     private void cancelFling() {
         // Cancel the list fling
@@ -384,11 +378,10 @@ public class FastScroller {
         mList.onTouchEvent(cancelFling);
         cancelFling.recycle();
     }
-    
+
     boolean onInterceptTouchEvent(MotionEvent ev) {
         if (mState > STATE_NONE && ev.getAction() == MotionEvent.ACTION_DOWN) {
-            if (ev.getX() > mList.getWidth() - mThumbW && ev.getY() >= mThumbY &&
-                    ev.getY() <= mThumbY + mThumbH) {
+            if (ev.getX() > mList.getWidth() - mThumbW && ev.getY() >= mThumbY && ev.getY() <= mThumbY + mThumbH) {
                 setState(STATE_DRAGGING);
                 return true;
             }
@@ -401,10 +394,8 @@ public class FastScroller {
             return false;
         }
         if (me.getAction() == MotionEvent.ACTION_DOWN) {
-            if (me.getX() > mList.getWidth() - mThumbW
-                    && me.getY() >= mThumbY 
-                    && me.getY() <= mThumbY + mThumbH) {
-                
+            if (me.getX() > mList.getWidth() - mThumbW && me.getY() >= mThumbY && me.getY() <= mThumbY + mThumbH) {
+
                 setState(STATE_DRAGGING);
                 if (mListAdapter == null && mList != null) {
                     getSections();
@@ -444,20 +435,20 @@ public class FastScroller {
         }
         return false;
     }
-    
+
     public class ScrollFade implements Runnable {
-        
-        long mStartTime;
-        long mFadeDuration;
-        static final int ALPHA_MAX = 208;
+
+        long              mStartTime;
+        long              mFadeDuration;
+        static final int  ALPHA_MAX     = 208;
         static final long FADE_DURATION = 200;
-        
+
         void startFade() {
             mFadeDuration = FADE_DURATION;
             mStartTime = SystemClock.uptimeMillis();
             setState(STATE_EXIT);
         }
-        
+
         int getAlpha() {
             if (getState() != STATE_EXIT) {
                 return ALPHA_MAX;
@@ -467,17 +458,17 @@ public class FastScroller {
             if (now > mStartTime + mFadeDuration) {
                 alpha = 0;
             } else {
-                alpha = (int) (ALPHA_MAX - ((now - mStartTime) * ALPHA_MAX) / mFadeDuration); 
+                alpha = (int) (ALPHA_MAX - ((now - mStartTime) * ALPHA_MAX) / mFadeDuration);
             }
             return alpha;
         }
-        
+
         public void run() {
             if (getState() != STATE_EXIT) {
                 startFade();
                 return;
             }
-            
+
             if (getAlpha() > 0) {
                 mList.invalidate();
             } else {

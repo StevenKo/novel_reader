@@ -1,4 +1,4 @@
-package com.android.novel.reader;
+package com.novel.reader;
 
 import java.util.ArrayList;
 
@@ -29,45 +29,43 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.adwhirl.AdWhirlLayout;
+import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
-import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
-import com.android.novel.reader.api.NovelAPI;
-import com.android.novel.reader.entity.Novel;
 import com.google.ads.AdView;
-import com.kosbrother.tool.DetectScrollView.DetectScrollViewListener;
+import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.ImageLoader;
 
-public class SearchActivity extends SherlockListActivity implements AdWhirlInterface{
-	
-	private static final int ID_SETTING = 0;
-    private static final int ID_RESPONSE = 1;
-    private static final int ID_ABOUT_US = 2;
-    private static final int ID_GRADE = 3;
-    private static final int ID_SEARCH = 5;
-	
-    private Bundle           mBundle;
-    private String           keyword;
-    private ArrayList<Novel> novels;
-    private ListView         novelListView;
-    private MenuItem         item;
-    
-    private LinearLayout layoutNoSearch;
+public class SearchActivity extends SherlockListActivity implements AdWhirlInterface {
+
+    private static final int    ID_SETTING  = 0;
+    private static final int    ID_RESPONSE = 1;
+    private static final int    ID_ABOUT_US = 2;
+    private static final int    ID_GRADE    = 3;
+    private static final int    ID_SEARCH   = 5;
+
+    private Bundle              mBundle;
+    private String              keyword;
+    private ArrayList<Novel>    novels;
+    private ListView            novelListView;
+    private MenuItem            item;
+
+    private LinearLayout        layoutNoSearch;
     private AlertDialog.Builder aboutUsDialog;
-    private String adWhirlKey = "215f895eb71748e7ba4cb3a5f20b061e";
+    private final String        adWhirlKey  = "215f895eb71748e7ba4cb3a5f20b061e";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_search);
-        layoutNoSearch = (LinearLayout) findViewById (R.id.layout_no_search);
+        layoutNoSearch = (LinearLayout) findViewById(R.id.layout_no_search);
 
         final ActionBar ab = getSupportActionBar();
         mBundle = this.getIntent().getExtras();
@@ -95,21 +93,21 @@ public class SearchActivity extends SherlockListActivity implements AdWhirlInter
         });
 
         ab.setDisplayHomeAsUpEnabled(true);
-        
+
         setAboutUsDialog();
         new LoadDataTask().execute();
-        
-        try{
-			Display display = getWindowManager().getDefaultDisplay(); 
-			int width = display.getWidth();  // deprecated
-			int height = display.getHeight();  // deprecated
-		
-			if (width > 320){
-				setAdAdwhirl();
-			}
-		}catch(Exception e){
-			
-		}
+
+        try {
+            Display display = getWindowManager().getDefaultDisplay();
+            int width = display.getWidth(); // deprecated
+            int height = display.getHeight(); // deprecated
+
+            if (width > 320) {
+                setAdAdwhirl();
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     private void fetchData() {
@@ -176,45 +174,46 @@ public class SearchActivity extends SherlockListActivity implements AdWhirlInter
         // Inflate the menu; this adds items to the action bar if it is present.
         // getMenuInflater().inflate(R.menu.activity_main, menu);
 
-    	menu.add(0, ID_SETTING, 0, getResources().getString(R.string.menu_settings)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0, ID_SETTING, 0, getResources().getString(R.string.menu_settings)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
-        item = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            private EditText search;
+        item = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse)
+                .setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                    private EditText search;
 
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                search = (EditText) item.getActionView();
-                search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-                search.setInputType(InputType.TYPE_CLASS_TEXT);
-                search.requestFocus();
-                search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                            keyword = v.getText().toString();
-                            new LoadDataTask().execute();
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        search = (EditText) item.getActionView();
+                        search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+                        search.setInputType(InputType.TYPE_CLASS_TEXT);
+                        search.requestFocus();
+                        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                            @Override
+                            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                                    keyword = v.getText().toString();
+                                    new LoadDataTask().execute();
 
-                            return true;
-                        }
+                                    return true;
+                                }
 
-                        return false;
+                                return false;
+                            }
+                        });
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(null, InputMethodManager.SHOW_IMPLICIT);
+                        return true;
                     }
-                });
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(null, InputMethodManager.SHOW_IMPLICIT);
-                return true;
-            }
 
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                // TODO Auto-generated method stub
-                search.setText("");
-                return true;
-            }
-        }).setActionView(R.layout.collapsible_edittext);
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        // TODO Auto-generated method stub
+                        search.setText("");
+                        return true;
+                    }
+                }).setActionView(R.layout.collapsible_edittext);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
         return true;
@@ -226,30 +225,30 @@ public class SearchActivity extends SherlockListActivity implements AdWhirlInter
         int itemId = item.getItemId();
         switch (itemId) {
         case android.R.id.home:
-	        finish();
-	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
-	        break;
-	    case ID_SETTING: // setting
-	    		Intent intent = new Intent(SearchActivity.this, SettingActivity.class);
-	    		startActivity(intent); 
-	        break;
-	    case ID_RESPONSE: // response
-	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-	    	emailIntent.setType("plain/text");
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getResources().getString(R.string.respond_mail_address)});
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.respond_mail_title));
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
-	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-			break;
-	    case ID_ABOUT_US: 
-	    	aboutUsDialog.show();
-			break;
-	    case ID_GRADE: 
-	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-			startActivity(browserIntent);
-			break;
-	    case ID_SEARCH: // response
-			break;
+            finish();
+            // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+            break;
+        case ID_SETTING: // setting
+            Intent intent = new Intent(SearchActivity.this, SettingActivity.class);
+            startActivity(intent);
+            break;
+        case ID_RESPONSE: // response
+            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+            emailIntent.setType("plain/text");
+            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] { getResources().getString(R.string.respond_mail_address) });
+            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.respond_mail_title));
+            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            break;
+        case ID_ABOUT_US:
+            aboutUsDialog.show();
+            break;
+        case ID_GRADE:
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+            startActivity(browserIntent);
+            break;
+        case ID_SEARCH: // response
+            break;
         }
         return true;
     }
@@ -290,80 +289,78 @@ public class SearchActivity extends SherlockListActivity implements AdWhirlInter
         @Override
         protected void onPostExecute(String result) {
             progressdialogInit.dismiss();
-            if( novels != null &&  novels.size()!=0){
-            	novelListView.setAdapter(new SearchAdapter(SearchActivity.this, novels));
-            }else{
-            	layoutNoSearch.setVisibility(View.VISIBLE);
+            if (novels != null && novels.size() != 0) {
+                novelListView.setAdapter(new SearchAdapter(SearchActivity.this, novels));
+            } else {
+                layoutNoSearch.setVisibility(View.VISIBLE);
             }
-            try{
-            	item.expandActionView();
-            	EditText search = (EditText) item.getActionView();
-            	search.setText(keyword);
-            }catch(Exception e){
-            	
+            try {
+                item.expandActionView();
+                EditText search = (EditText) item.getActionView();
+                search.setText(keyword);
+            } catch (Exception e) {
+
             }
         }
 
     }
-    
+
     private void setAboutUsDialog() {
-		// TODO Auto-generated method stub
-    	aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string))
-				.setIcon(R.drawable.play_store_icon)
-				.setMessage(getResources().getString(R.string.about_us))
-				.setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						
-					}
-				});
-	}
-    
-private void setAdAdwhirl() {
-		
-		AdWhirlManager.setConfigExpireTimeout(1000 * 60); 
+        // TODO Auto-generated method stub
+        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.play_store_icon)
+                .setMessage(getResources().getString(R.string.about_us))
+                .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+    }
+
+    private void setAdAdwhirl() {
+
+        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
         AdWhirlTargeting.setAge(23);
         AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
         AdWhirlTargeting.setKeywords("online games gaming");
         AdWhirlTargeting.setPostalCode("94123");
         AdWhirlTargeting.setTestMode(false);
-   		
-        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);	
 
-        LinearLayout mainLayout = (LinearLayout)findViewById(R.id.adonView);
-        
-    	adwhirlLayout.setAdWhirlInterface(this);
-	 	 	
-	 	mainLayout.addView(adwhirlLayout);
-		
-		mainLayout.invalidate();
+        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
+
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
+
+        adwhirlLayout.setAdWhirlInterface(this);
+
+        mainLayout.addView(adwhirlLayout);
+
+        mainLayout.invalidate();
     }
 
-	@Override
-	public void adWhirlGeneric() {
-			
-	}
-		
-	public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
-			final float centerX = 320 / 2.0f;
-			final float centerY = 48 / 2.0f;
-			final float zDepth = -0.50f * view.getHeight();
-		
-			Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
-			rotation.setDuration(1000);
-			rotation.setInterpolator(new AccelerateInterpolator());
-			rotation.setAnimationListener(new Animation.AnimationListener() {
-				public void onAnimationStart(Animation animation) {
-				}
-		
-				public void onAnimationEnd(Animation animation) {
-				}
-		
-				public void onAnimationRepeat(Animation animation) {
-				}
-			});
-			view.startAnimation(rotation);
-	}
-   
+    @Override
+    public void adWhirlGeneric() {
+
+    }
+
+    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
+        final float centerX = 320 / 2.0f;
+        final float centerY = 48 / 2.0f;
+        final float zDepth = -0.50f * view.getHeight();
+
+        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
+        rotation.setDuration(1000);
+        rotation.setInterpolator(new AccelerateInterpolator());
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        view.startAnimation(rotation);
+    }
 
 }

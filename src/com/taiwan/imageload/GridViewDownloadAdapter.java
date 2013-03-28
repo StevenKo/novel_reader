@@ -8,15 +8,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.novel.reader.MyDownloadArticleActivity;
-import com.android.novel.reader.R;
-import com.android.novel.reader.entity.Novel;
+import com.novel.reader.MyDownloadArticleActivity;
+import com.novel.reader.R;
+import com.novel.reader.entity.Novel;
 
 public class GridViewDownloadAdapter extends BaseAdapter {
 
@@ -63,8 +63,8 @@ public class GridViewDownloadAdapter extends BaseAdapter {
                 bundle.putInt("NovelId", data.get(position).getId());
                 bundle.putString("NovelName", data.get(position).getName());
                 bundle.putString("NovelAuthor", data.get(position).getAuthor());
-//                bundle.putString("NovelDescription", data.get(position).getDescription());
-//                bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
+                // bundle.putString("NovelDescription", data.get(position).getDescription());
+                // bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
                 bundle.putString("NovelPicUrl", data.get(position).getPic());
                 bundle.putString("NovelArticleNum", data.get(position).getArticleNum());
                 intent.putExtras(bundle);

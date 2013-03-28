@@ -1,4 +1,4 @@
-package com.android.novel.reader.entity;
+package com.novel.reader.entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.android.novel.reader.api;
+package com.novel.reader.api;
 
 import java.io.File;
 import java.net.URLEncoder;
