@@ -250,6 +250,10 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     }
 
     public ArrayList<Article> getArticleDownloadInfo(ArrayList<Article> articles) {
+
+        if (articles.size() == 0)
+            return articles;
+
         HashMap hash = new HashMap();
 
         String idLst = "";
