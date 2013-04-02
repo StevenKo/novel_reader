@@ -244,7 +244,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 .setMessage(getResources().getString(R.string.add_my_bookmark_content)).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        NovelAPI.insertBookmark(new Bookmark(0, myAricle.getNovelId(), myAricle.getId(), yRate, novelName, myAricle.getTitle(), novelPic, true), ArticleActivity.this);
+                        NovelAPI.insertBookmark(new Bookmark(0, myAricle.getNovelId(), myAricle.getId(), yRate, novelName, myAricle.getTitle(), novelPic, false), ArticleActivity.this);
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
