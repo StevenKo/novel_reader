@@ -27,6 +27,7 @@ public class Setting {
 	public final static String keyOpenDownloadPage = "OpenDownloadPage";
 	public final static String keyTextColor= "TextColor";
 	public final static String keyTextBackground = "TextBackground";
+	public final static String keyAppTheme = "AppTheme";
 	
 	public final static int initialTextSize = 20; // textsize in pixel
 	public final static int initialTextLanguage = 0;
@@ -36,6 +37,7 @@ public class Setting {
 	public final static int initialOpenDownloadPage = 0;
 	public final static int initialTextColor = -16777216;
 	public final static int initialTextBackground = -1;
+	public final static int initialAppTheme = 0; // 0 for 亮白, 1 for 灰黑
 	
 	private static final HashMap<String,Integer> initMap = new HashMap<String,Integer>(){
 		{
@@ -47,6 +49,7 @@ public class Setting {
 			put(keyOpenDownloadPage,initialOpenDownloadPage);
 			put(keyTextColor, initialTextColor);
 			put(keyTextBackground, initialTextBackground);
+			put(keyAppTheme, initialAppTheme);
 		}
 	};
 	

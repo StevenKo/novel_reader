@@ -19,6 +19,7 @@
     <string name="article_down">下一篇</string>
     <string name="article_no_up">無上一篇</string>
     <string name="article_no_down">無下一篇</string>
+    <string name="article_no_data">資料錯誤</string>
     
     <string name="setting_text">文字大小:</string>
     <string name="setting_text_preview">文字預覽:小說王</string>
@@ -52,6 +53,7 @@
     <string name="delete_message">是否刪除此小說</string>
     <string name="delete_yes">刪除</string>
     <string name="delete_no">不刪除</string>
+    <string name="delete_articles">删除所選章節</string>
     
     <string name="add_my_bookcase1">加入書櫃</string>
     <string name="add_my_bookcase">已加入我的書櫃</string>

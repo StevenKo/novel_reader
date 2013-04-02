@@ -1,6 +1,7 @@
 package com.novel.reader;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -70,12 +71,15 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private String              novelPic;
     private int                 novelId;
     private int                 yRate;
+    private int 				ariticlePosition;
+    private ArrayList<Integer>	articleIDs;
     // private ProgressDialog progressDialog= null;
     private AlertDialog.Builder aboutUsDialog;
     private final String        adWhirlKey  = "215f895eb71748e7ba4cb3a5f20b061e";
     private ActionBar           ab;
     private LinearLayout        layoutProgress;
     private int                 currentY    = 0;
+    private int                 appTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +97,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         novelPic = mBundle.getString("NovelPic");
         novelId = mBundle.getInt("NovelId");
         yRate = mBundle.getInt("ReadingRate", 0);
+        articleIDs = mBundle.getIntegerArrayList("ArticleIDs");
+        ariticlePosition = mBundle.getInt("ArticlePosition");
 
         ab.setDisplayShowCustomEnabled(true);
         ab.setDisplayShowTitleEnabled(false);
@@ -101,11 +107,19 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         // ab.setTitle(novelName);
         ab.setDisplayHomeAsUpEnabled(true);
-
-        if (downloadBoolean) {
-            myAricle = new Article(articleId, novelId, "", articleTitle, "", true);
-        } else {
-            myAricle = new Article(articleId, novelId, "", articleTitle, "", false);
+        
+        if (articleIDs!=null){
+	        if (downloadBoolean) {
+	            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
+	        } else {
+	            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
+	        }
+        }else{
+        	if (downloadBoolean) {
+	            myAricle = new Article(articleId, novelId, "", articleTitle, "", true);
+	        } else {
+	            myAricle = new Article(articleId, novelId, "", articleTitle, "", false);
+	        }
         }
 
         new DownloadArticleTask().execute();
@@ -173,14 +187,44 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         articleButtonUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                new GetPreviousArticleTask().execute();
+            	
+            	if (articleIDs!=null){
+	            	if(ariticlePosition!=0){
+	            		ariticlePosition = ariticlePosition -1;
+	            		if (downloadBoolean) {
+	                        myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
+	                    } else {
+	                        myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
+	                    }
+	            		new UpdateArticleTask().execute();
+	            	}else{
+	            		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_up), Toast.LENGTH_SHORT).show();
+	            	}            	
+            	}else{
+            		 new GetPreviousArticleTask().execute();
+            	}
             }
         });
 
         articleButtonDown.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                new GetNextArticleTask().execute();
+            	if (articleIDs!=null){
+	            	if(ariticlePosition < articleIDs.size()-1){
+	            		ariticlePosition = ariticlePosition + 1;
+	            		if (downloadBoolean) {
+	                        myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
+	                    } else {
+	                        myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
+	                    }
+	            		new UpdateArticleTask().execute();
+	            	}else{
+	            		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_down), Toast.LENGTH_SHORT).show();
+	            	}
+            	}else{
+            		new GetNextArticleTask().execute();
+            	}
+                
             }
         });
 
@@ -200,7 +244,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 .setMessage(getResources().getString(R.string.add_my_bookmark_content)).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        NovelAPI.insertBookmark(new Bookmark(0, novelId, articleId, yRate, novelName, articleTitle, novelPic, false), ArticleActivity.this);
+                        NovelAPI.insertBookmark(new Bookmark(0, myAricle.getNovelId(), myAricle.getId(), yRate, novelName, myAricle.getTitle(), novelPic, true), ArticleActivity.this);
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
@@ -313,6 +357,57 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             }
 
             myAricle.setNovelId(novelId);
+
+            new GetLastPositionTask().execute();
+
+        }
+    }
+    
+    private class UpdateArticleTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            layoutProgress.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Object doInBackground(Object... params) {
+        	if (myAricle != null) {
+                theGottenArticle = NovelAPI.getArticle(myAricle, ArticleActivity.this);
+                if (theGottenArticle != null) {
+                    myAricle = theGottenArticle;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+
+            super.onPostExecute(result);
+            layoutProgress.setVisibility(View.GONE);
+            if (theGottenArticle != null) {
+                if (textLanguage == 1) {
+                    String text = "";
+                    try {
+                        text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getText());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    articleTextView.setText(text);
+                } else {
+                    articleTextView.setText(myAricle.getText());
+                }
+
+                myAricle.setNovelId(novelId);
+                articleScrollView.fullScroll(ScrollView.FOCUS_UP);
+                setActionBarTitle(myAricle.getTitle());
+                articlePercent.setText("0%");
+
+            } else {
+                Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_data), Toast.LENGTH_SHORT).show();
+            }
 
             new GetLastPositionTask().execute();
 
@@ -472,7 +567,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         readingDirection = Setting.getSetting(Setting.keyReadingDirection, ArticleActivity.this);
         clickToNextPage = Setting.getSetting(Setting.keyClickToNextPage, ArticleActivity.this);
         stopSleeping = Setting.getSetting(Setting.keyStopSleeping, ArticleActivity.this);
-
+//        appTheme = Setting.getSetting(Setting.keyAppTheme, ArticleActivity.this);
+        
         articleTextView.setTextSize(textSize);
         articleTextView.setTextColor(textColor);
         articleScrollView.setBackgroundColor(textBackground);

@@ -34,11 +34,13 @@ public class SettingActivity extends SherlockFragmentActivity {
     private RadioGroup          directionRadioGroup;
     private RadioGroup          tapRadioGroup;
     private RadioGroup          stopSleepRadioGroup;
+//    private RadioGroup          themeRadioGroup;
     private TextView            textPreView;
     private ImageView 			imageviewTextColor;
     private ImageView 			imageviewTextBackground;
     private int 				textColor;
     private int 				textBackground;
+    private int 				appTheme;
 
     private AlertDialog.Builder finishDialog;
 
@@ -54,6 +56,7 @@ public class SettingActivity extends SherlockFragmentActivity {
         stopSleeping = Setting.getSetting(Setting.keyStopSleeping, SettingActivity.this);
         textColor = Setting.getSetting(Setting.keyTextColor, SettingActivity.this);
         textBackground = Setting.getSetting(Setting.keyTextBackground, SettingActivity.this);
+        appTheme = Setting.getSetting(Setting.keyAppTheme, SettingActivity.this);
         
         setViews();
 
@@ -70,6 +73,7 @@ public class SettingActivity extends SherlockFragmentActivity {
         directionRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_reading_direction);
         tapRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_tap);
         stopSleepRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_stop_sleep);
+//        themeRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_theme);
         textPreView = (TextView) findViewById(R.id.text_preview);
         imageviewTextColor = (ImageView) findViewById(R.id.imageview_textcolor);
         imageviewTextBackground = (ImageView) findViewById(R.id.imageview_textbackground);
@@ -85,6 +89,7 @@ public class SettingActivity extends SherlockFragmentActivity {
         ((RadioButton) directionRadioGroup.getChildAt(readingDirection)).setChecked(true);
         ((RadioButton) tapRadioGroup.getChildAt(clickToNextPage)).setChecked(true);
         ((RadioButton) stopSleepRadioGroup.getChildAt(textLanguage)).setChecked(true);
+//        ((RadioButton) themeRadioGroup.getChildAt(appTheme)).setChecked(true);
         
         imageviewTextColor.setOnClickListener(new OnClickListener() {
             @Override
@@ -204,6 +209,7 @@ public class SettingActivity extends SherlockFragmentActivity {
                         saveRadioGroupValue(directionRadioGroup, Setting.keyReadingDirection);
                         saveRadioGroupValue(tapRadioGroup, Setting.keyClickToNextPage);
                         saveRadioGroupValue(stopSleepRadioGroup, Setting.keyStopSleeping);
+//                        saveRadioGroupValue(themeRadioGroup, Setting.keyAppTheme);
                         finish();
 
                     }

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,7 +49,15 @@ public class GridViewDownloadAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         // if (convertView == null)
-        vi = inflater.inflate(R.layout.item_gridview_novel, null);
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int width = display.getWidth(); // deprecated
+        int height = display.getHeight(); // deprecated
+
+        if (width > 480) {
+            vi = inflater.inflate(R.layout.item_gridview_novel, null);
+        } else {
+            vi = inflater.inflate(R.layout.item_gridview_novel_small, null);
+        }
 
         vi.setClickable(true);
         vi.setFocusable(true);

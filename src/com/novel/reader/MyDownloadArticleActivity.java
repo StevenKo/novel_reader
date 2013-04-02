@@ -19,8 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.adwhirl.AdWhirlLayout;
 import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
@@ -28,14 +30,14 @@ import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.google.ads.AdView;
 import com.kosbrother.tool.ChildArticle;
+import com.kosbrother.tool.ExpandListDownLoadReadAdapter;
 import com.kosbrother.tool.Group;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Novel;
-import com.taiwan.imageload.ExpandListAdapter;
 import com.taiwan.imageload.ImageLoader;
 
-public class MyDownloadArticleActivity extends SherlockFragmentActivity implements AdWhirlInterface {
+public class MyDownloadArticleActivity extends SherlockActivity implements AdWhirlInterface {
 
     private static final int                          ID_SETTING         = 0;
     private static final int                          ID_RESPONSE        = 1;
@@ -59,17 +61,25 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
     private ExpandableListView                        novelListView;
     private Novel                                     theNovel;
 
-    private final TreeMap<String, ArrayList<Article>> myData             = new TreeMap<String, ArrayList<Article>>();
-    private final ArrayList<Group>                    mGroups            = new ArrayList<Group>();
-    private AlertDialog.Builder                       deleteDialog;
-    private AlertDialog.Builder                       aboutUsDialog;
+    private TreeMap<String, ArrayList<Article>> 	  myData             = new TreeMap<String, ArrayList<Article>>();
+    private static ArrayList<Group>             	  mGroups            = new ArrayList<Group>();
+    private AlertDialog.Builder                 	  deleteDialog;
+    private AlertDialog.Builder                 	  aboutUsDialog;
     private final String                              adWhirlKey         = "215f895eb71748e7ba4cb3a5f20b061e";
 
+    private static SherlockActivity 				  myActivity;
+    private static ActionMode                         myMode;
+    private static ExpandListDownLoadReadAdapter      mAdapter;
+    private static boolean                            actionModeShowing = false;
+
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_novel_downloaded);
-
+        
+        myActivity = MyDownloadArticleActivity.this;
+        
         final ActionBar ab = getSupportActionBar();
         mBundle = this.getIntent().getExtras();
         novelName = mBundle.getString("NovelName");
@@ -193,16 +203,11 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
         protected void onPostExecute(Object result) {
 
             super.onPostExecute(result);
-            novelLayoutProgress.setVisibility(View.GONE);
-            // if(articleList!= null && articleList.size()!= 0){
-            //
-            // ExpandListAdapter mAdapter = new ExpandListAdapter( MyDownloadArticleActivity.this, mGroups, theNovel);
-            // // ListArticleAdapter mAdapter = new ListArticleAdapter( MyDownloadArticleActivity.this, articleList, novelName);
-            // novelListView.setAdapter(mAdapter);
-            //
-            // }
+            
+            myData     = new TreeMap<String, ArrayList<Article>>();
+            mGroups    = new ArrayList<Group>();
 
-            if (articleList != null && articleList.size() != 0) {
+            if (articleList != null ) {
 
                 // use HashMap || TreeMap to make a parent key
                 for (int i = 0; i < articleList.size(); i++) {
@@ -225,14 +230,17 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
                     }
                 }
 
-                ExpandListAdapter mAdapter = new ExpandListAdapter(MyDownloadArticleActivity.this, mGroups, theNovel, -1);
+//                ExpandListAdapter mAdapter = new ExpandListAdapter(MyDownloadArticleActivity.this, mGroups, theNovel, -1);
+                mAdapter = new ExpandListDownLoadReadAdapter(MyDownloadArticleActivity.this, mGroups, theNovel);
+               
                 novelListView.setAdapter(mAdapter);
 
             }
 
             String txtCount = Integer.toString(articleList.size());
             downloadedCount.setText("共 " + txtCount + " 個下載");
-
+            
+            novelLayoutProgress.setVisibility(View.GONE);
         }
     }
 
@@ -247,6 +255,92 @@ public class MyDownloadArticleActivity extends SherlockFragmentActivity implemen
                     }
                 });
     }
+    
+    public static  ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+	    // Called when the action mode is created; startActionMode() was called	   
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+	      // Inflate a menu resource providing context menu items
+	      MenuInflater inflater = mode.getMenuInflater();
+	      // Assumes that you have "contexual.xml" menu resources
+	      inflater.inflate(R.menu.contextual, menu);
+	      myMode = mode;
+	      return true;
+	    }
+
+	    // Called each time the action mode is shown. Always called after
+	    // onCreateActionMode, but
+	    // may be called multiple times if the mode is invalidated.	   
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+	      return false; // Return false if nothing is done
+	    }
+
+	    // Called when the user selects a contextual menu item	    
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+	      switch (item.getItemId()) {
+	      case R.id.delete_articles:
+	    	removeArticles();	    	
+	        myMode = mode;
+	        actionModeShowing =false;
+	        myMode.finish();
+	        return true;
+	      default:
+	        return false;
+	      }
+	    }
+		
+		// Called when the user exits the action mode
+		public void onDestroyActionMode(ActionMode mode) {
+//	      mActionMode = null;
+		 
+	    }
+	};
+	  
+	public static void showCallBackAction(){
+		boolean show = checkSelectOrNot();
+		if(show && !actionModeShowing){
+			myActivity.startActionMode(MyDownloadArticleActivity.mActionModeCallback);
+			actionModeShowing = true;
+		}else if(!show){
+			actionModeShowing =false;
+			myMode.finish();
+		}
+	}
+	
+	private static boolean checkSelectOrNot() {
+		for (int i = 0; i < mGroups.size(); i++) {
+        	int groupSize = mGroups.get(i).getChildrenCount();
+            for (int j = groupSize; j > 0; j--) {
+                ChildArticle aChildArticle = mGroups.get(i).getChildItem(j-1);
+                if (aChildArticle.getChecked() && aChildArticle.isDownload()) {
+                	return true;
+                }
+            }
+        }
+		return false;
+	}
+
+	@Override
+	public void onActionModeFinished (ActionMode mode){
+		actionModeShowing =false;
+		new DownloadArticlesTask().execute();
+	}
+	
+	private static void removeArticles() {
+		// TODO Auto-generated method stub
+        for (int i = 0; i < mGroups.size(); i++) {
+        	int groupSize = mGroups.get(i).getChildrenCount();
+            for (int j = groupSize; j > 0; j--) {
+                ChildArticle aChildArticle = mGroups.get(i).getChildItem(j-1);
+                if (aChildArticle.getChecked() && aChildArticle.isDownload()) {
+                	Article theArticle = new Article(aChildArticle.getId(), aChildArticle.getNovelId(), "", aChildArticle.getTitle(), aChildArticle.getSubject(), true);
+                	NovelAPI.removeArticle(theArticle, myActivity);
+                	mGroups.get(i).removeChild(j-1);
+                }
+            }
+        }  
+	}
+	
 
     private void setAdAdwhirl() {
         // TODO Auto-generated method stub

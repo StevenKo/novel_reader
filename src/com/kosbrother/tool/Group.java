@@ -68,4 +68,7 @@ public class Group {
     	return checkCount;
     }
     
+    public void removeChild(int i){
+    	children.remove(i);
+    }
 }

@@ -32,7 +32,7 @@ public final class CategoryNewNovelsFragment extends Fragment {
     private LinearLayout     loadmoreLayout;
     private LinearLayout     noDataLayout;
     private LinearLayout     layoutReload;
-    private static int       id;
+//    private static int       id;
     private Button           buttonReload;
 
     public static CategoryNewNovelsFragment newInstance() {
@@ -161,8 +161,8 @@ public final class CategoryNewNovelsFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-            moreNovels = NovelAPI.getCategoryNovels(id, myPage);
-            if (moreNovels != null) {
+            moreNovels = NovelAPI.getCategoryNovels(CategoryActivity.categoryId, myPage);
+            if (moreNovels != null && moreNovels.size()!=0) {
                 for (int i = 0; i < moreNovels.size(); i++) {
                     novels.add(moreNovels.get(i));
                 }
@@ -178,7 +178,7 @@ public final class CategoryNewNovelsFragment extends Fragment {
 
             loadmoreLayout.setVisibility(View.GONE);
 
-            if (moreNovels != null) {
+            if (moreNovels != null && moreNovels.size()!=0) {
                 myGridViewAdapter.notifyDataSetChanged();
             } else {
                 checkLoad = false;

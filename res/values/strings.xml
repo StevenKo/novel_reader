@@ -19,6 +19,7 @@
     <string name="article_down">下一篇</string>
     <string name="article_no_up">無上一篇</string>
     <string name="article_no_down">無下一篇</string>
+    <string name="article_no_data">資料錯誤</string>
     
     <string name="setting_text">文字大小:</string>
     <string name="setting_text_preview">文字預覽:小說王</string>
@@ -34,6 +35,8 @@
     <string name="setting_select_sleeping">閱讀時停止休眠:</string>
     <string name="setting_sleeping_open">開啟停止休眠</string>
     <string name="setting_sleeping_close">關閉停止休眠</string>
+    <string name="setting_select_text_color">選擇閱讀字體顏色:</string>
+	<string name="setting_select_text_background">選擇閱讀背景顏色:</string>
     
     <string name="title_my_downloading"> 我的下載</string>
     <string name="title_my_bookcase"> 我的書櫃</string>

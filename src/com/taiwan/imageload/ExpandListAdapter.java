@@ -56,7 +56,7 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         final ChildArticle child = theGroups.get(groupPosition).getChildItem(childPosition);
 
@@ -69,8 +69,26 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         vi.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	
+            	
+            	ArrayList<Integer> articleIDs = new ArrayList<Integer>();
+            	
+            	for (int i=0; i< theGroups.size(); i++){
+            		for(int j=0; j< theGroups.get(i).getChildrenCount(); j++){
+            			articleIDs.add(theGroups.get(i).getChildItem(j).getId());
+            		}
+            	}
+            	
+            	int position =0;
+            	for (int i=0; i< groupPosition; i++){
+            		position = position + theGroups.get(i).getChildrenCount();
+            	}
+            	position = position + childPosition;
+            	
                 Intent intent = new Intent(activity, ArticleActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putIntegerArrayList("ArticleIDs", articleIDs);
+                bundle.putInt("ArticlePosition", position);
                 bundle.putInt("ArticleId", child.getId());
                 bundle.putString("ArticleTitle", child.getTitle());
                 bundle.putString("NovelName", theNovel.getName());

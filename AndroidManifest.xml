@@ -4,7 +4,7 @@
     android:versionCode="4"
     android:versionName="1.3" >
 
-    
+<!-- android:theme="@style/Theme.Sherlock.Light.DarkActionBar"     -->
     
     <uses-sdk
         android:minSdkVersion="8"
