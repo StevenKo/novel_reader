@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.ActionMode.Callback;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.novel.reader.ArticleActivity;
 import com.novel.reader.MyDownloadArticleActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Novel;
@@ -48,9 +51,9 @@ public class ExpandListDownLoadReadAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        ChildArticle child = theGroups.get(groupPosition).getChildItem(childPosition);
+        final ChildArticle child = theGroups.get(groupPosition).getChildItem(childPosition);
 
         View vi = convertView;
         vi = inflater.inflate(R.layout.item_expandable_download_child, null);
@@ -59,7 +62,7 @@ public class ExpandListDownLoadReadAdapter extends BaseExpandableListAdapter {
         text.setText(childString);
 
         CheckBox checkBox = (CheckBox) vi.findViewById(R.id.checkbox_child);
-        TextView textDownload = (TextView) vi.findViewById(R.id.text_child_downloaded);
+//      TextView textDownload = (TextView) vi.findViewById(R.id.text_child_downloaded);
 
         // check downloaded or not
 //        Boolean isDownloaded = child.isDownloaded;
@@ -73,7 +76,39 @@ public class ExpandListDownLoadReadAdapter extends BaseExpandableListAdapter {
 
         // 點擊 CheckBox 時，將狀態存起來
         checkBox.setOnClickListener(new Child_CheckBox_Click(Integer.valueOf(groupPosition), Integer.valueOf(childPosition)));
-
+        
+        
+        vi.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {           	
+            	ArrayList<Integer> articleIDs = new ArrayList<Integer>();
+            	
+            	for (int i=0; i< theGroups.size(); i++){
+            		for(int j=0; j< theGroups.get(i).getChildrenCount(); j++){
+            			articleIDs.add(theGroups.get(i).getChildItem(j).getId());
+            		}
+            	}
+            	
+            	int position =0;
+            	for (int i=0; i< groupPosition; i++){
+            		position = position + theGroups.get(i).getChildrenCount();
+            	}
+            	position = position + childPosition;
+            	
+                Intent intent = new Intent(activity, ArticleActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putIntegerArrayList("ArticleIDs", articleIDs);
+                bundle.putInt("ArticlePosition", position);
+                bundle.putInt("ArticleId", child.getId());
+                bundle.putString("ArticleTitle", child.getTitle());
+                bundle.putString("NovelName", theNovel.getName());
+                bundle.putString("NovelPic", theNovel.getPic());
+                bundle.putInt("NovelId", theNovel.getId());
+                intent.putExtras(bundle);
+                activity.startActivity(intent);
+            }
+        });
+        
         return vi;
     }
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,6 +37,7 @@ import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.ImageLoader;
+
 
 public class MyDownloadArticleActivity extends SherlockActivity implements AdWhirlInterface {
 
@@ -71,7 +73,8 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
     private static ActionMode                         myMode;
     private static ExpandListDownLoadReadAdapter      mAdapter;
     private static boolean                            actionModeShowing = false;
-
+    private static boolean							  isDeleteArticles = false;
+    private ProgressDialog progressDialog   = null;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,17 +195,27 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
     }
 
     private class DownloadArticlesTask extends AsyncTask {
-
+    	
+    	@Override  
+        protected void onPreExecute() {   
+    		progressDialog = ProgressDialog.show(MyDownloadArticleActivity.this, "資料處理中...", null);
+        }  
+    	
         @Override
         protected Object doInBackground(Object... params) {
+        	if(isDeleteArticles){
+        		removeArticles();
+        		isDeleteArticles= false;
+        	}
             articleList = NovelAPI.getDownloadedNovelArticles(novelId, false, MyDownloadArticleActivity.this);
             return null;
         }
 
         @Override
         protected void onPostExecute(Object result) {
-
             super.onPostExecute(result);
+            if(progressDialog.isShowing())
+            progressDialog.cancel();
             
             myData     = new TreeMap<String, ArrayList<Article>>();
             mGroups    = new ArrayList<Group>();
@@ -229,7 +242,8 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
                                         .getSubject(), articles.get(j).isDownload()));
                     }
                 }
-
+                
+                reverseMGroups();
 //                ExpandListAdapter mAdapter = new ExpandListAdapter(MyDownloadArticleActivity.this, mGroups, theNovel, -1);
                 mAdapter = new ExpandListDownLoadReadAdapter(MyDownloadArticleActivity.this, mGroups, theNovel);
                
@@ -242,6 +256,22 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
             
             novelLayoutProgress.setVisibility(View.GONE);
         }
+    }
+    
+    private void reverseMGroups() {
+        // TODO Auto-generated method stub
+        ArrayList<Group> aGroups = new ArrayList<Group>(mGroups.size());
+        for (int i = 0; i < mGroups.size(); i++) {
+            int groupInt = mGroups.size() - i - 1;
+            aGroups.add(mGroups.get(groupInt));
+            ArrayList<ChildArticle> theChildren = new ArrayList<ChildArticle>(mGroups.get(groupInt).getChildrenCount());
+            for (int j = 0; j < mGroups.get(groupInt).getChildrenCount(); j++) {
+                theChildren.add(mGroups.get(groupInt).getChildItem(mGroups.get(groupInt).getChildrenCount() - j - 1));
+            }
+            aGroups.get(i).setChilds(theChildren);
+        }
+        mGroups.clear();
+        mGroups = aGroups;
     }
 
     private void setAboutUsDialog() {
@@ -265,6 +295,7 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
 	      // Assumes that you have "contexual.xml" menu resources
 	      inflater.inflate(R.menu.contextual, menu);
 	      myMode = mode;
+	      isDeleteArticles = false;
 	      return true;
 	    }
 
@@ -279,7 +310,7 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 	      switch (item.getItemId()) {
 	      case R.id.delete_articles:
-	    	removeArticles();	    	
+	    	isDeleteArticles = true;   	
 	        myMode = mode;
 	        actionModeShowing =false;
 	        myMode.finish();
@@ -323,7 +354,10 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
 	@Override
 	public void onActionModeFinished (ActionMode mode){
 		actionModeShowing =false;
-		new DownloadArticlesTask().execute();
+		if(isDeleteArticles){
+			new DownloadArticlesTask().execute();
+			
+		}
 	}
 	
 	private static void removeArticles() {
