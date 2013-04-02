@@ -29,6 +29,10 @@ public class Article {
         this.isDownloaded = b;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public int getId() {
         return id;
     }
@@ -52,8 +56,8 @@ public class Article {
     public boolean isDownload() {
         return isDownloaded;
     }
-    
-    public void setNovelId(int id){
-    	novelId = id;
+
+    public void setNovelId(int id) {
+        novelId = id;
     }
 }

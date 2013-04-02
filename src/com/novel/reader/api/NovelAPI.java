@@ -291,7 +291,9 @@ public class NovelAPI {
                 JSONObject nObject;
                 nObject = new JSONObject(message.toString());
                 String text = nObject.getString("text") + "\n";
+                String title = nObject.getString("title");
                 article.setText(text);
+                article.setTitle(title);
 
             } catch (JSONException e) {
 
