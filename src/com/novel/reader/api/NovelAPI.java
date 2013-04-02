@@ -157,6 +157,11 @@ public class NovelAPI {
         return db.removeNovelFromDownload(novel);
     }
 
+    public static boolean removeArticle(Article article, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.deleteArticle(article);
+    }
+
     public static boolean collecNovel(final Novel novel, final Context context) {
         novel.setIsCollected(true);
         SQLiteNovel db = new SQLiteNovel(context);
