@@ -150,16 +150,18 @@ public class NovelAPI {
     public static boolean removeNovelFromDownload(Novel novel, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         ArrayList<Article> articles = db.getNovelArticles(novel.getId(), true);
-        for (int i = 0; i < articles.size(); i++) {
-            Article article = articles.get(i);
-            db.deleteArticle(article);
-        }
+        db.deleteArticles(articles);
         return db.removeNovelFromDownload(novel);
     }
 
     public static boolean removeArticle(Article article, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         return db.deleteArticle(article);
+    }
+
+    public static boolean removeArticles(ArrayList<Article> articles, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        return db.deleteArticles(articles);
     }
 
     public static boolean collecNovel(final Novel novel, final Context context) {

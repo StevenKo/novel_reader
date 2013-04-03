@@ -107,6 +107,24 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean deleteArticles(ArrayList<Article> articles) {
+
+        if (articles.size() == 0)
+            return false;
+
+        String idLst = "";
+        for (int i = 0; i < articles.size(); i++)
+            idLst = articles.get(i).getId() + "," + idLst;
+        idLst = idLst.substring(0, idLst.length() - 1);
+
+        Cursor cursor = null;
+        cursor = db.rawQuery("DELETE FROM " + ArtcileSchema.TABLE_NAME + " WHERE id in (" + idLst + ")", null);
+        cursor.moveToFirst();
+        cursor.close();
+        return true;
+
+    }
+
     public long insertBookmark(Bookmark bookmark) {
         ContentValues args = new ContentValues();
         args.put(BookmarkSchema.NOVEL_ID, bookmark.getNovelId());
