@@ -22,6 +22,7 @@ public class DownloadService extends IntentService {
     private Context             context;
     private final int           STATUS_BAR_NOTIFICATION = 10883;
     private NotificationManager nm;
+    private long                startTime;
     static ArrayList<Article>   articles                = new ArrayList<Article>(10);
 
     public DownloadService() {
@@ -78,6 +79,7 @@ public class DownloadService extends IntentService {
         noti.contentView = contentView;
         noti.contentIntent = pi;
         nm.notify(STATUS_BAR_NOTIFICATION, noti);
+        startTime = System.currentTimeMillis();
 
         for (int i = 0; i < articles.size(); i++) {
             if (NovelAPI.downloadArticle(articles.get(i).getNovelId(), articles.get(i), context)) {
@@ -87,6 +89,12 @@ public class DownloadService extends IntentService {
                     nm.notify(STATUS_BAR_NOTIFICATION, noti);
                     articles = new ArrayList<Article>(10);
                 } else {
+                    long nowTime = System.currentTimeMillis();
+                    if ((nowTime - startTime) < 4000) {
+                        continue;
+                    } else {
+                        startTime = nowTime;
+                    }
                     int downloadPercent = (int) (((float) (i + 1) / articles.size() * 100));
                     CharSequence title = "Downloading: " + downloadPercent + "%   " + articles.get(i).getTitle();
                     noti.contentView.setTextViewText(R.id.status_text, title);
