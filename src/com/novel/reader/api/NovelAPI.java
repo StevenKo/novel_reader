@@ -126,6 +126,8 @@ public class NovelAPI {
                 String text = nObject.getString("text");
                 article.setText(text);
                 article.setIsDownloaded(true);
+                nObject = null;
+                text = null;
 
             } catch (JSONException e) {
 
@@ -133,11 +135,14 @@ public class NovelAPI {
                 return false;
             }
         }
+        message = null;
 
         if (db.isArticleExists(article.getId()))
             db.updateArticle(article);
         else
             db.insertArticle(article);
+
+        article.setText("");
 
         return true;
     }
