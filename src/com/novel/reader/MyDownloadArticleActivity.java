@@ -350,7 +350,8 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
         }
 		return false;
 	}
-
+	
+	// 如果有按刪除鍵, 就刪除並重整Data
 	@Override
 	public void onActionModeFinished (ActionMode mode){
 		actionModeShowing =false;
@@ -363,15 +364,18 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
 	private static void removeArticles() {
 		// TODO Auto-generated method stub
         for (int i = 0; i < mGroups.size(); i++) {
+        	ArrayList<Article> articlesList = new ArrayList<Article>();
         	int groupSize = mGroups.get(i).getChildrenCount();
             for (int j = groupSize; j > 0; j--) {
                 ChildArticle aChildArticle = mGroups.get(i).getChildItem(j-1);
                 if (aChildArticle.getChecked() && aChildArticle.isDownload()) {
                 	Article theArticle = new Article(aChildArticle.getId(), aChildArticle.getNovelId(), "", aChildArticle.getTitle(), aChildArticle.getSubject(), true);
-                	NovelAPI.removeArticle(theArticle, myActivity);
+//                	NovelAPI.removeArticle(theArticle, myActivity);
+                	articlesList.add(theArticle);
                 	mGroups.get(i).removeChild(j-1);
                 }
             }
+            NovelAPI.removeArticles(articlesList, myActivity);
         }  
 	}
 	
