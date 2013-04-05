@@ -27,7 +27,7 @@ import com.novel.reader.entity.Novel;
 
 public class NovelAPI {
 
-    final static String         HOST  = "http://106.187.103.131";
+    final static String         HOST  = "http://106.187.40.42";
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
 
