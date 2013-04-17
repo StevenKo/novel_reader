@@ -140,13 +140,13 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
             checkBoxAddBookcase.setChecked(false);
         }
 
-        novelTextName.setText(novelName + "(" + novelArticleNum + ")");
-        novelTextAuthor.setText(getResources().getString(R.string.novel_author) + novelAuthor);
-        novelTextDescription.setText(novelDescription);
-        novelTextUpdate.setText(getResources().getString(R.string.novel_update_time) + novelUpdate);
+        novelTextName.setText(theNovel.getName() + "(" + theNovel.getArticleNum() + ")");
+        novelTextAuthor.setText(getResources().getString(R.string.novel_author) + theNovel.getAuthor());
+        novelTextDescription.setText(theNovel.getDescription());
+        novelTextUpdate.setText(getResources().getString(R.string.novel_update_time) + theNovel.getLastUpdate());
 
         mImageLoader = new ImageLoader(NovelIntroduceActivity.this, 70);
-        mImageLoader.DisplayImage(novelPicUrl, novelImageView);
+        mImageLoader.DisplayImage(theNovel.getPic(), novelImageView);
 
         novelButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -414,11 +414,12 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
             super.onPostExecute(result);
 
             if (theNovel != null)
-                novelTextDescription.setText(theNovel.getDescription());
+                setViews();
+            // novelTextDescription.setText(theNovel.getDescription());
 
             novelTextDescription.setMaxLines(3);
             descriptionExpand = false;
-            
+
         }
     }
 
