@@ -259,6 +259,8 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
             TextView novelName = (TextView) converView.findViewById(R.id.bookmark_novel_name);
             TextView articleTitle = (TextView) converView.findViewById(R.id.bookmark_article_name);
             Button novelBtn = (Button) converView.findViewById(R.id.novel_introduce_btn);
+            if (bookList.get(position).getNovelName().equals(getResources().getString(R.string.my_bookmark_none)))
+                novelBtn.setVisibility(View.GONE);
             novelBtn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
