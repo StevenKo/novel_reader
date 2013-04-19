@@ -113,6 +113,8 @@
     <string name="theme_light">亮白(预设)</string>
     <string name="theme_dark">灰黑</string>
     
+    <string name="search_hint">搜寻小说名称或作者</string>
+    
     <!-- for load more -->
     <string name="hello">Hello World, LoadMoreListView!</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh...</string>

@@ -106,6 +106,8 @@
     <string name="theme_light">亮白(預設)</string>
     <string name="theme_dark">灰黑</string>
     
+    <string name="search_hint">搜尋小說名稱或作者</string>
+    
     <!-- for vpon -->
     <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>

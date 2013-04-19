@@ -107,6 +107,7 @@
     <string name="theme_setting">App主題色＆上下邊顏色\n(App要重開,設定才會生效):</string>
     <string name="theme_light">亮白(預設)</string>
     <string name="theme_dark">灰黑</string>
+    <string name="search_hint">搜尋小說名稱或作者</string>
     
     
     <!-- for load more -->
