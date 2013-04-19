@@ -19,6 +19,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,8 +53,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private int                 readingDirection;                                // 0 for 直向, 1 for 橫向
     private int                 clickToNextPage;                                 // 0 for yes, 1 for no
     private int                 stopSleeping;                                    // 0 for yes, 1 for no
-    private int 				textColor;
-    private int 				textBackground;
+    private int                 textColor;
+    private int                 textBackground;
 
     private TextView            articleTextView;
     private DetectScrollView    articleScrollView;
@@ -71,8 +72,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private String              novelPic;
     private int                 novelId;
     private int                 yRate;
-    private int 				ariticlePosition;
-    private ArrayList<Integer>	articleIDs;
+    private int                 ariticlePosition;
+    private ArrayList<Integer>  articleIDs;
     // private ProgressDialog progressDialog= null;
     private AlertDialog.Builder aboutUsDialog;
     private final String        adWhirlKey  = "215f895eb71748e7ba4cb3a5f20b061e";
@@ -84,6 +85,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.layout_article);
         restorePreValues();
         setViews();
@@ -107,19 +109,19 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         // ab.setTitle(novelName);
         ab.setDisplayHomeAsUpEnabled(true);
-        
-        if (articleIDs!=null){
-	        if (downloadBoolean) {
-	            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
-	        } else {
-	            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
-	        }
-        }else{
-        	if (downloadBoolean) {
-	            myAricle = new Article(articleId, novelId, "", articleTitle, "", true);
-	        } else {
-	            myAricle = new Article(articleId, novelId, "", articleTitle, "", false);
-	        }
+
+        if (articleIDs != null) {
+            if (downloadBoolean) {
+                myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
+            } else {
+                myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
+            }
+        } else {
+            if (downloadBoolean) {
+                myAricle = new Article(articleId, novelId, "", articleTitle, "", true);
+            } else {
+                myAricle = new Article(articleId, novelId, "", articleTitle, "", false);
+            }
         }
 
         new DownloadArticleTask().execute();
@@ -146,6 +148,15 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         TextView titleText = ((TextView) v.findViewById(R.id.title));
         titleText.setText(novelName + ":" + articleTitle);
         titleText.setSelected(true);
+        int theme = Setting.getSetting(Setting.keyAppTheme, this);
+        if (theme != Setting.initialAppTheme) {
+            titleText.setTextColor(getResources().getColor(R.color.white));
+            RelativeLayout bottom_buttons = (RelativeLayout) findViewById(R.id.bottom_buttons);
+            bottom_buttons.setBackgroundColor(getResources().getColor(R.color.light_black));
+            articlePercent.setTextColor(getResources().getColor(R.color.white));
+            LinearLayout layout = (LinearLayout) findViewById(R.id.adonView);
+            layout.setBackgroundColor(getResources().getColor(R.color.black));
+        }
         ab.setCustomView(v);
     }
 
@@ -187,44 +198,44 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         articleButtonUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-            	
-            	if (articleIDs!=null){
-	            	if(ariticlePosition!=0){
-	            		ariticlePosition = ariticlePosition -1;
-	            		if (downloadBoolean) {
-	                        myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
-	                    } else {
-	                        myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
-	                    }
-	            		new UpdateArticleTask().execute();
-	            	}else{
-	            		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_up), Toast.LENGTH_SHORT).show();
-	            	}            	
-            	}else{
-            		 new GetPreviousArticleTask().execute();
-            	}
+
+                if (articleIDs != null) {
+                    if (ariticlePosition != 0) {
+                        ariticlePosition = ariticlePosition - 1;
+                        if (downloadBoolean) {
+                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
+                        } else {
+                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
+                        }
+                        new UpdateArticleTask().execute();
+                    } else {
+                        Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_up), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    new GetPreviousArticleTask().execute();
+                }
             }
         });
 
         articleButtonDown.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-            	if (articleIDs!=null){
-	            	if(ariticlePosition < articleIDs.size()-1){
-	            		ariticlePosition = ariticlePosition + 1;
-	            		if (downloadBoolean) {
-	                        myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
-	                    } else {
-	                        myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
-	                    }
-	            		new UpdateArticleTask().execute();
-	            	}else{
-	            		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_down), Toast.LENGTH_SHORT).show();
-	            	}
-            	}else{
-            		new GetNextArticleTask().execute();
-            	}
-                
+                if (articleIDs != null) {
+                    if (ariticlePosition < articleIDs.size() - 1) {
+                        ariticlePosition = ariticlePosition + 1;
+                        if (downloadBoolean) {
+                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
+                        } else {
+                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
+                        }
+                        new UpdateArticleTask().execute();
+                    } else {
+                        Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_down), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    new GetNextArticleTask().execute();
+                }
+
             }
         });
 
@@ -244,7 +255,9 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 .setMessage(getResources().getString(R.string.add_my_bookmark_content)).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        NovelAPI.insertBookmark(new Bookmark(0, myAricle.getNovelId(), myAricle.getId(), yRate, novelName, myAricle.getTitle(), novelPic, false), ArticleActivity.this);
+                        NovelAPI.insertBookmark(
+                                new Bookmark(0, myAricle.getNovelId(), myAricle.getId(), yRate, novelName, myAricle.getTitle(), novelPic, false),
+                                ArticleActivity.this);
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
@@ -263,6 +276,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         currentY = y;
         yRate = (int) (((double) (y) / (double) (tt)) * 100);
         int xx = (int) (((double) (y + kk) / (double) (tt)) * 100);
+        if (xx > 100)
+            xx = 100;
         String yPositon = Integer.toString(xx);
         articlePercent.setText(yPositon + "%");
     }
@@ -362,7 +377,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         }
     }
-    
+
     private class UpdateArticleTask extends AsyncTask {
 
         @Override
@@ -373,7 +388,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         @Override
         protected Object doInBackground(Object... params) {
-        	if (myAricle != null) {
+            if (myAricle != null) {
                 theGottenArticle = NovelAPI.getArticle(myAricle, ArticleActivity.this);
                 if (theGottenArticle != null) {
                     myAricle = theGottenArticle;
@@ -531,8 +546,11 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
             if (yRate == 0) {
                 int xx = (int) (((double) (kk) / (double) (tt)) * 100);
+                if (xx > 100)
+                    xx = 100;
                 String yPositon = Integer.toString(xx);
                 articlePercent.setText(yPositon + "%");
+                articleScrollView.fullScroll(ScrollView.FOCUS_UP);
             } else {
                 String yPositon = Integer.toString(yRate);
                 articlePercent.setText(yPositon + "%");
@@ -567,8 +585,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         readingDirection = Setting.getSetting(Setting.keyReadingDirection, ArticleActivity.this);
         clickToNextPage = Setting.getSetting(Setting.keyClickToNextPage, ArticleActivity.this);
         stopSleeping = Setting.getSetting(Setting.keyStopSleeping, ArticleActivity.this);
-//        appTheme = Setting.getSetting(Setting.keyAppTheme, ArticleActivity.this);
-        
+        // appTheme = Setting.getSetting(Setting.keyAppTheme, ArticleActivity.this);
+
         articleTextView.setTextSize(textSize);
         articleTextView.setTextColor(textColor);
         articleScrollView.setBackgroundColor(textBackground);

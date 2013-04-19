@@ -35,6 +35,7 @@ import com.kosbrother.fragments.CategoryNewNovelsFragment;
 import com.kosbrother.fragments.CategoryRecommendFragment;
 import com.kosbrother.fragments.CategoryWeekFragment;
 import com.kosbrother.fragments.CategroyHotNovelsFragment;
+import com.novel.reader.api.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
 public class CategoryActivity extends SherlockFragmentActivity implements AdWhirlInterface {
@@ -59,6 +60,7 @@ public class CategoryActivity extends SherlockFragmentActivity implements AdWhir
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.simple_titles);
 
         final ActionBar ab = getSupportActionBar();

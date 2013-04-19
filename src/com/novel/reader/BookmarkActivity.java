@@ -60,6 +60,7 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.layout_bookmark);
         // Bookmark b = new Bookmark(0, 1, 1, 45, "novel1", "title1", "", false);
         // Bookmark b1 = new Bookmark(0, 1, 2, 45, "novel1", "title2", "", false);

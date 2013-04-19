@@ -9,7 +9,8 @@
     <color name="dark_slate_gray">#2F4F4F</color>
 	<color name="gray_2">#AFAFAF</color>
 	<color name="gray_1">#C0C0C0</color>
-	<color name="black">#000000</color>
+	<color name="black">#151515</color>
+    <color name="light_black">#202020</color>
     
      <!-- Add for Report -->
     <color name="report_view_1">#f6c737</color>
@@ -48,7 +49,6 @@
     <color name="background">#FFE6E6E6</color>
     <color name="background_deep">#FF313131</color>
     <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
     <color name="grey05">#ACA899</color>
     <color name="light_grey">#d3d3d3</color>
     <color name="transparent100">#00000000</color>
@@ -85,5 +85,4 @@
     <color name="dark_slate_gray">#2F4F4F</color>
     <color name="gray_2">#AFAFAF</color>
     <color name="gray_1">#C0C0C0</color>
-    <color name="black">#000000</color>
 </resources>

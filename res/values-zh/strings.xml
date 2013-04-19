@@ -109,6 +109,10 @@
     <string name="delete_no">不删除</string>
 	<string name="delete_articles">删除所选章节</string>
     
+    <string name="theme_setting">App主题色＆上下边颜色\n(App要重开,设定才会生效):</string>
+    <string name="theme_light">亮白(预设)</string>
+    <string name="theme_dark">灰黑</string>
+    
     <!-- for load more -->
     <string name="hello">Hello World, LoadMoreListView!</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh...</string>

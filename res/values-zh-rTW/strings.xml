@@ -104,6 +104,10 @@
     <string name="reminder_next">下次再提醒</string>
     <string name="do_not_reminder">不要再提醒</string>
     
+    <string name="theme_setting">App主題色＆上下邊顏色\n(App要重開,設定才會生效):</string>
+    <string name="theme_light">亮白(預設)</string>
+    <string name="theme_dark">灰黑</string>
+    
     
     <!-- for load more -->
     <string name="hello">Hello World, LoadMoreListView!</string>

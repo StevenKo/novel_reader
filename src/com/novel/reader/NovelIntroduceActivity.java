@@ -32,6 +32,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.Group;
 import com.novel.reader.api.NovelAPI;
+import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Bookmark;
 import com.novel.reader.entity.Novel;
@@ -83,6 +84,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.layout_novel_introduce);
         findViews();
         mBundle = this.getIntent().getExtras();
