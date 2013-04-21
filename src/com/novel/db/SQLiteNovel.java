@@ -1,5 +1,9 @@
 package com.novel.db;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -7,6 +11,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.novel.reader.entity.Article;
@@ -15,10 +20,11 @@ import com.novel.reader.entity.Novel;
 
 public class SQLiteNovel extends SQLiteOpenHelper {
 
-    private static final String DB_NAME          = "kosnovel.sqlite"; // 資料庫名稱
-    private static final int    DATABASE_VERSION = 1;                // 資料庫版本
-    private SQLiteDatabase      db;
-    private final Context       ctx;
+    public static final String DB_NAME            = "kosnovel.sqlite";                                   // 資料庫名稱
+    private static final int   DATABASE_VERSION   = 2;                                                   // 資料庫版本
+    private SQLiteDatabase     db;
+    private final Context      ctx;
+    public static final File   DATABASE_FILE_PATH = android.os.Environment.getExternalStorageDirectory();
 
     // Define database schema
     public interface NovelSchema {
@@ -62,8 +68,68 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DATABASE_VERSION);
         ctx = context;
 
-        if (db == null)
-            db = this.getWritableDatabase();
+        // if (db == null)
+        // db = this.getWritableDatabase();
+
+        if (db == null) {
+            try {
+                db = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
+            } catch (SQLiteException ex) {
+                db = this.getWritableDatabase();
+                File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
+                if (!cacheDir.exists())
+                    cacheDir.mkdirs();
+                db = SQLiteDatabase.openOrCreateDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null);
+                db.setVersion(DATABASE_VERSION);
+                createTables();
+            }
+        }
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (newVersion == 2) {
+            try {
+                File currentDB = ctx.getDatabasePath(SQLiteNovel.DB_NAME);
+                File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
+                if (!cacheDir.exists())
+                    cacheDir.mkdirs();
+                File sdcardDB = new File(cacheDir, DB_NAME);
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(sdcardDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                    // currentDB;
+                    db.execSQL("DROP TABLE IF EXISTS " + BookmarkSchema.TABLE_NAME);
+                    db.execSQL("DROP TABLE IF EXISTS " + ArtcileSchema.TABLE_NAME);
+                    db.execSQL("DROP TABLE IF EXISTS " + NovelSchema.TABLE_NAME);
+                }
+            } catch (Exception e) {
+
+            }
+        }
+
+    }
+
+    private void createTables() {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + NovelSchema.TABLE_NAME + " (" + NovelSchema.ID + " INTEGER PRIMARY KEY" + "," + NovelSchema.NAME
+                + " TEXT NOT NULL" + "," + NovelSchema.AUTHOR + " TEXT NOT NULL" + "," + NovelSchema.DESCRIPTION + " TEXT NOT NULL" + "," + NovelSchema.PIC
+                + " TEXT NOT NULL" + "," + NovelSchema.CATEGORY_ID + " INTEGER NOT NULL" + "," + NovelSchema.ARTICLE_NUM + " TEXT NOT NULL" + ","
+                + NovelSchema.LAST_UPDATE + " TEXT NOT NULL" + "," + NovelSchema.IS_SERIALIZING + " INTEGER NOT NULL" + "," + NovelSchema.IS_COLLECTED
+                + " INTEGER NOT NULL" + "," + NovelSchema.IS_DOWNLOAD + " INTEGER NOT NULL" + ");");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + ArtcileSchema.TABLE_NAME + " (" + ArtcileSchema.ID + " INTEGER PRIMARY KEY" + "," + ArtcileSchema.NOVEL_ID
+                + " INTEGER NOT NULL" + "," + ArtcileSchema.TEXT + " TEXT NOT NULL" + "," + ArtcileSchema.TITLE + " TEXT NOT NULL" + ","
+                + ArtcileSchema.SUBJECT + " TEXT NOT NULL" + "," + ArtcileSchema.IS_DOWNLOADED + " INTEGER NOT NULL" + "," + "FOREIGN KEY("
+                + ArtcileSchema.NOVEL_ID + ") REFERENCES " + NovelSchema.TABLE_NAME + "(" + NovelSchema.ID + ") ON UPDATE CASCADE" + ");");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + BookmarkSchema.TABLE_NAME + " (" + BookmarkSchema.ID + " INTEGER PRIMARY KEY" + ","
+                + BookmarkSchema.NOVEL_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.ARTICLE_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.READ_RATE
+                + " INTEGER NOT NULL" + "," + BookmarkSchema.NOVEL_NAME + " TEXT NOT NULL" + "," + BookmarkSchema.ARTICLE_TITLE + " TEXT NOT NULL" + ","
+                + BookmarkSchema.NOVEL_PIC + " TEXT NOT NULL" + "," + BookmarkSchema.IS_RECENT_READ + " INTEGER NOT NULL" + ");");
     }
 
     @Override
@@ -429,12 +495,6 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             return 1;
         else
             return 0;
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO Auto-generated method stub
-
     }
 
     public Boolean isNovelCollected(int novel_id) {
