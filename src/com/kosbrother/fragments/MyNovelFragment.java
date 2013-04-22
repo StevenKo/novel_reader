@@ -4,7 +4,6 @@ import java.io.File;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -60,41 +59,17 @@ public final class MyNovelFragment extends Fragment {
         if (!cacheDir.exists())
             cacheDir.mkdirs();
         File sdcardDB = new File(cacheDir, SQLiteNovel.DB_NAME);
-        if (!sdcardDB.exists())
-            new InitDBTask().execute();
-    }
-
-    class InitDBTask extends AsyncTask<Integer, Integer, String> {
-
-        private ProgressDialog progressdialogInit;
-
-        @Override
-        protected void onPreExecute() {
+        if (!sdcardDB.exists()) {
+            ProgressDialog progressdialogInit;
             progressdialogInit = ProgressDialog.show(getActivity(), "Load", "Loading…");
             progressdialogInit.setTitle("初始化DB");
             progressdialogInit.setMessage("初始化DB中…(原先下載過小說的用戶，會將資料轉至 SD卡）");
             progressdialogInit.setCanceledOnTouchOutside(false);
             progressdialogInit.setCancelable(false);
             progressdialogInit.show();
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Integer... params) {
             SQLiteNovel db = new SQLiteNovel(getActivity());
-            return "progress end";
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            super.onProgressUpdate(progress);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
             progressdialogInit.dismiss();
         }
-
     }
 
     private void setViews() {
