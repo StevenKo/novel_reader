@@ -80,11 +80,21 @@
 	<string name="menu_respond">意见回馈</string>
 	<string name="menu_aboutus">关于我们</string>
 	<string name="menu_recommend">为App评分</string>
-	<string name="menu_add_bookmark">加入书签</string>
+	<string name="menu_add_bookmark">加书签</string>
 	<string name="menu_search">搜索</string>
 	<string name="menu_add_all">全选</string>
 	<string name="menu_remove_all">全取消</string>
 	<string name="menu_download">下载</string>
+	<string name="menu_report">问题回报</string>
+	
+	<string name="report_title">问题回报</string>
+	<string name="report_chapter">回报章节:</string>
+	<string name="report_confirm">回报</string>
+	<string name="report_cancel">取消</string>
+	<string name="report_reporting">回报中...</string>
+	<string name="report_remind">请输入问题内容！</string>
+	<string name="report_success">成功回报！</string>
+	<string name="report_fail">回报失败！</string>
 	
 	<string name="search_hint">请输入作者或书名</string>
 	<string name="about_us_string">关于我们</string>

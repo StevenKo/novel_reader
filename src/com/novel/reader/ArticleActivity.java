@@ -11,6 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.google.ads.AdView;
+import com.kosbrother.mail.GMailSender;
 import com.kosbrother.tool.DetectScrollView;
 import com.kosbrother.tool.DetectScrollView.DetectScrollViewListener;
 import com.novel.reader.api.NovelAPI;
@@ -46,6 +49,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private static final int    ID_ABOUT_US = 2;
     private static final int    ID_GRADE    = 3;
     private static final int    ID_Bookmark = 4;
+    private static final int    ID_Report   = 5;
 
     private int                 textSize;
     private int                 textLanguage;                                    // 0 for 繁體, 1 for 簡體
@@ -80,6 +84,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private LinearLayout        layoutProgress;
     private int                 currentY    = 0;
     private int                 appTheme;
+    private Boolean				booleanSend;
+    private String              reportContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,8 +287,9 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, ID_Bookmark, 4, getResources().getString(R.string.menu_add_bookmark)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
+        menu.add(0, ID_Bookmark, 5, getResources().getString(R.string.menu_add_bookmark)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.add(0, ID_Report, 4, getResources().getString(R.string.menu_report)).setIcon(R.drawable.icon_report).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        
         return true;
     }
 
@@ -317,8 +324,77 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         case ID_Bookmark:
             addBookMarkDialog.show();
             break;
+        case ID_Report:
+        	showReportDialog();       	
+            break;
         }
         return true;
+    }
+    
+    private void showReportDialog() {
+    	   AlertDialog.Builder editDialog = new AlertDialog.Builder(ArticleActivity.this);
+    	   editDialog.setTitle(getResources().getString(R.string.report_title));
+    	    
+//    	   final EditText editText = new EditText(ArticleActivity.this);
+//    	   editDialog.setView(editText);
+    	   
+    	   LayoutInflater inflater = LayoutInflater.from(ArticleActivity.this);
+    	   View edit_view = inflater.inflate(R.layout.layout_mail_dialog,null);
+    	   TextView text_chapter = (TextView) edit_view.findViewById(R.id.text_report_chapter);
+    	   final EditText text_content = (EditText) edit_view.findViewById(R.id.text_report_content);
+    	   
+    	   text_chapter.setText(getResources().getString(R.string.report_chapter)+articleTitle);
+    	      	   
+    	   editDialog.setView(edit_view);
+    	   
+    	   editDialog.setPositiveButton(getResources().getString(R.string.report_confirm), new DialogInterface.OnClickListener() {
+	    	    public void onClick(DialogInterface arg0, int arg1) {
+	    	    	if(!text_content.getText().toString().equals("")){
+		    	    	reportContent = text_content.getText().toString();
+		    	    	new SendMailTask().execute();
+	    	    	}else{
+	    	    		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_remind), Toast.LENGTH_SHORT).show();
+	    	    	}
+	    	     }
+	    	    });
+    	   editDialog.setNegativeButton(getResources().getString(R.string.report_cancel), new DialogInterface.OnClickListener() {
+	    	    public void onClick(DialogInterface arg0, int arg1) {	    	    
+	    	     }
+	    	    });
+    	   editDialog.show();
+	}
+
+	private class SendMailTask extends AsyncTask {
+    	
+    	@Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_reporting), Toast.LENGTH_SHORT).show();
+        }
+    	
+        @Override
+        protected Object doInBackground(Object... params) {
+        	try {   
+                GMailSender sender = new GMailSender("sandjstudio@gmail.com", "wonderful2013");
+                booleanSend = sender.sendMail(
+                		getResources().getString(R.string.report_chapter)+articleTitle,   
+                		 reportContent,   
+                        "sandjstudio@gmail.com",   
+                        "brotherkos@gmail.com");               
+            } catch (Exception e) {   
+            } 
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            if(booleanSend){
+            	Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_success), Toast.LENGTH_SHORT).show();
+            }else{
+            	Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_fail), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private class DownloadArticleTask extends AsyncTask {

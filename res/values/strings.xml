@@ -74,11 +74,21 @@
     <string name="menu_respond">意見回饋</string>
     <string name="menu_aboutus">關於我們</string>
     <string name="menu_recommend">為App評分</string>
-    <string name="menu_add_bookmark">加入書籤</string>
+    <string name="menu_add_bookmark">加書籤</string>
     <string name="menu_search">搜索</string>
     <string name="menu_add_all">全選</string>
     <string name="menu_remove_all">全取消</string>
     <string name="menu_download">下載</string>
+    <string name="menu_report">問題回報</string>
+    
+    <string name="report_title">問題回報</string>
+    <string name="report_chapter">回報章節:</string>
+    <string name="report_confirm">回報</string>
+    <string name="report_cancel">取消</string>
+    <string name="report_reporting">回報中...</string>
+    <string name="report_remind">請輸入問題內容!</string>
+    <string name="report_success">成功回報!</string>
+    <string name="report_fail">回報失敗!</string>
     
     <string name="search_hint">請輸入作者或書名</string>
     <string name="about_us_string">關於我們</string>
