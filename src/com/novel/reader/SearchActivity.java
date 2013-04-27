@@ -40,6 +40,7 @@ import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.google.ads.AdView;
 import com.novel.reader.api.NovelAPI;
+import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.ImageLoader;
 
@@ -64,6 +65,7 @@ public class SearchActivity extends SherlockListActivity implements AdWhirlInter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.layout_search);
         layoutNoSearch = (LinearLayout) findViewById(R.id.layout_no_search);
 

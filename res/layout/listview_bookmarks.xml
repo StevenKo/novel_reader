@@ -23,7 +23,17 @@
         android:layout_toRightOf="@+id/bookmark_poster"
         android:layout_marginLeft="5dp"
         android:orientation="vertical">
+        <Button
+            android:id="@+id/novel_introduce_btn" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/title_novel_introduce"
+            android:textSize="15dp"
+            android:focusable="false"
+            />
         <LinearLayout 
+        android:layout_toLeftOf="@+id/novel_introduce_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -73,6 +83,5 @@
             </RelativeLayout>
           
         </LinearLayout>
- 
     </RelativeLayout>
 </RelativeLayout>

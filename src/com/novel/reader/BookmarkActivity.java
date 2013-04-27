@@ -16,10 +16,12 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -58,6 +60,7 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.layout_bookmark);
         // Bookmark b = new Bookmark(0, 1, 1, 45, "novel1", "title1", "", false);
         // Bookmark b1 = new Bookmark(0, 1, 2, 45, "novel1", "title2", "", false);
@@ -249,13 +252,33 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
             return position;
         }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             LayoutInflater myInflater = LayoutInflater.from(mContext);
             View converView = myInflater.inflate(R.layout.listview_bookmarks, null);
 
             ImageView poster = (ImageView) converView.findViewById(R.id.bookmark_poster);
             TextView novelName = (TextView) converView.findViewById(R.id.bookmark_novel_name);
             TextView articleTitle = (TextView) converView.findViewById(R.id.bookmark_article_name);
+            Button novelBtn = (Button) converView.findViewById(R.id.novel_introduce_btn);
+            if (bookList.get(position).getNovelName().equals(getResources().getString(R.string.my_bookmark_none)))
+                novelBtn.setVisibility(View.GONE);
+            novelBtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("NovelId", bookList.get(position).getNovelId());
+                    bundle.putString("NovelName", bookList.get(position).getNovelName());
+                    bundle.putString("NovelAuthor", "");
+                    bundle.putString("NovelDescription", "");
+                    bundle.putString("NovelUpdate", "");
+                    bundle.putString("NovelPicUrl", bookList.get(position).getNovelPic());
+                    bundle.putString("NovelArticleNum", "");
+                    Intent intent = new Intent();
+                    intent.putExtras(bundle);
+                    intent.setClass(mContext, NovelIntroduceActivity.class);
+                    startActivity(intent);
+                }
+            });
             novelName.setText(bookList.get(position).getNovelName());
             articleTitle.setText(bookList.get(position).getArticleTitle());
 

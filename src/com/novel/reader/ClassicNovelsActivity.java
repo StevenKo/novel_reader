@@ -31,6 +31,7 @@ import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.google.ads.AdView;
 import com.kosbrother.fragments.ClassicFragment;
+import com.novel.reader.api.Setting;
 
 public class ClassicNovelsActivity extends SherlockFragmentActivity implements AdWhirlInterface {
 
@@ -53,6 +54,7 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity implements A
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.layout_classic);
 
         final ActionBar ab = getSupportActionBar();

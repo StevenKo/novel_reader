@@ -26,6 +26,7 @@ import com.adwhirl.AdWhirlTargeting;
 import com.google.ads.AdView;
 import com.kosbrother.fragments.MyBookcaseFragment;
 import com.kosbrother.fragments.MyDownloadFragment;
+import com.novel.reader.api.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
 public class MyNovelActivity extends SherlockFragmentActivity implements AdWhirlInterface {
@@ -43,6 +44,7 @@ public class MyNovelActivity extends SherlockFragmentActivity implements AdWhirl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.simple_titles);
 
         final ActionBar ab = getSupportActionBar();

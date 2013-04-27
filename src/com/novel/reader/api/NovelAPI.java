@@ -27,7 +27,7 @@ import com.novel.reader.entity.Novel;
 
 public class NovelAPI {
 
-    final static String         HOST  = "http://106.187.103.131";
+    final static String         HOST  = "http://106.187.40.42";
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
 
@@ -126,6 +126,8 @@ public class NovelAPI {
                 String text = nObject.getString("text");
                 article.setText(text);
                 article.setIsDownloaded(true);
+                nObject = null;
+                text = null;
 
             } catch (JSONException e) {
 
@@ -133,11 +135,14 @@ public class NovelAPI {
                 return false;
             }
         }
+        message = null;
 
         if (db.isArticleExists(article.getId()))
             db.updateArticle(article);
         else
             db.insertArticle(article);
+
+        article.setText("");
 
         return true;
     }

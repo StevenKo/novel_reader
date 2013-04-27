@@ -19,34 +19,34 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.novel.reader.api.Setting;
-import com.taiwan.imageload.ExpandListAdapter;
 
 public class SettingActivity extends SherlockFragmentActivity {
 
     // private SharedPreferences prefs;
     private int                 textSize;
-    private int                 textLanguage;       // 0 for 繁體, 1 for 簡體
-    private int                 readingDirection;   // 0 for 直向, 1 for 橫向
-    private int                 clickToNextPage;    // 0 for yes, 1 for no
-    private int                 stopSleeping;       // 0 for yes, 1 for no
+    private int                 textLanguage;           // 0 for 繁體, 1 for 簡體
+    private int                 readingDirection;       // 0 for 直向, 1 for 橫向
+    private int                 clickToNextPage;        // 0 for yes, 1 for no
+    private int                 stopSleeping;           // 0 for yes, 1 for no
     private SeekBar             mSeekBar;
     private RadioGroup          langRadioGroup;
     private RadioGroup          directionRadioGroup;
     private RadioGroup          tapRadioGroup;
     private RadioGroup          stopSleepRadioGroup;
-//    private RadioGroup          themeRadioGroup;
+    private RadioGroup          themeRadioGroup;
     private TextView            textPreView;
-    private ImageView 			imageviewTextColor;
-    private ImageView 			imageviewTextBackground;
-    private int 				textColor;
-    private int 				textBackground;
-    private int 				appTheme;
+    private ImageView           imageviewTextColor;
+    private ImageView           imageviewTextBackground;
+    private int                 textColor;
+    private int                 textBackground;
+    private int                 appTheme;
 
     private AlertDialog.Builder finishDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.layout_setting);
 
         textSize = Setting.getSetting(Setting.keyTextSize, SettingActivity.this);
@@ -57,7 +57,7 @@ public class SettingActivity extends SherlockFragmentActivity {
         textColor = Setting.getSetting(Setting.keyTextColor, SettingActivity.this);
         textBackground = Setting.getSetting(Setting.keyTextBackground, SettingActivity.this);
         appTheme = Setting.getSetting(Setting.keyAppTheme, SettingActivity.this);
-        
+
         setViews();
 
         final ActionBar ab = getSupportActionBar();
@@ -73,11 +73,11 @@ public class SettingActivity extends SherlockFragmentActivity {
         directionRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_reading_direction);
         tapRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_tap);
         stopSleepRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_stop_sleep);
-//        themeRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_theme);
+        themeRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_theme);
         textPreView = (TextView) findViewById(R.id.text_preview);
         imageviewTextColor = (ImageView) findViewById(R.id.imageview_textcolor);
         imageviewTextBackground = (ImageView) findViewById(R.id.imageview_textbackground);
-        
+
         textPreView.setTextSize(textSize);
         textPreView.setTextColor(textColor);
         textPreView.setBackgroundColor(textBackground);
@@ -89,23 +89,22 @@ public class SettingActivity extends SherlockFragmentActivity {
         ((RadioButton) directionRadioGroup.getChildAt(readingDirection)).setChecked(true);
         ((RadioButton) tapRadioGroup.getChildAt(clickToNextPage)).setChecked(true);
         ((RadioButton) stopSleepRadioGroup.getChildAt(textLanguage)).setChecked(true);
-//        ((RadioButton) themeRadioGroup.getChildAt(appTheme)).setChecked(true);
-        
+        ((RadioButton) themeRadioGroup.getChildAt(appTheme)).setChecked(true);
+
         imageviewTextColor.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-            	showTextColorPicker();
+                showTextColorPicker();
             }
         });
-        
+
         imageviewTextBackground.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-            	showTextBackgroundPicker();
+                showTextBackgroundPicker();
             }
         });
-        
-        
+
         mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             public void onProgressChanged(SeekBar arg0, int progress, boolean arg2) {
@@ -128,48 +127,46 @@ public class SettingActivity extends SherlockFragmentActivity {
         setFinishDialog();
 
     }
-    
+
     private void showTextColorPicker() {
-    	AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, textColor,
-                new OnAmbilWarnaListener() {
+        AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, textColor, new OnAmbilWarnaListener() {
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
-                    // color is the color selected by the user.
-            	textColor = color;
-            	imageviewTextColor.setBackgroundColor(textColor);
-            	textPreView.setTextColor(textColor);
+                // color is the color selected by the user.
+                textColor = color;
+                imageviewTextColor.setBackgroundColor(textColor);
+                textPreView.setTextColor(textColor);
             }
-                    
+
             @Override
             public void onCancel(AmbilWarnaDialog dialog) {
-                    // cancel was selected by the user
+                // cancel was selected by the user
             }
         });
-        dialog.show();	
-	}
-    
+        dialog.show();
+    }
+
     private void showTextBackgroundPicker() {
-    	AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, textBackground,
-                new OnAmbilWarnaListener() {
+        AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, textBackground, new OnAmbilWarnaListener() {
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
-                    // color is the color selected by the user.
-            	textBackground = color;
-            	imageviewTextBackground.setBackgroundColor(textBackground);
-            	textPreView.setBackgroundColor(textBackground);
+                // color is the color selected by the user.
+                textBackground = color;
+                imageviewTextBackground.setBackgroundColor(textBackground);
+                textPreView.setBackgroundColor(textBackground);
             }
-                    
+
             @Override
             public void onCancel(AmbilWarnaDialog dialog) {
-                    // cancel was selected by the user
+                // cancel was selected by the user
             }
         });
-        dialog.show();	
-	}
-    
+        dialog.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         return true;
     }
 
@@ -209,7 +206,7 @@ public class SettingActivity extends SherlockFragmentActivity {
                         saveRadioGroupValue(directionRadioGroup, Setting.keyReadingDirection);
                         saveRadioGroupValue(tapRadioGroup, Setting.keyClickToNextPage);
                         saveRadioGroupValue(stopSleepRadioGroup, Setting.keyStopSleeping);
-//                        saveRadioGroupValue(themeRadioGroup, Setting.keyAppTheme);
+                        saveRadioGroupValue(themeRadioGroup, Setting.keyAppTheme);
                         finish();
 
                     }

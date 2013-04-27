@@ -14,6 +14,61 @@
 	    	android:layout_height="wrap_content"
 	    	android:orientation="vertical"
 	        >
+                <LinearLayout 
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#A3A3A3"
+                    android:layout_margin="10dp"
+                    >      
+                </LinearLayout>
+               <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_select_text_background"
+                android:layout_marginLeft="10dp"
+                android:textSize="18dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                />
+                <LinearLayout 
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:background="#696969"
+                    android:layout_marginLeft="10dp"
+                    >
+                    <ImageView android:id="@+id/imageview_textbackground"
+                       android:layout_width="fill_parent"
+                       android:layout_height="fill_parent"
+                       android:layout_margin="2dp"
+                       android:background="#000000"
+                        />    
+                </LinearLayout>
+                
+                <TextView 
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_select_text_color"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="18dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    />
+                <LinearLayout 
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:background="#696969"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp"
+                    >
+                    <ImageView android:id="@+id/imageview_textcolor"
+                       android:layout_width="fill_parent"
+                       android:layout_height="fill_parent"
+                       android:layout_margin="2dp"
+                       android:background="#FFF700"
+                        />    
+                </LinearLayout>
+            
+            
 	        
 	    
 		    <TextView 
@@ -220,65 +275,11 @@
 		        >      
 		    </LinearLayout>
 	    	
-		    <TextView 
-		        android:layout_width="wrap_content"
-		    	android:layout_height="wrap_content"
-		    	android:text="@string/setting_select_text_background"
-		    	android:layout_marginLeft="10dp"
-		    	android:textSize="18dp"
-		    	android:layout_marginTop="10dp"
-		    	android:layout_marginBottom="10dp"
-		        />
-		    <LinearLayout 
-		        android:layout_width="100dp"
-		    	android:layout_height="60dp"
-		    	android:background="#696969"
-		    	android:layout_marginLeft="10dp"
-		        >
-			    <ImageView android:id="@+id/imageview_textbackground"
-			       android:layout_width="fill_parent"
-		    	   android:layout_height="fill_parent"
-		           android:layout_margin="2dp"
-		           android:background="#000000"
-			        />    
-		    </LinearLayout>
 		    
 		    <TextView 
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:text="@string/setting_select_text_color"
-		    	android:layout_marginLeft="10dp"
-		    	android:textSize="18dp"
-		    	android:layout_marginTop="10dp"
-		    	android:layout_marginBottom="10dp"
-		        />
-		    <LinearLayout 
-		        android:layout_width="100dp"
-		    	android:layout_height="60dp"
-		    	android:background="#696969"
-		    	android:layout_marginLeft="10dp"
-		    	android:layout_marginBottom="10dp"
-		        >
-			    <ImageView android:id="@+id/imageview_textcolor"
-			       android:layout_width="fill_parent"
-		    	   android:layout_height="fill_parent"
-		           android:layout_margin="2dp"
-		           android:background="#FFF700"
-			        />    
-		    </LinearLayout>
-		    
-		    <!-- <LinearLayout 
-		        android:layout_width="fill_parent"
-		        android:layout_height="1dp"
-		        android:background="#A3A3A3"
-		        android:layout_margin="10dp"
-		        >      
-		    </LinearLayout>
-		    
-		    <TextView 
-		        android:layout_width="wrap_content"
-		    	android:layout_height="wrap_content"
-		    	android:text="App主題色(退出程式再進入,才看得到):"
+		    	android:text="@string/theme_setting"
 		    	android:layout_marginLeft="10dp"
 		    	android:textSize="18dp"
 		    	android:layout_marginTop="10dp"
@@ -292,23 +293,27 @@
 			    android:orientation="horizontal"
 			    android:layout_marginLeft="10dp"
 			    >
-			    第一個RadioButton
 			    <RadioButton
 			      android:id="@+id/myRadioButton_theme1"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="亮白(預設)"
+			      android:text="@string/theme_light"
 			      android:checked="true"
 			    />
-			    第二個RadioButton
 			    <RadioButton
 			      android:id="@+id/myRadioButton_theme2"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="灰黑"
+			      android:text="@string/theme_dark"
 			    />
-			</RadioGroup> -->
-			
+			</RadioGroup>
+    		    <LinearLayout 
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#A3A3A3"
+                    android:layout_margin="10dp"
+                    >      
+                </LinearLayout>
 		    
 		    
 	    </LinearLayout>

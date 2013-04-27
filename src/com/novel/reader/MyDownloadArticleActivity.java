@@ -34,55 +34,56 @@ import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.ExpandListDownLoadReadAdapter;
 import com.kosbrother.tool.Group;
 import com.novel.reader.api.NovelAPI;
+import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.ImageLoader;
 
-
 public class MyDownloadArticleActivity extends SherlockActivity implements AdWhirlInterface {
 
-    private static final int                          ID_SETTING         = 0;
-    private static final int                          ID_RESPONSE        = 1;
-    private static final int                          ID_ABOUT_US        = 2;
-    private static final int                          ID_GRADE           = 3;
-    private static final int                          ID_DELETE_DOWNLOAD = 4;
+    private static final int                     ID_SETTING         = 0;
+    private static final int                     ID_RESPONSE        = 1;
+    private static final int                     ID_ABOUT_US        = 2;
+    private static final int                     ID_GRADE           = 3;
+    private static final int                     ID_DELETE_DOWNLOAD = 4;
 
-    private Bundle                                    mBundle;
-    private String                                    novelName;
-    private int                                       novelId;
-    private String                                    novelAuthor;
-    private String                                    novelPicUrl;
-    private String                                    novelArticleNum;
-    private ImageView                                 novelImageView;
-    private TextView                                  novelTextName;
-    private TextView                                  novelTextAuthor;
-    private TextView                                  downloadedCount;
-    private ImageLoader                               mImageLoader;
-    private LinearLayout                              novelLayoutProgress;
-    private ArrayList<Article>                        articleList        = new ArrayList<Article>();
-    private ExpandableListView                        novelListView;
-    private Novel                                     theNovel;
+    private Bundle                               mBundle;
+    private String                               novelName;
+    private int                                  novelId;
+    private String                               novelAuthor;
+    private String                               novelPicUrl;
+    private String                               novelArticleNum;
+    private ImageView                            novelImageView;
+    private TextView                             novelTextName;
+    private TextView                             novelTextAuthor;
+    private TextView                             downloadedCount;
+    private ImageLoader                          mImageLoader;
+    private LinearLayout                         novelLayoutProgress;
+    private ArrayList<Article>                   articleList        = new ArrayList<Article>();
+    private ExpandableListView                   novelListView;
+    private Novel                                theNovel;
 
-    private TreeMap<String, ArrayList<Article>> 	  myData             = new TreeMap<String, ArrayList<Article>>();
-    private static ArrayList<Group>             	  mGroups            = new ArrayList<Group>();
-    private AlertDialog.Builder                 	  deleteDialog;
-    private AlertDialog.Builder                 	  aboutUsDialog;
-    private final String                              adWhirlKey         = "215f895eb71748e7ba4cb3a5f20b061e";
+    private TreeMap<String, ArrayList<Article>>  myData             = new TreeMap<String, ArrayList<Article>>();
+    private static ArrayList<Group>              mGroups            = new ArrayList<Group>();
+    private AlertDialog.Builder                  deleteDialog;
+    private AlertDialog.Builder                  aboutUsDialog;
+    private final String                         adWhirlKey         = "215f895eb71748e7ba4cb3a5f20b061e";
 
-    private static SherlockActivity 				  myActivity;
-    private static ActionMode                         myMode;
-    private static ExpandListDownLoadReadAdapter      mAdapter;
-    private static boolean                            actionModeShowing = false;
-    private static boolean							  isDeleteArticles = false;
-    private ProgressDialog progressDialog   = null;
-    
+    private static SherlockActivity              myActivity;
+    private static ActionMode                    myMode;
+    private static ExpandListDownLoadReadAdapter mAdapter;
+    private static boolean                       actionModeShowing  = false;
+    private static boolean                       isDeleteArticles   = false;
+    private ProgressDialog                       progressDialog     = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.layout_novel_downloaded);
-        
+
         myActivity = MyDownloadArticleActivity.this;
-        
+
         final ActionBar ab = getSupportActionBar();
         mBundle = this.getIntent().getExtras();
         novelName = mBundle.getString("NovelName");
@@ -195,18 +196,18 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
     }
 
     private class DownloadArticlesTask extends AsyncTask {
-    	
-    	@Override  
-        protected void onPreExecute() {   
-    		progressDialog = ProgressDialog.show(MyDownloadArticleActivity.this, "資料處理中...", null);
-        }  
-    	
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(MyDownloadArticleActivity.this, "資料處理中...", null);
+        }
+
         @Override
         protected Object doInBackground(Object... params) {
-        	if(isDeleteArticles){
-        		removeArticles();
-        		isDeleteArticles= false;
-        	}
+            if (isDeleteArticles) {
+                removeArticles();
+                isDeleteArticles = false;
+            }
             articleList = NovelAPI.getDownloadedNovelArticles(novelId, false, MyDownloadArticleActivity.this);
             return null;
         }
@@ -214,13 +215,13 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            if(progressDialog.isShowing())
-            progressDialog.cancel();
-            
-            myData     = new TreeMap<String, ArrayList<Article>>();
-            mGroups    = new ArrayList<Group>();
+            if (progressDialog.isShowing())
+                progressDialog.cancel();
 
-            if (articleList != null ) {
+            myData = new TreeMap<String, ArrayList<Article>>();
+            mGroups = new ArrayList<Group>();
+
+            if (articleList != null) {
 
                 // use HashMap || TreeMap to make a parent key
                 for (int i = 0; i < articleList.size(); i++) {
@@ -242,22 +243,22 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
                                         .getSubject(), articles.get(j).isDownload()));
                     }
                 }
-                
+
                 reverseMGroups();
-//                ExpandListAdapter mAdapter = new ExpandListAdapter(MyDownloadArticleActivity.this, mGroups, theNovel, -1);
+                // ExpandListAdapter mAdapter = new ExpandListAdapter(MyDownloadArticleActivity.this, mGroups, theNovel, -1);
                 mAdapter = new ExpandListDownLoadReadAdapter(MyDownloadArticleActivity.this, mGroups, theNovel);
-               
+
                 novelListView.setAdapter(mAdapter);
 
             }
 
             String txtCount = Integer.toString(articleList.size());
             downloadedCount.setText("共 " + txtCount + " 個下載");
-            
+
             novelLayoutProgress.setVisibility(View.GONE);
         }
     }
-    
+
     private void reverseMGroups() {
         // TODO Auto-generated method stub
         ArrayList<Group> aGroups = new ArrayList<Group>(mGroups.size());
@@ -285,100 +286,100 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
                     }
                 });
     }
-    
-    public static  ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
-	    // Called when the action mode is created; startActionMode() was called	   
-		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-	      // Inflate a menu resource providing context menu items
-	      MenuInflater inflater = mode.getMenuInflater();
-	      // Assumes that you have "contexual.xml" menu resources
-	      inflater.inflate(R.menu.contextual, menu);
-	      myMode = mode;
-	      isDeleteArticles = false;
-	      return true;
-	    }
+    public static ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
-	    // Called each time the action mode is shown. Always called after
-	    // onCreateActionMode, but
-	    // may be called multiple times if the mode is invalidated.	   
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-	      return false; // Return false if nothing is done
-	    }
+                                                              // Called when the action mode is created; startActionMode() was called
+                                                              public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                                                                  // Inflate a menu resource providing context menu items
+                                                                  MenuInflater inflater = mode.getMenuInflater();
+                                                                  // Assumes that you have "contexual.xml" menu resources
+                                                                  inflater.inflate(R.menu.contextual, menu);
+                                                                  myMode = mode;
+                                                                  isDeleteArticles = false;
+                                                                  return true;
+                                                              }
 
-	    // Called when the user selects a contextual menu item	    
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-	      switch (item.getItemId()) {
-	      case R.id.delete_articles:
-	    	isDeleteArticles = true;   	
-	        myMode = mode;
-	        actionModeShowing =false;
-	        myMode.finish();
-	        return true;
-	      default:
-	        return false;
-	      }
-	    }
-		
-		// Called when the user exits the action mode
-		public void onDestroyActionMode(ActionMode mode) {
-//	      mActionMode = null;
-		 
-	    }
-	};
-	  
-	public static void showCallBackAction(){
-		boolean show = checkSelectOrNot();
-		if(show && !actionModeShowing){
-			myActivity.startActionMode(MyDownloadArticleActivity.mActionModeCallback);
-			actionModeShowing = true;
-		}else if(!show){
-			actionModeShowing =false;
-			myMode.finish();
-		}
-	}
-	
-	private static boolean checkSelectOrNot() {
-		for (int i = 0; i < mGroups.size(); i++) {
-        	int groupSize = mGroups.get(i).getChildrenCount();
+                                                              // Called each time the action mode is shown. Always called after
+                                                              // onCreateActionMode, but
+                                                              // may be called multiple times if the mode is invalidated.
+                                                              public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                                                                  return false; // Return false if nothing is done
+                                                              }
+
+                                                              // Called when the user selects a contextual menu item
+                                                              public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                                                                  switch (item.getItemId()) {
+                                                                  case R.id.delete_articles:
+                                                                      isDeleteArticles = true;
+                                                                      myMode = mode;
+                                                                      actionModeShowing = false;
+                                                                      myMode.finish();
+                                                                      return true;
+                                                                  default:
+                                                                      return false;
+                                                                  }
+                                                              }
+
+                                                              // Called when the user exits the action mode
+                                                              public void onDestroyActionMode(ActionMode mode) {
+                                                                  // mActionMode = null;
+
+                                                              }
+                                                          };
+
+    public static void showCallBackAction() {
+        boolean show = checkSelectOrNot();
+        if (show && !actionModeShowing) {
+            myActivity.startActionMode(MyDownloadArticleActivity.mActionModeCallback);
+            actionModeShowing = true;
+        } else if (!show) {
+            actionModeShowing = false;
+            myMode.finish();
+        }
+    }
+
+    private static boolean checkSelectOrNot() {
+        for (int i = 0; i < mGroups.size(); i++) {
+            int groupSize = mGroups.get(i).getChildrenCount();
             for (int j = groupSize; j > 0; j--) {
-                ChildArticle aChildArticle = mGroups.get(i).getChildItem(j-1);
+                ChildArticle aChildArticle = mGroups.get(i).getChildItem(j - 1);
                 if (aChildArticle.getChecked() && aChildArticle.isDownload()) {
-                	return true;
+                    return true;
                 }
             }
         }
-		return false;
-	}
-	
-	// 如果有按刪除鍵, 就刪除並重整Data
-	@Override
-	public void onActionModeFinished (ActionMode mode){
-		actionModeShowing =false;
-		if(isDeleteArticles){
-			new DownloadArticlesTask().execute();
-			
-		}
-	}
-	
-	private static void removeArticles() {
-		// TODO Auto-generated method stub
+        return false;
+    }
+
+    // 如果有按刪除鍵, 就刪除並重整Data
+    @Override
+    public void onActionModeFinished(ActionMode mode) {
+        actionModeShowing = false;
+        if (isDeleteArticles) {
+            new DownloadArticlesTask().execute();
+
+        }
+    }
+
+    private static void removeArticles() {
+        // TODO Auto-generated method stub
         for (int i = 0; i < mGroups.size(); i++) {
-        	ArrayList<Article> articlesList = new ArrayList<Article>();
-        	int groupSize = mGroups.get(i).getChildrenCount();
+            ArrayList<Article> articlesList = new ArrayList<Article>();
+            int groupSize = mGroups.get(i).getChildrenCount();
             for (int j = groupSize; j > 0; j--) {
-                ChildArticle aChildArticle = mGroups.get(i).getChildItem(j-1);
+                ChildArticle aChildArticle = mGroups.get(i).getChildItem(j - 1);
                 if (aChildArticle.getChecked() && aChildArticle.isDownload()) {
-                	Article theArticle = new Article(aChildArticle.getId(), aChildArticle.getNovelId(), "", aChildArticle.getTitle(), aChildArticle.getSubject(), true);
-//                	NovelAPI.removeArticle(theArticle, myActivity);
-                	articlesList.add(theArticle);
-                	mGroups.get(i).removeChild(j-1);
+                    Article theArticle = new Article(aChildArticle.getId(), aChildArticle.getNovelId(), "", aChildArticle.getTitle(),
+                            aChildArticle.getSubject(), true);
+                    // NovelAPI.removeArticle(theArticle, myActivity);
+                    articlesList.add(theArticle);
+                    mGroups.get(i).removeChild(j - 1);
                 }
             }
             NovelAPI.removeArticles(articlesList, myActivity);
-        }  
-	}
-	
+        }
+    }
 
     private void setAdAdwhirl() {
         // TODO Auto-generated method stub

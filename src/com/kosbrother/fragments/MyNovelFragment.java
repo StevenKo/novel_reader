@@ -1,5 +1,8 @@
 package com.kosbrother.fragments;
 
+import java.io.File;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.novel.db.SQLiteNovel;
 import com.novel.reader.BookmarkActivity;
 import com.novel.reader.ClassicNovelsActivity;
 import com.novel.reader.MyNovelActivity;
@@ -42,6 +46,30 @@ public final class MyNovelFragment extends Fragment {
         findViews();
         setViews();
         return myFragmentView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        checkDB();
+    }
+
+    void checkDB() {
+        File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
+        if (!cacheDir.exists())
+            cacheDir.mkdirs();
+        File sdcardDB = new File(cacheDir, SQLiteNovel.DB_NAME);
+        if (!sdcardDB.exists()) {
+            ProgressDialog progressdialogInit;
+            progressdialogInit = ProgressDialog.show(getActivity(), "Load", "Loading…");
+            progressdialogInit.setTitle("初始化DB");
+            progressdialogInit.setMessage("初始化DB中…(原先下載過小說的用戶，會將資料轉至 SD卡）");
+            progressdialogInit.setCanceledOnTouchOutside(false);
+            progressdialogInit.setCancelable(false);
+            progressdialogInit.show();
+            SQLiteNovel db = new SQLiteNovel(getActivity());
+            progressdialogInit.dismiss();
+        }
     }
 
     private void setViews() {
