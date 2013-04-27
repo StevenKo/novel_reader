@@ -89,6 +89,7 @@
     <string name="report_remind">請輸入問題內容!</string>
     <string name="report_success">成功回報!</string>
     <string name="report_fail">回報失敗!</string>
+    <string name="report_hint">問題內容...</string>
     
     <string name="search_hint">請輸入作者或書名</string>
     <string name="about_us_string">關於我們</string>

@@ -18,7 +18,7 @@
     <EditText android:id="@+id/text_report_content"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
-       android:hint="問題內容..."
+       android:hint="@string/report_hint"
        android:layout_marginTop="5dp"
        android:layout_marginBottom="5dp"
         />

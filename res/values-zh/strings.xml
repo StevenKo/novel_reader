@@ -95,6 +95,7 @@
 	<string name="report_remind">请输入问题内容！</string>
 	<string name="report_success">成功回报！</string>
 	<string name="report_fail">回报失败！</string>
+	<string name="report_hint">问题内容...</string>
 	
 	<string name="search_hint">请输入作者或书名</string>
 	<string name="about_us_string">关于我们</string>
