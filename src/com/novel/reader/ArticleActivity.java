@@ -392,7 +392,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         	try {   
                 GMailSender sender = new GMailSender("sandjstudio@gmail.com", "wonderful2013");
                 booleanSend = sender.sendMail(
-                		getResources().getString(R.string.report_chapter)+articleTitle,   
+                		novelName + "---"+getResources().getString(R.string.report_chapter)+articleTitle,   
                 		 reportContent,   
                         "sandjstudio@gmail.com",   
                         "brotherkos@gmail.com");               
@@ -444,6 +444,13 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 }
                 articleTextView.setText(text);
             } else {
+//            	String text2 = "";
+//            	 try {
+//                     text2 = taobe.tec.jcc.JChineseConvertor.getInstance().s2t(myAricle.getText());
+//                 } catch (IOException e) {
+//                     e.printStackTrace();
+//                 }
+//            	articleTextView.setText(text2);
                 articleTextView.setText(myAricle.getText());
             }
 
