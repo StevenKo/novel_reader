@@ -90,7 +90,6 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         mBundle = this.getIntent().getExtras();
         novelId = mBundle.getInt("NovelId");
 
-        new DownloadArticlesTask().execute();
         new DownloadNovelTask().execute();
 
         final ActionBar ab = getSupportActionBar();
@@ -116,7 +115,13 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setGroupsAndAdatper();
+        novelLayoutProgress.setVisibility(View.VISIBLE);
+        if (articleList == null || articleList.size() == 0) {
+            new DownloadArticlesTask().execute();
+        } else {
+            setGroupsAndAdatper();
+            novelLayoutProgress.setVisibility(View.GONE);
+        }
 
     }
 
