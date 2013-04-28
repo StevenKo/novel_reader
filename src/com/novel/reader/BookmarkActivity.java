@@ -196,7 +196,8 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
 
         @Override
         protected void onPostExecute(String result) {
-            progressdialogInit.dismiss();
+            if (progressdialogInit.isShowing())
+                progressdialogInit.dismiss();
             setListAdatper();
             if (alertDeleteBookmark)
                 showArticleDeleteDialog();
