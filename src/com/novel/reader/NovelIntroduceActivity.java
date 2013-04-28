@@ -412,7 +412,10 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 
         @Override
         protected Object doInBackground(Object... params) {
-            theNovel = NovelAPI.getNovel(novelId, NovelIntroduceActivity.this);
+            Novel getNovel = NovelAPI.getNovel(novelId, NovelIntroduceActivity.this);
+            if (getNovel != null)
+                theNovel = getNovel;
+
             return null;
         }
 
