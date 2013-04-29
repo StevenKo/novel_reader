@@ -119,6 +119,12 @@
     
     <string name="search_hint">搜尋小說名稱或作者</string>
     
+    <string name="reset_db_hint">資料庫重置(清空 DB)</string>
+    <string name="reset_db_message">確定要重置資料庫嗎？(完成後,請重開APP)</string>
+    <string name="reset_db_success">重置完成</string>
+    <string name="reset_db_fail">重置失敗</string>
+    <string name="reset">重置</string>
+    
     <!-- for vpon -->
     <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>

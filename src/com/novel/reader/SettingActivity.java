@@ -7,17 +7,20 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.novel.db.SQLiteNovel;
 import com.novel.reader.api.Setting;
 
 public class SettingActivity extends SherlockFragmentActivity {
@@ -42,6 +45,7 @@ public class SettingActivity extends SherlockFragmentActivity {
     private int                 appTheme;
 
     private AlertDialog.Builder finishDialog;
+    private Button              dbResetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,7 @@ public class SettingActivity extends SherlockFragmentActivity {
         textPreView = (TextView) findViewById(R.id.text_preview);
         imageviewTextColor = (ImageView) findViewById(R.id.imageview_textcolor);
         imageviewTextBackground = (ImageView) findViewById(R.id.imageview_textbackground);
+        dbResetButton = (Button) findViewById(R.id.dbResetButton);
 
         textPreView.setTextSize(textSize);
         textPreView.setTextColor(textColor);
@@ -90,6 +95,13 @@ public class SettingActivity extends SherlockFragmentActivity {
         ((RadioButton) tapRadioGroup.getChildAt(clickToNextPage)).setChecked(true);
         ((RadioButton) stopSleepRadioGroup.getChildAt(textLanguage)).setChecked(true);
         ((RadioButton) themeRadioGroup.getChildAt(appTheme)).setChecked(true);
+
+        dbResetButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                showDbResetDialog();
+            }
+        });
 
         imageviewTextColor.setOnClickListener(new OnClickListener() {
             @Override
@@ -189,6 +201,28 @@ public class SettingActivity extends SherlockFragmentActivity {
         View radioButton = theRadioGroup.findViewById(radioButtonID);
         int idx = theRadioGroup.indexOfChild(radioButton);
         Setting.saveSetting(key, idx, SettingActivity.this);
+
+    }
+
+    private void showDbResetDialog() {
+        new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.reset_db_hint))
+                .setMessage(getResources().getString(R.string.reset_db_message))
+                .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SQLiteNovel db = new SQLiteNovel(SettingActivity.this);
+                        boolean reset = db.resetDB();
+                        if (reset) {
+                            Toast.makeText(SettingActivity.this, getResources().getString(R.string.reset_db_success), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(SettingActivity.this, getResources().getString(R.string.reset_db_fail), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }).setNegativeButton(getResources().getString(R.string.report_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
 
     }
 

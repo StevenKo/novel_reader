@@ -126,6 +126,12 @@
     
     <string name="search_hint">搜寻小说名称或作者</string>
     
+    <string name="reset_db_hint">资料库重置(清空DB)</string>
+    <string name="reset_db_message">确定要重置资料库吗？ (完成后,请重开APP)</string>
+    <string name="reset_db_success">重置完成</string>
+    <string name="reset_db_fail">重置失败</string>
+    <string name="reset">重置</string>
+    
     <!-- for load more -->
     <string name="hello">Hello World, LoadMoreListView!</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh...</string>

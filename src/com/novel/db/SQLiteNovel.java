@@ -122,6 +122,23 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         db.execSQL(upgradeQuery);
     }
 
+    public boolean resetDB() {
+        try {
+            ctx.deleteDatabase(SQLiteNovel.DB_NAME);
+            db = this.getWritableDatabase();
+            File currentDB = ctx.getDatabasePath(SQLiteNovel.DB_NAME);
+            File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
+            if (!cacheDir.exists())
+                cacheDir.mkdirs();
+            File sdcardDB = new File(cacheDir, DB_NAME);
+            if (sdcardDB.exists())
+                sdcardDB.delete();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private void moveDB() {
         try {
             File currentDB = ctx.getDatabasePath(SQLiteNovel.DB_NAME);
