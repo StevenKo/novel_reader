@@ -21,10 +21,11 @@ import com.novel.reader.entity.Novel;
 public class SQLiteNovel extends SQLiteOpenHelper {
 
     public static final String DB_NAME            = "kosnovel.sqlite";                                   // 資料庫名稱
-    private static final int   DATABASE_VERSION   = 2;                                                   // 資料庫版本
+    private static final int   DATABASE_VERSION   = 3;                                                   // 資料庫版本
     private SQLiteDatabase     db;
     private final Context      ctx;
     public static final File   DATABASE_FILE_PATH = android.os.Environment.getExternalStorageDirectory();
+    public static final String STORAGE_STATE      = android.os.Environment.getExternalStorageState();
 
     // Define database schema
     public interface NovelSchema {
@@ -50,6 +51,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         String TITLE         = "title";
         String SUBJECT       = "subject";
         String IS_DOWNLOADED = "is_downloaded";
+        String NUM           = "num";
     }
 
     public interface BookmarkSchema {
@@ -72,46 +74,75 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         // db = this.getWritableDatabase();
 
         if (db == null) {
-            try {
-                db = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
-            } catch (SQLiteException ex) {
+            if (STORAGE_STATE.equals("mounted") && DATABASE_FILE_PATH != null) {
+                try {
+                    db = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
+                    if (db.getVersion() < DATABASE_VERSION) {
+                        onUpgrade(db, db.getVersion(), DATABASE_VERSION);
+                        db = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
+                    }
+                } catch (SQLiteException ex) {
+                    db = this.getWritableDatabase();
+                    File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
+                    if (!cacheDir.exists())
+                        cacheDir.mkdirs();
+                    db = SQLiteDatabase.openOrCreateDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null);
+                    db.setVersion(DATABASE_VERSION);
+                    try {
+                        createTables();
+                    } catch (Exception e) {
+
+                    }
+                }
+            } else {
                 db = this.getWritableDatabase();
-                File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
-                if (!cacheDir.exists())
-                    cacheDir.mkdirs();
-                db = SQLiteDatabase.openOrCreateDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null);
-                db.setVersion(DATABASE_VERSION);
-                createTables();
             }
+
         }
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (newVersion == 2) {
-            try {
-                File currentDB = ctx.getDatabasePath(SQLiteNovel.DB_NAME);
-                File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
-                if (!cacheDir.exists())
-                    cacheDir.mkdirs();
-                File sdcardDB = new File(cacheDir, DB_NAME);
-                if (currentDB.exists()) {
-                    FileChannel src = new FileInputStream(currentDB).getChannel();
-                    FileChannel dst = new FileOutputStream(sdcardDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
-                    // currentDB;
-                    db.execSQL("DROP TABLE IF EXISTS " + BookmarkSchema.TABLE_NAME);
-                    db.execSQL("DROP TABLE IF EXISTS " + ArtcileSchema.TABLE_NAME);
-                    db.execSQL("DROP TABLE IF EXISTS " + NovelSchema.TABLE_NAME);
-                }
-            } catch (Exception e) {
-
+        if (STORAGE_STATE.equals("mounted") && DATABASE_FILE_PATH != null) {
+            if (oldVersion == 2) {
+                alterArticleTableAddNum(db);
+            } else if (oldVersion == 1) {
+                alterArticleTableAddNum(db);
+                moveDB();
             }
+        } else {
+            alterArticleTableAddNum(db);
         }
 
+    }
+
+    private void alterArticleTableAddNum(SQLiteDatabase db) {
+        String upgradeQuery = "ALTER TABLE " + ArtcileSchema.TABLE_NAME + " ADD COLUMN " + ArtcileSchema.NUM + " INTEGER default 0";
+        db.execSQL(upgradeQuery);
+    }
+
+    private void moveDB() {
+        try {
+            File currentDB = ctx.getDatabasePath(SQLiteNovel.DB_NAME);
+            File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
+            if (!cacheDir.exists())
+                cacheDir.mkdirs();
+            File sdcardDB = new File(cacheDir, DB_NAME);
+            if (currentDB.exists()) {
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(sdcardDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                // currentDB;
+                db.execSQL("DROP TABLE IF EXISTS " + BookmarkSchema.TABLE_NAME);
+                db.execSQL("DROP TABLE IF EXISTS " + ArtcileSchema.TABLE_NAME);
+                db.execSQL("DROP TABLE IF EXISTS " + NovelSchema.TABLE_NAME);
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     private void createTables() {
@@ -123,8 +154,13 @@ public class SQLiteNovel extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + ArtcileSchema.TABLE_NAME + " (" + ArtcileSchema.ID + " INTEGER PRIMARY KEY" + "," + ArtcileSchema.NOVEL_ID
                 + " INTEGER NOT NULL" + "," + ArtcileSchema.TEXT + " TEXT NOT NULL" + "," + ArtcileSchema.TITLE + " TEXT NOT NULL" + ","
-                + ArtcileSchema.SUBJECT + " TEXT NOT NULL" + "," + ArtcileSchema.IS_DOWNLOADED + " INTEGER NOT NULL" + "," + "FOREIGN KEY("
-                + ArtcileSchema.NOVEL_ID + ") REFERENCES " + NovelSchema.TABLE_NAME + "(" + NovelSchema.ID + ") ON UPDATE CASCADE" + ");");
+                + ArtcileSchema.SUBJECT + " TEXT NOT NULL" + "," + ArtcileSchema.IS_DOWNLOADED + " INTEGER NOT NULL" + "," + ArtcileSchema.NUM
+                + " INTEGER default 0" + "," + "FOREIGN KEY(" + ArtcileSchema.NOVEL_ID + ") REFERENCES " + NovelSchema.TABLE_NAME + "(" + NovelSchema.ID
+                + ") ON UPDATE CASCADE" + ");");
+        // db.execSQL("CREATE TABLE IF NOT EXISTS " + ArtcileSchema.TABLE_NAME + " (" + ArtcileSchema.ID + " INTEGER PRIMARY KEY" + "," + ArtcileSchema.NOVEL_ID
+        // + " INTEGER NOT NULL" + "," + ArtcileSchema.TEXT + " TEXT NOT NULL" + "," + ArtcileSchema.TITLE + " TEXT NOT NULL" + ","
+        // + ArtcileSchema.SUBJECT + " TEXT NOT NULL" + "," + ArtcileSchema.IS_DOWNLOADED + " INTEGER NOT NULL" + "," + "FOREIGN KEY("
+        // + ArtcileSchema.NOVEL_ID + ") REFERENCES " + NovelSchema.TABLE_NAME + "(" + NovelSchema.ID + ") ON UPDATE CASCADE" + ");");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + BookmarkSchema.TABLE_NAME + " (" + BookmarkSchema.ID + " INTEGER PRIMARY KEY" + ","
                 + BookmarkSchema.NOVEL_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.ARTICLE_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.READ_RATE
@@ -142,8 +178,13 @@ public class SQLiteNovel extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + ArtcileSchema.TABLE_NAME + " (" + ArtcileSchema.ID + " INTEGER PRIMARY KEY" + "," + ArtcileSchema.NOVEL_ID
                 + " INTEGER NOT NULL" + "," + ArtcileSchema.TEXT + " TEXT NOT NULL" + "," + ArtcileSchema.TITLE + " TEXT NOT NULL" + ","
-                + ArtcileSchema.SUBJECT + " TEXT NOT NULL" + "," + ArtcileSchema.IS_DOWNLOADED + " INTEGER NOT NULL" + "," + "FOREIGN KEY("
-                + ArtcileSchema.NOVEL_ID + ") REFERENCES " + NovelSchema.TABLE_NAME + "(" + NovelSchema.ID + ") ON UPDATE CASCADE" + ");");
+                + ArtcileSchema.SUBJECT + " TEXT NOT NULL" + "," + ArtcileSchema.IS_DOWNLOADED + " INTEGER NOT NULL" + "," + ArtcileSchema.NUM
+                + " INTEGER default 0" + "," + "FOREIGN KEY(" + ArtcileSchema.NOVEL_ID + ") REFERENCES " + NovelSchema.TABLE_NAME + "(" + NovelSchema.ID
+                + ") ON UPDATE CASCADE" + ");");
+        // db.execSQL("CREATE TABLE IF NOT EXISTS " + ArtcileSchema.TABLE_NAME + " (" + ArtcileSchema.ID + " INTEGER PRIMARY KEY" + "," + ArtcileSchema.NOVEL_ID
+        // + " INTEGER NOT NULL" + "," + ArtcileSchema.TEXT + " TEXT NOT NULL" + "," + ArtcileSchema.TITLE + " TEXT NOT NULL" + ","
+        // + ArtcileSchema.SUBJECT + " TEXT NOT NULL" + "," + ArtcileSchema.IS_DOWNLOADED + " INTEGER NOT NULL" + "," + "FOREIGN KEY("
+        // + ArtcileSchema.NOVEL_ID + ") REFERENCES " + NovelSchema.TABLE_NAME + "(" + NovelSchema.ID + ") ON UPDATE CASCADE" + ");");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + BookmarkSchema.TABLE_NAME + " (" + BookmarkSchema.ID + " INTEGER PRIMARY KEY" + ","
                 + BookmarkSchema.NOVEL_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.ARTICLE_ID + " INTEGER NOT NULL" + "," + BookmarkSchema.READ_RATE
@@ -368,10 +409,10 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         Cursor cursor = null;
         ArrayList<Article> articles = new ArrayList<Article>();
         if (isOrderUp)
-            cursor = db.rawQuery("SELECT id,novel_id,title,subject,is_downloaded FROM " + ArtcileSchema.TABLE_NAME + " WHERE novel_id = \'" + novel_id + "\'",
-                    null);
+            cursor = db.rawQuery("SELECT id,novel_id,title,subject,is_downloaded,num FROM " + ArtcileSchema.TABLE_NAME + " WHERE novel_id = \'" + novel_id
+                    + "\'", null);
         else
-            cursor = db.rawQuery("SELECT id,novel_id,title,subject,is_downloaded FROM " + ArtcileSchema.TABLE_NAME + " WHERE novel_id = \'" + novel_id
+            cursor = db.rawQuery("SELECT id,novel_id,title,subject,is_downloaded,num FROM " + ArtcileSchema.TABLE_NAME + " WHERE novel_id = \'" + novel_id
                     + "\' ORDER BY id DESC", null);
 
         while (cursor.moveToNext()) {
@@ -380,7 +421,8 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             String TITLE = cursor.getString(2);
             String SUBJECT = cursor.getString(3);
             boolean IS_DOWNLOADED = cursor.getInt(4) > 0;
-            Article article = new Article(ID, NOVEL_ID, "", TITLE, SUBJECT, IS_DOWNLOADED);
+            int NUM = cursor.getInt(5);
+            Article article = new Article(ID, NOVEL_ID, "", TITLE, SUBJECT, IS_DOWNLOADED, NUM);
             articles.add(article);
         }
         return articles;
@@ -410,7 +452,8 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             String TITLE = cursor.getString(3);
             String SUBJECT = cursor.getString(4);
             boolean IS_DOWNLOADED = cursor.getInt(5) > 0;
-            article = new Article(ID, NOVEL_ID, TEXT, TITLE, SUBJECT, IS_DOWNLOADED);
+            int NUM = cursor.getInt(6);
+            article = new Article(ID, NOVEL_ID, TEXT, TITLE, SUBJECT, IS_DOWNLOADED, NUM);
         }
         cursor.close();
         return article;
@@ -425,6 +468,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         args.put(ArtcileSchema.TITLE, article.getTitle());
         args.put(ArtcileSchema.SUBJECT, article.getSubject());
         args.put(ArtcileSchema.IS_DOWNLOADED, getSQLiteBoolean(article.isDownload()));
+        args.put(ArtcileSchema.NUM, article.getNum());
         return db.insert(ArtcileSchema.TABLE_NAME, null, args);
     }
 
