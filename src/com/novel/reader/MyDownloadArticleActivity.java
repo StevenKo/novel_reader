@@ -240,7 +240,7 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
                     for (int j = 0; j < articles.size(); j++) {
                         mGroups.get(i).addChildrenItem(
                                 new ChildArticle(articles.get(j).getId(), articles.get(j).getNovelId(), "", articles.get(j).getTitle(), articles.get(j)
-                                        .getSubject(), articles.get(j).isDownload()));
+                                        .getSubject(), articles.get(j).isDownload(), articles.get(j).getNum()));
                     }
                 }
 
@@ -371,7 +371,7 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
                 ChildArticle aChildArticle = mGroups.get(i).getChildItem(j - 1);
                 if (aChildArticle.getChecked() && aChildArticle.isDownload()) {
                     Article theArticle = new Article(aChildArticle.getId(), aChildArticle.getNovelId(), "", aChildArticle.getTitle(),
-                            aChildArticle.getSubject(), true);
+                            aChildArticle.getSubject(), true, aChildArticle.getNum());
                     // NovelAPI.removeArticle(theArticle, myActivity);
                     articlesList.add(theArticle);
                     mGroups.get(i).removeChild(j - 1);

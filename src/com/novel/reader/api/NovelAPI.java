@@ -325,8 +325,8 @@ public class NovelAPI {
             }
         }
 
-        String message = getMessageFromServer("GET", "/api/v1/articles/previous_article.json?novel_id=" + orginArticle.getNovelId() + "&article_id="
-                + orginArticle.getId(), null);
+        String message = getMessageFromServer("GET", "/api/v1/articles/previous_article_by_num.json?novel_id=" + orginArticle.getNovelId() + "&article_id="
+                + orginArticle.getId() + "&num=" + orginArticle.getNum(), null);
         if (message == null) {
             return null;
         } else {
@@ -338,7 +338,8 @@ public class NovelAPI {
                 int id = nObject.getInt("id");
                 int novelId = nObject.getInt("novel_id");
                 String title = nObject.getString("title");
-                return new Article(id, novelId, text, title, "", false);
+                int num = nObject.getInt("num");
+                return new Article(id, novelId, text, title, "", false, num);
 
             } catch (JSONException e) {
 
@@ -357,8 +358,8 @@ public class NovelAPI {
             }
         }
 
-        String message = getMessageFromServer("GET",
-                "/api/v1/articles/next_article.json?novel_id=" + orginArticle.getNovelId() + "&article_id=" + orginArticle.getId(), null);
+        String message = getMessageFromServer("GET", "/api/v1/articles/next_article_by_num.json?novel_id=" + orginArticle.getNovelId() + "&article_id="
+                + orginArticle.getId() + "&num=" + orginArticle.getNum(), null);
         if (message == null) {
             return null;
         } else {
@@ -370,7 +371,8 @@ public class NovelAPI {
                 int id = nObject.getInt("id");
                 int novelId = nObject.getInt("novel_id");
                 String title = nObject.getString("title");
-                return new Article(id, novelId, text, title, "", false);
+                int num = nObject.getInt("num");
+                return new Article(id, novelId, text, title, "", false, num);
 
             } catch (JSONException e) {
 
@@ -387,7 +389,7 @@ public class NovelAPI {
 
     public static ArrayList<Article> getNovelArticles(int novelId, boolean isOrderUp, Context context) {
         ArrayList<Article> articles = new ArrayList<Article>();
-        String message = getMessageFromServer("GET", "/api/v1/articles.json?novel_id=" + novelId + "&order=" + isOrderUp, null);
+        String message = getMessageFromServer("GET", "/api/v1/articles/articles_by_num.json?novel_id=" + novelId + "&order=" + isOrderUp, null);
         if (message == null) {
             return null;
         } else {
@@ -399,8 +401,9 @@ public class NovelAPI {
                     int id = novelsArray.getJSONObject(i).getInt("id");
                     String subject = novelsArray.getJSONObject(i).getString("subject");
                     String title = novelsArray.getJSONObject(i).getString("title");
+                    int num = novelsArray.getJSONObject(i).getInt("num");
 
-                    Article a = new Article(id, novelId, "", title, subject, false);
+                    Article a = new Article(id, novelId, "", title, subject, false, num);
                     articles.add(a);
                 }
 

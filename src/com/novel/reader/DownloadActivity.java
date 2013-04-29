@@ -205,7 +205,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
                     for (int j = 0; j < articles.size(); j++) {
                         mGroups.get(i).addChildrenItem(
                                 new ChildArticle(articles.get(j).getId(), articles.get(j).getNovelId(), "", articles.get(j).getTitle(), articles.get(j)
-                                        .getSubject(), articles.get(j).isDownload()));
+                                        .getSubject(), articles.get(j).isDownload(), articles.get(j).getNum()));
                     }
                 }
 
@@ -235,7 +235,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
                     ChildArticle aChildArticle = mGroups.get(i).getChildItem(j);
                     if (aChildArticle.getChecked() && !aChildArticle.isDownload()) {
                         checkedArticles.add(new Article(aChildArticle.getId(), aChildArticle.getNovelId(), aChildArticle.getText(), aChildArticle.getTitle(),
-                                aChildArticle.getSubject(), aChildArticle.isDownload()));
+                                aChildArticle.getSubject(), aChildArticle.isDownload(), aChildArticle.getNum()));
                     }
                 }
             }

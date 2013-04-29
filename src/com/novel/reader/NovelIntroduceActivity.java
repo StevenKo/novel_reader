@@ -278,7 +278,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
                 for (int j = 0; j < articles.size(); j++) {
                     mGroups.get(i).addChildrenItem(
                             new ChildArticle(articles.get(j).getId(), articles.get(j).getNovelId(), "", articles.get(j).getTitle(), articles.get(j)
-                                    .getSubject(), articles.get(j).isDownload()));
+                                    .getSubject(), articles.get(j).isDownload(), articles.get(j).getNum()));
 
                     if (theNovelBookmark != null) {
                         if (theNovelBookmark.getArticleTitle().equals(articles.get(j).getTitle()))

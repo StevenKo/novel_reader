@@ -1,26 +1,26 @@
 package com.novel.reader.entity;
 
 public class Article {
-    int     id;
-    int     novelId;
-    String  text;
-    String  title;
-    String  subject;
-    boolean isDownloaded;
-    int     num;
+    protected int     id;
+    protected int     novelId;
+    protected String  text;
+    protected String  title;
+    protected String  subject;
+    protected boolean isDownloaded;
+    protected int     num;
 
     public Article() {
-        this(1, 1, "", "", "", false);
+        this(1, 1, "", "", "", false, 0);
     }
 
-    public Article(int id, int novelId, String text, String title, String subject, boolean isDownloaded) {
-        this.id = id;
-        this.novelId = novelId;
-        this.title = title;
-        this.text = text;
-        this.subject = subject;
-        this.isDownloaded = isDownloaded;
-    }
+    // public Article(int id, int novelId, String text, String title, String subject, boolean isDownloaded) {
+    // this.id = id;
+    // this.novelId = novelId;
+    // this.title = title;
+    // this.text = text;
+    // this.subject = subject;
+    // this.isDownloaded = isDownloaded;
+    // }
 
     public Article(int id, int novelId, String text, String title, String subject, boolean isDownloaded, int num) {
         this.id = id;

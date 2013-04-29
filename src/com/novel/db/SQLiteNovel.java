@@ -410,10 +410,10 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         ArrayList<Article> articles = new ArrayList<Article>();
         if (isOrderUp)
             cursor = db.rawQuery("SELECT id,novel_id,title,subject,is_downloaded,num FROM " + ArtcileSchema.TABLE_NAME + " WHERE novel_id = \'" + novel_id
-                    + "\'", null);
+                    + "\' order by num ASC", null);
         else
             cursor = db.rawQuery("SELECT id,novel_id,title,subject,is_downloaded,num FROM " + ArtcileSchema.TABLE_NAME + " WHERE novel_id = \'" + novel_id
-                    + "\' ORDER BY id DESC", null);
+                    + "\' ORDER BY num DESC", null);
 
         while (cursor.moveToNext()) {
             int ID = cursor.getInt(0);

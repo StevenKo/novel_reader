@@ -57,7 +57,7 @@ public class ExpandListDownLoadAdapter extends BaseExpandableListAdapter {
         TextView textDownload = (TextView) vi.findViewById(R.id.text_child_downloaded);
 
         // check downloaded or not
-        Boolean isDownloaded = child.isDownloaded;
+        Boolean isDownloaded = child.isDownload();
         if (isDownloaded) {
             checkBox.setVisibility(View.GONE);
             textDownload.setVisibility(View.VISIBLE);
@@ -133,7 +133,7 @@ public class ExpandListDownLoadAdapter extends BaseExpandableListAdapter {
         // check 是否都下載了
         Boolean isAllDownloaded = true;
         for (int i = 0; i < group.getChildrenCount(); i++) {
-            if (!group.getChildItem(i).isDownloaded)
+            if (!group.getChildItem(i).isDownload())
                 isAllDownloaded = false;
         }
 

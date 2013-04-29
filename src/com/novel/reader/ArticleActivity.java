@@ -11,7 +11,6 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,8 +84,10 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private LinearLayout        layoutProgress;
     private int                 currentY    = 0;
     private int                 appTheme;
-    private Boolean				booleanSend;
+    private Boolean             booleanSend;
     private String              reportContent;
+    private int                 articleNum;
+    private ArrayList<Integer>  articleNums;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         yRate = mBundle.getInt("ReadingRate", 0);
         articleIDs = mBundle.getIntegerArrayList("ArticleIDs");
         ariticlePosition = mBundle.getInt("ArticlePosition");
+        articleNum = mBundle.getInt("ArticleNum");
+        articleNums = mBundle.getIntegerArrayList("ArticleNums");
 
         ab.setDisplayShowCustomEnabled(true);
         ab.setDisplayShowTitleEnabled(false);
@@ -118,15 +121,15 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         if (articleIDs != null) {
             if (downloadBoolean) {
-                myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
+                myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
             } else {
-                myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
+                myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
             }
         } else {
             if (downloadBoolean) {
-                myAricle = new Article(articleId, novelId, "", articleTitle, "", true);
+                myAricle = new Article(articleId, novelId, "", articleTitle, "", true, articleNum);
             } else {
-                myAricle = new Article(articleId, novelId, "", articleTitle, "", false);
+                myAricle = new Article(articleId, novelId, "", articleTitle, "", false, articleNum);
             }
         }
 
@@ -209,9 +212,9 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                     if (ariticlePosition != 0) {
                         ariticlePosition = ariticlePosition - 1;
                         if (downloadBoolean) {
-                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
+                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
                         } else {
-                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
+                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
                         }
                         new UpdateArticleTask().execute();
                     } else {
@@ -230,9 +233,9 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                     if (ariticlePosition < articleIDs.size() - 1) {
                         ariticlePosition = ariticlePosition + 1;
                         if (downloadBoolean) {
-                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true);
+                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
                         } else {
-                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false);
+                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
                         }
                         new UpdateArticleTask().execute();
                     } else {
@@ -303,8 +306,9 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_Bookmark, 5, getResources().getString(R.string.menu_add_bookmark)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menu.add(0, ID_Report, 4, getResources().getString(R.string.menu_report)).setIcon(R.drawable.icon_report).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        
+        menu.add(0, ID_Report, 4, getResources().getString(R.string.menu_report)).setIcon(R.drawable.icon_report)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
         return true;
     }
 
@@ -340,74 +344,71 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             addBookMarkDialog.show();
             break;
         case ID_Report:
-        	showReportDialog();       	
+            showReportDialog();
             break;
         }
         return true;
     }
-    
-    private void showReportDialog() {
-    	   AlertDialog.Builder editDialog = new AlertDialog.Builder(ArticleActivity.this);
-    	   editDialog.setTitle(getResources().getString(R.string.report_title));
-    	    
-//    	   final EditText editText = new EditText(ArticleActivity.this);
-//    	   editDialog.setView(editText);
-    	   
-    	   LayoutInflater inflater = LayoutInflater.from(ArticleActivity.this);
-    	   View edit_view = inflater.inflate(R.layout.layout_mail_dialog,null);
-    	   TextView text_chapter = (TextView) edit_view.findViewById(R.id.text_report_chapter);
-    	   final EditText text_content = (EditText) edit_view.findViewById(R.id.text_report_content);
-    	   
-    	   text_chapter.setText(getResources().getString(R.string.report_chapter)+articleTitle);
-    	      	   
-    	   editDialog.setView(edit_view);
-    	   
-    	   editDialog.setPositiveButton(getResources().getString(R.string.report_confirm), new DialogInterface.OnClickListener() {
-	    	    public void onClick(DialogInterface arg0, int arg1) {
-	    	    	if(!text_content.getText().toString().equals("")){
-		    	    	reportContent = text_content.getText().toString();
-		    	    	new SendMailTask().execute();
-	    	    	}else{
-	    	    		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_remind), Toast.LENGTH_SHORT).show();
-	    	    	}
-	    	     }
-	    	    });
-    	   editDialog.setNegativeButton(getResources().getString(R.string.report_cancel), new DialogInterface.OnClickListener() {
-	    	    public void onClick(DialogInterface arg0, int arg1) {	    	    
-	    	     }
-	    	    });
-    	   editDialog.show();
-	}
 
-	private class SendMailTask extends AsyncTask {
-    	
-    	@Override
+    private void showReportDialog() {
+        AlertDialog.Builder editDialog = new AlertDialog.Builder(ArticleActivity.this);
+        editDialog.setTitle(getResources().getString(R.string.report_title));
+
+        // final EditText editText = new EditText(ArticleActivity.this);
+        // editDialog.setView(editText);
+
+        LayoutInflater inflater = LayoutInflater.from(ArticleActivity.this);
+        View edit_view = inflater.inflate(R.layout.layout_mail_dialog, null);
+        TextView text_chapter = (TextView) edit_view.findViewById(R.id.text_report_chapter);
+        final EditText text_content = (EditText) edit_view.findViewById(R.id.text_report_content);
+
+        text_chapter.setText(getResources().getString(R.string.report_chapter) + articleTitle);
+
+        editDialog.setView(edit_view);
+
+        editDialog.setPositiveButton(getResources().getString(R.string.report_confirm), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                if (!text_content.getText().toString().equals("")) {
+                    reportContent = text_content.getText().toString();
+                    new SendMailTask().execute();
+                } else {
+                    Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_remind), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        editDialog.setNegativeButton(getResources().getString(R.string.report_cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+            }
+        });
+        editDialog.show();
+    }
+
+    private class SendMailTask extends AsyncTask {
+
+        @Override
         protected void onPreExecute() {
             super.onPreExecute();
             Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_reporting), Toast.LENGTH_SHORT).show();
         }
-    	
+
         @Override
         protected Object doInBackground(Object... params) {
-        	try {   
+            try {
                 GMailSender sender = new GMailSender("sandjstudio@gmail.com", "wonderful2013");
-                booleanSend = sender.sendMail(
-                		novelName + "---"+getResources().getString(R.string.report_chapter)+articleTitle,   
-                		 reportContent,   
-                        "sandjstudio@gmail.com",   
-                        "brotherkos@gmail.com");               
-            } catch (Exception e) {   
-            } 
+                booleanSend = sender.sendMail(novelName + "---" + getResources().getString(R.string.report_chapter) + articleTitle, reportContent,
+                        "sandjstudio@gmail.com", "brotherkos@gmail.com");
+            } catch (Exception e) {
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            if(booleanSend){
-            	Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_success), Toast.LENGTH_SHORT).show();
-            }else{
-            	Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_fail), Toast.LENGTH_SHORT).show();
+            if (booleanSend) {
+                Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_success), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_fail), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -444,13 +445,13 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 }
                 articleTextView.setText(text);
             } else {
-//            	String text2 = "";
-//            	 try {
-//                     text2 = taobe.tec.jcc.JChineseConvertor.getInstance().s2t(myAricle.getText());
-//                 } catch (IOException e) {
-//                     e.printStackTrace();
-//                 }
-//            	articleTextView.setText(text2);
+                // String text2 = "";
+                // try {
+                // text2 = taobe.tec.jcc.JChineseConvertor.getInstance().s2t(myAricle.getText());
+                // } catch (IOException e) {
+                // e.printStackTrace();
+                // }
+                // articleTextView.setText(text2);
                 articleTextView.setText(myAricle.getText());
             }
 

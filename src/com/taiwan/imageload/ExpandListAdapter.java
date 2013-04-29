@@ -69,22 +69,29 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         vi.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	
-            	
-            	ArrayList<Integer> articleIDs = new ArrayList<Integer>();
-            	
-            	for (int i=0; i< theGroups.size(); i++){
-            		for(int j=0; j< theGroups.get(i).getChildrenCount(); j++){
-            			articleIDs.add(theGroups.get(i).getChildItem(j).getId());
-            		}
-            	}
-            	
-            	int position =0;
-            	for (int i=0; i< groupPosition; i++){
-            		position = position + theGroups.get(i).getChildrenCount();
-            	}
-            	position = position + childPosition;
-            	
+
+                ArrayList<Integer> articleIDs = new ArrayList<Integer>();
+
+                for (int i = 0; i < theGroups.size(); i++) {
+                    for (int j = 0; j < theGroups.get(i).getChildrenCount(); j++) {
+                        articleIDs.add(theGroups.get(i).getChildItem(j).getId());
+                    }
+                }
+
+                ArrayList<Integer> articleNums = new ArrayList<Integer>();
+
+                for (int i = 0; i < theGroups.size(); i++) {
+                    for (int j = 0; j < theGroups.get(i).getChildrenCount(); j++) {
+                        articleNums.add(theGroups.get(i).getChildItem(j).getNum());
+                    }
+                }
+
+                int position = 0;
+                for (int i = 0; i < groupPosition; i++) {
+                    position = position + theGroups.get(i).getChildrenCount();
+                }
+                position = position + childPosition;
+
                 Intent intent = new Intent(activity, ArticleActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putIntegerArrayList("ArticleIDs", articleIDs);
@@ -94,6 +101,8 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
                 bundle.putString("NovelName", theNovel.getName());
                 bundle.putString("NovelPic", theNovel.getPic());
                 bundle.putInt("NovelId", theNovel.getId());
+                bundle.putInt("ArticleNum", child.getNum());
+                bundle.putIntegerArrayList("ArticleNums", articleNums);
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
             }
