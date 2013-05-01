@@ -81,7 +81,6 @@ public class SQLiteNovel extends SQLiteOpenHelper {
                         db = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
                     }
                 } catch (SQLiteException ex) {
-                    db = this.getWritableDatabase();
                     try {
                         File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
                         if (!cacheDir.exists())
@@ -91,10 +90,14 @@ public class SQLiteNovel extends SQLiteOpenHelper {
                         onCreate(db);
                     } catch (Exception e) {
                         db = this.getWritableDatabase();
+                        if (!isTableExists(db, NovelSchema.TABLE_NAME))
+                            onCreate(db);
                     }
                 }
             } else {
                 db = this.getWritableDatabase();
+                if (!isTableExists(db, NovelSchema.TABLE_NAME))
+                    onCreate(db);
             }
 
         }
@@ -145,6 +148,19 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         }
     }
 
+    public boolean isTableExists(SQLiteDatabase mDatabase, String tableName) {
+
+        Cursor cursor = mDatabase.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '" + tableName + "'", null);
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.close();
+                return true;
+            }
+            cursor.close();
+        }
+        return false;
+    }
+
     public boolean resetDB() {
         try {
             ctx.deleteDatabase(SQLiteNovel.DB_NAME);
@@ -176,9 +192,8 @@ public class SQLiteNovel extends SQLiteOpenHelper {
                 src.close();
                 dst.close();
                 // currentDB;
-                db.execSQL("DROP TABLE IF EXISTS " + BookmarkSchema.TABLE_NAME);
-                db.execSQL("DROP TABLE IF EXISTS " + ArtcileSchema.TABLE_NAME);
-                db.execSQL("DROP TABLE IF EXISTS " + NovelSchema.TABLE_NAME);
+                ctx.deleteDatabase(SQLiteNovel.DB_NAME);
+                db = this.getWritableDatabase();
             }
         } catch (Exception e) {
 
