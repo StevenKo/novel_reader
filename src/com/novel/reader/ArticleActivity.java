@@ -203,7 +203,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         articleTextView.setTextSize(textSize);
         articleTextView.setTextColor(textColor);
         articleScrollView.setBackgroundColor(textBackground);
-
+        
+        
         articleButtonUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -395,7 +396,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         protected Object doInBackground(Object... params) {
             try {
                 GMailSender sender = new GMailSender("sandjstudio@gmail.com", "wonderful2013");
-                booleanSend = sender.sendMail(novelName + "---" + getResources().getString(R.string.report_chapter) + myAricle.getTitle(), reportContent,
+                booleanSend = sender.sendMail(novelName + "---" + getResources().getString(R.string.report_chapter) + myAricle.getTitle(), 
+                		"\n"+"Article Num:"+Integer.toString(myAricle.getNum())+"\n"+reportContent,
                         "sandjstudio@gmail.com", "brotherkos@gmail.com");
             } catch (Exception e) {
             }
