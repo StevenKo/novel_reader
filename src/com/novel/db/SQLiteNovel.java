@@ -25,7 +25,6 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     private SQLiteDatabase     db;
     private final Context      ctx;
     public static final File   DATABASE_FILE_PATH = android.os.Environment.getExternalStorageDirectory();
-    public static final String STORAGE_STATE      = android.os.Environment.getExternalStorageState();
 
     // Define database schema
     public interface NovelSchema {
@@ -74,7 +73,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         // db = this.getWritableDatabase();
 
         if (db == null) {
-            if (STORAGE_STATE.equals(android.os.Environment.MEDIA_MOUNTED) && DATABASE_FILE_PATH != null) {
+            if (DATABASE_FILE_PATH != null) {
                 try {
                     db = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
                     if (db.getVersion() < DATABASE_VERSION) {
@@ -83,15 +82,15 @@ public class SQLiteNovel extends SQLiteOpenHelper {
                     }
                 } catch (SQLiteException ex) {
                     db = this.getWritableDatabase();
-                    File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
-                    if (!cacheDir.exists())
-                        cacheDir.mkdirs();
-                    db = SQLiteDatabase.openOrCreateDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null);
-                    db.setVersion(DATABASE_VERSION);
                     try {
+                        File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
+                        if (!cacheDir.exists())
+                            cacheDir.mkdirs();
+                        db = SQLiteDatabase.openOrCreateDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null);
+                        db.setVersion(DATABASE_VERSION);
                         onCreate(db);
                     } catch (Exception e) {
-
+                        db = this.getWritableDatabase();
                     }
                 }
             } else {
@@ -105,7 +104,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
-            if (STORAGE_STATE.equals("mounted") && DATABASE_FILE_PATH != null) {
+            if (DATABASE_FILE_PATH != null) {
                 if (oldVersion == 1) {
                     alterArticleTableAddNum(db);
                     moveDB();
