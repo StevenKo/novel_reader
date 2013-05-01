@@ -74,7 +74,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         // db = this.getWritableDatabase();
 
         if (db == null) {
-            if (STORAGE_STATE.equals("mounted") && DATABASE_FILE_PATH != null) {
+            if (STORAGE_STATE.equals(android.os.Environment.MEDIA_MOUNTED) && DATABASE_FILE_PATH != null) {
                 try {
                     db = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
                     if (db.getVersion() < DATABASE_VERSION) {
