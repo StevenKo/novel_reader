@@ -362,7 +362,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         TextView text_chapter = (TextView) edit_view.findViewById(R.id.text_report_chapter);
         final EditText text_content = (EditText) edit_view.findViewById(R.id.text_report_content);
 
-        text_chapter.setText(getResources().getString(R.string.report_chapter) + articleTitle);
+        text_chapter.setText(getResources().getString(R.string.report_chapter) + myAricle.getTitle());
 
         editDialog.setView(edit_view);
 
@@ -395,7 +395,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         protected Object doInBackground(Object... params) {
             try {
                 GMailSender sender = new GMailSender("sandjstudio@gmail.com", "wonderful2013");
-                booleanSend = sender.sendMail(novelName + "---" + getResources().getString(R.string.report_chapter) + articleTitle, reportContent,
+                booleanSend = sender.sendMail(novelName + "---" + getResources().getString(R.string.report_chapter) + myAricle.getTitle(), reportContent,
                         "sandjstudio@gmail.com", "brotherkos@gmail.com");
             } catch (Exception e) {
             }
