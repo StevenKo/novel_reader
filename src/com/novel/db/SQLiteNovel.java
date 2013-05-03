@@ -21,7 +21,7 @@ import com.novel.reader.entity.Novel;
 public class SQLiteNovel extends SQLiteOpenHelper {
 
     public static final String DB_NAME            = "kosnovel.sqlite";                                   // 資料庫名稱
-    private static final int   DATABASE_VERSION   = 4;                                                   // 資料庫版本
+    private static final int   DATABASE_VERSION   = 5;                                                   // 資料庫版本
     private SQLiteDatabase     db;
     private final Context      ctx;
     public static final File   DATABASE_FILE_PATH = android.os.Environment.getExternalStorageDirectory();
