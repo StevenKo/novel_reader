@@ -81,7 +81,7 @@
     <string name="menu_download">下載</string>
     <string name="menu_report">問題回報</string>
     
-    <string name="report_title">問題回報</string>
+    <string name="report_title">小說王問題回報</string>
     <string name="report_chapter">回報章節:</string>
     <string name="report_confirm">回報</string>
     <string name="report_cancel">取消</string>
@@ -91,6 +91,7 @@
     <string name="report_fail">回報失敗!</string>
     <string name="report_hint">問題內容...</string>
     <string name="report_content">問題內容:</string>
+    <string name="report_novel">小說名稱:</string>
     
     <string name="search_hint">請輸入作者或書名</string>
     <string name="about_us_string">關於我們</string>

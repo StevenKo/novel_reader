@@ -87,7 +87,7 @@
 	<string name="menu_download">下载</string>
 	<string name="menu_report">问题回报</string>
 	
-	<string name="report_title">问题回报</string>
+	<string name="report_title">小说王问题回报</string>
 	<string name="report_chapter">回报章节:</string>
 	<string name="report_confirm">回报</string>
 	<string name="report_cancel">取消</string>
@@ -97,6 +97,7 @@
 	<string name="report_fail">回报失败！</string>
 	<string name="report_hint">问题内容...</string>
 	<string name="report_content">问题内容:</string>
+	<string name="report_novel">小说名称:</string>
 	
 	<string name="search_hint">请输入作者或书名</string>
 	<string name="about_us_string">关于我们</string>

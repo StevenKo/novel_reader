@@ -348,8 +348,11 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         	final Intent emailIntent2 = new Intent(android.content.Intent.ACTION_SEND);
             emailIntent2.setType("plain/text");
             emailIntent2.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] { getResources().getString(R.string.respond_mail_address) });
-            emailIntent2.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.report_chapter) + myAricle.getTitle());
-            emailIntent2.putExtra(android.content.Intent.EXTRA_TEXT, "\n"+"Article Num:"+Integer.toString(myAricle.getNum())+"\n"+getResources().getString(R.string.report_content)+"\n");
+            emailIntent2.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.report_title));
+            emailIntent2.putExtra(android.content.Intent.EXTRA_TEXT, 
+            		getResources().getString(R.string.report_novel)+novelName
+            		+"\n"+getResources().getString(R.string.report_chapter)+ myAricle.getTitle()+"(Num:"+myAricle.getNum()+")"
+            		+"\n"+getResources().getString(R.string.report_content)+"\n");
             startActivity(Intent.createChooser(emailIntent2, "Send mail..."));       	
          // showReportDialog();
             break;
