@@ -31,7 +31,7 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
     public ArrayList<Group>       theGroups;
     private final Novel           theNovel;
     private final Bookmark        theNovelBookmark;
-    private final int             expandGroup;
+    private int             expandGroup;
 
     public ExpandListAdapter(Activity a, ArrayList<Group> mGroups, Novel mNovel, int expandGroup) {
 
@@ -160,10 +160,21 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         int id = (!isExpanded) ? R.drawable.right_arrow : R.drawable.up_arrow;
         ImageView image = (ImageView) vi.findViewById(R.id.expandlist_parent_button);
         image.setImageResource(id);
-
+        
         if ((expandGroup != -1) && (expandGroup == groupPosition)) {
-            ExpandableListView eLV = (ExpandableListView) parent;
+            final ExpandableListView eLV = (ExpandableListView) parent;
             eLV.expandGroup(expandGroup);
+            vi.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                	if(expandGroup != -1){
+                		eLV.collapseGroup(expandGroup);
+                		expandGroup = -1;
+                	}else{
+                		eLV.expandGroup(expandGroup);
+                	}
+                }
+            });
         }
 
         return vi;
