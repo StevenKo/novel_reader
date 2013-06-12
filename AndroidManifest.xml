@@ -44,6 +44,7 @@
         <activity
             android:name="com.novel.reader.ArticleActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:hardwareAccelerated="false"
             >
         </activity>
         <activity
