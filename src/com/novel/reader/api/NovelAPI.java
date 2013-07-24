@@ -291,7 +291,7 @@ public class NovelAPI {
         if (db.isArticleExists(article.getId())) {
             Article articleFromDB = db.getArticle(article.getId());
             if (articleFromDB.getText().length() > 0)
-                articleFromDB.setText(articleFromDB.getText() + "\n");
+                articleFromDB.setText(articleFromDB.getText());
             return articleFromDB;
         }
 
@@ -302,7 +302,7 @@ public class NovelAPI {
             try {
                 JSONObject nObject;
                 nObject = new JSONObject(message.toString());
-                String text = nObject.getString("text") + "\n";
+                String text = nObject.getString("text");
                 String title = nObject.getString("title");
                 article.setText(text);
                 article.setTitle(title);

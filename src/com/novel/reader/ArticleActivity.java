@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -88,6 +89,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private String              reportContent;
     private int                 articleNum;
     private ArrayList<Integer>  articleNums;
+	private WebView             articleWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +195,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         layoutProgress = (LinearLayout) findViewById(R.id.layout_progress);
         articleTextView = (TextView) findViewById(R.id.article_text);
+        articleWebView = (WebView)findViewById(R.id.article_webview);
         articleScrollView = (DetectScrollView) findViewById(R.id.article_scrollview);
         articleButtonUp = (Button) findViewById(R.id.article_button_up);
         articleButtonDown = (Button) findViewById(R.id.article_button_down);
@@ -203,6 +206,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         articleTextView.setTextSize(textSize);
         articleTextView.setTextColor(textColor);
         articleScrollView.setBackgroundColor(textBackground);
+        articleWebView.setBackgroundColor(textBackground);
         
         
         articleButtonUp.setOnClickListener(new OnClickListener() {
@@ -447,29 +451,47 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             super.onPostExecute(result);
 
             layoutProgress.setVisibility(View.GONE);
-            if (textLanguage == 1) {
-                String text = "";
-                try {
-                    text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getText());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                articleTextView.setText(text);
-            } else {
-                // String text2 = "";
-                // try {
-                // text2 = taobe.tec.jcc.JChineseConvertor.getInstance().s2t(myAricle.getText());
-                // } catch (IOException e) {
-                // e.printStackTrace();
-                // }
-                // articleTextView.setText(text2);
-                articleTextView.setText(myAricle.getText());
-            }
-
+            setArticleText();
             myAricle.setNovelId(novelId);
 
             new GetLastPositionTask().execute();
 
+        }
+    }
+    
+    private void setArticleText(){
+    	if(myAricle.getText().indexOf("*&&$$*") > 0){
+        	// this is img of text
+        	articleScrollView.setVisibility(View.GONE);
+        	articleWebView.setVisibility(View.VISIBLE);
+        	String[] urls = myAricle.getText().split("\\*&&\\$\\$\\*");
+        	String html = "<html><body>";
+        	String imgString = "";
+        	for(int i=0; i < urls.length ; i++){
+        		imgString += "<img src=\""+urls[i]+"\"><br><br>";
+        	}
+        	html += imgString + "<br><br></body></html>";
+        	String mime = "text/html";
+        	String encoding = "utf-8";
+        	articleWebView.getSettings().setSupportZoom(true);
+            articleWebView.getSettings().setBuiltInZoomControls(true);
+            articleWebView.getSettings().setLoadWithOverviewMode(true);
+            articleWebView.getSettings().setUseWideViewPort(true);
+            articleWebView.loadDataWithBaseURL(null, html, mime, encoding, null);
+        }else{
+        	articleScrollView.setVisibility(View.VISIBLE);
+        	articleWebView.setVisibility(View.GONE);
+            String text = "";
+            if(textLanguage == 1){
+            	try {
+            	    text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getText());
+	            }catch (IOException e) {
+	            	e.printStackTrace();
+	            }
+            }else{
+            	text = myAricle.getText();
+            }
+            articleTextView.setText(text);
         }
     }
 
@@ -498,17 +520,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             super.onPostExecute(result);
             layoutProgress.setVisibility(View.GONE);
             if (theGottenArticle != null) {
-                if (textLanguage == 1) {
-                    String text = "";
-                    try {
-                        text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getText());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    articleTextView.setText(text);
-                } else {
-                    articleTextView.setText(myAricle.getText());
-                }
+            	setArticleText();
 
                 myAricle.setNovelId(novelId);
                 articleScrollView.fullScroll(ScrollView.FOCUS_UP);
@@ -549,17 +561,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             super.onPostExecute(result);
             layoutProgress.setVisibility(View.GONE);
             if (theGottenArticle != null) {
-                if (textLanguage == 1) {
-                    String text = "";
-                    try {
-                        text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getText());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    articleTextView.setText(text);
-                } else {
-                    articleTextView.setText(myAricle.getText());
-                }
+                setArticleText();
 
                 myAricle.setNovelId(novelId);
                 articleScrollView.fullScroll(ScrollView.FOCUS_UP);
@@ -598,17 +600,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             super.onPostExecute(result);
             layoutProgress.setVisibility(View.GONE);
             if (theGottenArticle != null) {
-                if (textLanguage == 1) {
-                    String text = "";
-                    try {
-                        text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getText());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    articleTextView.setText(text);
-                } else {
-                    articleTextView.setText(myAricle.getText());
-                }
+            	setArticleText();
 
                 myAricle.setNovelId(novelId);
                 articleScrollView.fullScroll(ScrollView.FOCUS_UP);

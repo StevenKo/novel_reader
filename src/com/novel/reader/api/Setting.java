@@ -30,7 +30,7 @@ public class Setting {
     public final static String                    keyAppTheme             = "AppTheme";
 
     public final static int                       initialTextSize         = 20;                // textsize in pixel
-    public final static int                       initialTextLanguage     = 0;
+    public final static int                       initialTextLanguage     = 0;                 // 0 繁體, 1 簡體
     public final static int                       initialReadingDirection = 0;
     public final static int                       initialClickToNextPage  = 1;
     public final static int                       initialStopSleeping     = 1;
