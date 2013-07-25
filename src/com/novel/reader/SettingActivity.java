@@ -20,6 +20,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.novel.db.SQLiteNovel;
 import com.novel.reader.api.Setting;
 
@@ -260,6 +261,18 @@ public class SettingActivity extends SherlockFragmentActivity {
     @Override
     public void onBackPressed() {
         finishDialog.show();
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 
 }

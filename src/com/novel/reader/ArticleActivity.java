@@ -35,6 +35,7 @@ import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.google.ads.AdView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.mail.GMailSender;
 import com.kosbrother.tool.DetectScrollView;
 import com.kosbrother.tool.DetectScrollView.DetectScrollViewListener;
@@ -774,6 +775,18 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             }
         });
         view.startAnimation(rotation);
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 
 }

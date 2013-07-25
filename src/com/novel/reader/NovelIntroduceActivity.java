@@ -29,6 +29,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.Group;
 import com.novel.reader.api.NovelAPI;
@@ -443,6 +444,18 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 
                     }
                 });
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 
 }

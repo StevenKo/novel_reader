@@ -39,6 +39,7 @@ import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.google.ads.AdView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Novel;
@@ -363,6 +364,18 @@ public class SearchActivity extends SherlockListActivity implements AdWhirlInter
             }
         });
         view.startAnimation(rotation);
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 
 }

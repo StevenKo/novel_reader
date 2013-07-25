@@ -31,6 +31,7 @@ import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.google.ads.AdView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.CategoryNewNovelsFragment;
 import com.kosbrother.fragments.CategoryRecommendFragment;
 import com.kosbrother.fragments.CategoryWeekFragment;
@@ -278,6 +279,18 @@ public class CategoryActivity extends SherlockFragmentActivity implements AdWhir
             }
         });
         view.startAnimation(rotation);
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 
 }

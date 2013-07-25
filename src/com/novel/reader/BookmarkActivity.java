@@ -36,6 +36,7 @@ import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.google.ads.AdView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.ifixit.android.sectionheaders.Section;
 import com.ifixit.android.sectionheaders.SectionHeadersAdapter;
 import com.ifixit.android.sectionheaders.SectionListView;
@@ -403,6 +404,18 @@ public class BookmarkActivity extends SherlockActivity implements AdWhirlInterfa
             }
         });
         view.startAnimation(rotation);
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 
 }

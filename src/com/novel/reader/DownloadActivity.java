@@ -21,6 +21,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.ExpandListDownLoadAdapter;
 import com.kosbrother.tool.Group;
@@ -259,6 +260,18 @@ public class DownloadActivity extends SherlockFragmentActivity {
             // Toast.makeText(DownloadActivity.this,getResources().getString(R.string.toast_downloading_fail), Toast.LENGTH_SHORT).show();
             // }
         }
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 
 }
