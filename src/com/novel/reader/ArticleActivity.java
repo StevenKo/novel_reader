@@ -492,7 +492,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             }else{
             	text = myAricle.getText();
             }
-            articleTextView.setText(text);
+            articleTextView.setText(text+"\n");
         }
     }
 
