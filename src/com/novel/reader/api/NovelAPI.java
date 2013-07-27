@@ -11,6 +11,12 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -629,5 +635,50 @@ public class NovelAPI {
             return null;
         }
         return novels;
+    }
+    
+    public static boolean sendRegistrationId(String regid){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users.json?regid="+regid;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPost httpPost = new HttpPost(url);
+			HttpResponse response = httpClient.execute(httpPost);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+    }
+    
+    public static boolean sendNovel(int novel,String regid){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users/update_novel.json?novel="+novel+"&regid="+regid;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPut httpPut = new HttpPut(url);
+			HttpResponse response = httpClient.execute(httpPut);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+
     }
 }
