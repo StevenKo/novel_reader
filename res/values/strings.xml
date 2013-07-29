@@ -64,6 +64,7 @@
     <string name="toast_novel_downloading">小說下載中,...</string>
     <string name="toast_downloading_success">成功下載</string>
     <string name="toast_downloading_fail">出現錯誤, 請重新下載</string>
+    <string name="toast_downloading_wait">資料下載中,請稍候</string>
     
     <string name="respond_mail_address">brotherkos@gmail.com</string>
     <string name="respond_mail_title">意見回餽 from 小說王</string>
@@ -114,6 +115,7 @@
     <string name="delete_message">是否刪除此小說</string>
     <string name="delete_yes">刪除</string>
     <string name="delete_no">不刪除</string>
+    <string name="delete_articles">刪除所選章節</string>
     
     <string name="theme_setting">App主題色＆上下邊顏色\n(App要重開,設定才會生效):</string>
     <string name="theme_light">亮白(預設)</string>
@@ -154,5 +156,12 @@
     <string name="msg_share_subject_line">Here are the contents of a barcode I scanned</string>
     <string name="msg_share_text">Or type some text and press Enter</string>
     <string name="msg_unmount_usb">Sorry, the SD card is not accessible.</string>
+    
+    <!-- for load more -->
+    <string name="hello">Hello World, LoadMoreListView!</string>
+    <string name="pull_to_refresh_pull_label">Pull to refresh...</string>
+    <string name="pull_to_refresh_release_label">Release to refresh...</string>
+    <string name="pull_to_refresh_refreshing_label">Loading...</string>
+    <string name="pull_to_refresh_tap_label">Tap to refresh...</string>
 
 </resources>
