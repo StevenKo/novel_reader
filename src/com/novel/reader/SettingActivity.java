@@ -24,7 +24,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.novel.db.SQLiteNovel;
 import com.novel.reader.api.Setting;
 
-public class SettingActivity extends SherlockFragmentActivity {
+public class SettingActivity extends SherlockFragmentActivity implements RadioGroup.OnCheckedChangeListener{
 
     // private SharedPreferences prefs;
     private int                 textSize;
@@ -47,6 +47,8 @@ public class SettingActivity extends SherlockFragmentActivity {
 
     private AlertDialog.Builder finishDialog;
     private Button              dbResetButton;
+    
+    private boolean isSettingChanged = false; 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,12 @@ public class SettingActivity extends SherlockFragmentActivity {
         ((RadioButton) tapRadioGroup.getChildAt(clickToNextPage)).setChecked(true);
         ((RadioButton) stopSleepRadioGroup.getChildAt(textLanguage)).setChecked(true);
         ((RadioButton) themeRadioGroup.getChildAt(appTheme)).setChecked(true);
+        
+        langRadioGroup.setOnCheckedChangeListener(this);
+        directionRadioGroup.setOnCheckedChangeListener(this);
+        tapRadioGroup.setOnCheckedChangeListener(this);
+        stopSleepRadioGroup.setOnCheckedChangeListener(this);
+        themeRadioGroup.setOnCheckedChangeListener(this);
 
         dbResetButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -122,6 +130,7 @@ public class SettingActivity extends SherlockFragmentActivity {
 
             public void onProgressChanged(SeekBar arg0, int progress, boolean arg2) {
                 textPreView.setTextSize(progress);
+                isSettingChanged = true;
             }
 
             @Override
@@ -144,7 +153,8 @@ public class SettingActivity extends SherlockFragmentActivity {
     private void showTextColorPicker() {
         AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, textColor, new OnAmbilWarnaListener() {
             @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
+            public void onOk(AmbilWarnaDialog dialog, int color) {      	
+            	isSettingChanged = true;
                 // color is the color selected by the user.
                 textColor = color;
                 imageviewTextColor.setBackgroundColor(textColor);
@@ -163,6 +173,7 @@ public class SettingActivity extends SherlockFragmentActivity {
         AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, textBackground, new OnAmbilWarnaListener() {
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
+            	isSettingChanged = true;
                 // color is the color selected by the user.
                 textBackground = color;
                 imageviewTextBackground.setBackgroundColor(textBackground);
@@ -189,8 +200,10 @@ public class SettingActivity extends SherlockFragmentActivity {
         int itemId = item.getItemId();
         switch (itemId) {
         case android.R.id.home:
-            // finish();
-            finishDialog.show();
+            if(isSettingChanged)
+                finishDialog.show();
+            else
+            	finish();
             break;
         }
         return true;
@@ -211,6 +224,8 @@ public class SettingActivity extends SherlockFragmentActivity {
                 .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                    	isSettingChanged = true;
+                    	
                         SQLiteNovel db = new SQLiteNovel(SettingActivity.this);
                         boolean reset = db.resetDB();
                         if (reset) {
@@ -260,7 +275,10 @@ public class SettingActivity extends SherlockFragmentActivity {
 
     @Override
     public void onBackPressed() {
-        finishDialog.show();
+    	if(isSettingChanged)
+    		finishDialog.show();
+    	else
+    		finish();
     }
     
     @Override
@@ -274,5 +292,10 @@ public class SettingActivity extends SherlockFragmentActivity {
       super.onStop();
       EasyTracker.getInstance().activityStop(this);
     }
+
+	@Override
+	public void onCheckedChanged(RadioGroup arg0, int arg1) {
+		isSettingChanged = true;
+	}
 
 }
