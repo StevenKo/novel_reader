@@ -595,7 +595,7 @@ public class NovelAPI {
                 lines = lines.append(tempStr);
             }
             if (DEBUG)
-                Log.d("MOVIE_API", lines.toString());
+                Log.d(TAG, lines.toString());
 
             reader.close();
             connection.disconnect();

@@ -137,6 +137,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         }
 
         new DownloadArticleTask().execute();
+        new UploadUserReadNovelTask().execute();
 
         setAboutUsDialog();
 
@@ -427,6 +428,16 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_fail), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+    
+    private class UploadUserReadNovelTask extends AsyncTask{
+
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			NovelAPI.sendNovel(myAricle.getId(), Setting.getRegistrationId(ArticleActivity.this));
+			return null;
+		}
+    	
     }
 
     private class DownloadArticleTask extends AsyncTask {
