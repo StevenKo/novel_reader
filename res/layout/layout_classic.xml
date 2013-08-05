@@ -14,8 +14,9 @@
             android:id="@+id/adonView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-      	android:gravity="center_horizontal"
+      	    android:gravity="center_horizontal"
             android:background="@color/background"
+            android:orientation="horizontal"
             />
     
 </LinearLayout>

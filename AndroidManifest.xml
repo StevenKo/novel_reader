@@ -139,7 +139,6 @@
                 <category android:name="com.novel.reader" />
             </intent-filter>
         </receiver>
-        <service android:name=".GcmIntentService" /> 
     </application>
     
     <uses-permission android:name="android.permission.INTERNET" />

@@ -116,18 +116,12 @@
     <string name="reminder_next">下次再提醒</string>
     <string name="do_not_reminder">不要再提醒</string>
     
-    <string name="delete_title">删除</string>
-    <string name="delete_message">是否删除此小说</string>
-    <string name="delete_yes">删除</string>
-    <string name="delete_no">不删除</string>
 	<string name="delete_articles">删除所选章节</string>
     
     <string name="theme_setting">App主题色＆上下边颜色\n(App要重开,设定才会生效):</string>
     <string name="theme_light">亮白(预设)</string>
     <string name="theme_dark">灰黑</string>
-    
-    <string name="search_hint">搜寻小说名称或作者</string>
-    
+        
     <string name="reset_db_hint">资料库重置(清空DB)</string>
     <string name="reset_db_message">确定要重置资料库吗？ (完成后,请重开APP)</string>
     <string name="reset_db_success">重置完成</string>
