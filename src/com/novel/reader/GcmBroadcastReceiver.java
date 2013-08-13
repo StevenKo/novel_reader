@@ -50,10 +50,10 @@ public class GcmBroadcastReceiver extends BroadcastReceiver{
         
         switch(openActivity){
         	case 0:
-        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
         		break;
         	case 1:
-        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, MyNovelActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, MyNovelActivity.class), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
         		break;
         	case 2:
         		Intent activity_intent = new Intent(ctx, BookmarkActivity.class);
@@ -61,13 +61,13 @@ public class GcmBroadcastReceiver extends BroadcastReceiver{
         		    activity_intent.putExtra("IS_RECNET", true);
         		else
         			activity_intent.putExtra("IS_RECNET", false);
-        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
         		break;
         	case 3:
         		Intent activity_intent1 = new Intent(ctx, CategoryActivity.class);
         		activity_intent1.putExtra("CategoryName", intent.getStringExtra("category_name"));
         		activity_intent1.putExtra("CategoryId", Integer.parseInt(intent.getStringExtra("category_id")));
-        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent1, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
         		break;
         	case 4:
         		Intent activity_intent2 = new Intent(ctx, NovelIntroduceActivity.class);
@@ -78,7 +78,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver{
         		activity_intent2.putExtra("NovelPicUrl",intent.getStringExtra("novel_pic_url"));
         		activity_intent2.putExtra("NovelArticleNum",intent.getStringExtra("novel_article_num"));
         		activity_intent2.putExtra("NovelId",Integer.parseInt(intent.getStringExtra("novel_id")));
-        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent2, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
         		break;
         	
         }

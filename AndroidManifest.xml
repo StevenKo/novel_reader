@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.novel.reader"
-    android:versionCode="26"
-    android:versionName="1.10.2" >
+    android:versionCode="27"
+    android:versionName="1.10.3"
+    android:installLocation="auto" >
 
 <!-- android:theme="@style/Theme.Sherlock.Light.DarkActionBar"     -->
     
@@ -157,7 +158,7 @@
 	<!-- GCM requires a Google account. -->
 	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 	<!-- Keeps the processor from sleeping when a message is received. -->
-	<uses-permission android:name="android.permission.WAKE_LOCK" />    
+	<!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->    
     
     <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> -->
