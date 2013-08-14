@@ -67,10 +67,6 @@ public class MainActivity extends SherlockFragmentActivity{
     private ViewPager           pager;
     private AlertDialog.Builder aboutUsDialog;
 
-    private final String admobKey = "292fbab7f4ea4848";
-    private LinearLayout adBannerLayout;
-    private AdView adMobAdView;
-
 
     //gcm
     public static final String EXTRA_MESSAGE = "message";
@@ -106,39 +102,6 @@ public class MainActivity extends SherlockFragmentActivity{
         pager.setCurrentItem(1);
 
         setAboutUsDialog();
-
-        adBannerLayout = (LinearLayout) findViewById(R.id.adonView);
-        final AdRequest adReq = new AdRequest();
-        adMobAdView = new AdView(this, AdSize.SMART_BANNER, admobKey);
-        adMobAdView.setAdListener(new AdListener() {
-			@Override
-			public void onDismissScreen(Ad arg0) {
-				Log.d("admob_banner", "onDismissScreen");
-			}
-
-			@Override
-			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {
-                Log.d("admob_banner", "onFailedToReceiveAd");
-			}
-
-			@Override
-			public void onLeaveApplication(Ad arg0) {
-                Log.d("admob_banner", "onLeaveApplication");
-			}
-
-			@Override
-			public void onPresentScreen(Ad arg0) {
-                Log.d("admob_banner", "onPresentScreen");
-			}
-
-			@Override
-			public void onReceiveAd(Ad arg0) {
-                Log.d("admob_banner", "onReceiveAd ad:" + arg0.getClass());
-			}
-			
-		});
-		adMobAdView.loadAd(adReq);
-		adBannerLayout.addView(adMobAdView);
         
         context = getApplicationContext();
         regid = Setting.getRegistrationId(context);

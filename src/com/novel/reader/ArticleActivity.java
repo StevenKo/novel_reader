@@ -92,9 +92,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private int                 articleNum = -1;
     private ArrayList<Integer>  articleNums;
 	private WebView             articleWebView;
-    private final String admobKey = "292fbab7f4ea4848";
-    private LinearLayout adBannerLayout;
-    private AdView adMobAdView;
 
 	
 
@@ -162,39 +159,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         setAboutUsDialog();
 
-        adBannerLayout = (LinearLayout) findViewById(R.id.adonView);
-        final AdRequest adReq = new AdRequest();
-        adMobAdView = new AdView(this, AdSize.SMART_BANNER, admobKey);
-        adMobAdView.setAdListener(new AdListener() {
-			@Override
-			public void onDismissScreen(Ad arg0) {
-				Log.d("admob_banner", "onDismissScreen");
-			}
-
-			@Override
-			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {
-                Log.d("admob_banner", "onFailedToReceiveAd");
-			}
-
-			@Override
-			public void onLeaveApplication(Ad arg0) {
-                Log.d("admob_banner", "onLeaveApplication");
-			}
-
-			@Override
-			public void onPresentScreen(Ad arg0) {
-                Log.d("admob_banner", "onPresentScreen");
-			}
-
-			@Override
-			public void onReceiveAd(Ad arg0) {
-                Log.d("admob_banner", "onReceiveAd ad:" + arg0.getClass());
-			}
-			
-		});
-		adMobAdView.loadAd(adReq);
-		adBannerLayout.addView(adMobAdView);
-
+        
     }
     
     @Override
@@ -222,8 +187,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             RelativeLayout bottom_buttons = (RelativeLayout) findViewById(R.id.bottom_buttons);
             bottom_buttons.setBackgroundColor(getResources().getColor(R.color.light_black));
             articlePercent.setTextColor(getResources().getColor(R.color.white));
-            LinearLayout layout = (LinearLayout) findViewById(R.id.adonView);
-            layout.setBackgroundColor(getResources().getColor(R.color.black));
         }
         ab.setCustomView(v);
     }

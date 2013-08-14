@@ -16,6 +16,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" xmlns:app="http://schemas.android.com/apk/res/com.android.novel.reader">
@@ -33,11 +34,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"      
         />
-    <LinearLayout
-            android:id="@+id/adonView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-      		android:gravity="center_horizontal"
-            />
+    <com.google.ads.AdView android:id="@+id/adView"
+                     android:layout_width="fill_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentBottom="true"
+                     ads:adUnitId="292fbab7f4ea4848"
+                     ads:adSize="SMART_BANNER"
+                     ads:testDevices="353918051867212"
+                     ads:loadAdOnCreate="true"/>
 
 </LinearLayout>

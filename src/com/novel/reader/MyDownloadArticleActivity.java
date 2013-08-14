@@ -113,38 +113,6 @@ public class MyDownloadArticleActivity extends SherlockActivity {
 
         new DownloadArticlesTask().execute();
 
-        adBannerLayout = (LinearLayout) findViewById(R.id.adonView);
-        final AdRequest adReq = new AdRequest();
-        adMobAdView = new AdView(this, AdSize.SMART_BANNER, admobKey);
-        adMobAdView.setAdListener(new AdListener() {
-			@Override
-			public void onDismissScreen(Ad arg0) {
-				Log.d("admob_banner", "onDismissScreen");
-			}
-
-			@Override
-			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {
-                Log.d("admob_banner", "onFailedToReceiveAd");
-			}
-
-			@Override
-			public void onLeaveApplication(Ad arg0) {
-                Log.d("admob_banner", "onLeaveApplication");
-			}
-
-			@Override
-			public void onPresentScreen(Ad arg0) {
-                Log.d("admob_banner", "onPresentScreen");
-			}
-
-			@Override
-			public void onReceiveAd(Ad arg0) {
-                Log.d("admob_banner", "onReceiveAd ad:" + arg0.getClass());
-			}
-			
-		});
-		adMobAdView.loadAd(adReq);
-		adBannerLayout.addView(adMobAdView);
 
     }
 

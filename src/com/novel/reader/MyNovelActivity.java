@@ -44,9 +44,6 @@ public class MyNovelActivity extends SherlockFragmentActivity {
     private ViewPager                 pager;
     private FragmentStatePagerAdapter adapter;
 
-    private final String admobKey = "292fbab7f4ea4848";
-    private LinearLayout adBannerLayout;
-    private AdView adMobAdView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,38 +73,6 @@ public class MyNovelActivity extends SherlockFragmentActivity {
         indicator.setViewPager(pager);
 
         setAboutUsDialog();
-        adBannerLayout = (LinearLayout) findViewById(R.id.adonView);
-        final AdRequest adReq = new AdRequest();
-        adMobAdView = new AdView(this, AdSize.SMART_BANNER, admobKey);
-        adMobAdView.setAdListener(new AdListener() {
-			@Override
-			public void onDismissScreen(Ad arg0) {
-				Log.d("admob_banner", "onDismissScreen");
-			}
-
-			@Override
-			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {
-                Log.d("admob_banner", "onFailedToReceiveAd");
-			}
-
-			@Override
-			public void onLeaveApplication(Ad arg0) {
-                Log.d("admob_banner", "onLeaveApplication");
-			}
-
-			@Override
-			public void onPresentScreen(Ad arg0) {
-                Log.d("admob_banner", "onPresentScreen");
-			}
-
-			@Override
-			public void onReceiveAd(Ad arg0) {
-                Log.d("admob_banner", "onReceiveAd ad:" + arg0.getClass());
-			}
-			
-		});
-		adMobAdView.loadAd(adReq);
-		adBannerLayout.addView(adMobAdView);
 
     }
 
