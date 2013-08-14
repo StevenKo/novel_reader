@@ -68,6 +68,7 @@ public final class MyNovelFragment extends Fragment {
             progressdialogInit.setCancelable(false);
             progressdialogInit.show();
             SQLiteNovel db = new SQLiteNovel(getActivity());
+            db.close();
             progressdialogInit.dismiss();
         }
     }

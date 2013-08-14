@@ -137,9 +137,14 @@ public class SQLiteNovel extends SQLiteOpenHelper {
 
             // getColumnIndex gives us the index (0 to ...) of the column - otherwise we get a -1
             if (mCursor.getColumnIndex(columnToCheck) != -1)
+            {
+            	mCursor.close();
                 return true;
-            else
-                return false;
+            }else{
+            	mCursor.close();
+            	return false;
+            }
+                
 
         } catch (Exception Exp) {
             // something went wrong. Missing the database? The table?
@@ -158,6 +163,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             }
             cursor.close();
         }
+        cursor.close();
         return false;
     }
 
@@ -323,6 +329,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC, IS_RECENT_READ);
             bookmarks.add(bookmark);
         }
+        cursor.close();
         return bookmarks;
     }
 
@@ -344,6 +351,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC, IS_RECENT_READ);
             bookmarks.add(bookmark);
         }
+        cursor.close();
         return bookmarks;
     }
 
@@ -433,7 +441,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             if (value != null)
                 articles.get(i).setIsDownloaded(value);
         }
-
+        cursor.close();
         return articles;
     }
 
@@ -457,6 +465,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             Article article = new Article(ID, NOVEL_ID, "", TITLE, SUBJECT, IS_DOWNLOADED, NUM);
             articles.add(article);
         }
+        cursor.close();
         return articles;
     }
 
@@ -523,6 +532,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED, IS_DOWNLOADED);
             novels.add(novel);
         }
+        cursor.close();
         return novels;
     }
 
@@ -545,6 +555,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
             Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED, IS_DOWNLOADED);
             novels.add(novel);
         }
+        cursor.close();
         return novels;
     }
 
@@ -611,6 +622,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
 
             bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC, IS_RECENT_READ);
         }
+        cursor.close();
         return bookmark;
     }
 

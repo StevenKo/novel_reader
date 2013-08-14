@@ -233,6 +233,7 @@ public class SettingActivity extends SherlockFragmentActivity implements RadioGr
                         } else {
                             Toast.makeText(SettingActivity.this, getResources().getString(R.string.reset_db_fail), Toast.LENGTH_LONG).show();
                         }
+                        db.close();
                     }
                 }).setNegativeButton(getResources().getString(R.string.report_cancel), new DialogInterface.OnClickListener() {
                     @Override
