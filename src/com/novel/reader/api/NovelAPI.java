@@ -45,40 +45,34 @@ public class NovelAPI {
     public static ArrayList<Bookmark> getAllRecentReadBookmarks(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         ArrayList<Bookmark> bookmarks = db.getAllRecentReadBookmarks();
-        db.close();
         return bookmarks;
     }
 
     public static ArrayList<Bookmark> getAllBookmarks(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         ArrayList<Bookmark> bookmarks = db.getAllBookmarks();
-        db.close();
         return bookmarks;
     }
 
     public static Bookmark getNovelBookmark(int novel_id, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         Bookmark bookmark = db.getNovelBookmark(novel_id);
-        db.close();
         return bookmark;
     }
 
     public static void updateBookmark(Bookmark bookmark, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         db.updateBookmark(bookmark);
-        db.close();
     }
 
     public static void deleteBookmark(Bookmark bookmark, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         db.deleteBookmark(bookmark);
-        db.close();
     }
 
     public static Bookmark insertBookmark(Bookmark bookmark, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         int id = (int) db.insertBookmark(bookmark);
-        db.close();
         bookmark.setId(id);
         return bookmark;
     }
@@ -89,7 +83,6 @@ public class NovelAPI {
         if (lastNovelBookmark != null)
             db.deleteBookmark(lastNovelBookmark);
         int id = (int) db.insertBookmark(bookmark);
-        db.close();
         bookmark.setId(id);
         return bookmark;
     }
@@ -97,28 +90,24 @@ public class NovelAPI {
     public static ArrayList<Novel> getCollectedNovels(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         ArrayList<Novel> novels = db.getCollectedNovels();
-        db.close();
         return novels;
     }
 
     public static Boolean isNovelCollected(Context context, int novel_id) {
         SQLiteNovel db = new SQLiteNovel(context);
         Boolean isNovelCollected = db.isNovelCollected(novel_id);
-        db.close();
         return isNovelCollected;
     }
 
     public static Boolean isNovelDownloaded(Context context, int novel_id) {
         SQLiteNovel db = new SQLiteNovel(context);
         Boolean isNovelDownloaded = db.isNovelDownloaded(novel_id);
-        db.close();
         return isNovelDownloaded;
     }
 
     public static ArrayList<Novel> getDownloadedNovels(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         ArrayList<Novel> novels = db.getDownloadNovels();
-        db.close();
         return novels;
     }
 
@@ -166,14 +155,12 @@ public class NovelAPI {
             db.insertArticle(article);
 
         article.setText("");
-        db.close();
         return true;
     }
 
     public static void removeNovelFromCollected(Novel novel, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         db.removeNovelFromCollected(novel);
-        db.close();
     }
 
     public static void removeNovelFromDownload(Novel novel, Context context) {
@@ -181,19 +168,16 @@ public class NovelAPI {
         ArrayList<Article> articles = db.getNovelArticles(novel.getId(), true);
         db.deleteArticles(articles);
         db.removeNovelFromDownload(novel);
-        db.close();
     }
 
     public static void removeArticle(Article article, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         db.deleteArticle(article);
-        db.close();
     }
 
     public static void removeArticles(ArrayList<Article> articles, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         db.deleteArticles(articles);
-        db.close();
     }
 
     public static boolean collecNovel(final Novel novel, final Context context) {
@@ -204,7 +188,6 @@ public class NovelAPI {
         else
             db.insertNovel(novel);
 
-        db.close();
         new AsyncTask() {
             @Override
             protected Object doInBackground(Object... params) {
@@ -266,7 +249,6 @@ public class NovelAPI {
         else
             db.insertNovel(n);
         
-        db.close();
 
         // for (int i = 0; i < articles.size(); i++) {
         // if (db.isArticleExists(articles.get(i).getId()))
@@ -325,7 +307,6 @@ public class NovelAPI {
             return articleFromDB;
         }
         
-        db.close();
 
         String message = getMessageFromServer("GET", "/api/v1/articles/" + article.getId() + ".json", null);
         if (message == null) {
@@ -351,7 +332,7 @@ public class NovelAPI {
     public static Article getPreviousArticle(Article orginArticle, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         ArrayList<Article> articles = db.getNovelArticles(orginArticle.getNovelId(), true);
-        db.close();
+
         for (int i = 1; i < articles.size(); i++) {
             if (articles.get(i).getId() == orginArticle.getId()) {
                 return getArticle(articles.get(i - 1), context);
@@ -385,7 +366,7 @@ public class NovelAPI {
     public static Article getNextArticle(Article orginArticle, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         ArrayList<Article> articles = db.getNovelArticles(orginArticle.getNovelId(), true);
-        db.close();
+
         for (int i = 0; i < articles.size() - 1; i++) {
             if (articles.get(i).getId() == orginArticle.getId()) {
                 return getArticle(articles.get(i + 1), context);
@@ -419,7 +400,6 @@ public class NovelAPI {
     public static ArrayList<Article> getDownloadedNovelArticles(int novelId, boolean isOrderUp, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
         ArrayList<Article> as = db.getNovelArticles(novelId, isOrderUp);
-        db.close();
         return as;
     }
 
@@ -451,7 +431,6 @@ public class NovelAPI {
 
         SQLiteNovel db = new SQLiteNovel(context);
         articles = db.getArticleDownloadInfo(articles);
-        db.close();
 
         return articles;
     }
@@ -545,7 +524,6 @@ public class NovelAPI {
         if (db.isNovelExists(novelId)) {
             return db.getNovel(novelId);
         }
-        db.close();
 
         Novel n = null;
         String message = getMessageFromServer("GET", "/api/v1/novels/" + novelId + ".json", null);

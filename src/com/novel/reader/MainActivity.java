@@ -1,8 +1,10 @@
 package com.novel.reader;
 
+import java.io.File;
 import java.io.IOException;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,6 +47,7 @@ import com.kosbrother.fragments.HotNovelsFragment;
 import com.kosbrother.fragments.MonthFragment;
 import com.kosbrother.fragments.MyNovelFragment;
 import com.kosbrother.fragments.WeekFragment;
+import com.novel.db.SQLiteNovel;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.api.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -119,7 +122,26 @@ public class MainActivity extends SherlockFragmentActivity implements AdWhirlInt
             registerBackground();
         }
         gcm = GoogleCloudMessaging.getInstance(this);
+        checkDB();
 
+    }
+    
+    void checkDB() {
+        File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
+        if (!cacheDir.exists())
+            cacheDir.mkdirs();
+        File sdcardDB = new File(cacheDir, SQLiteNovel.DB_NAME);
+        if (!sdcardDB.exists()) {
+            ProgressDialog progressdialogInit;
+            progressdialogInit = ProgressDialog.show(MainActivity.this, "Load", "Loading…");
+            progressdialogInit.setTitle("初始化DB");
+            progressdialogInit.setMessage("初始化DB中…(原先下載過小說的用戶，會將資料轉至 SD卡）");
+            progressdialogInit.setCanceledOnTouchOutside(false);
+            progressdialogInit.setCancelable(false);
+            progressdialogInit.show();
+            SQLiteNovel db = new SQLiteNovel(MainActivity.this);
+            progressdialogInit.dismiss();
+        }
     }
 
     @Override

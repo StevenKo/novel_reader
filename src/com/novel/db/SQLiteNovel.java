@@ -22,7 +22,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
 
     public static final String DB_NAME            = "kosnovel.sqlite";                                   // 資料庫名稱
     private static final int   DATABASE_VERSION   = 5;                                                   // 資料庫版本
-    private SQLiteDatabase     db;
+    private static SQLiteDatabase     db;
     private final Context      ctx;
     public static final File   DATABASE_FILE_PATH = android.os.Environment.getExternalStorageDirectory();
 
@@ -72,7 +72,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         // if (db == null)
         // db = this.getWritableDatabase();
 
-        if (db == null) {
+        if (db == null || !db.isOpen()) {
             if (DATABASE_FILE_PATH != null) {
                 try {
                     db = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);

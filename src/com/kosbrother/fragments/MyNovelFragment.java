@@ -51,26 +51,6 @@ public final class MyNovelFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        checkDB();
-    }
-
-    void checkDB() {
-        File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
-        if (!cacheDir.exists())
-            cacheDir.mkdirs();
-        File sdcardDB = new File(cacheDir, SQLiteNovel.DB_NAME);
-        if (!sdcardDB.exists()) {
-            ProgressDialog progressdialogInit;
-            progressdialogInit = ProgressDialog.show(getActivity(), "Load", "Loading…");
-            progressdialogInit.setTitle("初始化DB");
-            progressdialogInit.setMessage("初始化DB中…(原先下載過小說的用戶，會將資料轉至 SD卡）");
-            progressdialogInit.setCanceledOnTouchOutside(false);
-            progressdialogInit.setCancelable(false);
-            progressdialogInit.show();
-            SQLiteNovel db = new SQLiteNovel(getActivity());
-            db.close();
-            progressdialogInit.dismiss();
-        }
     }
 
     private void setViews() {
