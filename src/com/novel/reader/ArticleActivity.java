@@ -440,7 +440,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 GMailSender sender = new GMailSender("sandjstudio@gmail.com", "wonderful2013");
                 booleanSend = sender.sendMail(novelName + "---" + getResources().getString(R.string.report_chapter) + myAricle.getTitle(), 
                 		"\n"+"Article Num:"+Integer.toString(myAricle.getNum())+"\n"+reportContent,
-                        "sandjstudio@gmail.com", "brotherkos@gmail.com");
+                        "sandjstudio@gmail.com", "service@kosbrother.com");
             } catch (Exception e) {
             }
             return null;
