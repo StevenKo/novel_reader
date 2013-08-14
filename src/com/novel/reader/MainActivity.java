@@ -35,11 +35,12 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.adwhirl.AdWhirlLayout;
-import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
-import com.adwhirl.AdWhirlManager;
-import com.adwhirl.AdWhirlTargeting;
+import com.google.ads.Ad;
+import com.google.ads.AdListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
 import com.google.ads.AdView;
+import com.google.ads.AdRequest.ErrorCode;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.kosbrother.fragments.CategoryListFragment;
@@ -52,7 +53,7 @@ import com.novel.reader.api.NovelAPI;
 import com.novel.reader.api.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class MainActivity extends SherlockFragmentActivity implements AdWhirlInterface {
+public class MainActivity extends SherlockFragmentActivity{
 
     private static final int    ID_SETTING  = 0;
     private static final int    ID_RESPONSE = 1;
@@ -66,7 +67,10 @@ public class MainActivity extends SherlockFragmentActivity implements AdWhirlInt
     private ViewPager           pager;
     private AlertDialog.Builder aboutUsDialog;
 
-    private final String        adWhirlKey  = "215f895eb71748e7ba4cb3a5f20b061e";
+    private final String admobKey = "292fbab7f4ea4848";
+    private LinearLayout adBannerLayout;
+    private AdView adMobAdView;
+
 
     //gcm
     public static final String EXTRA_MESSAGE = "message";
@@ -103,17 +107,38 @@ public class MainActivity extends SherlockFragmentActivity implements AdWhirlInt
 
         setAboutUsDialog();
 
-        try {
-            Display display = getWindowManager().getDefaultDisplay();
-            int width = display.getWidth(); // deprecated
-            int height = display.getHeight(); // deprecated
+        adBannerLayout = (LinearLayout) findViewById(R.id.adonView);
+        final AdRequest adReq = new AdRequest();
+        adMobAdView = new AdView(this, AdSize.SMART_BANNER, admobKey);
+        adMobAdView.setAdListener(new AdListener() {
+			@Override
+			public void onDismissScreen(Ad arg0) {
+				Log.d("admob_banner", "onDismissScreen");
+			}
 
-            if (width > 320) {
-                setAdAdwhirl();
-            }
-        } catch (Exception e) {
+			@Override
+			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {
+                Log.d("admob_banner", "onFailedToReceiveAd");
+			}
 
-        }
+			@Override
+			public void onLeaveApplication(Ad arg0) {
+                Log.d("admob_banner", "onLeaveApplication");
+			}
+
+			@Override
+			public void onPresentScreen(Ad arg0) {
+                Log.d("admob_banner", "onPresentScreen");
+			}
+
+			@Override
+			public void onReceiveAd(Ad arg0) {
+                Log.d("admob_banner", "onReceiveAd ad:" + arg0.getClass());
+			}
+			
+		});
+		adMobAdView.loadAd(adReq);
+		adBannerLayout.addView(adMobAdView);
         
         context = getApplicationContext();
         regid = Setting.getRegistrationId(context);
@@ -280,32 +305,6 @@ public class MainActivity extends SherlockFragmentActivity implements AdWhirlInt
 
                     }
                 });
-    }
-
-    private void setAdAdwhirl() {
-        // TODO Auto-generated method stub
-        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
-        AdWhirlTargeting.setAge(23);
-        AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
-        AdWhirlTargeting.setKeywords("online games gaming");
-        AdWhirlTargeting.setPostalCode("94123");
-        AdWhirlTargeting.setTestMode(false);
-
-        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
-
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
-
-        adwhirlLayout.setAdWhirlInterface(this);
-
-        mainLayout.addView(adwhirlLayout);
-
-        mainLayout.invalidate();
-    }
-
-    @Override
-    public void adWhirlGeneric() {
-        // TODO Auto-generated method stub
-
     }
 
     public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {

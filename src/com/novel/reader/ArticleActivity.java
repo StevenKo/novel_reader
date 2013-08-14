@@ -11,6 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,13 +31,13 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.adwhirl.AdWhirlLayout;
-import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
-import com.adwhirl.AdWhirlManager;
-import com.adwhirl.AdWhirlTargeting;
+import com.google.ads.Ad;
+import com.google.ads.AdListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdRequest.ErrorCode;
+import com.google.ads.AdSize;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.kosbrother.mail.GMailSender;
 import com.kosbrother.tool.DetectScrollView;
 import com.kosbrother.tool.DetectScrollView.DetectScrollViewListener;
 import com.novel.reader.api.NovelAPI;
@@ -44,7 +45,7 @@ import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Bookmark;
 
-public class ArticleActivity extends SherlockFragmentActivity implements DetectScrollViewListener, AdWhirlInterface {
+public class ArticleActivity extends SherlockFragmentActivity implements DetectScrollViewListener {
 
     private static final int    ID_SETTING  = 0;
     private static final int    ID_RESPONSE = 1;
@@ -91,6 +92,11 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private int                 articleNum = -1;
     private ArrayList<Integer>  articleNums;
 	private WebView             articleWebView;
+    private final String admobKey = "292fbab7f4ea4848";
+    private LinearLayout adBannerLayout;
+    private AdView adMobAdView;
+
+	
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,17 +162,39 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         setAboutUsDialog();
 
-        try {
-            Display display = getWindowManager().getDefaultDisplay();
-            int width = display.getWidth(); // deprecated
-            int height = display.getHeight(); // deprecated
+        adBannerLayout = (LinearLayout) findViewById(R.id.adonView);
+        final AdRequest adReq = new AdRequest();
+        adMobAdView = new AdView(this, AdSize.SMART_BANNER, admobKey);
+        adMobAdView.setAdListener(new AdListener() {
+			@Override
+			public void onDismissScreen(Ad arg0) {
+				Log.d("admob_banner", "onDismissScreen");
+			}
 
-            if (width > 320) {
-                setAdAdwhirl();
-            }
-        } catch (Exception e) {
+			@Override
+			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {
+                Log.d("admob_banner", "onFailedToReceiveAd");
+			}
 
-        }
+			@Override
+			public void onLeaveApplication(Ad arg0) {
+                Log.d("admob_banner", "onLeaveApplication");
+			}
+
+			@Override
+			public void onPresentScreen(Ad arg0) {
+                Log.d("admob_banner", "onPresentScreen");
+			}
+
+			@Override
+			public void onReceiveAd(Ad arg0) {
+                Log.d("admob_banner", "onReceiveAd ad:" + arg0.getClass());
+			}
+			
+		});
+		adMobAdView.loadAd(adReq);
+		adBannerLayout.addView(adMobAdView);
+
     }
     
     @Override
@@ -387,75 +415,11 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             		+"\n"+getResources().getString(R.string.report_chapter)+ myAricle.getTitle()+"(Num:"+myAricle.getNum()+")"
             		+"\n"+getResources().getString(R.string.report_content)+"\n");
             startActivity(Intent.createChooser(emailIntent2, "Send mail..."));       	
-         // showReportDialog();
             break;
         }
         return true;
     }
 
-    private void showReportDialog() {
-        AlertDialog.Builder editDialog = new AlertDialog.Builder(ArticleActivity.this);
-        editDialog.setTitle(getResources().getString(R.string.report_title));
-
-        // final EditText editText = new EditText(ArticleActivity.this);
-        // editDialog.setView(editText);
-
-        LayoutInflater inflater = LayoutInflater.from(ArticleActivity.this);
-        View edit_view = inflater.inflate(R.layout.layout_mail_dialog, null);
-        TextView text_chapter = (TextView) edit_view.findViewById(R.id.text_report_chapter);
-        final EditText text_content = (EditText) edit_view.findViewById(R.id.text_report_content);
-
-        text_chapter.setText(getResources().getString(R.string.report_chapter) + myAricle.getTitle());
-
-        editDialog.setView(edit_view);
-
-        editDialog.setPositiveButton(getResources().getString(R.string.report_confirm), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
-                if (!text_content.getText().toString().equals("")) {
-                    reportContent = text_content.getText().toString();
-                    new SendMailTask().execute();
-                } else {
-                    Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_remind), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        editDialog.setNegativeButton(getResources().getString(R.string.report_cancel), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
-            }
-        });
-        editDialog.show();
-    }
-
-    private class SendMailTask extends AsyncTask {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_reporting), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            try {
-                GMailSender sender = new GMailSender("sandjstudio@gmail.com", "wonderful2013");
-                booleanSend = sender.sendMail(novelName + "---" + getResources().getString(R.string.report_chapter) + myAricle.getTitle(), 
-                		"\n"+"Article Num:"+Integer.toString(myAricle.getNum())+"\n"+reportContent,
-                        "sandjstudio@gmail.com", "service@kosbrother.com");
-            } catch (Exception e) {
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
-            if (booleanSend) {
-                Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_success), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(ArticleActivity.this, getResources().getString(R.string.report_fail), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
     
     private class UploadUserReadNovelTask extends AsyncTask{
 
@@ -767,31 +731,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         NovelAPI.createRecentBookmark(new Bookmark(0, myAricle.getNovelId(), myAricle.getId(), yRate, novelName, myAricle.getTitle(), novelPic, true),
                 ArticleActivity.this);
         super.onPause();
-    }
-
-    private void setAdAdwhirl() {
-
-        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
-        AdWhirlTargeting.setAge(23);
-        AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
-        AdWhirlTargeting.setKeywords("online games gaming");
-        AdWhirlTargeting.setPostalCode("94123");
-        AdWhirlTargeting.setTestMode(false);
-
-        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
-
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
-
-        adwhirlLayout.setAdWhirlInterface(this);
-
-        mainLayout.addView(adwhirlLayout);
-
-        mainLayout.invalidate();
-    }
-
-    @Override
-    public void adWhirlGeneric() {
-
     }
 
     public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {

@@ -96,37 +96,21 @@
         <activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
         
-		<activity android:name="com.vpon.adon.android.WebInApp"
-		 android:screenOrientation="portrait"
-		 android:configChanges="orientation|keyboardHidden|navigation|keyboard"
-		 
-		/>
-		<activity android:name="com.vpon.adon.android.CrazyAdRun"
-		 android:configChanges="orientation|keyboardHidden|navigation|keyboard"
-		 android:theme="@android:style/Theme.Translucent" />          
-		<activity android:name="com.vpon.adon.android.webClientHandler.QRActivity"
-		 android:finishOnTaskLaunch = "true"
-		 android:clearTaskOnLaunch = "true"
-		 android:configChanges="keyboardHidden|navigation|keyboard"
-		>
-		</activity>
-		<activity android:name="com.vpon.adon.android.webClientHandler.ShootActivity"
-		 android:finishOnTaskLaunch = "true"
-		 android:clearTaskOnLaunch = "true"
-		 android:configChanges="keyboardHidden|navigation|keyboard">
-		</activity>
-		<activity android:name="com.googleing.zxinging.client.android.CaptureActivity"
-		 android:finishOnTaskLaunch = "true"
-		 android:clearTaskOnLaunch = "true"
-		 android:configChanges="orientation|keyboardHidden"
-		 android:screenOrientation="landscape"
-		 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-		 android:windowSoftInputMode="stateAlwaysHidden">
-		        <intent-filter>
-		          <action android:name="com.googleing.zxinging.client.android.SCAN"/>
-		       	  <category android:name="android.intent.category.DEFAULT"/>
-		        </intent-filter>
-		</activity>
+		<activity
+            android:name="com.vpon.widget.VponActivity" 
+            android:configChanges="orientation|keyboardHidden|navigation|keyboard|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent"
+            android:hardwareAccelerated="true"
+            >
+        </activity>
+        
+        <!--HODo Ad 設定  -->
+    	<activity android:name="com.hodo.ADActivity"/>
+        <activity 
+        	android:name="com.hodo.SplashaActivity"
+            android:theme="@android:style/Theme.Translucent"/>
+        
+        
         <service
           android:name="com.novel.reader.service.DownloadService"
           >
