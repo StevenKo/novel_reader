@@ -73,11 +73,11 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private Bundle              mBundle;
     private String              novelName;
     private String              articleTitle;
-    private int                 articleId;
+    private int                 articleId = -1;
     private String              novelPic;
     private int                 novelId;
-    private int                 yRate;
-    private int                 ariticlePosition;
+    private int                 yRate = -1;
+    private int                 ariticlePosition = -1;
     private ArrayList<Integer>  articleIDs;
     // private ProgressDialog progressDialog= null;
     private AlertDialog.Builder aboutUsDialog;
@@ -88,7 +88,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private int                 appTheme;
     private Boolean             booleanSend;
     private String              reportContent;
-    private int                 articleNum;
+    private int                 articleNum = -1;
     private ArrayList<Integer>  articleNums;
 	private WebView             articleWebView;
 
@@ -97,23 +97,55 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         super.onCreate(savedInstanceState);
         Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.layout_article);
+
+        
         restorePreValues();
         setViews();
 
         ab = getSupportActionBar();
         mBundle = this.getIntent().getExtras();
         novelName = mBundle.getString("NovelName");
-        articleTitle = mBundle.getString("ArticleTitle");
-        articleId = mBundle.getInt("ArticleId");
-        downloadBoolean = mBundle.getBoolean("ArticleDownloadBoolean", false);
         novelPic = mBundle.getString("NovelPic");
         novelId = mBundle.getInt("NovelId");
-        yRate = mBundle.getInt("ReadingRate", 0);
-        articleIDs = mBundle.getIntegerArrayList("ArticleIDs");
-        ariticlePosition = mBundle.getInt("ArticlePosition");
-        articleNum = mBundle.getInt("ArticleNum");
-        articleNums = mBundle.getIntegerArrayList("ArticleNums");
+        
+        if(myAricle == null){
+	         articleTitle = mBundle.getString("ArticleTitle");
+	         articleId = mBundle.getInt("ArticleId");
+	         downloadBoolean = mBundle.getBoolean("ArticleDownloadBoolean", false);
+	         yRate = mBundle.getInt("ReadingRate", 0);
+	         articleIDs = mBundle.getIntegerArrayList("ArticleIDs");
+	         ariticlePosition = mBundle.getInt("ArticlePosition");
+	         articleNum = mBundle.getInt("ArticleNum");
+	         articleNums = mBundle.getIntegerArrayList("ArticleNums");
+	         if(savedInstanceState != null){
+	        	 articleTitle = savedInstanceState.getString("ArticleTitle");
+		         articleId = savedInstanceState.getInt("ArticleId");
+		         downloadBoolean = savedInstanceState.getBoolean("ArticleDownloadBoolean", false);
+		         yRate = savedInstanceState.getInt("ReadingRate", 0);
+		         articleIDs = savedInstanceState.getIntegerArrayList("ArticleIDs");
+		         ariticlePosition = savedInstanceState.getInt("ArticlePosition");
+		         articleNum = savedInstanceState.getInt("ArticleNum");
+		         articleNums = savedInstanceState.getIntegerArrayList("ArticleNums");
+	         }
 
+	  	    if (articleIDs != null) {
+	  	        if (downloadBoolean) {
+	  	            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
+	  	        } else {
+	  	            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
+	  	        }
+	  	    } else {
+	  	        if (downloadBoolean) {
+	  	            myAricle = new Article(articleId, novelId, "", articleTitle, "", true, articleNum);
+	  	        } else {
+	  	            myAricle = new Article(articleId, novelId, "", articleTitle, "", false, articleNum);
+	  	        }
+	  	    }
+	  	
+	  	    new DownloadArticleTask().execute();
+	  	    new UploadUserReadNovelTask().execute();
+        }
+        
         ab.setDisplayShowCustomEnabled(true);
         ab.setDisplayShowTitleEnabled(false);
 
@@ -121,23 +153,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         // ab.setTitle(novelName);
         ab.setDisplayHomeAsUpEnabled(true);
-
-        if (articleIDs != null) {
-            if (downloadBoolean) {
-                myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
-            } else {
-                myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
-            }
-        } else {
-            if (downloadBoolean) {
-                myAricle = new Article(articleId, novelId, "", articleTitle, "", true, articleNum);
-            } else {
-                myAricle = new Article(articleId, novelId, "", articleTitle, "", false, articleNum);
-            }
-        }
-
-        new DownloadArticleTask().execute();
-        new UploadUserReadNovelTask().execute();
 
         setAboutUsDialog();
 
@@ -152,7 +167,19 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         } catch (Exception e) {
 
         }
-
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+      savedInstanceState.putString("ArticleTitle", myAricle.getTitle());
+      savedInstanceState.putInt("ArticleId", myAricle.getId());
+      savedInstanceState.putBoolean("ArticleDownloadBoolean", myAricle.isDownload());
+      savedInstanceState.putInt("ReadingRate", yRate);
+      savedInstanceState.putIntegerArrayList("ArticleIDs", articleIDs);
+      savedInstanceState.putInt("ArticlePosition", ariticlePosition);
+      savedInstanceState.putInt("ArticleNum", myAricle.getNum());
+      savedInstanceState.putIntegerArrayList("ArticleNums", articleNums);
+      super.onSaveInstanceState(savedInstanceState);
     }
 
     private void setActionBarTitle(String articleTitle) {
