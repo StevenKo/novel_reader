@@ -12,11 +12,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -76,6 +79,8 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
     private static boolean                       actionModeShowing  = false;
     private static boolean                       isDeleteArticles   = false;
     private ProgressDialog                       progressDialog     = null;
+	private Button updateNovelButton;
+	private RelativeLayout novel_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +129,8 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
         novelListView = (ExpandableListView) findViewById(R.id.novel_download_artiles_list);
         downloadedCount = (TextView) findViewById(R.id.text_downloaded_count);
         novelLayoutProgress = (LinearLayout) findViewById(R.id.novel_layout_progress);
+        updateNovelButton = (Button)findViewById(R.id.update_novel_button);
+        novel_layout = (RelativeLayout)findViewById(R.id.novel_layout);
 
         novelTextName.setText(novelName + "(" + novelArticleNum + ")");
         novelTextAuthor.setText(getResources().getString(R.string.novel_author) + novelAuthor);
@@ -145,6 +152,31 @@ public class MyDownloadArticleActivity extends SherlockActivity implements AdWhi
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
+        updateNovelButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	Intent intent_to_download = new Intent(MyDownloadArticleActivity.this, DownloadActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("NovelId", novelId);
+                bundle.putString("NovelName", novelName);
+                intent_to_download.putExtras(bundle);
+                startActivity(intent_to_download);
+            }
+        });
+        novel_layout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	Intent activity_intent2 = new Intent(MyDownloadArticleActivity.this, NovelIntroduceActivity.class);
+        		activity_intent2.putExtra("NovelName",novelName);
+        		activity_intent2.putExtra("NovelAuthor",novelAuthor);
+        		activity_intent2.putExtra("NovelDescription","");
+        		activity_intent2.putExtra("NovelUpdate","");
+        		activity_intent2.putExtra("NovelPicUrl",novelPicUrl);
+        		activity_intent2.putExtra("NovelArticleNum",novelPicUrl);
+        		activity_intent2.putExtra("NovelId",novelId);
+                startActivity(activity_intent2);
+            }
+        });
 
     }
 

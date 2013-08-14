@@ -42,6 +42,7 @@
 	<string name="title_my_bookcase"> 我的书柜</string>
 	<string name="title_novel_introduce"> 小说介绍</string>
 	<string name="title_reading_setting"> 阅读设定</string>
+	<string name="update_novel">小说更新</string>
 	
 	<string name="setting_living">离开设定</string>
 	<string name="setting_message">是否要储存设定?</string>

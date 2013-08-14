@@ -4,11 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <RelativeLayout 
+    <RelativeLayout
+        android:id="@+id/novel_layout"
         android:layout_width="fill_parent"
         android:layout_height="80dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:clickable="true"
+        android:background="@drawable/grid_selector"
         >
         <ImageView android:id="@+id/novel_image"
             android:layout_width="55dp"
@@ -37,6 +40,24 @@
             	android:text="作者:金庸"
             	android:layout_marginTop="2dp"
                 />
+        </LinearLayout>
+        
+        <LinearLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="fill_parent"
+	    android:orientation="horizontal" 
+	    android:layout_alignParentRight="true"
+	    android:layout_marginRight="5dp">
+        
+        <Button
+            android:id="@+id/update_novel_button" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/update_novel"
+            android:textSize="15dp"
+            android:focusable="false"
+            android:layout_gravity="center_vertical"
+            />
         </LinearLayout>
         
     </RelativeLayout>
@@ -95,8 +116,9 @@
             android:id="@+id/adonView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-      	android:gravity="center_horizontal"
+      	    android:gravity="center_horizontal"
             android:background="@color/background"
+            android:orientation="horizontal"
             />
     
 </LinearLayout>
