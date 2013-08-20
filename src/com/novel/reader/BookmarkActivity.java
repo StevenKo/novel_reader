@@ -89,6 +89,7 @@ public class BookmarkActivity extends SherlockActivity{
 
         settings = getSharedPreferences(Setting.keyPref, 0);
         alertDeleteBookmark = settings.getBoolean(alertKey, true);
+        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
     }
 
     @Override

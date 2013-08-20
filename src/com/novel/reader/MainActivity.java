@@ -111,6 +111,8 @@ public class MainActivity extends SherlockFragmentActivity{
         }
         gcm = GoogleCloudMessaging.getInstance(this);
         checkDB();
+        
+        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
 
     }
     

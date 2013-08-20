@@ -74,6 +74,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
         }
 
         new DownloadArticlesTask().execute();
+        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
 
     }
 

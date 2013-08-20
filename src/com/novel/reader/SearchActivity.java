@@ -100,6 +100,7 @@ public class SearchActivity extends SherlockListActivity {
 
         setAboutUsDialog();
         new LoadDataTask().execute();
+        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
 
     }
 

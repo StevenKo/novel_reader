@@ -74,6 +74,7 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
         pager.setAdapter(adapter);
 
         setAboutUsDialog();
+        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
         
     }
 
