@@ -129,6 +129,16 @@
     <string name="reset_db_fail">重置失败</string>
     <string name="reset">重置</string>
     
+    <string name="no_data">目前无资料</string>
+    <string name="no_internet">无法连线</string>
+    <string name="try_again">重试</string>
+    <string name="article_name">章节名称:</string>
+    <string name="cannot_find_data">找不到资料</string>
+    <string name="order">排序:</string>
+    <string name="article_num">篇数:</string>
+    <string name="update_time">更新日期:</string>
+    <string name="serializing">连载中</string>
+    
     <!-- for load more -->
     <string name="hello">Hello World, LoadMoreListView!</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh...</string>

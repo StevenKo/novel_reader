@@ -49,7 +49,7 @@
 	              android:id="@+id/author_tip"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="作者:"
+	            android:text="@string/novel_author"
 	            android:textSize="15px" 
 	              android:textColor="#999999"
 	              android:typeface="serif">
@@ -82,7 +82,7 @@
 	            <TextView
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="篇數:"
+	            android:text="@string/article_num"
 	            android:textSize="15px" 
 	              android:textColor="#999999"
 	              android:typeface="serif">
@@ -107,7 +107,7 @@
 	            <TextView
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="更新日期:"
+	            android:text="@string/update_time"
 	            android:textSize="15px" 
 	              android:textColor="#999999"
 	              android:typeface="serif">
@@ -128,7 +128,7 @@
 	            android:id="@+id/serializing"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="連載中"
+	            android:text="@string/serializing"
 	            android:layout_alignParentRight="true"
 	            android:textSize="15px" 
 	              android:textColor="#FF3333"

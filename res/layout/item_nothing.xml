@@ -6,7 +6,7 @@
     <TextView android:id="@+id/text_no_data"
         android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
-    	android:text="無資料"
+    	android:text="@string/no_data"
     	android:textSize="20dp"
     	android:textColor="#545454"
     	android:gravity="center"   

@@ -142,7 +142,7 @@
 	    <TextView android:id="@+id/text_rank"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="排序:"
+	        android:text="@string/order"
 	        android:layout_marginLeft="10dp"
 	        android:textSize="12dp"
 	        android:layout_centerVertical="true"
@@ -151,7 +151,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="3dp"
-	        android:text="由後往前"
+	        android:text="@string/novel_back"
 	        android:layout_centerVertical="true"
 	        android:layout_toRightOf="@id/text_rank"
 	        />

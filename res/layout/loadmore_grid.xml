@@ -40,7 +40,7 @@
 	    <TextView 
 	        android:layout_width="wrap_content"
    	 		android:layout_height="wrap_content"
-   	 		android:text="下載中..."
+   	 		android:text="@string/toast_novel_downloading"
 	        />
 	    <ProgressBar
 	        android:id="@+id/load_more_progressBar"
@@ -70,7 +70,7 @@
 	    <TextView 
 	        android:layout_width="wrap_content"
    	 		android:layout_height="wrap_content"
-   	 		android:text="目前無資料"
+   	 		android:text="@string/no_data"
    	 		android:textSize="23dp"
    	 		android:layout_marginLeft="5dp"
    	 		android:textColor="#6E6E6E"
@@ -88,7 +88,7 @@
 	    <TextView 
 	        android:layout_width="wrap_content"
    	 		android:layout_height="wrap_content"
-   	 		android:text="無法連線"
+   	 		android:text="@string/no_internet"
    	 		android:textSize="23dp"
    	 		android:layout_marginLeft="5dp"
    	 		android:textColor="#6E6E6E"
@@ -97,7 +97,7 @@
 	       android:layout_width="wrap_content"
    	 	   android:layout_height="wrap_content"
    	 	   android:layout_marginLeft="5dp"
-   	 	   android:text="重試"
+   	 	   android:text="@string/try_again"
 	        />
 	</LinearLayout>
 
