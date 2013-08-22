@@ -198,7 +198,7 @@ public class BookmarkActivity extends SherlockActivity{
     }
 
     private void showArticleDeleteDialog() {
-        new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.reminder)).setIcon(R.drawable.noti_app_icon)
+        new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.reminder)).setIcon(R.drawable.ic_stat_notify)
                 .setMessage(getResources().getString(R.string.delete_bookmark_reminder))
                 .setPositiveButton(getResources().getString(R.string.do_not_reminder), new DialogInterface.OnClickListener() {
 

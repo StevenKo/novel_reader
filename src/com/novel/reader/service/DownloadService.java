@@ -66,7 +66,7 @@ public class DownloadService extends IntentService {
         nm = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
         CharSequence tickerText = "下載中 ...";
         long when = System.currentTimeMillis();
-        Notification noti = new Notification(R.drawable.noti_app_icon, tickerText, when);
+        Notification noti = new Notification(R.drawable.ic_stat_notify, tickerText, when);
         context = this.getApplicationContext();
         Intent notiIntent = new Intent(context, MyNovelActivity.class);
         notiIntent.putExtra("noti", true);

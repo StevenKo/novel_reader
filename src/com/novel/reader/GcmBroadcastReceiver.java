@@ -8,6 +8,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
 public class GcmBroadcastReceiver extends BroadcastReceiver{
@@ -83,9 +85,11 @@ public class GcmBroadcastReceiver extends BroadcastReceiver{
         	
         }
         
+        Bitmap iconBitmap = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.app_icon);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx)
-        .setSmallIcon(R.drawable.noti_app_icon)
+        .setSmallIcon(R.drawable.ic_stat_notify)
+        .setLargeIcon(iconBitmap)
         .setContentTitle(intent.getStringExtra("title"))
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(intent.getStringExtra("big_text")))
