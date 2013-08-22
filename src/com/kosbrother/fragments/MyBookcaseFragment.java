@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,8 +100,23 @@ public class MyBookcaseFragment extends Fragment {
                 myGrid.setVisibility(View.GONE);
                 noDataLayout.setVisibility(View.VISIBLE);
             }
-
+            new UpdateServerCollectTask().execute();
         }
+    }
+    
+    private class UpdateServerCollectTask extends AsyncTask {
+
+		@Override
+		protected Object doInBackground(Object... params) {
+			String collect_novels_str = "";
+			for(Novel novel :novels){
+				collect_novels_str += novel.getId() + ",";
+			}
+			
+			NovelAPI.sendCollectedNovels(collect_novels_str, Settings.Secure.getString(MyBookcaseFragment.this.getActivity().getContentResolver(),Settings.Secure.ANDROID_ID));
+			return null;
+		}
+    	
     }
 
 }

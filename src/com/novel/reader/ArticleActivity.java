@@ -11,6 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -389,7 +390,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
 		@Override
 		protected Object doInBackground(Object... arg0) {
-			NovelAPI.sendNovel(myAricle.getId(), Setting.getRegistrationId(ArticleActivity.this));
+			NovelAPI.sendNovel(myAricle.getId(), Settings.Secure.getString(ArticleActivity.this.getContentResolver(),Settings.Secure.ANDROID_ID));
 			return null;
 		}
     	

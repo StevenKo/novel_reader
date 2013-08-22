@@ -100,6 +100,7 @@ public class Setting {
     
     public static final String PROPERTY_REG_ID = "registration_id";
     public static final String PROPERTY_APP_VERSION = "appVersion";
+    public static final String PROPERTY_DEVICE_ID = "device_id";
 	static final String TAG = "GCM_kos";
 	
 	/**
@@ -127,6 +128,12 @@ public class Setting {
             return "";
         }
         return registrationId;
+    }
+    
+    public static String getDeviceId(Context context) {
+        final SharedPreferences prefs = getGCMPreferences(context);
+        String deviceId = prefs.getString(PROPERTY_DEVICE_ID, "");
+        return deviceId;
     }
     
     public static SharedPreferences getGCMPreferences(Context context) {

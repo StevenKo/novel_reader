@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -105,8 +106,9 @@ public class MainActivity extends SherlockFragmentActivity{
         
         context = getApplicationContext();
         regid = Setting.getRegistrationId(context);
+        String device_id = Setting.getDeviceId(context);
 
-        if (regid.length() == 0) {
+        if (regid.length() == 0 || device_id.length() == 0) {
             registerBackground();
         }
         gcm = GoogleCloudMessaging.getInstance(this);
@@ -319,19 +321,21 @@ public class MainActivity extends SherlockFragmentActivity{
 	                }
 	                regid = gcm.register(SENDER_ID);
 	                msg = "Device registered, registration id=" + regid;
-	                NovelAPI.sendRegistrationId(regid);
+	                String deviceId = Settings.Secure.getString(MainActivity.this.getContentResolver(),Settings.Secure.ANDROID_ID); 
+	                NovelAPI.sendRegistrationId(regid,deviceId);
 	                
-	                setRegistrationId(context, regid);
+	                setRegistrationId(context, regid,deviceId);
 	            } catch (IOException ex) {
 	                msg = "Error :" + ex.getMessage();
 	            }
 	            return msg;
 			}
 
-			private void setRegistrationId(Context context, String regid) {
+			private void setRegistrationId(Context context, String regid,String deviceId) {
 				final SharedPreferences prefs = Setting.getGCMPreferences(context);
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString(Setting.PROPERTY_REG_ID, regid);
+				editor.putString(Setting.PROPERTY_DEVICE_ID, deviceId);
 				editor.putInt(Setting.PROPERTY_APP_VERSION, Setting.getAppVersion(context));
 				editor.putLong(Setting.PROPERTY_ON_SERVER_EXPIRATION_TIME, Setting.REGISTRATION_EXPIRY_TIME_MS + System.currentTimeMillis());
 				editor.commit();

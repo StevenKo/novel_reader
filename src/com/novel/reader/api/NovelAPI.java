@@ -182,7 +182,8 @@ public class NovelAPI {
 
     public static boolean collecNovel(final Novel novel, final Context context) {
         novel.setIsCollected(true);
-        SQLiteNovel db = new SQLiteNovel(context);
+        final SQLiteNovel db = new SQLiteNovel(context);
+        novel.setIsDownload(db.isNovelDownloaded(novel.getId()));
         if (db.isNovelExists(novel.getId()))
             db.updateNovel(novel);
         else
@@ -191,7 +192,7 @@ public class NovelAPI {
         new AsyncTask() {
             @Override
             protected Object doInBackground(Object... params) {
-                downloadOrUpdateNovelInfo(novel.getId(), context, true, false);
+                downloadOrUpdateNovelInfo(novel.getId(), context, true, db.isNovelDownloaded(novel.getId()));
                 return params;
             }
         }.execute();
@@ -647,10 +648,10 @@ public class NovelAPI {
         return novels;
     }
     
-    public static boolean sendRegistrationId(String regid){
+    public static boolean sendRegistrationId(String regid,String deviceId){
     	try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users.json?regid="+regid;						
+			String url = HOST + "/api/v1/users.json?regid="+regid+"&device_id="+deviceId;;						
 			if(DEBUG)
 				Log.d(TAG, "URL : " + url);
 
@@ -669,10 +670,10 @@ public class NovelAPI {
 		} 
     }
     
-    public static boolean sendNovel(int novel,String regid){
+    public static boolean sendNovel(int novel,String deviceId){
     	try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users/update_novel.json?novel="+novel+"&regid="+regid;						
+			String url = HOST + "/api/v1/users/update_novel.json?novel="+novel+"&device_id="+deviceId;						
 			if(DEBUG)
 				Log.d(TAG, "URL : " + url);
 
@@ -690,5 +691,49 @@ public class NovelAPI {
 			return false;
 		} 
 
+    }
+    
+    public static boolean sendDownloadedNovels(String novels,String deviceId){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users/update_downloaded_novels.json?novels="+novels+"&device_id="+deviceId;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPut httpPut = new HttpPut(url);
+			HttpResponse response = httpClient.execute(httpPut);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+    }
+    
+    public static boolean sendCollectedNovels(String novels,String deviceId){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users/update_collected_novels.json?novels="+novels+"&device_id="+deviceId;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPut httpPut = new HttpPut(url);
+			HttpResponse response = httpClient.execute(httpPut);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
     }
 }
