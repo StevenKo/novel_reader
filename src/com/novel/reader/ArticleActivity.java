@@ -498,8 +498,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_data), Toast.LENGTH_SHORT).show();
             }
 
-            new GetLastPositionTask().execute();
-
         }
     }
 
@@ -539,8 +537,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_up), Toast.LENGTH_SHORT).show();
             }
 
-            new GetLastPositionTask().execute();
-
         }
     }
 
@@ -576,8 +572,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_down), Toast.LENGTH_SHORT).show();
             }
-
-            new GetLastPositionTask().execute();
 
         }
     }
