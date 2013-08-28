@@ -122,7 +122,7 @@ public class MyNovelActivity extends SherlockFragmentActivity {
             startActivity(browserIntent);
             break;
         case ID_Report:
-        	Report.createReportDialog(this,getResources().getString(R.string.report_not_novel_problem),getResources().getString(R.string.report_not_article_problem),getResources().getString(R.string.title_my_bookcase)+":");
+        	Report.createReportDialog(this,getResources().getString(R.string.report_not_novel_problem),getResources().getString(R.string.report_not_article_problem));
             break;
         }
         return true;

@@ -165,7 +165,7 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
         case ID_SEARCH: // response
             break;
         case ID_Report:
-        	Report.createReportDialog(this,this.getResources().getString(R.string.report_not_novel_problem),this.getResources().getString(R.string.report_not_article_problem),title + ":");
+        	Report.createReportDialog(this,this.getResources().getString(R.string.report_not_novel_problem),this.getResources().getString(R.string.report_not_article_problem));
             break;
         }
         return true;
