@@ -102,7 +102,7 @@
     
     <string name="search_hint">請輸入作者或書名</string>
     <string name="about_us_string">關於我們</string>
-    <string name="about_us">您好, \n\n『小說王』是一個從網路收集小說的第三方App軟體, \n\n如果您有什麼建議與指教, 歡迎 Email 讓我們知道. \n\n感謝您. \n\nEmail: brotherkos\@gmail.com</string>
+    <string name="about_us">您好, \n\n『小說王』是一個從網路收集小說的第三方App軟體,資料不屬於小說王所有，直接來自網路 \n\n如果您有什麼建議與指教, 歡迎 Email 讓我們知道. \n\n感謝您. \n\nEmail: service\@kosbrother.com</string>
     <string name="yes_string">確定</string>
     
     <string name="my_bookcase">我的書櫃</string>

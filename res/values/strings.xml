@@ -96,7 +96,7 @@
     <string name="report_novel">小說名稱:</string>
     
     <string name="about_us_string">關於我們</string>
-    <string name="about_us">嗨, \n\n音樂頻道是一個收集熱門Youtube音樂頻道的第三方App軟體, \n\n我們並不擁有這些影音版權. 如果您的頻道不希望出現在此App, 請Email讓我們知道. \n\n感謝您. \n\nEmail: brotherkos\@gmail.com</string>
+    <string name="about_us">您好, \n\n『小說王』是一個從網路收集小說的第三方App軟體,資料不屬於小說王所有，直接來自網路 \n\n如果您有什麼建議與指教, 歡迎 Email 讓我們知道. \n\n感謝您. \n\nEmail: service\@kosbrother.com</string>
     <string name="yes_string">確定</string>
     
     <string name="my_bookcase">我的書櫃</string>
@@ -138,6 +138,11 @@
     <string name="article_num">篇數:</string>
     <string name="update_time">更新日期:</string>
     <string name="serializing">連載中</string>
+    
+    
+    <string name="report_problem_hint">請輸入問題內容...</string>
+    <string name="report_not_article_problem">非特定章節！</string>
+    <string name="report_not_novel_problem">非特定小說！</string>
     
     <!-- for vpon -->
     <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>

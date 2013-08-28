@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 
 public class AdViewUtil {
 	
-	private static String admobKey = "292fbab7f4ea4848";
+	private static String admobKey = "da9b22b1a4d24723";
 	
 	private static void getAdRequest(LinearLayout adBannerLayout, Context ctx){
 

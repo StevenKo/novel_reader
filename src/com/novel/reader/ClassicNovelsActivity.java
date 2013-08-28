@@ -34,6 +34,7 @@ import com.google.ads.AdView;
 import com.google.ads.AdRequest.ErrorCode;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.ClassicFragment;
+import com.kosbrother.tool.Report;
 import com.novel.reader.api.Setting;
 
 public class ClassicNovelsActivity extends SherlockFragmentActivity {
@@ -44,6 +45,7 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
     private static final int    ID_GRADE    = 3;
     private static final int    ID_DOWNLOAD = 4;
     private static final int    ID_SEARCH   = 5;
+    private static final int    ID_Report   = 6;
 
     private Bundle              mBundle;
     private String              title;
@@ -87,6 +89,7 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
         menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         itemSearch = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse)
                 .setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
@@ -160,6 +163,9 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
             startActivity(browserIntent);
             break;
         case ID_SEARCH: // response
+            break;
+        case ID_Report:
+        	Report.createReportDialog(this,this.getResources().getString(R.string.report_not_novel_problem),this.getResources().getString(R.string.report_not_article_problem),title + ":");
             break;
         }
         return true;

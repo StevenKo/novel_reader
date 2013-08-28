@@ -38,6 +38,7 @@ import com.kosbrother.fragments.CategoryNewNovelsFragment;
 import com.kosbrother.fragments.CategoryRecommendFragment;
 import com.kosbrother.fragments.CategoryWeekFragment;
 import com.kosbrother.fragments.CategroyHotNovelsFragment;
+import com.kosbrother.tool.Report;
 import com.novel.reader.api.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
@@ -49,6 +50,7 @@ public class CategoryActivity extends SherlockFragmentActivity {
     private static final int    ID_GRADE    = 3;
     private static final int    ID_DOWNLOAD = 4;
     private static final int    ID_SEARCH   = 5;
+    private static final int    ID_Report   = 6;
 
     private String[]            CONTENT;
     private EditText            search;
@@ -100,6 +102,7 @@ public class CategoryActivity extends SherlockFragmentActivity {
         menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         itemSearch = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse)
                 .setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
@@ -174,6 +177,10 @@ public class CategoryActivity extends SherlockFragmentActivity {
             break;
         case ID_SEARCH: // response
             break;
+        case ID_Report:
+        	Report.createReportDialog(this,this.getResources().getString(R.string.report_not_novel_problem),this.getResources().getString(R.string.report_not_article_problem),categoryName + ":");
+            break;
+        
         }
         return true;
     }

@@ -32,6 +32,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.Group;
+import com.kosbrother.tool.Report;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Article;
@@ -48,6 +49,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
     private static final int                    ID_GRADE          = 3;
     private static final int                    ID_DOWNLOAD       = 4;
     private static final int                    ID_SEARCH         = 5;
+    private static final int                    ID_Report         = 6;
 
     private EditText                            search;
     private Bundle                              mBundle;
@@ -305,6 +307,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_DOWNLOAD, 5, getResources().getString(R.string.menu_download)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         itemSearch = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse)
                 .setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
@@ -386,6 +389,9 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
             break;
         case ID_SEARCH: // response
             Toast.makeText(NovelIntroduceActivity.this, "SEARCH", Toast.LENGTH_SHORT).show();
+            break;
+        case ID_Report:
+        	Report.createReportDialog(this,novelName,this.getResources().getString(R.string.report_not_article_problem));  	
             break;
         }
         return true;

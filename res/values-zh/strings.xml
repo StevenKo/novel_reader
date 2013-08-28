@@ -102,7 +102,7 @@
 	
 	<string name="search_hint">请输入作者或书名</string>
 	<string name="about_us_string">关于我们</string>
-	<string name="about_us">您好, \n\n『小说王』是一个从网路收集小说的第三方App软体, \n\n如果您有什么建议与指教, 欢迎Email 让我们知道. \n\n感谢您. \n\ nEmail: brotherkos\@gmail.com</string>
+	<string name="about_us">您好, \n\n『小说王』是一个从网路收集小说的第三方App软体,资料不属于小说王所有，直接来自网路\n\n如果您有什么建议与指教, 欢迎Email 让我们知道. \n\n感谢您. \n\nEmail: service\@kosbrother.com</string>
 	<string name="yes_string">确定</string>
 	
 	<string name="my_bookcase">我的书柜</string>

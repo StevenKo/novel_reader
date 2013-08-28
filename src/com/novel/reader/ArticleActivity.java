@@ -41,6 +41,7 @@ import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.tool.DetectScrollView;
 import com.kosbrother.tool.DetectScrollView.DetectScrollViewListener;
+import com.kosbrother.tool.Report;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Article;
@@ -371,15 +372,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             addBookMarkDialog.show();
             break;
         case ID_Report:
-        	final Intent emailIntent2 = new Intent(android.content.Intent.ACTION_SEND);
-            emailIntent2.setType("plain/text");
-            emailIntent2.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] { getResources().getString(R.string.respond_mail_address) });
-            emailIntent2.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.report_title));
-            emailIntent2.putExtra(android.content.Intent.EXTRA_TEXT, 
-            		getResources().getString(R.string.report_novel)+novelName
-            		+"\n"+getResources().getString(R.string.report_chapter)+ myAricle.getTitle()+"(Num:"+myAricle.getNum()+")"
-            		+"\n"+getResources().getString(R.string.report_content)+"\n");
-            startActivity(Intent.createChooser(emailIntent2, "Send mail..."));       	
+        	Report.createReportDialog(this,novelName,myAricle.getTitle()+"(Num:"+myAricle.getNum()+")");  	
             break;
         }
         return true;

@@ -29,6 +29,7 @@ import com.google.ads.AdRequest.ErrorCode;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.MyBookcaseFragment;
 import com.kosbrother.fragments.MyDownloadFragment;
+import com.kosbrother.tool.Report;
 import com.novel.reader.api.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
@@ -38,6 +39,7 @@ public class MyNovelActivity extends SherlockFragmentActivity {
     private static final int          ID_RESPONSE = 1;
     private static final int          ID_ABOUT_US = 2;
     private static final int          ID_GRADE    = 3;
+    private static final int          ID_Report   = 6;
     private String[]                  CONTENT;
     private AlertDialog.Builder       aboutUsDialog;
     
@@ -86,6 +88,7 @@ public class MyNovelActivity extends SherlockFragmentActivity {
         menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         return true;
     }
@@ -117,6 +120,9 @@ public class MyNovelActivity extends SherlockFragmentActivity {
         case ID_GRADE:
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
             startActivity(browserIntent);
+            break;
+        case ID_Report:
+        	Report.createReportDialog(this,getResources().getString(R.string.report_not_novel_problem),getResources().getString(R.string.report_not_article_problem),getResources().getString(R.string.title_my_bookcase)+":");
             break;
         }
         return true;
