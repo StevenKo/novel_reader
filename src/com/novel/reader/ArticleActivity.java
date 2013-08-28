@@ -94,6 +94,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private int                 articleNum = -1;
     private ArrayList<Integer>  articleNums;
 	private WebView             articleWebView;
+	private LinearLayout articleLayout;
 
 	
 
@@ -223,13 +224,18 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         articleButtonUp = (Button) findViewById(R.id.article_button_up);
         articleButtonDown = (Button) findViewById(R.id.article_button_down);
         articlePercent = (TextView) findViewById(R.id.article_percent);
+        articleLayout = (LinearLayout)findViewById(R.id.article_layout);
 
         articleScrollView.setScrollViewListener(ArticleActivity.this);
 
         articleTextView.setTextSize(textSize);
         articleTextView.setTextColor(textColor);
-        articleScrollView.setBackgroundColor(textBackground);
-        articleWebView.setBackgroundColor(textBackground);
+        if(textBackground!=Setting.initialTextBackground){
+        	articleLayout.setBackgroundColor(textBackground);
+        	layoutProgress.setBackgroundColor(textBackground);
+        }
+        	
+        
         
         
         articleButtonUp.setOnClickListener(new OnClickListener() {
@@ -637,7 +643,10 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         articleTextView.setTextSize(textSize);
         articleTextView.setTextColor(textColor);
-        articleScrollView.setBackgroundColor(textBackground);
+        if(textBackground!=Setting.initialTextBackground){
+        	articleLayout.setBackgroundColor(textBackground);
+        	layoutProgress.setBackgroundColor(textBackground);
+        }
 
         if (originTextLan != textLanguage) {
             if (textLanguage == 1) {

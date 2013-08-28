@@ -16,10 +16,16 @@
         	/>        
     </LinearLayout>
     
-    <com.kosbrother.tool.DetectScrollView android:id="@+id/article_scrollview"
+    <LinearLayout 
+       android:orientation="horizontal"
        android:layout_width="fill_parent"
        android:layout_height="0dp"
        android:layout_weight="1"
+       android:id="@+id/article_layout">
+    
+    <com.kosbrother.tool.DetectScrollView android:id="@+id/article_scrollview"
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent"
         >
 	    <TextView  android:id="@+id/article_text"
 	        android:layout_width="wrap_content"
@@ -34,12 +40,12 @@
     
     <WebView android:id="@+id/article_webview"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="fill_parent"
         android:visibility="gone"
     	android:layout_marginTop="10dp"
     	android:layout_marginBottom="5dp"
         />
+    </LinearLayout>
     
     <RelativeLayout android:id="@+id/bottom_buttons"
 	     android:layout_width="fill_parent"
