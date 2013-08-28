@@ -285,6 +285,7 @@ public class SearchActivity extends SherlockListActivity {
             progressdialogInit.dismiss();
             if (novels != null && novels.size() != 0) {
                 novelListView.setAdapter(new SearchAdapter(SearchActivity.this, novels));
+                layoutNoSearch.setVisibility(View.GONE);
             } else {
                 layoutNoSearch.setVisibility(View.VISIBLE);
             }
