@@ -490,7 +490,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             	setArticleText();
 
                 myAricle.setNovelId(novelId);
-                articleScrollView.fullScroll(ScrollView.FOCUS_UP);
+                articleScrollView.scrollTo(0, 0);
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
 
@@ -529,7 +529,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 setArticleText();
 
                 myAricle.setNovelId(novelId);
-                articleScrollView.fullScroll(ScrollView.FOCUS_UP);
+                articleScrollView.scrollTo(0, 0);
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
 
@@ -566,7 +566,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             	setArticleText();
 
                 myAricle.setNovelId(novelId);
-                articleScrollView.fullScroll(ScrollView.FOCUS_UP);
+                articleScrollView.scrollTo(0, 0);
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
             } else {
@@ -598,7 +598,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                     xx = 100;
                 String yPositon = Integer.toString(xx);
                 articlePercent.setText(yPositon + "%");
-                articleScrollView.fullScroll(ScrollView.FOCUS_UP);
+                articleScrollView.scrollTo(0, 0);
             } else {
                 String yPositon = Integer.toString(yRate);
                 articlePercent.setText(yPositon + "%");
