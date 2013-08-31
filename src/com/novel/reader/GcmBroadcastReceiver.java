@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 public class GcmBroadcastReceiver extends BroadcastReceiver{
@@ -81,6 +82,12 @@ public class GcmBroadcastReceiver extends BroadcastReceiver{
         		activity_intent2.putExtra("NovelArticleNum",intent.getStringExtra("novel_article_num"));
         		activity_intent2.putExtra("NovelId",Integer.parseInt(intent.getStringExtra("novel_id")));
         		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent2, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+        		break;
+        	case 5:
+        		String url = intent.getStringExtra("open_url");
+        		Intent i = new Intent(Intent.ACTION_VIEW);
+        		i.setData(Uri.parse(url));
+        		contentIntent = PendingIntent.getActivity(ctx, 0, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
         		break;
         	
         }
