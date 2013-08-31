@@ -648,10 +648,10 @@ public class NovelAPI {
         return novels;
     }
     
-    public static boolean sendRegistrationId(String regid,String deviceId){
+    public static boolean sendRegistrationId(String regid,String deviceId,String country,int versionCode,String platform){
     	try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users.json?regid="+regid+"&device_id="+deviceId;;						
+			String url = HOST + "/api/v1/users.json?regid="+regid+"&device_id="+deviceId+"&platform="+platform+"&version="+versionCode+"&country="+country;				
 			if(DEBUG)
 				Log.d(TAG, "URL : " + url);
 
