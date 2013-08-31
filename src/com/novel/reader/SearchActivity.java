@@ -43,8 +43,8 @@ import com.google.ads.AdView;
 import com.google.ads.AdRequest.ErrorCode;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.novel.reader.api.NovelAPI;
-import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Novel;
+import com.novel.reader.util.Setting;
 import com.taiwan.imageload.ImageLoader;
 
 public class SearchActivity extends SherlockListActivity {

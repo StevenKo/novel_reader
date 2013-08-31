@@ -1,4 +1,4 @@
-package com.novel.reader.api;
+package com.novel.reader.util;
 
 import java.util.HashMap;
 

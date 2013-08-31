@@ -53,7 +53,7 @@ import com.kosbrother.fragments.WeekFragment;
 import com.kosbrother.tool.Report;
 import com.novel.db.SQLiteNovel;
 import com.novel.reader.api.NovelAPI;
-import com.novel.reader.api.Setting;
+import com.novel.reader.util.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
 public class MainActivity extends SherlockFragmentActivity{

@@ -39,7 +39,7 @@ import com.kosbrother.fragments.CategoryRecommendFragment;
 import com.kosbrother.fragments.CategoryWeekFragment;
 import com.kosbrother.fragments.CategroyHotNovelsFragment;
 import com.kosbrother.tool.Report;
-import com.novel.reader.api.Setting;
+import com.novel.reader.util.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
 public class CategoryActivity extends SherlockFragmentActivity {

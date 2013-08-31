@@ -22,7 +22,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.novel.db.SQLiteNovel;
-import com.novel.reader.api.Setting;
+import com.novel.reader.util.Setting;
 
 public class SettingActivity extends SherlockFragmentActivity implements RadioGroup.OnCheckedChangeListener{
 

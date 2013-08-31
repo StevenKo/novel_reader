@@ -26,9 +26,9 @@ import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.ExpandListDownLoadAdapter;
 import com.kosbrother.tool.Group;
 import com.novel.reader.api.NovelAPI;
-import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Article;
 import com.novel.reader.service.DownloadService;
+import com.novel.reader.util.Setting;
 
 public class DownloadActivity extends SherlockFragmentActivity {
 

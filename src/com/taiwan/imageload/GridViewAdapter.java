@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.novel.reader.NovelIntroduceActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Novel;
+import com.novel.reader.util.NovelReaderUtil;
 
 public class GridViewAdapter extends BaseAdapter {
 
@@ -102,8 +103,8 @@ public class GridViewAdapter extends BaseAdapter {
         textCounts.setText(data.get(position).getArticleNum());
         textFinish.setText(data.get(position).getLastUpdate());
 
-        if (data.get(position).getPic().equals("") || data.get(position).getPic() == null) {
-            image.setImageResource(R.drawable.app_icon);
+        if (NovelReaderUtil.isDisplayDefaultBookCover(data.get(position).getPic())) {
+            image.setImageResource(R.drawable.bookcover_default);
         } else {
             imageLoader.DisplayImage(data.get(position).getPic(), image);
         }

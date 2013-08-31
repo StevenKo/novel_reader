@@ -43,8 +43,8 @@ import com.ifixit.android.sectionheaders.Section;
 import com.ifixit.android.sectionheaders.SectionHeadersAdapter;
 import com.ifixit.android.sectionheaders.SectionListView;
 import com.novel.reader.api.NovelAPI;
-import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Bookmark;
+import com.novel.reader.util.Setting;
 import com.taiwan.imageload.ImageLoader;
 
 public class BookmarkActivity extends SherlockActivity{
