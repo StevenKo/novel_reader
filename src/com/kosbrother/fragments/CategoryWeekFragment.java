@@ -14,9 +14,9 @@ import android.widget.LinearLayout;
 
 import com.novel.reader.CategoryActivity;
 import com.novel.reader.R;
+import com.novel.reader.adapter.GridViewAdapter;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Novel;
-import com.taiwan.imageload.GridViewAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
 public final class CategoryWeekFragment extends Fragment {

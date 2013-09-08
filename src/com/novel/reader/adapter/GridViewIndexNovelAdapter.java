@@ -1,4 +1,4 @@
-package com.taiwan.imageload;
+package com.novel.reader.adapter;
 
 import java.util.ArrayList;
 
@@ -15,19 +15,20 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.novel.reader.MyDownloadArticleActivity;
+import com.novel.reader.NovelIntroduceActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Novel;
 import com.novel.reader.util.NovelReaderUtil;
+import com.taiwan.imageload.ImageLoader;
 
-public class GridViewDownloadAdapter extends BaseAdapter {
+public class GridViewIndexNovelAdapter extends BaseAdapter {
 
     private final Activity         activity;
     private final ArrayList<Novel> data;
     private static LayoutInflater  inflater = null;
     public ImageLoader             imageLoader;
 
-    public GridViewDownloadAdapter(Activity a, ArrayList<Novel> d) {
+    public GridViewIndexNovelAdapter(Activity a, ArrayList<Novel> d) {
         activity = a;
         data = d;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -50,14 +51,16 @@ public class GridViewDownloadAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         // if (convertView == null)
+        // vi = inflater.inflate(R.layout.item_gridview_novel, null);
+
         Display display = activity.getWindowManager().getDefaultDisplay();
         int width = display.getWidth(); // deprecated
         int height = display.getHeight(); // deprecated
 
         if (width > 480) {
-            vi = inflater.inflate(R.layout.item_gridview_novel, null);
+            vi = inflater.inflate(R.layout.item_gridview_index_novel, null);
         } else {
-            vi = inflater.inflate(R.layout.item_gridview_novel_small, null);
+            vi = inflater.inflate(R.layout.item_gridview_index_novel, null);
         }
 
         vi.setClickable(true);
@@ -68,13 +71,13 @@ public class GridViewDownloadAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // Toast.makeText(activity, "tt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(activity, MyDownloadArticleActivity.class);
+                Intent intent = new Intent(activity, NovelIntroduceActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("NovelId", data.get(position).getId());
                 bundle.putString("NovelName", data.get(position).getName());
                 bundle.putString("NovelAuthor", data.get(position).getAuthor());
-                // bundle.putString("NovelDescription", data.get(position).getDescription());
-                // bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
+                bundle.putString("NovelDescription", data.get(position).getDescription());
+                bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
                 bundle.putString("NovelPicUrl", data.get(position).getPic());
                 bundle.putString("NovelArticleNum", data.get(position).getArticleNum());
                 intent.putExtras(bundle);
@@ -107,10 +110,10 @@ public class GridViewDownloadAdapter extends BaseAdapter {
             imageLoader.DisplayImage(data.get(position).getPic(), image);
         }
 
-        if (data.get(position).isSerializing()) {
-            textSerialize.setText("連載中...");
+        if (data.get(position).isCollected()) {
+            textSerialize.setText("收藏小說");
         } else {
-            textSerialize.setText("全本");
+            textSerialize.setText("下載小說");
         }
 
         return vi;

@@ -1,4 +1,4 @@
-package com.taiwan.imageload;
+package com.novel.reader.adapter;
 
 import java.util.ArrayList;
 
@@ -19,6 +19,7 @@ import com.novel.reader.NovelIntroduceActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Novel;
 import com.novel.reader.util.NovelReaderUtil;
+import com.taiwan.imageload.ImageLoader;
 
 public class GridViewAdapter extends BaseAdapter {
 

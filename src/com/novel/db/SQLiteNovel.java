@@ -80,7 +80,7 @@ public class SQLiteNovel extends SQLiteOpenHelper {
                         onUpgrade(db, db.getVersion(), DATABASE_VERSION);
                         db = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator + "kosnovel/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE);
                     }
-                } catch (SQLiteException ex) {
+                } catch (Exception ex) {
                     try {
                         File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
                         if (!cacheDir.exists())
@@ -354,6 +354,50 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         cursor.close();
         return bookmarks;
     }
+    
+    public ArrayList<Bookmark> getLastBookmarks(int num) {
+        Cursor cursor = null;
+        ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
+        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE is_recent_read = 0 ORDER BY id DESC LIMIT "+num, null);
+
+        while (cursor.moveToNext()) {
+            int ID = cursor.getInt(0);
+            int NOVEL_ID = cursor.getInt(1);
+            int ARTICLE_ID = cursor.getInt(2);
+            int READ_RATE = cursor.getInt(3);
+            String NOVEL_NAME = cursor.getString(4);
+            String ARTICLE_TITLE = cursor.getString(5);
+            String NOVEL_PIC = cursor.getString(6);
+            Boolean IS_RECENT_READ = cursor.getInt(7) > 0;
+
+            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC, IS_RECENT_READ);
+            bookmarks.add(bookmark);
+        }
+        cursor.close();
+        return bookmarks;
+    }
+    
+    public ArrayList<Bookmark> getLastRecentBookmarks(int num) {
+        Cursor cursor = null;
+        ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
+        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE is_recent_read = 1 ORDER BY id LIMIT "+num, null);
+
+        while (cursor.moveToNext()) {
+            int ID = cursor.getInt(0);
+            int NOVEL_ID = cursor.getInt(1);
+            int ARTICLE_ID = cursor.getInt(2);
+            int READ_RATE = cursor.getInt(3);
+            String NOVEL_NAME = cursor.getString(4);
+            String ARTICLE_TITLE = cursor.getString(5);
+            String NOVEL_PIC = cursor.getString(6);
+            Boolean IS_RECENT_READ = cursor.getInt(7) > 0;
+
+            Bookmark bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC, IS_RECENT_READ);
+            bookmarks.add(bookmark);
+        }
+        cursor.close();
+        return bookmarks;
+    }
 
     // public ArrayList<Bookmark> getNovelBookmarks(int novelId) {
     // Cursor cursor = null;
@@ -511,6 +555,52 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         args.put(ArtcileSchema.IS_DOWNLOADED, getSQLiteBoolean(article.isDownload()));
         args.put(ArtcileSchema.NUM, article.getNum());
         return db.insert(ArtcileSchema.TABLE_NAME, null, args);
+    }
+    
+    public ArrayList<Novel> getLastCollectNovels(int num){
+    	Cursor cursor = null;
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        cursor = db.rawQuery("SELECT * FROM " + NovelSchema.TABLE_NAME + " WHERE is_collected != 0 ORDER BY id DESC LIMIT "+num, null);
+        while (cursor.moveToNext()) {
+            int ID = cursor.getInt(0);
+            String NAME = cursor.getString(1);
+            String AUTHOR = cursor.getString(2);
+            String DESCRIPTION = cursor.getString(3);
+            String PIC = cursor.getString(4);
+            int CATEGORY_ID = cursor.getInt(5);
+            String ARTICLE_NUM = cursor.getString(6);
+            String LAST_UPDATE = cursor.getString(7);
+            Boolean IS_SERIALIZING = cursor.getInt(8) > 0;
+            Boolean IS_COLLECTED = cursor.getInt(9) > 0;
+            Boolean IS_DOWNLOADED = cursor.getInt(10) > 0;
+            Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED, IS_DOWNLOADED);
+            novels.add(novel);
+        }
+        cursor.close();
+        return novels;
+    }
+    
+    public ArrayList<Novel> getLastDownloadNovels(int num){
+    	Cursor cursor = null;
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        cursor = db.rawQuery("SELECT * FROM " + NovelSchema.TABLE_NAME + " WHERE is_downloaded != 0 ORDER BY id DESC LIMIT "+num, null);
+        while (cursor.moveToNext()) {
+            int ID = cursor.getInt(0);
+            String NAME = cursor.getString(1);
+            String AUTHOR = cursor.getString(2);
+            String DESCRIPTION = cursor.getString(3);
+            String PIC = cursor.getString(4);
+            int CATEGORY_ID = cursor.getInt(5);
+            String ARTICLE_NUM = cursor.getString(6);
+            String LAST_UPDATE = cursor.getString(7);
+            Boolean IS_SERIALIZING = cursor.getInt(8) > 0;
+            Boolean IS_COLLECTED = cursor.getInt(9) > 0;
+            Boolean IS_DOWNLOADED = cursor.getInt(10) > 0;
+            Novel novel = new Novel(ID, NAME, AUTHOR, DESCRIPTION, PIC, CATEGORY_ID, ARTICLE_NUM, LAST_UPDATE, IS_SERIALIZING, IS_COLLECTED, IS_DOWNLOADED);
+            novels.add(novel);
+        }
+        cursor.close();
+        return novels;
     }
 
     public ArrayList<Novel> getCollectedNovels() {

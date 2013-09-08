@@ -1,4 +1,4 @@
-package com.taiwan.imageload;
+package com.novel.reader.adapter;
 
 import java.util.ArrayList;
 
