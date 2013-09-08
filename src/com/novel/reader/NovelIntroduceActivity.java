@@ -33,12 +33,12 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.Group;
 import com.kosbrother.tool.Report;
+import com.novel.reader.adapter.ExpandListAdapter;
 import com.novel.reader.api.NovelAPI;
-import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Bookmark;
 import com.novel.reader.entity.Novel;
-import com.taiwan.imageload.ExpandListAdapter;
+import com.novel.reader.util.Setting;
 import com.taiwan.imageload.ImageLoader;
 
 public class NovelIntroduceActivity extends SherlockFragmentActivity {
@@ -391,7 +391,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
             Toast.makeText(NovelIntroduceActivity.this, "SEARCH", Toast.LENGTH_SHORT).show();
             break;
         case ID_Report:
-        	Report.createReportDialog(this,novelName,this.getResources().getString(R.string.report_not_article_problem));  	
+        	Report.createReportDialog(this,novelName+"("+novelId+")",this.getResources().getString(R.string.report_not_article_problem));  	
             break;
         }
         return true;

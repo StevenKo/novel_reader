@@ -43,9 +43,9 @@ import com.kosbrother.tool.DetectScrollView;
 import com.kosbrother.tool.DetectScrollView.DetectScrollViewListener;
 import com.kosbrother.tool.Report;
 import com.novel.reader.api.NovelAPI;
-import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Bookmark;
+import com.novel.reader.util.Setting;
 
 public class ArticleActivity extends SherlockFragmentActivity implements DetectScrollViewListener {
 
@@ -378,7 +378,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             addBookMarkDialog.show();
             break;
         case ID_Report:
-        	Report.createReportDialog(this,novelName,myAricle.getTitle()+"(Num:"+myAricle.getNum()+")");  	
+        	Report.createReportDialog(this,novelName+"("+novelId+")",myAricle.getTitle()+"(Num:"+myAricle.getNum()+")");  	
             break;
         }
         return true;

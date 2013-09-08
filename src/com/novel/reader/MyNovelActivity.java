@@ -30,7 +30,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.MyBookcaseFragment;
 import com.kosbrother.fragments.MyDownloadFragment;
 import com.kosbrother.tool.Report;
-import com.novel.reader.api.Setting;
+import com.novel.reader.util.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
 public class MyNovelActivity extends SherlockFragmentActivity {

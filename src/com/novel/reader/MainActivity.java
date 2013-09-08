@@ -2,6 +2,7 @@ package com.novel.reader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -52,7 +53,7 @@ import com.kosbrother.fragments.WeekFragment;
 import com.kosbrother.tool.Report;
 import com.novel.db.SQLiteNovel;
 import com.novel.reader.api.NovelAPI;
-import com.novel.reader.api.Setting;
+import com.novel.reader.util.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
 public class MainActivity extends SherlockFragmentActivity{
@@ -327,12 +328,18 @@ public class MainActivity extends SherlockFragmentActivity{
 	                regid = gcm.register(SENDER_ID);
 	                msg = "Device registered, registration id=" + regid;
 	                String deviceId = Settings.Secure.getString(MainActivity.this.getContentResolver(),Settings.Secure.ANDROID_ID); 
-	                NovelAPI.sendRegistrationId(regid,deviceId);
 	                
-	                setRegistrationId(context, regid,deviceId);
+	                boolean isRegistered = NovelAPI.sendRegistrationId(regid,deviceId,Locale.getDefault().getCountry(),getPackageManager().getPackageInfo(getPackageName(), 0).versionCode,"GooglePlay");
+	                
+	                if(isRegistered)
+	                  setRegistrationId(context, regid,deviceId);
+	                
 	            } catch (IOException ex) {
 	                msg = "Error :" + ex.getMessage();
-	            }
+	            } catch (NameNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	            return msg;
 			}
 

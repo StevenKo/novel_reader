@@ -4,9 +4,9 @@ package com.kosbrother.fragments;
 import java.util.ArrayList;
 
 import com.novel.reader.CategoryActivity;
+import com.novel.reader.adapter.ListAdapter;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Category;
-import com.taiwan.imageload.ListAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

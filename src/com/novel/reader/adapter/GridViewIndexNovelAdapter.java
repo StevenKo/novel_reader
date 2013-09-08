@@ -1,4 +1,4 @@
-package com.taiwan.imageload;
+package com.novel.reader.adapter;
 
 import java.util.ArrayList;
 
@@ -18,15 +18,17 @@ import android.widget.TextView;
 import com.novel.reader.NovelIntroduceActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Novel;
+import com.novel.reader.util.NovelReaderUtil;
+import com.taiwan.imageload.ImageLoader;
 
-public class GridViewAdapter extends BaseAdapter {
+public class GridViewIndexNovelAdapter extends BaseAdapter {
 
     private final Activity         activity;
     private final ArrayList<Novel> data;
     private static LayoutInflater  inflater = null;
     public ImageLoader             imageLoader;
 
-    public GridViewAdapter(Activity a, ArrayList<Novel> d) {
+    public GridViewIndexNovelAdapter(Activity a, ArrayList<Novel> d) {
         activity = a;
         data = d;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -56,9 +58,9 @@ public class GridViewAdapter extends BaseAdapter {
         int height = display.getHeight(); // deprecated
 
         if (width > 480) {
-            vi = inflater.inflate(R.layout.item_gridview_novel, null);
+            vi = inflater.inflate(R.layout.item_gridview_index_novel, null);
         } else {
-            vi = inflater.inflate(R.layout.item_gridview_novel_small, null);
+            vi = inflater.inflate(R.layout.item_gridview_index_novel, null);
         }
 
         vi.setClickable(true);
@@ -102,16 +104,16 @@ public class GridViewAdapter extends BaseAdapter {
         textCounts.setText(data.get(position).getArticleNum());
         textFinish.setText(data.get(position).getLastUpdate());
 
-        if (data.get(position).getPic().equals("") || data.get(position).getPic() == null) {
-            image.setImageResource(R.drawable.app_icon);
+        if (NovelReaderUtil.isDisplayDefaultBookCover(data.get(position).getPic())) {
+            image.setImageResource(R.drawable.bookcover_default);
         } else {
             imageLoader.DisplayImage(data.get(position).getPic(), image);
         }
 
-        if (data.get(position).isSerializing()) {
-            textSerialize.setText("連載中...");
+        if (data.get(position).isCollected()) {
+            textSerialize.setText("收藏小說");
         } else {
-            textSerialize.setText("全本");
+            textSerialize.setText("下載小說");
         }
 
         return vi;

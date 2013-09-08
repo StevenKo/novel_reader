@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.novel.reader.R;
+import com.novel.reader.adapter.GridViewDownloadAdapter;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Novel;
-import com.taiwan.imageload.GridViewDownloadAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
 public class MyDownloadFragment extends Fragment {

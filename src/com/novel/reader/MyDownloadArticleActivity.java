@@ -40,9 +40,9 @@ import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.ExpandListDownLoadReadAdapter;
 import com.kosbrother.tool.Group;
 import com.novel.reader.api.NovelAPI;
-import com.novel.reader.api.Setting;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Novel;
+import com.novel.reader.util.Setting;
 import com.taiwan.imageload.ImageLoader;
 
 public class MyDownloadArticleActivity extends SherlockActivity {

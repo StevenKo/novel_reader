@@ -1,4 +1,4 @@
-package com.taiwan.imageload;
+package com.novel.reader.adapter;
 
 import java.util.ArrayList;
 
@@ -15,18 +15,20 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.novel.reader.MyDownloadArticleActivity;
+import com.novel.reader.NovelIntroduceActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Novel;
+import com.novel.reader.util.NovelReaderUtil;
+import com.taiwan.imageload.ImageLoader;
 
-public class GridViewDownloadAdapter extends BaseAdapter {
+public class GridViewAdapter extends BaseAdapter {
 
     private final Activity         activity;
     private final ArrayList<Novel> data;
     private static LayoutInflater  inflater = null;
     public ImageLoader             imageLoader;
 
-    public GridViewDownloadAdapter(Activity a, ArrayList<Novel> d) {
+    public GridViewAdapter(Activity a, ArrayList<Novel> d) {
         activity = a;
         data = d;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -49,6 +51,8 @@ public class GridViewDownloadAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         // if (convertView == null)
+        // vi = inflater.inflate(R.layout.item_gridview_novel, null);
+
         Display display = activity.getWindowManager().getDefaultDisplay();
         int width = display.getWidth(); // deprecated
         int height = display.getHeight(); // deprecated
@@ -67,13 +71,13 @@ public class GridViewDownloadAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // Toast.makeText(activity, "tt", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(activity, MyDownloadArticleActivity.class);
+                Intent intent = new Intent(activity, NovelIntroduceActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("NovelId", data.get(position).getId());
                 bundle.putString("NovelName", data.get(position).getName());
                 bundle.putString("NovelAuthor", data.get(position).getAuthor());
-                // bundle.putString("NovelDescription", data.get(position).getDescription());
-                // bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
+                bundle.putString("NovelDescription", data.get(position).getDescription());
+                bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
                 bundle.putString("NovelPicUrl", data.get(position).getPic());
                 bundle.putString("NovelArticleNum", data.get(position).getArticleNum());
                 intent.putExtras(bundle);
@@ -100,8 +104,8 @@ public class GridViewDownloadAdapter extends BaseAdapter {
         textCounts.setText(data.get(position).getArticleNum());
         textFinish.setText(data.get(position).getLastUpdate());
 
-        if (data.get(position).getPic().equals("") || data.get(position).getPic() == null) {
-            image.setImageResource(R.drawable.app_icon);
+        if (NovelReaderUtil.isDisplayDefaultBookCover(data.get(position).getPic())) {
+            image.setImageResource(R.drawable.bookcover_default);
         } else {
             imageLoader.DisplayImage(data.get(position).getPic(), image);
         }

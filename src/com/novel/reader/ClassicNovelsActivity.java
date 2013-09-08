@@ -35,7 +35,7 @@ import com.google.ads.AdRequest.ErrorCode;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.ClassicFragment;
 import com.kosbrother.tool.Report;
-import com.novel.reader.api.Setting;
+import com.novel.reader.util.Setting;
 
 public class ClassicNovelsActivity extends SherlockFragmentActivity {
 

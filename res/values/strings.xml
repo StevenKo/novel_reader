@@ -143,6 +143,12 @@
     <string name="report_problem_hint">請輸入問題內容...</string>
     <string name="report_not_article_problem">非特定章節！</string>
     <string name="report_not_novel_problem">非特定小說！</string>
+    <string name="bookmarks_recent_read">查看書籤及最近閱讀</string>
+    <string name="look_collect_download">查看收藏及下載</string>
+    
+    <string name="title">標題:</string>
+    <string name="no_novel_in_bookcase">目前還沒有收藏或下載的小說</string>
+    <string name="no_bookmark_in_my_bookmarks">目前還沒有收集書籤或閱讀過小說章節</string>
     
     <!-- for vpon -->
     <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
