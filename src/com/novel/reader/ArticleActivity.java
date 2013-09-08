@@ -378,7 +378,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             addBookMarkDialog.show();
             break;
         case ID_Report:
-        	Report.createReportDialog(this,novelName,myAricle.getTitle()+"(Num:"+myAricle.getNum()+")");  	
+        	Report.createReportDialog(this,novelName+"("+novelId+")",myAricle.getTitle()+"(Num:"+myAricle.getNum()+")");  	
             break;
         }
         return true;

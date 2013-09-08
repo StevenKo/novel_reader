@@ -391,7 +391,7 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
             Toast.makeText(NovelIntroduceActivity.this, "SEARCH", Toast.LENGTH_SHORT).show();
             break;
         case ID_Report:
-        	Report.createReportDialog(this,novelName,this.getResources().getString(R.string.report_not_article_problem));  	
+        	Report.createReportDialog(this,novelName+"("+novelId+")",this.getResources().getString(R.string.report_not_article_problem));  	
             break;
         }
         return true;
