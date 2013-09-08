@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.novel.db.SQLiteNovel;
 import com.novel.reader.BookmarkActivity;
@@ -20,10 +21,8 @@ import com.novel.reader.ClassicNovelsActivity;
 import com.novel.reader.MyNovelActivity;
 import com.novel.reader.R;
 import com.novel.reader.SettingActivity;
-import com.novel.reader.adapter.GridViewDownloadAdapter;
 import com.novel.reader.adapter.GridViewIndexBookmarkAdapter;
 import com.novel.reader.adapter.GridViewIndexNovelAdapter;
-import com.novel.reader.api.NovelAPI;
 import com.novel.reader.costum.view.ExpandableHeightGridView;
 import com.novel.reader.entity.Bookmark;
 import com.novel.reader.entity.Novel;
@@ -51,6 +50,7 @@ public final class MyNovelFragment extends Fragment {
 	private LinearLayout noNovelInBookcase;
 	private LinearLayout noBookmarkInBookmarks;
 	private LinearLayout progressLayout;
+	private ScrollView scrollView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,11 +68,12 @@ public final class MyNovelFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        progressLayout.setVisibility(View.VISIBLE);
-        new DownloadChannelsTask().execute();
+        getData();
+    	setViews();
+        new ReloadTask().execute();
     }
     
-    private class DownloadChannelsTask extends AsyncTask {
+    private class ReloadTask extends AsyncTask {
 
         @Override
         protected void onPreExecute() {
@@ -87,10 +88,10 @@ public final class MyNovelFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
         	getData();
+        	setViews();
             progressLayout.setVisibility(View.GONE);
-            setViews();
+            scrollView.scrollTo(0, 0);
         }
     }
 
@@ -228,6 +229,7 @@ public final class MyNovelFragment extends Fragment {
         noNovelInBookcase = (LinearLayout) myFragmentView.findViewById(R.id.no_novel_in_bookcase);
         noBookmarkInBookmarks = (LinearLayout) myFragmentView.findViewById(R.id.no_bookmark_in_my_bookmarks);
         progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
+        scrollView = (ScrollView) myFragmentView.findViewById(R.id.scrollerView);
     }
 
     @Override

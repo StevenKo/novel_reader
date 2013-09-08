@@ -32,4 +32,8 @@
         <item>我的書櫃</item>
         <item>我的下載</item>
     </string-array>
+    <string-array name="bookmarks">
+        <item>我的書籤</item>
+        <item>最近閱讀</item>
+    </string-array>
 </resources>
