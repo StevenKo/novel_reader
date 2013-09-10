@@ -168,6 +168,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+      NovelAPI.createRecentBookmark(new Bookmark(0, myAricle.getNovelId(), myAricle.getId(), yRate, novelName, myAricle.getTitle(), novelPic, true),
+                ArticleActivity.this);
       savedInstanceState.putString("ArticleTitle", myAricle.getTitle());
       savedInstanceState.putInt("ArticleId", myAricle.getId());
       savedInstanceState.putBoolean("ArticleDownloadBoolean", myAricle.isDownload());
