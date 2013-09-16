@@ -140,6 +140,16 @@
     <string name="update_time">更新日期:</string>
     <string name="serializing">连载中</string>
     
+    <string name="report_problem_hint">请输入问题内容...</string>
+    <string name="report_not_article_problem">非特定章节！</string>
+    <string name="report_not_novel_problem">非特定小说！</string>
+    <string name="bookmarks_recent_read">查看书签及最近阅读</string>
+    <string name="look_collect_download">查看收藏及下载</string>
+    
+    <string name="title">标题:</string>
+    <string name="no_novel_in_bookcase">目前还没有收藏或下载的小说</string>
+    <string name="no_bookmark_in_my_bookmarks">目前还没有收集书签或阅读过小说章节</string>
+    
     <!-- for load more -->
     <string name="hello">Hello World, LoadMoreListView!</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh...</string>
