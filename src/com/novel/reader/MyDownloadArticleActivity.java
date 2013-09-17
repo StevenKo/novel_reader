@@ -112,7 +112,7 @@ public class MyDownloadArticleActivity extends SherlockActivity {
         setAboutUsDialog();
 
         new DownloadArticlesTask().execute();
-        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
+        AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
 
 
     }
