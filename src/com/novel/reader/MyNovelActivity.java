@@ -75,7 +75,7 @@ public class MyNovelActivity extends SherlockFragmentActivity {
         indicator.setViewPager(pager);
 
         setAboutUsDialog();
-        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
+        AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
 
     }
 

@@ -73,9 +73,6 @@ public class MyDownloadArticleActivity extends SherlockActivity {
     private static ArrayList<Group>              mGroups            = new ArrayList<Group>();
     private AlertDialog.Builder                  deleteDialog;
     private AlertDialog.Builder                  aboutUsDialog;
-    private final String admobKey = "292fbab7f4ea4848";
-    private LinearLayout adBannerLayout;
-    private AdView adMobAdView;
 
 
     private static SherlockActivity              myActivity;
@@ -112,7 +109,7 @@ public class MyDownloadArticleActivity extends SherlockActivity {
         setAboutUsDialog();
 
         new DownloadArticlesTask().execute();
-        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
+        AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
 
 
     }

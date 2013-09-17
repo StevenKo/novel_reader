@@ -161,7 +161,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         ab.setDisplayHomeAsUpEnabled(true);
 
         setAboutUsDialog();
-        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
+        AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
 
         
     }
