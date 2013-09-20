@@ -181,12 +181,11 @@ public class SearchActivity extends SherlockListActivity {
                     public boolean onMenuItemActionExpand(MenuItem item) {
                         search = (EditText) item.getActionView();
                         search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-                        search.setInputType(InputType.TYPE_CLASS_TEXT);
                         search.requestFocus();
                         search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                             @Override
                             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                                if (actionId == EditorInfo.IME_ACTION_SEARCH || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                                     keyword = v.getText().toString();
                                     new LoadDataTask().execute();
 
