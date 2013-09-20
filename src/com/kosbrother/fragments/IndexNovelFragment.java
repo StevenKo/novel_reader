@@ -18,7 +18,7 @@ import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.LoadMoreGridView;
 
-public class MonthFragment extends Fragment {
+public class IndexNovelFragment extends Fragment {
 
     private ArrayList<Novel> novels = new ArrayList<Novel>();
     private LoadMoreGridView myGrid;
@@ -28,10 +28,17 @@ public class MonthFragment extends Fragment {
     private LinearLayout     layoutReload;
     private Button           buttonReload;
 
-    public static MonthFragment newInstance() {
+    public static final int HOT_NOVEL = 1;
+    public static final int MONTH_NOVEL = 2;
+    public static final int WEEK_NOVEL = 3;
+	private int novelFragment = 0;
+    
+    public static IndexNovelFragment newInstance(int novelFragment) {
 
-        MonthFragment fragment = new MonthFragment();
-
+        IndexNovelFragment fragment = new IndexNovelFragment();
+        Bundle bdl = new Bundle();
+        bdl.putInt("NovelFragment", novelFragment);
+        fragment.setArguments(bdl);
         return fragment;
 
     }
@@ -39,6 +46,8 @@ public class MonthFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        novelFragment = getArguments().getInt("NovelFragment");
+
     }
 
     @Override
@@ -52,7 +61,7 @@ public class MonthFragment extends Fragment {
         myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
         myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
             public void onLoadMore() {
-                // Do the work to load more items at the end of list
+
             }
         });
 
@@ -93,9 +102,19 @@ public class MonthFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object... params) {
-            // TODO Auto-generated method stub
-
-            novels = NovelAPI.getThisMonthHotNovels();
+        	
+        	switch (novelFragment) {
+	          case HOT_NOVEL:
+	        	  novels = NovelAPI.getHotNovels();
+	        	  break;
+	          case MONTH_NOVEL:
+	        	  novels = NovelAPI.getThisMonthHotNovels();
+	        	  break;
+	          case WEEK_NOVEL:
+	        	  novels = NovelAPI.getThisWeekHotNovels();
+	        	  break;
+	          }
+            
 
             return null;
         }
