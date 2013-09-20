@@ -236,11 +236,13 @@ public class MainActivity extends SherlockFragmentActivity{
             } else if (position == 1) {
                 kk = MyNovelFragment.newInstance();
             } else if (position == 2) {
-                kk = IndexNovelFragment.newInstance(IndexNovelFragment.WEEK_NOVEL);
+            	kk = IndexNovelFragment.newInstance(IndexNovelFragment.LATEST_NOVEL);
             } else if (position == 3) {
-                kk = IndexNovelFragment.newInstance(IndexNovelFragment.MONTH_NOVEL);
+            	kk = IndexNovelFragment.newInstance(IndexNovelFragment.WEEK_NOVEL);
             } else if (position == 4) {
-                kk = IndexNovelFragment.newInstance(IndexNovelFragment.HOT_NOVEL);
+            	kk = IndexNovelFragment.newInstance(IndexNovelFragment.MONTH_NOVEL);
+            } else if (position == 5) {
+            	kk = IndexNovelFragment.newInstance(IndexNovelFragment.HOT_NOVEL);
             }
             return kk;
         }

@@ -569,6 +569,16 @@ public class NovelAPI {
             return parseNovel(message, novels);
         }
     }
+    
+    public static ArrayList<Novel> getLatestUpdateNovels(int page) {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/all_novel_update.json?&page=" + page, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+    }
 
     public static ArrayList<Category> getCategories() {
         return Category.getCategories();

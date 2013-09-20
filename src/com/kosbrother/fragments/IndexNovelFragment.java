@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.novel.reader.R;
 import com.novel.reader.adapter.GridViewAdapter;
@@ -27,11 +28,15 @@ public class IndexNovelFragment extends Fragment {
     private LinearLayout     loadmoreLayout;
     private LinearLayout     layoutReload;
     private Button           buttonReload;
+    private static int       myPage     = 1;
+    private Boolean          checkLoad  = true;
 
     public static final int HOT_NOVEL = 1;
     public static final int MONTH_NOVEL = 2;
     public static final int WEEK_NOVEL = 3;
+    public static final int LATEST_NOVEL = 4;
 	private int novelFragment = 0;
+	 private ArrayList<Novel> moreNovels;
     
     public static IndexNovelFragment newInstance(int novelFragment) {
 
@@ -61,6 +66,13 @@ public class IndexNovelFragment extends Fragment {
         myGrid = (LoadMoreGridView) myFragmentView.findViewById(R.id.news_list);
         myGrid.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
             public void onLoadMore() {
+            	if (checkLoad) {
+                    myPage = myPage + 1;
+                    loadmoreLayout.setVisibility(View.VISIBLE);
+                    new LoadMoreTask().execute();
+                } else {
+                    myGrid.onLoadMoreComplete();
+                }
 
             }
         });
@@ -70,7 +82,7 @@ public class IndexNovelFragment extends Fragment {
             public void onClick(View arg0) {
                 progressLayout.setVisibility(View.VISIBLE);
                 layoutReload.setVisibility(View.GONE);
-                new DownloadChannelsTask().execute();
+                new LoadMoreTask().execute();
             }
         });
 
@@ -79,7 +91,7 @@ public class IndexNovelFragment extends Fragment {
             loadmoreLayout.setVisibility(View.GONE);
             myGrid.setAdapter(myGridViewAdapter);
         } else {
-            new DownloadChannelsTask().execute();
+            new LoadMoreTask().execute();
         }
 
         return myFragmentView;
@@ -91,9 +103,9 @@ public class IndexNovelFragment extends Fragment {
 
     }
 
-    private class DownloadChannelsTask extends AsyncTask {
+    private class LoadMoreTask extends AsyncTask {
 
-        @Override
+		@Override
         protected void onPreExecute() {
             // TODO Auto-generated method stub
             super.onPreExecute();
@@ -113,6 +125,14 @@ public class IndexNovelFragment extends Fragment {
 	          case WEEK_NOVEL:
 	        	  novels = NovelAPI.getThisWeekHotNovels();
 	        	  break;
+	          case LATEST_NOVEL:
+	        	  moreNovels = NovelAPI.getLatestUpdateNovels(myPage);
+	              if (moreNovels != null && moreNovels.size()!=0) {
+	                  for (int i = 0; i < moreNovels.size(); i++) {
+	                      novels.add(moreNovels.get(i));
+	                  }
+	              }
+	        	  break;
 	          }
             
 
@@ -121,12 +141,29 @@ public class IndexNovelFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Object result) {
-            // TODO Auto-generated method stub
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
             loadmoreLayout.setVisibility(View.GONE);
+            
+            if (novelFragment==LATEST_NOVEL && myPage > 1)
+            	setLoadMoreNovels();
+            else
+            	setNovesAdapter();
 
-            if (novels != null) {
+        }
+        
+        private void setLoadMoreNovels(){
+        	if (moreNovels != null && moreNovels.size()!=0) {
+                myGridViewAdapter.notifyDataSetChanged();
+            } else {
+                checkLoad = false;
+                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();
+            }
+            myGrid.onLoadMoreComplete();
+        }
+        
+        private void setNovesAdapter(){
+        	if (novels != null) {
                 try {
                     layoutReload.setVisibility(View.GONE);
                     myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
@@ -137,7 +174,6 @@ public class IndexNovelFragment extends Fragment {
             } else {
                 layoutReload.setVisibility(View.VISIBLE);
             }
-
         }
     }
 
