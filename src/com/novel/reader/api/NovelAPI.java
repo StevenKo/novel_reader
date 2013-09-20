@@ -69,6 +69,11 @@ public class NovelAPI {
         SQLiteNovel db = new SQLiteNovel(context);
         db.deleteBookmark(bookmark);
     }
+    
+    public static void deleteBookmarks(ArrayList<Bookmark> bookmarks, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        db.deleteBookmarks(bookmarks);
+    }
 
     public static Bookmark insertBookmark(Bookmark bookmark, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);

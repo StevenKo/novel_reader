@@ -244,6 +244,24 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         cursor.close();
         return true;
     }
+    
+    public boolean deleteBookmarks(ArrayList<Bookmark> bookmarks) {
+
+        if (bookmarks.size() == 0)
+            return false;
+
+        String idLst = "";
+        for (int i = 0; i < bookmarks.size(); i++)
+            idLst = bookmarks.get(i).getId() + "," + idLst;
+        idLst = idLst.substring(0, idLst.length() - 1);
+
+        Cursor cursor = null;
+        cursor = db.rawQuery("DELETE FROM " + BookmarkSchema.TABLE_NAME + " WHERE id in (" + idLst + ")", null);
+        cursor.moveToFirst();
+        cursor.close();
+        return true;
+
+    }
 
     public boolean deleteArticle(Article article) {
         Cursor cursor = db.rawQuery("DELETE FROM articles WHERE `articles`.`id` = ?", new String[] { article.getId() + "" });

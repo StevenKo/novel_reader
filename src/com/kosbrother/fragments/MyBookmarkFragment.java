@@ -7,15 +7,14 @@ import com.ifixit.android.sectionheaders.Section;
 import com.ifixit.android.sectionheaders.SectionHeadersAdapter;
 import com.ifixit.android.sectionheaders.SectionListView;
 import com.novel.reader.ArticleActivity;
+import com.novel.reader.BookmarkActivity;
 import com.novel.reader.NovelIntroduceActivity;
 import com.novel.reader.R;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Bookmark;
 import com.taiwan.imageload.ImageLoader;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -30,6 +29,7 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MyBookmarkFragment extends Fragment{
@@ -38,9 +38,11 @@ public class MyBookmarkFragment extends Fragment{
 	private int isRecent;
 	private ArrayList<String> arrayKey;
 	private ArrayList<Bookmark> bookmarks;
+	private ArrayList<Bookmark> deleteBookmarks;
 	private TreeMap<String, ArrayList<Bookmark>> bookmarksMap;
 	public static int BOOKMARK_VIEW = 1;
 	public static int RECENT_READ_VIEW = 2;
+	private boolean isShowDeleteCallbackAction = false;
 	
 	public static MyBookmarkFragment newInstance(int isRecent) {
 
@@ -69,6 +71,7 @@ public class MyBookmarkFragment extends Fragment{
 
         View myFragmentView = inflater.inflate(R.layout.layout_bookmark, container, false);
         bookmarkListView = (SectionListView) myFragmentView.findViewById(R.id.bookmark_listview);
+        bookmarkListView.getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         
         return myFragmentView;
     }
@@ -236,48 +239,52 @@ public class MyBookmarkFragment extends Fragment{
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            Bookmark bookmark = bookList.get(position);
-            if (bookmark.getId() == 0)
-                return;
-            Intent newAct = new Intent();
-            newAct.putExtra("NovelName", bookmark.getNovelName());
-            newAct.putExtra("ArticleTitle", bookmark.getArticleTitle());
-            newAct.putExtra("ArticleId", bookmark.getArticleId());
-            newAct.putExtra("ReadingRate", bookmark.getReadRate());
-            newAct.putExtra("NovelPic", bookmark.getNovelPic());
-            newAct.putExtra("NovelId", bookmark.getNovelId());
-            newAct.setClass(mContext, ArticleActivity.class);
-            startActivity(newAct);
+        	if(isShowDeleteCallbackAction){
+        		view.setBackgroundColor(MyBookmarkFragment.this.getResources().getColor(R.color.selector_blue));
+        		deleteBookmarks.add((Bookmark) getItem(position));
+        	}else{
+        		Bookmark bookmark = bookList.get(position);
+	              if (bookmark.getId() == 0)
+	                  return;
+	              Intent newAct = new Intent();
+	              newAct.putExtra("NovelName", bookmark.getNovelName());
+	              newAct.putExtra("ArticleTitle", bookmark.getArticleTitle());
+	              newAct.putExtra("ArticleId", bookmark.getArticleId());
+	              newAct.putExtra("ReadingRate", bookmark.getReadRate());
+	              newAct.putExtra("NovelPic", bookmark.getNovelPic());
+	              newAct.putExtra("NovelId", bookmark.getNovelId());
+	              newAct.setClass(mContext, ArticleActivity.class);
+	              startActivity(newAct);
+        	}
         }
 
         @Override
         public void onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-            final Bookmark bookmark = bookList.get(position);
-            final String[] ListStr = { getResources().getString(R.string.reading_novel), getResources().getString(R.string.remove_bookmark) };
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setTitle(bookmark.getArticleTitle());
-            builder.setItems(ListStr, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int item) {
-                    if (item == 0 && bookmark.getId() != 0) {
-                        Intent newAct = new Intent();
-                        newAct.putExtra("NovelName", bookmark.getNovelName());
-                        newAct.putExtra("ArticleTitle", bookmark.getArticleTitle());
-                        newAct.putExtra("ArticleId", bookmark.getArticleId());
-                        newAct.putExtra("ReadingRate", bookmark.getReadRate());
-                        newAct.putExtra("NovelPic", bookmark.getNovelPic());
-                        newAct.putExtra("NovelId", bookmark.getNovelId());
-                        newAct.setClass(mContext, ArticleActivity.class);
-                        startActivity(newAct);
-                    } else {
-                        NovelAPI.deleteBookmark(bookmark, mContext);
-                        new LoadDataTask().execute();
-                    }
-                }
-            });
-            AlertDialog alert = builder.create();
-            alert.show();
+        	if(isShowDeleteCallbackAction){
+        		view.setBackgroundColor(MyBookmarkFragment.this.getResources().getColor(R.color.selector_blue));
+        		deleteBookmarks.add((Bookmark) getItem(position));
+        	}else{
+        		((BookmarkActivity)MyBookmarkFragment.this.getActivity()).showCallBackAction();
+        		isShowDeleteCallbackAction = true;
+        		deleteBookmarks = new ArrayList<Bookmark>();
+        	}
+        	
         }
+        
+        
     }
+
+	public void deleteAndReload() {
+		isShowDeleteCallbackAction = false;
+		if(deleteBookmarks!=null)
+			NovelAPI.deleteBookmarks(deleteBookmarks, this.getActivity());
+		new LoadDataTask().execute();
+	}
+	
+	public void resetIsShowDeleteCallbackAction(){
+		isShowDeleteCallbackAction = false;
+		new LoadDataTask().execute();
+	}
 
     
 
