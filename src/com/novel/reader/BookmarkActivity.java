@@ -73,7 +73,6 @@ public class BookmarkActivity extends SherlockFragmentActivity{
             super(fm);
         }
 
-        // 這邊要寫兩個不同的Fragment, 分別取書櫃資 & 下載資料
         @Override
         public Fragment getItem(int position) {
             Fragment kk = new Fragment();
@@ -97,19 +96,12 @@ public class BookmarkActivity extends SherlockFragmentActivity{
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-//        new LoadDataTask().execute();
-    }
-
-    @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {
         case android.R.id.home:
             finish();
-            // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
             break;
         }
         return true;

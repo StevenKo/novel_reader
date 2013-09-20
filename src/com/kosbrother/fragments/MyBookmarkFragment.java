@@ -56,6 +56,11 @@ public class MyBookmarkFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isRecent = getArguments().getInt("IS_RECNET");
+    }
+    
+    @Override
+	public void onResume() {
+        super.onResume();
         new LoadDataTask().execute();
     }
 
