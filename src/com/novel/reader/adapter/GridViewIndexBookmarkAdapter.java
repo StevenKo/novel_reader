@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.novel.db.SQLiteNovel;
 import com.novel.reader.ArticleActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Bookmark;
@@ -27,10 +28,15 @@ public class GridViewIndexBookmarkAdapter extends BaseAdapter {
     private final ArrayList<Bookmark> data;
     private static LayoutInflater  inflater = null;
     public ImageLoader             imageLoader;
+	private int bookmark_size;
 
-    public GridViewIndexBookmarkAdapter(Activity a, ArrayList<Bookmark> d) {
+    public GridViewIndexBookmarkAdapter(Activity a) {
         activity = a;
-        data = d;
+        SQLiteNovel db = new SQLiteNovel(activity);
+        ArrayList<Bookmark> bookmarks = db.getLastBookmarks(3);
+        bookmark_size = bookmarks.size();
+    	bookmarks.addAll(db.getLastRecentBookmarks(3));
+        data = bookmarks;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = new ImageLoader(activity.getApplicationContext(), 70);
 
@@ -50,22 +56,11 @@ public class GridViewIndexBookmarkAdapter extends BaseAdapter {
 
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        // if (convertView == null)
-        // vi = inflater.inflate(R.layout.item_gridview_novel, null);
 
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        int width = display.getWidth(); // deprecated
-        int height = display.getHeight(); // deprecated
-
-        if (width > 480) {
-            vi = inflater.inflate(R.layout.item_gridview_index_bookmark, null);
-        } else {
-            vi = inflater.inflate(R.layout.item_gridview_index_bookmark, null);
-        }
+        vi = inflater.inflate(R.layout.item_gridview_index_bookmark, null);
 
         vi.setClickable(true);
         vi.setFocusable(true);
-        // vi.setBackgroundResource(android.R.drawable.menuitem_background);
         vi.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -89,12 +84,8 @@ public class GridViewIndexBookmarkAdapter extends BaseAdapter {
         TextView textSerialize = (TextView) vi.findViewById(R.id.bookmark);
 
         textName.setText(data.get(position).getNovelName());
-        if (data.get(position).getNovelName().length() > 6)
-            textName.setTextSize(12);
         textArticleTitle.setText(data.get(position).getArticleTitle());
-        if (data.get(position).getArticleTitle().length() > 14) {
-        	textArticleTitle.setTextSize(8);
-        }
+ 
 
         if (NovelReaderUtil.isDisplayDefaultBookCover(data.get(position).getNovelPic())) {
             image.setImageResource(R.drawable.bookcover_default);
@@ -102,10 +93,10 @@ public class GridViewIndexBookmarkAdapter extends BaseAdapter {
             imageLoader.DisplayImage(data.get(position).getNovelPic(), image);
         }
 
-        if (data.get(position).isRecentRead()) {
-            textSerialize.setText("最近閱讀");
+        if (position < bookmark_size) {
+           textSerialize.setText("書籤"); 
         } else {
-            textSerialize.setText("書籤");
+           textSerialize.setText("最近閱讀");
         }
 
         return vi;
