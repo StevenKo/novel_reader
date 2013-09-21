@@ -23,6 +23,7 @@ import com.novel.reader.R;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Bookmark;
 import com.novel.reader.entity.Novel;
+import com.novel.reader.util.NovelReaderUtil;
 
 public class ExpandListAdapter extends BaseExpandableListAdapter {
 
@@ -63,7 +64,7 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         View vi = convertView;
         vi = inflater.inflate(R.layout.item_expandible_child, null);
         TextView text = (TextView) vi.findViewById(R.id.expandlist_child);
-        String childString = child.getTitle();
+        String childString = NovelReaderUtil.translateTextIfCN(activity,child.getTitle());
         text.setText(childString);
 
         vi.setOnClickListener(new OnClickListener() {
@@ -154,7 +155,7 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         View vi = convertView;
         vi = inflater.inflate(R.layout.item_expandbile_parent, null);
         TextView text = (TextView) vi.findViewById(R.id.expandlist_parent);
-        String groupString = group.getTitle();
+        String groupString = NovelReaderUtil.translateTextIfCN(activity,group.getTitle());
         text.setText(groupString);
 
         int id = (!isExpanded) ? R.drawable.right_arrow : R.drawable.up_arrow;

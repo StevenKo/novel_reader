@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.novel.reader.ArticleActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Article;
+import com.novel.reader.util.NovelReaderUtil;
 
 public class ListArticleAdapter extends BaseAdapter {
 
@@ -47,7 +48,7 @@ public class ListArticleAdapter extends BaseAdapter {
         View vi = convertView;
         vi = inflater.inflate(R.layout.item_expandible_child, null);
         TextView text = (TextView) vi.findViewById(R.id.expandlist_child);
-        text.setText(data.get(position).getTitle());
+        text.setText(NovelReaderUtil.translateTextIfCN(activity,data.get(position).getTitle()));
 
         vi.setOnClickListener(new OnClickListener() {
 

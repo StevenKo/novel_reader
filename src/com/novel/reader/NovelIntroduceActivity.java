@@ -38,6 +38,7 @@ import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Bookmark;
 import com.novel.reader.entity.Novel;
+import com.novel.reader.util.NovelReaderUtil;
 import com.novel.reader.util.Setting;
 import com.taiwan.imageload.ImageLoader;
 
@@ -150,9 +151,9 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
             checkBoxAddBookcase.setChecked(false);
         }
 
-        novelTextName.setText(theNovel.getName() + "(" + theNovel.getArticleNum() + ")");
-        novelTextAuthor.setText(getResources().getString(R.string.novel_author) + theNovel.getAuthor());
-        novelTextDescription.setText(theNovel.getDescription());
+        novelTextName.setText(NovelReaderUtil.translateTextIfCN(this,theNovel.getName() + "(" + theNovel.getArticleNum() + ")"));
+        novelTextAuthor.setText(NovelReaderUtil.translateTextIfCN(this,getResources().getString(R.string.novel_author) + theNovel.getAuthor()));
+        novelTextDescription.setText(NovelReaderUtil.translateTextIfCN(this,theNovel.getDescription()));
         novelTextUpdate.setText(getResources().getString(R.string.novel_update_time) + theNovel.getLastUpdate());
 
         mImageLoader = new ImageLoader(NovelIntroduceActivity.this, 70);

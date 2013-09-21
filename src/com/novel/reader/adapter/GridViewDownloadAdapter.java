@@ -92,10 +92,10 @@ public class GridViewDownloadAdapter extends BaseAdapter {
         TextView textFinish = (TextView) vi.findViewById(R.id.grid_item_finish);
         TextView textSerialize = (TextView) vi.findViewById(R.id.serializing);
 
-        textName.setText(data.get(position).getName());
+        textName.setText(NovelReaderUtil.translateTextIfCN(activity,data.get(position).getName()));
         if (data.get(position).getName().length() > 6)
             textName.setTextSize(12);
-        textAuthor.setText(data.get(position).getAuthor());
+        textAuthor.setText(NovelReaderUtil.translateTextIfCN(activity,data.get(position).getAuthor()));
         if (data.get(position).getAuthor().length() > 14) {
             textAuthor.setTextSize(8);
         }

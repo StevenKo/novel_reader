@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.novel.reader.R;
 import com.novel.reader.entity.Category;
+import com.novel.reader.util.NovelReaderUtil;
 
 public class ListAdapter extends BaseAdapter {
 
@@ -44,7 +45,7 @@ public class ListAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.item_list, null);
         TextView text = (TextView) vi.findViewById(R.id.text_category_name);
         TextView testId = (TextView) vi.findViewById(R.id.text_category_id);
-        text.setText(data.get(position).getCateName());
+        text.setText(NovelReaderUtil.translateTextIfCN(activity,data.get(position).getCateName()));
         testId.setText(Integer.toString(data.get(position).getId()));
 
         return vi;

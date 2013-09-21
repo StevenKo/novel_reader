@@ -41,6 +41,8 @@ public class Setting {
     public final static int                       initialTextColor        = -16777216;
     public final static int                       initialTextBackground   = -1;
     public final static int                       initialAppTheme         = 0;                 // 0 for 亮白, 1 for 灰黑
+    
+    public final static int TEXT_CHINA = 1;
 
     private static final HashMap<String, Integer> initMap                 = new HashMap<String, Integer>() {
                                                                               {
