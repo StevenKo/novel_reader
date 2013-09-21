@@ -2,6 +2,7 @@ package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -25,6 +26,13 @@ public class MyDownloadFragment extends Fragment {
     private LinearLayout            progressLayout;
     private LinearLayout            loadmoreLayout;
     private LinearLayout            noDataLayout;
+	private Activity mActivity;
+    
+    @Override
+	  public void onAttach(Activity activity) {
+	    super.onAttach(activity);
+	    mActivity= activity;
+	  }
 
     public static MyDownloadFragment newInstance() {
 
@@ -88,7 +96,7 @@ public class MyDownloadFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-            novels = NovelAPI.getDownloadedNovels(getActivity());
+            novels = NovelAPI.getDownloadedNovels(mActivity);
             // moreNovels = NovelAPI.getThisWeekHotNovels();
 
             return null;
@@ -103,7 +111,7 @@ public class MyDownloadFragment extends Fragment {
 
             if (novels != null && novels.size() != 0) {
                 try {
-                    myGridViewAdapter = new GridViewDownloadAdapter(getActivity(), novels);
+                    myGridViewAdapter = new GridViewDownloadAdapter(mActivity, novels);
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 
@@ -125,7 +133,7 @@ public class MyDownloadFragment extends Fragment {
 				collect_novels_str += novel.getId() + ",";
 			}
 			
-			NovelAPI.sendDownloadedNovels(collect_novels_str, Settings.Secure.getString(MyDownloadFragment.this.getActivity().getContentResolver(),Settings.Secure.ANDROID_ID));
+			NovelAPI.sendDownloadedNovels(collect_novels_str, Settings.Secure.getString(mActivity.getContentResolver(),Settings.Secure.ANDROID_ID));
 			return null;
 		}
     	

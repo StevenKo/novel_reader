@@ -19,35 +19,37 @@ import android.widget.ListView;
 public class CategoryListFragment extends ListFragment {
 
   private ArrayList<Category> categories = new ArrayList<Category>();
-//  private static Activity mActivity;
+  private Activity mActivity;
+  
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    mActivity= activity;
+  }
 	
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-//    String[] values = new String[] { "經典武俠", "經典小說", "長篇",
-//        "短篇" };
     
     categories = NovelAPI.getCategories();
-    ListAdapter adapter = new ListAdapter(getActivity(), categories);
+    ListAdapter adapter = new ListAdapter(mActivity, categories);
    
     setListAdapter(adapter);
   }
   
   public static ListFragment newInstance(Activity myActivity) {
-//	  mActivity = myActivity;
 	  CategoryListFragment fragment = new CategoryListFragment();
       return fragment;
   }
 
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
-    // Do something with the data
-	  	Intent intent = new Intent(getActivity(), CategoryActivity.class);
+	  	Intent intent = new Intent(mActivity, CategoryActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putInt("CategoryId", categories.get(position).getId()); 
 		bundle.putString("CategoryName", categories.get(position).getCateName());
 		intent.putExtras(bundle);
-		getActivity().startActivity(intent);
+		mActivity.startActivity(intent);
   }
 
 } 

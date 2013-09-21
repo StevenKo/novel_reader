@@ -14,6 +14,7 @@ import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Bookmark;
 import com.taiwan.imageload.ImageLoader;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -43,6 +44,13 @@ public class MyBookmarkFragment extends Fragment{
 	public static int BOOKMARK_VIEW = 1;
 	public static int RECENT_READ_VIEW = 2;
 	private boolean isShowDeleteCallbackAction = false;
+	private Activity mActivity;
+	
+	@Override
+	  public void onAttach(Activity activity) {
+	    super.onAttach(activity);
+	    mActivity= activity;
+	  }
 	
 	public static MyBookmarkFragment newInstance(int isRecent) {
 
@@ -112,7 +120,7 @@ public class MyBookmarkFragment extends Fragment{
         SectionHeadersAdapter adapter = new SectionHeadersAdapter();
 
         for (int i = 0; i < arrayKey.size(); i++) {
-        	adapter.addSection(new BookmarkSectionAdapter(getActivity(), bookmarksMap.get(arrayKey.get(i)), arrayKey.get(i)));
+        	adapter.addSection(new BookmarkSectionAdapter(mActivity, bookmarksMap.get(arrayKey.get(i)), arrayKey.get(i)));
         }
         bookmarkListView.setAdapter(adapter);
         bookmarkListView.getListView().setOnItemClickListener(adapter);
@@ -121,9 +129,9 @@ public class MyBookmarkFragment extends Fragment{
 
     private void fetchData() {
         if (isRecent == RECENT_READ_VIEW)
-            bookmarks = NovelAPI.getAllRecentReadBookmarks(getActivity());
+            bookmarks = NovelAPI.getAllRecentReadBookmarks(mActivity);
         else
-            bookmarks = NovelAPI.getAllBookmarks(getActivity());
+            bookmarks = NovelAPI.getAllBookmarks(mActivity);
 
         if (bookmarks.size() == 0)
             bookmarks.add(new Bookmark(0, 0, 0, 0, getResources().getString(R.string.my_bookmark_none), "", "", false));
@@ -264,7 +272,7 @@ public class MyBookmarkFragment extends Fragment{
         		view.setBackgroundColor(MyBookmarkFragment.this.getResources().getColor(R.color.selector_blue));
         		deleteBookmarks.add((Bookmark) getItem(position));
         	}else{
-        		((BookmarkActivity)MyBookmarkFragment.this.getActivity()).showCallBackAction();
+        		((BookmarkActivity)MyBookmarkFragment.this.mActivity).showCallBackAction();
         		isShowDeleteCallbackAction = true;
         		deleteBookmarks = new ArrayList<Bookmark>();
         	}
@@ -277,7 +285,7 @@ public class MyBookmarkFragment extends Fragment{
 	public void deleteAndReload() {
 		isShowDeleteCallbackAction = false;
 		if(deleteBookmarks!=null)
-			NovelAPI.deleteBookmarks(deleteBookmarks, this.getActivity());
+			NovelAPI.deleteBookmarks(deleteBookmarks, this.mActivity);
 		new LoadDataTask().execute();
 	}
 	

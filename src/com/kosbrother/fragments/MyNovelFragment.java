@@ -3,6 +3,7 @@ package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,6 +50,13 @@ public final class MyNovelFragment extends Fragment {
 	private LinearLayout noBookmarkInBookmarks;
 	private LinearLayout progressLayout;
 	private ScrollView scrollView;
+	private Activity mActivity;
+	
+	@Override
+	  public void onAttach(Activity activity) {
+	    super.onAttach(activity);
+	    mActivity= activity;
+	  }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,8 +102,8 @@ public final class MyNovelFragment extends Fragment {
     }
 
     private void getData() {
-    	novelAdapter = new GridViewIndexNovelAdapter(getActivity());
-    	bookmarkAdapter = new GridViewIndexBookmarkAdapter(getActivity());
+    	novelAdapter = new GridViewIndexNovelAdapter(mActivity);
+    	bookmarkAdapter = new GridViewIndexBookmarkAdapter(mActivity);
     	if(novelAdapter.getCount() > 0){
     		noNovelInBookcase.setVisibility(View.GONE);
     		novelGridView.setVisibility(View.VISIBLE);
@@ -127,7 +135,7 @@ public final class MyNovelFragment extends Fragment {
                 bundle.putBoolean("IS_RECNET", false);
                 Intent intent = new Intent();
                 intent.putExtras(bundle);
-                intent.setClass(getActivity(), BookmarkActivity.class);
+                intent.setClass(mActivity, BookmarkActivity.class);
                 startActivity(intent);
             }
         });
@@ -139,7 +147,7 @@ public final class MyNovelFragment extends Fragment {
                 bundle.putBoolean("IS_RECNET", false);
                 Intent intent = new Intent();
                 intent.putExtras(bundle);
-                intent.setClass(getActivity(), BookmarkActivity.class);
+                intent.setClass(mActivity, BookmarkActivity.class);
                 startActivity(intent);
             }
         });
@@ -151,7 +159,7 @@ public final class MyNovelFragment extends Fragment {
                 bundle.putBoolean("IS_RECNET", true);
                 Intent intent = new Intent();
                 intent.putExtras(bundle);
-                intent.setClass(getActivity(), BookmarkActivity.class);
+                intent.setClass(mActivity, BookmarkActivity.class);
                 startActivity(intent);
             }
         });
@@ -159,7 +167,7 @@ public final class MyNovelFragment extends Fragment {
         myBookcase.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MyNovelActivity.class);
+                Intent intent = new Intent(mActivity, MyNovelActivity.class);
                 startActivity(intent);
             }
         });
@@ -167,7 +175,7 @@ public final class MyNovelFragment extends Fragment {
         noNovelInBookcase.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MyNovelActivity.class);
+                Intent intent = new Intent(mActivity, MyNovelActivity.class);
                 startActivity(intent);
             }
         });
@@ -175,7 +183,7 @@ public final class MyNovelFragment extends Fragment {
         mySetting.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SettingActivity.class);
+                Intent intent = new Intent(mActivity, SettingActivity.class);
                 startActivity(intent);
             }
         });
@@ -183,7 +191,7 @@ public final class MyNovelFragment extends Fragment {
         classicKongFu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ClassicNovelsActivity.class);
+                Intent intent = new Intent(mActivity, ClassicNovelsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("ClassTitle", "經典武俠");
                 bundle.putInt("ClassicId", 0);
@@ -195,7 +203,7 @@ public final class MyNovelFragment extends Fragment {
         classicNovel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ClassicNovelsActivity.class);
+                Intent intent = new Intent(mActivity, ClassicNovelsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("ClassTitle", "經典小說");
                 bundle.putInt("ClassicId", 1);

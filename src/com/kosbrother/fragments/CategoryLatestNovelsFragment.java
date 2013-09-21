@@ -2,6 +2,7 @@ package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,6 +35,13 @@ public final class CategoryLatestNovelsFragment extends Fragment {
     private LinearLayout     layoutReload;
 //    private static int       id;
     private Button           buttonReload;
+	private Activity mActivity;
+    
+    @Override
+	  public void onAttach(Activity activity) {
+	    super.onAttach(activity);
+	    mActivity= activity;
+	  }
 
     public static CategoryLatestNovelsFragment newInstance() {
 
@@ -130,7 +138,7 @@ public final class CategoryLatestNovelsFragment extends Fragment {
             if (novels != null && novels.size() != 0) {
                 try {
                     layoutReload.setVisibility(View.GONE);
-                    myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
+                    myGridViewAdapter = new GridViewAdapter(mActivity, novels);
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 
@@ -138,7 +146,7 @@ public final class CategoryLatestNovelsFragment extends Fragment {
             } else {
                 layoutReload.setVisibility(View.VISIBLE);
                 // noDataLayout.setVisibility(View.VISIBLE);
-                // ListNothingAdapter nothingAdapter = new ListNothingAdapter(getActivity());
+                // ListNothingAdapter nothingAdapter = new ListNothingAdapter(mActivity);
                 // myGrid.setAdapter(nothingAdapter);
             }
 
@@ -179,7 +187,7 @@ public final class CategoryLatestNovelsFragment extends Fragment {
                 myGridViewAdapter.notifyDataSetChanged();
             } else {
                 checkLoad = false;
-                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, "no more data", Toast.LENGTH_SHORT).show();
             }
             myGrid.onLoadMoreComplete();
 

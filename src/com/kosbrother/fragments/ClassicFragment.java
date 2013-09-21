@@ -2,6 +2,7 @@ package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,13 @@ public class ClassicFragment extends Fragment {
     private static int       classicType;                    // 0 for classic action, 1 for classic
     private Button           buttonReload;
     private LinearLayout     layoutReload;
+	private Activity mActivity;
+    
+    @Override
+	  public void onAttach(Activity activity) {
+	    super.onAttach(activity);
+	    mActivity= activity;
+	  }
 
     public static ClassicFragment newInstance(int type) {
 
@@ -115,7 +123,7 @@ public class ClassicFragment extends Fragment {
             if (novels != null && novels.size() != 0) {
                 try {
                     layoutReload.setVisibility(View.GONE);
-                    myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
+                    myGridViewAdapter = new GridViewAdapter(mActivity, novels);
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 
