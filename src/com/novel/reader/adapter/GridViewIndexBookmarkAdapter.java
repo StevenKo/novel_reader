@@ -83,8 +83,8 @@ public class GridViewIndexBookmarkAdapter extends BaseAdapter {
         TextView textArticleTitle = (TextView) vi.findViewById(R.id.grid_item_article_title);
         TextView textSerialize = (TextView) vi.findViewById(R.id.bookmark);
 
-        textName.setText(data.get(position).getNovelName());
-        textArticleTitle.setText(data.get(position).getArticleTitle());
+        textName.setText(NovelReaderUtil.translateTextIfCN(activity,data.get(position).getNovelName()));
+        textArticleTitle.setText(NovelReaderUtil.translateTextIfCN(activity,data.get(position).getArticleTitle()));
  
 
         if (NovelReaderUtil.isDisplayDefaultBookCover(data.get(position).getNovelPic())) {
