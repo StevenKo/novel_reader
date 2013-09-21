@@ -2,6 +2,7 @@ package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,6 +38,14 @@ public class IndexNovelFragment extends Fragment {
     public static final int LATEST_NOVEL = 4;
 	private int novelFragment = 0;
 	 private ArrayList<Novel> moreNovels;
+	private Activity mActivity;
+	 
+	 
+	 @Override
+	  public void onAttach(Activity activity) {
+	    super.onAttach(activity);
+	    mActivity= activity;
+	  }
     
     public static IndexNovelFragment newInstance(int novelFragment) {
 
@@ -157,7 +166,7 @@ public class IndexNovelFragment extends Fragment {
                 myGridViewAdapter.notifyDataSetChanged();
             } else {
                 checkLoad = false;
-                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, "no more data", Toast.LENGTH_SHORT).show();
             }
             myGrid.onLoadMoreComplete();
         }
@@ -166,7 +175,7 @@ public class IndexNovelFragment extends Fragment {
         	if (novels != null) {
                 try {
                     layoutReload.setVisibility(View.GONE);
-                    myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
+                    myGridViewAdapter = new GridViewAdapter(mActivity, novels);
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 

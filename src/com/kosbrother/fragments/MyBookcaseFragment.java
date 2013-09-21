@@ -2,6 +2,7 @@ package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -25,6 +26,13 @@ public class MyBookcaseFragment extends Fragment {
     private LinearLayout     progressLayout;
     private LinearLayout     loadmoreLayout;
     private LinearLayout     noDataLayout;
+	private Activity mActivity;
+    
+    @Override
+	  public void onAttach(Activity activity) {
+	    super.onAttach(activity);
+	    mActivity= activity;
+	  }
 
     public static MyBookcaseFragment newInstance() {
 
@@ -76,7 +84,7 @@ public class MyBookcaseFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-            novels = NovelAPI.getCollectedNovels(getActivity());
+            novels = NovelAPI.getCollectedNovels(mActivity);
             // moreNovels = NovelAPI.getThisWeekHotNovels();
 
             return null;
@@ -91,7 +99,7 @@ public class MyBookcaseFragment extends Fragment {
 
             if (novels != null && novels.size() != 0) {
                 try {
-                    myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
+                    myGridViewAdapter = new GridViewAdapter(mActivity, novels);
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 
@@ -113,7 +121,7 @@ public class MyBookcaseFragment extends Fragment {
 				collect_novels_str += novel.getId() + ",";
 			}
 			
-			NovelAPI.sendCollectedNovels(collect_novels_str, Settings.Secure.getString(MyBookcaseFragment.this.getActivity().getContentResolver(),Settings.Secure.ANDROID_ID));
+			NovelAPI.sendCollectedNovels(collect_novels_str, Settings.Secure.getString(mActivity.getContentResolver(),Settings.Secure.ANDROID_ID));
 			return null;
 		}
     	

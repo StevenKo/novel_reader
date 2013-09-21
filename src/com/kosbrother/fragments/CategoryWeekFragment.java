@@ -2,6 +2,7 @@ package com.kosbrother.fragments;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,14 @@ public final class CategoryWeekFragment extends Fragment {
     private LinearLayout           layoutReload;
     // private static int id;
     private Button                 buttonReload;
+	private Activity mActivity;
+    
+    
+    @Override
+	  public void onAttach(Activity activity) {
+	    super.onAttach(activity);
+	    mActivity= activity;
+	  }
 
     public static CategoryWeekFragment newInstance() {
 
@@ -118,7 +127,7 @@ public final class CategoryWeekFragment extends Fragment {
             if (novels != null && novels.size() != 0) {
                 try {
                     layoutReload.setVisibility(View.GONE);
-                    myGridViewAdapter = new GridViewAdapter(getActivity(), novels);
+                    myGridViewAdapter = new GridViewAdapter(mActivity, novels);
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 
