@@ -89,8 +89,8 @@ public class GridViewIndexNovelAdapter extends BaseAdapter {
         TextView textFinish = (TextView) vi.findViewById(R.id.grid_item_finish);
         TextView textSerialize = (TextView) vi.findViewById(R.id.serializing);
 
-        textName.setText(data.get(position).getName());
-        textAuthor.setText(data.get(position).getAuthor());
+        textName.setText(NovelReaderUtil.translateTextIfCN(activity,data.get(position).getName()));
+        textAuthor.setText(NovelReaderUtil.translateTextIfCN(activity,data.get(position).getAuthor()));
         textCounts.setText(data.get(position).getArticleNum());
         textFinish.setText(data.get(position).getLastUpdate());
 

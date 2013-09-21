@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.novel.reader.R;
+import com.novel.reader.util.NovelReaderUtil;
 
 public class ExpandListDownLoadAdapter extends BaseExpandableListAdapter {
 
@@ -50,7 +51,7 @@ public class ExpandListDownLoadAdapter extends BaseExpandableListAdapter {
         View vi = convertView;
         vi = inflater.inflate(R.layout.item_expandable_download_child, null);
         TextView text = (TextView) vi.findViewById(R.id.expandlist_child);
-        String childString = child.getTitle();
+        String childString = NovelReaderUtil.translateTextIfCN(activity,child.getTitle());
         text.setText(childString);
 
         CheckBox checkBox = (CheckBox) vi.findViewById(R.id.checkbox_child);
@@ -119,7 +120,7 @@ public class ExpandListDownLoadAdapter extends BaseExpandableListAdapter {
         View vi = convertView;
         vi = inflater.inflate(R.layout.item_expandable_download_parent, null);
         TextView text = (TextView) vi.findViewById(R.id.expandlist_parent);
-        String groupString = group.getTitle();
+        String groupString = NovelReaderUtil.translateTextIfCN(activity,group.getTitle());
         text.setText(groupString);
 
         int id = (!isExpanded) ? R.drawable.right_arrow : R.drawable.up_arrow;

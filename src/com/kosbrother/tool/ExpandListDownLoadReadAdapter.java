@@ -19,6 +19,7 @@ import com.novel.reader.ArticleActivity;
 import com.novel.reader.MyDownloadArticleActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Novel;
+import com.novel.reader.util.NovelReaderUtil;
 
 public class ExpandListDownLoadReadAdapter extends BaseExpandableListAdapter {
 
@@ -56,7 +57,7 @@ public class ExpandListDownLoadReadAdapter extends BaseExpandableListAdapter {
         View vi = convertView;
         vi = inflater.inflate(R.layout.item_expandable_download_child, null);
         TextView text = (TextView) vi.findViewById(R.id.expandlist_child);
-        String childString = child.getTitle();
+        String childString = NovelReaderUtil.translateTextIfCN(activity,child.getTitle());
         text.setText(childString);
 
         CheckBox checkBox = (CheckBox) vi.findViewById(R.id.checkbox_child);
@@ -157,7 +158,7 @@ public class ExpandListDownLoadReadAdapter extends BaseExpandableListAdapter {
         View vi = convertView;
         vi = inflater.inflate(R.layout.item_expandable_download_parent, null);
         TextView text = (TextView) vi.findViewById(R.id.expandlist_parent);
-        String groupString = group.getTitle();
+        String groupString = NovelReaderUtil.translateTextIfCN(activity,group.getTitle());
         text.setText(groupString);
 
         int id = (!isExpanded) ? R.drawable.right_arrow : R.drawable.up_arrow;

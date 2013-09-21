@@ -81,6 +81,7 @@ public class MainActivity extends SherlockFragmentActivity{
 	private Context context;
 	String regid;
 	GoogleCloudMessaging gcm;
+	private String local;
 
     
     
@@ -92,7 +93,9 @@ public class MainActivity extends SherlockFragmentActivity{
 
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.sections);
-
+        
+        setTextLocale();
+        
         FragmentPagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
 
         pager = (ViewPager) findViewById(R.id.pager);
@@ -119,7 +122,16 @@ public class MainActivity extends SherlockFragmentActivity{
 
     }
     
-    void checkDB() {
+    private void setTextLocale() {
+    	Locale current = getResources().getConfiguration().locale;
+        String country = current.getCountry();
+        SharedPreferences sharePreference = getSharedPreferences(Setting.keyPref, 0);
+        int text_setting_value = sharePreference.getInt(Setting.keyTextLanguage, 1000);
+        if(text_setting_value==1000 && country.toLowerCase().contains("cn"))
+        	Setting.saveSetting(Setting.keyTextLanguage, Setting.TEXT_CHINA, this);
+	}
+
+	void checkDB() {
         File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "kosnovel");
         if (!cacheDir.exists())
             cacheDir.mkdirs();
