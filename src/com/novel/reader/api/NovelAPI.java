@@ -69,6 +69,11 @@ public class NovelAPI {
         SQLiteNovel db = new SQLiteNovel(context);
         db.deleteBookmark(bookmark);
     }
+    
+    public static void deleteBookmarks(ArrayList<Bookmark> bookmarks, Context context) {
+        SQLiteNovel db = new SQLiteNovel(context);
+        db.deleteBookmarks(bookmarks);
+    }
 
     public static Bookmark insertBookmark(Bookmark bookmark, Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
@@ -558,6 +563,26 @@ public class NovelAPI {
     public static ArrayList<Novel> getCategoryNovels(int category_id, int page) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
         String message = getMessageFromServer("GET", "/api/v1/novels.json?category_id=" + category_id + "&page=" + page, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+    }
+    
+    public static ArrayList<Novel> getCategoryLatestNovels(int category_id, int page) {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/category_latest_update.json?category_id=" + category_id + "&page=" + page, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+    }
+    
+    public static ArrayList<Novel> getLatestUpdateNovels(int page) {
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/all_novel_update.json?&page=" + page, null);
         if (message == null) {
             return null;
         } else {

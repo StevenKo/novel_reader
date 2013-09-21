@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.novel.db.SQLiteNovel;
 import com.novel.reader.NovelIntroduceActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Novel;
@@ -27,10 +28,15 @@ public class GridViewIndexNovelAdapter extends BaseAdapter {
     private final ArrayList<Novel> data;
     private static LayoutInflater  inflater = null;
     public ImageLoader             imageLoader;
+	private int collect_nove_size;
 
-    public GridViewIndexNovelAdapter(Activity a, ArrayList<Novel> d) {
+    public GridViewIndexNovelAdapter(Activity a) {
         activity = a;
-        data = d;
+    	SQLiteNovel db = new SQLiteNovel(activity);
+    	ArrayList<Novel> novels = db.getLastCollectNovels(3);
+    	collect_nove_size = novels.size();
+    	novels.addAll(db.getLastDownloadNovels(3));
+        data = novels;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = new ImageLoader(activity.getApplicationContext(), 70);
 
@@ -50,27 +56,16 @@ public class GridViewIndexNovelAdapter extends BaseAdapter {
 
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        // if (convertView == null)
-        // vi = inflater.inflate(R.layout.item_gridview_novel, null);
-
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        int width = display.getWidth(); // deprecated
-        int height = display.getHeight(); // deprecated
-
-        if (width > 480) {
-            vi = inflater.inflate(R.layout.item_gridview_index_novel, null);
-        } else {
-            vi = inflater.inflate(R.layout.item_gridview_index_novel, null);
-        }
+       
+        vi = inflater.inflate(R.layout.item_gridview_index_novel, null);
+        
 
         vi.setClickable(true);
         vi.setFocusable(true);
-        // vi.setBackgroundResource(android.R.drawable.menuitem_background);
         vi.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                // Toast.makeText(activity, "tt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(activity, NovelIntroduceActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("NovelId", data.get(position).getId());
@@ -95,12 +90,7 @@ public class GridViewIndexNovelAdapter extends BaseAdapter {
         TextView textSerialize = (TextView) vi.findViewById(R.id.serializing);
 
         textName.setText(data.get(position).getName());
-        if (data.get(position).getName().length() > 6)
-            textName.setTextSize(12);
         textAuthor.setText(data.get(position).getAuthor());
-        if (data.get(position).getAuthor().length() > 14) {
-            textAuthor.setTextSize(8);
-        }
         textCounts.setText(data.get(position).getArticleNum());
         textFinish.setText(data.get(position).getLastUpdate());
 
@@ -110,7 +100,7 @@ public class GridViewIndexNovelAdapter extends BaseAdapter {
             imageLoader.DisplayImage(data.get(position).getPic(), image);
         }
 
-        if (data.get(position).isCollected()) {
+        if (position < collect_nove_size) {
             textSerialize.setText("收藏小說");
         } else {
             textSerialize.setText("下載小說");
