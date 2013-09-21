@@ -224,9 +224,21 @@ public class BookmarkActivity extends SherlockFragmentActivity{
 	
 	      }
 	};
+	private ActionMode mActionMode;
 	  
     public void showCallBackAction() {
-    	mActivity.startActionMode(mActionModeCallback);  
+    	mActionMode = mActivity.startActionMode(mActionModeCallback);  
     }
+    
+    public void closeActionMode(){
+    	if (mActionMode!=null){
+    		mActionMode.finish();
+    		MyBookmarkFragment fragment1 = (MyBookmarkFragment) ((NovelPagerAdapter) adapter).getRegisteredFragment(0);
+      	  	MyBookmarkFragment fragment2 = (MyBookmarkFragment) ((NovelPagerAdapter) adapter).getRegisteredFragment(1);
+      	    fragment1.isShowDeleteCallbackAction = false;
+      	    fragment2.isShowDeleteCallbackAction = false;
+    	}
+    }
+    
 
 }

@@ -43,7 +43,7 @@ public class MyBookmarkFragment extends Fragment{
 	private TreeMap<String, ArrayList<Bookmark>> bookmarksMap;
 	public static int BOOKMARK_VIEW = 1;
 	public static int RECENT_READ_VIEW = 2;
-	private boolean isShowDeleteCallbackAction = false;
+	public boolean isShowDeleteCallbackAction = false;
 	private Activity mActivity;
 	
 	@Override
@@ -248,9 +248,14 @@ public class MyBookmarkFragment extends Fragment{
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         	if(isShowDeleteCallbackAction){
-        		view.setBackgroundColor(MyBookmarkFragment.this.getResources().getColor(R.color.selector_blue));
-        		deleteBookmarks.add((Bookmark) getItem(position));
+        		if (deleteBookmarks.contains((Bookmark) getItem(position))){
+        			deleteBookmarks.remove((Bookmark) getItem(position));
+        		}else{
+        			deleteBookmarks.add((Bookmark) getItem(position));
+        		}
         	}else{
+        		((BookmarkActivity)MyBookmarkFragment.this.mActivity).closeActionMode();
+        		
         		Bookmark bookmark = bookList.get(position);
 	              if (bookmark.getId() == 0)
 	                  return;
@@ -269,8 +274,11 @@ public class MyBookmarkFragment extends Fragment{
         @Override
         public void onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
         	if(isShowDeleteCallbackAction){
-        		view.setBackgroundColor(MyBookmarkFragment.this.getResources().getColor(R.color.selector_blue));
-        		deleteBookmarks.add((Bookmark) getItem(position));
+        		if (deleteBookmarks.contains((Bookmark) getItem(position))){
+        			deleteBookmarks.remove((Bookmark) getItem(position));
+        		}else{
+        			deleteBookmarks.add((Bookmark) getItem(position));
+        		}
         	}else{
         		((BookmarkActivity)MyBookmarkFragment.this.mActivity).showCallBackAction();
         		isShowDeleteCallbackAction = true;
