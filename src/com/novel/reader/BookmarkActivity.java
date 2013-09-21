@@ -220,7 +220,10 @@ public class BookmarkActivity extends SherlockFragmentActivity{
 	
 	      // Called when the user exits the action mode
 	      public void onDestroyActionMode(ActionMode mode) {
-	          // mActionMode = null;
+	    	  MyBookmarkFragment fragment1 = (MyBookmarkFragment) ((NovelPagerAdapter) adapter).getRegisteredFragment(0);
+        	  MyBookmarkFragment fragment2 = (MyBookmarkFragment) ((NovelPagerAdapter) adapter).getRegisteredFragment(1);
+        	  fragment1.resetIsShowDeleteCallbackAction();
+        	  fragment2.resetIsShowDeleteCallbackAction();
 	
 	      }
 	};
