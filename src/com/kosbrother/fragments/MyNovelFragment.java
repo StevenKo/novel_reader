@@ -45,8 +45,6 @@ public final class MyNovelFragment extends Fragment {
     private ExpandableHeightGridView bookmarkGridView;
     private GridViewIndexNovelAdapter novelAdapter;
     private GridViewIndexBookmarkAdapter bookmarkAdapter;
-	private ArrayList<Novel> novels;
-	private ArrayList<Bookmark> bookmarks;
 	private LinearLayout noNovelInBookcase;
 	private LinearLayout noBookmarkInBookmarks;
 	private LinearLayout progressLayout;
@@ -96,14 +94,9 @@ public final class MyNovelFragment extends Fragment {
     }
 
     private void getData() {
-    	SQLiteNovel db = new SQLiteNovel(this.getActivity());
-    	novels = db.getLastCollectNovels(3);
-    	novels.addAll(db.getLastDownloadNovels(3));
-    	bookmarks = db.getLastBookmarks(3);
-    	bookmarks.addAll(db.getLastRecentBookmarks(3));
-    	novelAdapter = new GridViewIndexNovelAdapter(getActivity(),novels);
-    	bookmarkAdapter = new GridViewIndexBookmarkAdapter(getActivity(),bookmarks);
-    	if(novels.size() > 0){
+    	novelAdapter = new GridViewIndexNovelAdapter(getActivity());
+    	bookmarkAdapter = new GridViewIndexBookmarkAdapter(getActivity());
+    	if(novelAdapter.getCount() > 0){
     		noNovelInBookcase.setVisibility(View.GONE);
     		novelGridView.setVisibility(View.VISIBLE);
     	}else{
@@ -111,7 +104,7 @@ public final class MyNovelFragment extends Fragment {
     		noNovelInBookcase.setVisibility(View.VISIBLE);
     	}
     	
-    	if(bookmarks.size() > 0){
+    	if(bookmarkAdapter.getCount() > 0){
     		noBookmarkInBookmarks.setVisibility(View.GONE);
     		bookmarkGridView.setVisibility(View.VISIBLE);
     	}else{

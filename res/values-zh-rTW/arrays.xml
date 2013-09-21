@@ -18,6 +18,7 @@
     <string-array name="sections">
         <item>類別</item>
         <item>我的小說</item>
+        <item>近期更新</item>
         <item>本週排行</item>
         <item>本月排行</item>
         <item>總人氣排行</item>
@@ -26,6 +27,7 @@
         <item>人氣排行</item>
         <item>推薦</item>
         <item>本週排行</item>
+        <item>近期更新</item>
         <item>全部小說</item>
     </string-array>
     <string-array name="collections">

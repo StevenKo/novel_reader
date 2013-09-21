@@ -10,12 +10,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -30,8 +35,9 @@ public class BookmarkActivity extends SherlockFragmentActivity{
     SharedPreferences                            settings;
     private final String                         alertKey   = "alertDeleteBookmark";
     private String[]                  CONTENT;
-    private ViewPager                 pager;
-    private FragmentStatePagerAdapter adapter;
+    private static ViewPager                 pager;
+    private static FragmentStatePagerAdapter adapter;
+	private static BookmarkActivity mActivity;
 
 
     @Override
@@ -39,6 +45,8 @@ public class BookmarkActivity extends SherlockFragmentActivity{
         super.onCreate(savedInstanceState);
         Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.simple_titles);
+        
+        mActivity = BookmarkActivity.this;
         
         final ActionBar ab = getSupportActionBar();
         ab.setTitle(getResources().getString(R.string.my_bookmark));
@@ -69,11 +77,13 @@ public class BookmarkActivity extends SherlockFragmentActivity{
     }
     
     class NovelPagerAdapter extends FragmentStatePagerAdapter {
+    	
+    	SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+    	
         public NovelPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
-        // 這邊要寫兩個不同的Fragment, 分別取書櫃資 & 下載資料
         @Override
         public Fragment getItem(int position) {
             Fragment kk = new Fragment();
@@ -82,6 +92,7 @@ public class BookmarkActivity extends SherlockFragmentActivity{
             } else if (position == 1) {
                 kk = MyBookmarkFragment.newInstance(MyBookmarkFragment.RECENT_READ_VIEW);
             }
+            registeredFragments.put(position, kk);
             return kk;
         }
 
@@ -94,12 +105,10 @@ public class BookmarkActivity extends SherlockFragmentActivity{
         public int getCount() {
             return CONTENT.length;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        new LoadDataTask().execute();
+        
+        public Fragment getRegisteredFragment(int position) {
+            return registeredFragments.get(position);
+        }
     }
 
     @Override
@@ -109,7 +118,6 @@ public class BookmarkActivity extends SherlockFragmentActivity{
         switch (itemId) {
         case android.R.id.home:
             finish();
-            // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
             break;
         }
         return true;
@@ -172,6 +180,53 @@ public class BookmarkActivity extends SherlockFragmentActivity{
     public void onStop() {
       super.onStop();
       EasyTracker.getInstance().activityStop(this);
+    }
+    
+    public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+	      // Called when the action mode is created; startActionMode() was called
+	      public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+	          // Inflate a menu resource providing context menu items
+	          MenuInflater inflater = mode.getMenuInflater();
+	          // Assumes that you have "contexual.xml" menu resources
+	          inflater.inflate(R.menu.contextual, menu);
+	          
+	          return true;
+	      }
+	
+	      // Called each time the action mode is shown. Always called after
+	      // onCreateActionMode, but
+	      // may be called multiple times if the mode is invalidated.
+	      public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+	          return false; // Return false if nothing is done
+	      }
+	
+	      // Called when the user selects a contextual menu item
+	      public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+	    	  MyBookmarkFragment fragment1 = (MyBookmarkFragment) ((NovelPagerAdapter) adapter).getRegisteredFragment(0);
+        	  MyBookmarkFragment fragment2 = (MyBookmarkFragment) ((NovelPagerAdapter) adapter).getRegisteredFragment(1);
+	          switch (item.getItemId()) {
+	          case R.id.delete_articles:
+	        	  fragment1.deleteAndReload();
+	        	  fragment2.deleteAndReload();
+	        	  mode.finish();
+	              return true;
+	          default:
+	        	  fragment1.resetIsShowDeleteCallbackAction();
+	        	  fragment2.resetIsShowDeleteCallbackAction();
+	              return false;
+	          }
+	      }
+	
+	      // Called when the user exits the action mode
+	      public void onDestroyActionMode(ActionMode mode) {
+	          // mActionMode = null;
+	
+	      }
+	};
+	  
+    public void showCallBackAction() {
+    	mActivity.startActionMode(mActionModeCallback);  
     }
 
 }

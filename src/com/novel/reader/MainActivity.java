@@ -46,10 +46,8 @@ import com.google.ads.AdRequest.ErrorCode;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.kosbrother.fragments.CategoryListFragment;
-import com.kosbrother.fragments.HotNovelsFragment;
-import com.kosbrother.fragments.MonthFragment;
+import com.kosbrother.fragments.IndexNovelFragment;
 import com.kosbrother.fragments.MyNovelFragment;
-import com.kosbrother.fragments.WeekFragment;
 import com.kosbrother.tool.Report;
 import com.novel.db.SQLiteNovel;
 import com.novel.reader.api.NovelAPI;
@@ -158,7 +156,6 @@ public class MainActivity extends SherlockFragmentActivity{
                     public boolean onMenuItemActionExpand(MenuItem item) {
                         search = (EditText) item.getActionView();
                         search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-                        search.setInputType(InputType.TYPE_CLASS_TEXT);
                         search.requestFocus();
                         search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                             @Override
@@ -239,11 +236,13 @@ public class MainActivity extends SherlockFragmentActivity{
             } else if (position == 1) {
                 kk = MyNovelFragment.newInstance();
             } else if (position == 2) {
-                kk = WeekFragment.newInstance();
+            	kk = IndexNovelFragment.newInstance(IndexNovelFragment.LATEST_NOVEL);
             } else if (position == 3) {
-                kk = MonthFragment.newInstance();
+            	kk = IndexNovelFragment.newInstance(IndexNovelFragment.WEEK_NOVEL);
             } else if (position == 4) {
-                kk = HotNovelsFragment.newInstance();
+            	kk = IndexNovelFragment.newInstance(IndexNovelFragment.MONTH_NOVEL);
+            } else if (position == 5) {
+            	kk = IndexNovelFragment.newInstance(IndexNovelFragment.HOT_NOVEL);
             }
             return kk;
         }
