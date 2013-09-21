@@ -152,10 +152,10 @@ public class MyBookmarkFragment extends Fragment{
     
     public class BookmarkSectionAdapter extends Section implements Filterable {
 
-        private final Context             mContext;
-        private final ArrayList<Bookmark> bookList;
-        private final ImageLoader         imageLoader;
-        private final String              headerString;
+        private Context             mContext;
+        private ArrayList<Bookmark> bookList;
+        private ImageLoader         imageLoader;
+        private String              headerString = "";
 
         public BookmarkSectionAdapter(Context context, ArrayList<Bookmark> bookList, String headerString) {
             this.mContext = context;
