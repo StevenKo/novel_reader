@@ -29,7 +29,7 @@ public class IndexNovelFragment extends Fragment {
     private LinearLayout     loadmoreLayout;
     private LinearLayout     layoutReload;
     private Button           buttonReload;
-    private static int       myPage     = 1;
+    private int       myPage     = 1;
     private Boolean          checkLoad  = true;
 
     public static final int HOT_NOVEL = 1;
@@ -127,12 +127,15 @@ public class IndexNovelFragment extends Fragment {
         	switch (novelFragment) {
 	          case HOT_NOVEL:
 	        	  novels = NovelAPI.getHotNovels();
+	        	  checkLoad = false;
 	        	  break;
 	          case MONTH_NOVEL:
 	        	  novels = NovelAPI.getThisMonthHotNovels();
+	        	  checkLoad = false;
 	        	  break;
 	          case WEEK_NOVEL:
 	        	  novels = NovelAPI.getThisWeekHotNovels();
+	        	  checkLoad = false;
 	        	  break;
 	          case LATEST_NOVEL:
 	        	  moreNovels = NovelAPI.getLatestUpdateNovels(myPage);
@@ -156,8 +159,9 @@ public class IndexNovelFragment extends Fragment {
             
             if (novelFragment==LATEST_NOVEL && myPage > 1)
             	setLoadMoreNovels();
-            else
+            else{
             	setNovesAdapter();
+            }
 
         }
         
