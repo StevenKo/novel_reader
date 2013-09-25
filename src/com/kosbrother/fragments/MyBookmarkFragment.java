@@ -134,7 +134,7 @@ public class MyBookmarkFragment extends Fragment{
             bookmarks = NovelAPI.getAllBookmarks(mActivity);
 
         if (bookmarks.size() == 0)
-            bookmarks.add(new Bookmark(0, 0, 0, 0, getResources().getString(R.string.my_bookmark_none), "", "", false));
+            bookmarks.add(new Bookmark(0, 0, 0, 0, mActivity.getResources().getString(R.string.my_bookmark_none), "", "", false));
         bookmarksMap = getBookmarksMap(bookmarks);
     }
 
@@ -192,7 +192,7 @@ public class MyBookmarkFragment extends Fragment{
             TextView novelName = (TextView) converView.findViewById(R.id.bookmark_novel_name);
             TextView articleTitle = (TextView) converView.findViewById(R.id.bookmark_article_name);
             Button novelBtn = (Button) converView.findViewById(R.id.novel_introduce_btn);
-            if (bookList.get(position).getNovelName().equals(getResources().getString(R.string.my_bookmark_none)))
+            if (bookList.get(position).getNovelName().equals(mContext.getResources().getString(R.string.my_bookmark_none)))
                 novelBtn.setVisibility(View.GONE);
             novelBtn.setOnClickListener(new OnClickListener() {
                 @Override
