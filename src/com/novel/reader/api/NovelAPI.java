@@ -674,91 +674,95 @@ public class NovelAPI {
     }
     
     public static boolean sendRegistrationId(String regid,String deviceId,String country,int versionCode,String platform){
-    	try{
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users.json?regid="+regid+"&device_id="+deviceId+"&platform="+platform+"&version="+versionCode+"&country="+country;				
-			if(DEBUG)
-				Log.d(TAG, "URL : " + url);
-
-			HttpPost httpPost = new HttpPost(url);
-			HttpResponse response = httpClient.execute(httpPost);
-
-			StatusLine statusLine =  response.getStatusLine();
-			if (statusLine.getStatusCode() == 200){
-				return true;
-			}else{
-				return false;
-			}
-		} 
-	    catch (Exception e) {
-			return false;
-		} 
+    	return false;
+//    	try{
+//			DefaultHttpClient httpClient = new DefaultHttpClient();
+//			String url = HOST + "/api/v1/users.json?regid="+regid+"&device_id="+deviceId+"&platform="+platform+"&version="+versionCode+"&country="+country;				
+//			if(DEBUG)
+//				Log.d(TAG, "URL : " + url);
+//
+//			HttpPost httpPost = new HttpPost(url);
+//			HttpResponse response = httpClient.execute(httpPost);
+//
+//			StatusLine statusLine =  response.getStatusLine();
+//			if (statusLine.getStatusCode() == 200){
+//				return true;
+//			}else{
+//				return false;
+//			}
+//		} 
+//	    catch (Exception e) {
+//			return false;
+//		} 
     }
     
     public static boolean sendNovel(int novel,String deviceId){
-    	try{
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users/update_novel.json?novel="+novel+"&device_id="+deviceId;						
-			if(DEBUG)
-				Log.d(TAG, "URL : " + url);
-
-			HttpPut httpPut = new HttpPut(url);
-			HttpResponse response = httpClient.execute(httpPut);
-
-			StatusLine statusLine =  response.getStatusLine();
-			if (statusLine.getStatusCode() == 200){
-				return true;
-			}else{
-				return false;
-			}
-		} 
-	    catch (Exception e) {
-			return false;
-		} 
+    	return false;
+//    	try{
+//			DefaultHttpClient httpClient = new DefaultHttpClient();
+//			String url = HOST + "/api/v1/users/update_novel.json?novel="+novel+"&device_id="+deviceId;						
+//			if(DEBUG)
+//				Log.d(TAG, "URL : " + url);
+//
+//			HttpPut httpPut = new HttpPut(url);
+//			HttpResponse response = httpClient.execute(httpPut);
+//
+//			StatusLine statusLine =  response.getStatusLine();
+//			if (statusLine.getStatusCode() == 200){
+//				return true;
+//			}else{
+//				return false;
+//			}
+//		} 
+//	    catch (Exception e) {
+//			return false;
+//		} 
 
     }
     
     public static boolean sendDownloadedNovels(String novels,String deviceId){
-    	try{
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users/update_downloaded_novels.json?novels="+novels+"&device_id="+deviceId;						
-			if(DEBUG)
-				Log.d(TAG, "URL : " + url);
-
-			HttpPut httpPut = new HttpPut(url);
-			HttpResponse response = httpClient.execute(httpPut);
-
-			StatusLine statusLine =  response.getStatusLine();
-			if (statusLine.getStatusCode() == 200){
-				return true;
-			}else{
-				return false;
-			}
-		} 
-	    catch (Exception e) {
-			return false;
-		} 
+    	return false;
+//    	try{
+//			DefaultHttpClient httpClient = new DefaultHttpClient();
+//			String url = HOST + "/api/v1/users/update_downloaded_novels.json?novels="+novels+"&device_id="+deviceId;						
+//			if(DEBUG)
+//				Log.d(TAG, "URL : " + url);
+//
+//			HttpPut httpPut = new HttpPut(url);
+//			HttpResponse response = httpClient.execute(httpPut);
+//
+//			StatusLine statusLine =  response.getStatusLine();
+//			if (statusLine.getStatusCode() == 200){
+//				return true;
+//			}else{
+//				return false;
+//			}
+//		} 
+//	    catch (Exception e) {
+//			return false;
+//		} 
     }
     
     public static boolean sendCollectedNovels(String novels,String deviceId){
-    	try{
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users/update_collected_novels.json?novels="+novels+"&device_id="+deviceId;						
-			if(DEBUG)
-				Log.d(TAG, "URL : " + url);
-
-			HttpPut httpPut = new HttpPut(url);
-			HttpResponse response = httpClient.execute(httpPut);
-
-			StatusLine statusLine =  response.getStatusLine();
-			if (statusLine.getStatusCode() == 200){
-				return true;
-			}else{
-				return false;
-			}
-		} 
-	    catch (Exception e) {
-			return false;
-		} 
+    	return false;
+//    	try{
+//			DefaultHttpClient httpClient = new DefaultHttpClient();
+//			String url = HOST + "/api/v1/users/update_collected_novels.json?novels="+novels+"&device_id="+deviceId;						
+//			if(DEBUG)
+//				Log.d(TAG, "URL : " + url);
+//
+//			HttpPut httpPut = new HttpPut(url);
+//			HttpResponse response = httpClient.execute(httpPut);
+//
+//			StatusLine statusLine =  response.getStatusLine();
+//			if (statusLine.getStatusCode() == 200){
+//				return true;
+//			}else{
+//				return false;
+//			}
+//		} 
+//	    catch (Exception e) {
+//			return false;
+//		} 
     }
 }
