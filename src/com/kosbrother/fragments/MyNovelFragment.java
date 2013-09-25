@@ -76,29 +76,8 @@ public final class MyNovelFragment extends Fragment {
         super.onResume();
         getData();
     	setViews();
-        new ReloadTask().execute();
-    }
-    
-    private class ReloadTask extends AsyncTask {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-        	getData();
-        	setViews();
-            progressLayout.setVisibility(View.GONE);
-            scrollView.scrollTo(0, 0);
-        }
+        progressLayout.setVisibility(View.GONE);
+        scrollView.scrollTo(0, 0);
     }
 
     private void getData() {
