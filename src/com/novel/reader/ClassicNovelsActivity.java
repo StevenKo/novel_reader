@@ -99,6 +99,7 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
                     public boolean onMenuItemActionExpand(MenuItem item) {
                         search = (EditText) item.getActionView();
                         search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+                        search.setInputType(InputType.TYPE_CLASS_TEXT);
                         search.requestFocus();
                         search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                             @Override
