@@ -150,6 +150,12 @@
     <string name="no_novel_in_bookcase">目前還沒有收藏或下載的小說</string>
     <string name="no_bookmark_in_my_bookmarks">目前還沒有收集書籤或閱讀過小說章節</string>
     
+    <string name="update_info"><font color='blue'>V2.8:</font> \n\t因為有不少使用者反應廣告佔據版面的問題，我們將閱讀頁的<font color='red'>橫幅式廣告</font>換成<font color='red'>插頁式的廣告</font>，如果使用者想換為原先橫幅式的廣告，可以在"設定"裡做設定，謝謝!</string>
+    <string name="update">版本更新通知</string>
+    <string name="aritcle_ad_type">小說閱讀頁廣告模式</string>
+    <string name="InterstitialAd">插頁廣告</string>
+    <string name="BannerAd">橫幅廣告</string>
+    
     <!-- for vpon -->
     <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>

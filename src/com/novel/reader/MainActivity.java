@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +28,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
@@ -33,6 +36,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -108,6 +112,11 @@ public class MainActivity extends SherlockFragmentActivity{
 
         setAboutUsDialog();
         
+        if(Setting.getSetting(Setting.keyUpdateAppVersion,this) < Setting.getAppVersion(this)){
+        	showUpdateInfoDialog(this);
+        	Setting.saveSetting(Setting.keyUpdateAppVersion, Setting.getAppVersion(this), this);
+        }
+        
         context = getApplicationContext();
         regid = Setting.getRegistrationId(context);
         String device_id = Setting.getDeviceId(context);
@@ -121,6 +130,24 @@ public class MainActivity extends SherlockFragmentActivity{
         AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
 
     }
+    
+    private static void showUpdateInfoDialog(Activity mActivity){
+		LayoutInflater inflater = mActivity.getLayoutInflater();
+    	LinearLayout recomendLayout = (LinearLayout) inflater.inflate(R.layout.dialog_update_info,null);
+
+    	
+    	Builder a = new AlertDialog.Builder(mActivity).setTitle(mActivity.getResources().getString(R.string.update)).setIcon(R.drawable.icon_report)
+        .setPositiveButton(mActivity.getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	
+            	
+            }
+        });
+    	a.setView(recomendLayout);
+    	a.show();
+	}
+
     
     private void setTextLocale() {
     	Locale current = getResources().getConfiguration().locale;

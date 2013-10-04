@@ -150,6 +150,12 @@
     <string name="no_novel_in_bookcase">目前还没有收藏或下载的小说</string>
     <string name="no_bookmark_in_my_bookmarks">目前还没有收集书签或阅读过小说章节</string>
     
+    <string name="update_info"><font color='blue'>V2.8:</font> \n\t因为有不少使用者反应广告占据版面的问题，我们将阅读页的<font color= 'red'>横幅式广告</font>换成<font color='red'>插页式的广告</font>，如果使用者想换为原先横幅式的广告，可以在"设定"里做设定，谢谢!</string>
+    <string name="update">版本更新通知</string>
+    <string name="aritcle_ad_type">小说阅读页广告模式</string>
+    <string name="InterstitialAd">插页广告</string>
+    <string name="BannerAd">横幅广告</string>
+    
     <!-- for load more -->
     <string name="hello">Hello World, LoadMoreListView!</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh...</string>

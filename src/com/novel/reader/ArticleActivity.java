@@ -95,6 +95,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
     private ArrayList<Integer>  articleNums;
 	private WebView             articleWebView;
 	private LinearLayout articleLayout;
+	private int articleAdType;
 
 	
 
@@ -161,9 +162,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         ab.setDisplayHomeAsUpEnabled(true);
 
         setAboutUsDialog();
-        AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
-
-        
     }
     
     @Override
@@ -424,6 +422,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             myAricle.setNovelId(novelId);
 
             new GetLastPositionTask().execute();
+            if(articleAdType == Setting.InterstitialAd)
+            	AdViewUtil.requestInterstitialAd(ArticleActivity.this);
 
         }
     }
@@ -495,6 +495,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 articleScrollView.scrollTo(0, 0);
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
+                if(articleAdType == Setting.InterstitialAd)
+                	AdViewUtil.requestInterstitialAd(ArticleActivity.this);
 
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_data), Toast.LENGTH_SHORT).show();
@@ -534,6 +536,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 articleScrollView.scrollTo(0, 0);
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
+                if(articleAdType == Setting.InterstitialAd)
+                	AdViewUtil.requestInterstitialAd(ArticleActivity.this);
 
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_up), Toast.LENGTH_SHORT).show();
@@ -571,6 +575,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 articleScrollView.scrollTo(0, 0);
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
+                if(articleAdType == Setting.InterstitialAd)
+                	AdViewUtil.requestInterstitialAd(ArticleActivity.this);
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_down), Toast.LENGTH_SHORT).show();
             }
@@ -686,6 +692,13 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         if (stopSleeping == 0) {
             ArticleActivity.this.findViewById(android.R.id.content).setKeepScreenOn(true);
         }
+        
+        articleAdType = Setting.getSetting(Setting.keyArticleAdType, ArticleActivity.this);
+        if(articleAdType == Setting.BannerAd){
+        	((LinearLayout) findViewById(R.id.adonView)).setVisibility(View.VISIBLE);
+        	AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
+        }else
+        	((LinearLayout) findViewById(R.id.adonView)).setVisibility(View.GONE);
 
     }
 

@@ -38,17 +38,20 @@ public class SettingActivity extends SherlockFragmentActivity implements RadioGr
     private RadioGroup          tapRadioGroup;
     private RadioGroup          stopSleepRadioGroup;
     private RadioGroup          themeRadioGroup;
+    private RadioGroup          articleAdTypeRadioGroup; 
     private TextView            textPreView;
     private ImageView           imageviewTextColor;
     private ImageView           imageviewTextBackground;
     private int                 textColor;
     private int                 textBackground;
     private int                 appTheme;
+    private int                 articleAdType;
 
     private AlertDialog.Builder finishDialog;
     private Button              dbResetButton;
     
-    private boolean isSettingChanged = false; 
+    private boolean isSettingChanged = false;
+	
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,7 @@ public class SettingActivity extends SherlockFragmentActivity implements RadioGr
         textColor = Setting.getSetting(Setting.keyTextColor, SettingActivity.this);
         textBackground = Setting.getSetting(Setting.keyTextBackground, SettingActivity.this);
         appTheme = Setting.getSetting(Setting.keyAppTheme, SettingActivity.this);
+        articleAdType = Setting.getSetting(Setting.keyArticleAdType, SettingActivity.this);
 
         setViews();
 
@@ -81,6 +85,7 @@ public class SettingActivity extends SherlockFragmentActivity implements RadioGr
         tapRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_tap);
         stopSleepRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_stop_sleep);
         themeRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_theme);
+        articleAdTypeRadioGroup = (RadioGroup) findViewById(R.id.RadioGroup_AD);
         textPreView = (TextView) findViewById(R.id.text_preview);
         imageviewTextColor = (ImageView) findViewById(R.id.imageview_textcolor);
         imageviewTextBackground = (ImageView) findViewById(R.id.imageview_textbackground);
@@ -98,12 +103,14 @@ public class SettingActivity extends SherlockFragmentActivity implements RadioGr
         ((RadioButton) tapRadioGroup.getChildAt(clickToNextPage)).setChecked(true);
         ((RadioButton) stopSleepRadioGroup.getChildAt(textLanguage)).setChecked(true);
         ((RadioButton) themeRadioGroup.getChildAt(appTheme)).setChecked(true);
+        ((RadioButton) articleAdTypeRadioGroup.getChildAt(articleAdType)).setChecked(true);
         
         langRadioGroup.setOnCheckedChangeListener(this);
         directionRadioGroup.setOnCheckedChangeListener(this);
         tapRadioGroup.setOnCheckedChangeListener(this);
         stopSleepRadioGroup.setOnCheckedChangeListener(this);
         themeRadioGroup.setOnCheckedChangeListener(this);
+        articleAdTypeRadioGroup.setOnCheckedChangeListener(this);
 
         dbResetButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -258,6 +265,7 @@ public class SettingActivity extends SherlockFragmentActivity implements RadioGr
                         saveRadioGroupValue(tapRadioGroup, Setting.keyClickToNextPage);
                         saveRadioGroupValue(stopSleepRadioGroup, Setting.keyStopSleeping);
                         saveRadioGroupValue(themeRadioGroup, Setting.keyAppTheme);
+                        saveRadioGroupValue(articleAdTypeRadioGroup, Setting.keyArticleAdType);
                         finish();
 
                     }
