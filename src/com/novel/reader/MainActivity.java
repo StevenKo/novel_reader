@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
@@ -131,12 +132,13 @@ public class MainActivity extends SherlockFragmentActivity{
 
     }
     
-    private static void showUpdateInfoDialog(Activity mActivity){
+    private void showUpdateInfoDialog(Activity mActivity){
 		LayoutInflater inflater = mActivity.getLayoutInflater();
     	LinearLayout recomendLayout = (LinearLayout) inflater.inflate(R.layout.dialog_update_info,null);
-
+    	TextView update_text = (TextView)recomendLayout.findViewById(R.id.update_tip);
+    	update_text.setText(Html.fromHtml(getResources().getString(R.string.update_info)));
     	
-    	Builder a = new AlertDialog.Builder(mActivity).setTitle(mActivity.getResources().getString(R.string.update)).setIcon(R.drawable.icon_report)
+    	Builder a = new AlertDialog.Builder(mActivity).setTitle(mActivity.getResources().getString(R.string.update)).setIcon(R.drawable.ic_stat_notify)
         .setPositiveButton(mActivity.getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
