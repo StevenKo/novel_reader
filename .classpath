@@ -10,10 +10,10 @@
 	<classpathentry kind="lib" path="libs/libGoogleAnalyticsV2.jar"/>
 	<classpathentry kind="lib" path="libs/GoogleAdMobAdsSdk-6.4.1.jar"/>
 	<classpathentry kind="lib" path="libs/HODoAD_1.3.8 _ob.jar"/>
-	<classpathentry kind="lib" path="libs/vpadn-sdk-obf401-32703102.jar"/>
 	<classpathentry kind="lib" path="libs/kuAD_1.7.0.jar"/>
 	<classpathentry kind="lib" path="libs/InMobiAdNetwork-3.7.1.jar"/>
 	<classpathentry kind="lib" path="libs/InMobiCommons-3.7.1.jar"/>
 	<classpathentry kind="lib" path="libs/libadapterinmobi.jar"/>
+	<classpathentry kind="lib" path="libs/vpadn-sdk-obf401-20803102.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

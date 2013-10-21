@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.novel.db.SQLiteNovel;
+import com.novel.reader.MyDownloadArticleActivity;
 import com.novel.reader.NovelIntroduceActivity;
 import com.novel.reader.R;
 import com.novel.reader.entity.Novel;
@@ -59,28 +60,8 @@ public class GridViewIndexNovelAdapter extends BaseAdapter {
        
         vi = inflater.inflate(R.layout.item_gridview_index_novel, null);
         
-
         vi.setClickable(true);
         vi.setFocusable(true);
-        vi.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, NovelIntroduceActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("NovelId", data.get(position).getId());
-                bundle.putString("NovelName", data.get(position).getName());
-                bundle.putString("NovelAuthor", data.get(position).getAuthor());
-                bundle.putString("NovelDescription", data.get(position).getDescription());
-                bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
-                bundle.putString("NovelPicUrl", data.get(position).getPic());
-                bundle.putString("NovelArticleNum", data.get(position).getArticleNum());
-                intent.putExtras(bundle);
-                activity.startActivity(intent);
-
-            }
-
-        });
 
         TextView textName = (TextView) vi.findViewById(R.id.grid_item_name);
         ImageView image = (ImageView) vi.findViewById(R.id.grid_item_image);
@@ -102,8 +83,47 @@ public class GridViewIndexNovelAdapter extends BaseAdapter {
 
         if (position < collect_nove_size) {
             textSerialize.setText("收藏小說");
+            
+            vi.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, NovelIntroduceActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("NovelId", data.get(position).getId());
+                    bundle.putString("NovelName", data.get(position).getName());
+                    bundle.putString("NovelAuthor", data.get(position).getAuthor());
+                    bundle.putString("NovelDescription", data.get(position).getDescription());
+                    bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
+                    bundle.putString("NovelPicUrl", data.get(position).getPic());
+                    bundle.putString("NovelArticleNum", data.get(position).getArticleNum());
+                    intent.putExtras(bundle);
+                    activity.startActivity(intent);
+
+                }
+
+            });
+            
         } else {
             textSerialize.setText("下載小說");
+            
+            vi.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                	 Intent intent = new Intent(activity, MyDownloadArticleActivity.class);
+                     Bundle bundle = new Bundle();
+                     bundle.putInt("NovelId", data.get(position).getId());
+                     bundle.putString("NovelName", data.get(position).getName());
+                     bundle.putString("NovelAuthor", data.get(position).getAuthor());
+                     bundle.putString("NovelPicUrl", data.get(position).getPic());
+                     bundle.putString("NovelArticleNum", data.get(position).getArticleNum());
+                     intent.putExtras(bundle);
+                     activity.startActivity(intent);
+
+                }
+
+            });
         }
 
         return vi;
