@@ -33,7 +33,7 @@ import com.novel.reader.entity.Novel;
 
 public class NovelAPI {
 
-    final static String         HOST  = "http://106.187.40.42";
+    final static String         HOST  = "http://app.hainanmobile.com";
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
 
@@ -41,6 +41,22 @@ public class NovelAPI {
     // SQLiteNovel db = new SQLiteNovel(context);
     // return db.getNovelBookmarks(novelId);
     // }
+    
+    public static void parseInfo(Context context) throws JSONException{
+    	String message = getMessageFromServer("GET", "/api/spread?index=1&count=15", null);
+    	if (message == null) {
+        } else{
+        	 JSONArray articlesArray = new JSONArray(message.toString());
+             for (int i = 0; i < articlesArray.length(); i++) {
+            
+             int article_id = articlesArray.getJSONObject(i).getInt("id");
+             String subject = articlesArray.getJSONObject(i).getString("title");
+             String url = articlesArray.getJSONObject(i).getString("imageUrl");
+             
+            
+             }
+        }
+    }
 
     public static ArrayList<Bookmark> getAllRecentReadBookmarks(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
