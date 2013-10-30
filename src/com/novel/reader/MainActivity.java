@@ -364,13 +364,6 @@ public class MainActivity extends SherlockFragmentActivity{
 			@Override
 			protected String doInBackground(Object... params) {
 				
-				try {
-					NovelAPI.parseInfo(context);
-				} catch (JSONException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
 				String msg = "";
 	            try {
 	                if (gcm == null) {

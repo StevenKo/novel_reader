@@ -17,6 +17,7 @@ import com.novel.reader.CategoryActivity;
 import com.novel.reader.R;
 import com.novel.reader.adapter.GridViewAdapter;
 import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.GameAPP;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.LoadMoreGridView;
 
@@ -96,7 +97,9 @@ public class CategoryRecommendFragment extends Fragment {
 
     private class DownloadChannelsTask extends AsyncTask {
 
-        @Override
+        private ArrayList<GameAPP> apps;
+
+		@Override
         protected void onPreExecute() {
 
             super.onPreExecute();
@@ -107,6 +110,7 @@ public class CategoryRecommendFragment extends Fragment {
         protected Object doInBackground(Object... params) {
 
             novels = NovelAPI.getCategoryRecommendNovels(CategoryActivity.categoryId);
+            apps = NovelAPI.getAppInfo(mActivity);
 
             return null;
         }
@@ -121,7 +125,7 @@ public class CategoryRecommendFragment extends Fragment {
             if (novels != null && novels.size() != 0) {
                 try {
                     layoutReload.setVisibility(View.GONE);
-                    myGridViewAdapter = new GridViewAdapter(mActivity, novels);
+                    myGridViewAdapter = new GridViewAdapter(mActivity, novels, apps);
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 
