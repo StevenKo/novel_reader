@@ -125,14 +125,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	         articleNum = mBundle.getInt("ArticleNum");
 	         articleNums = mBundle.getIntegerArrayList("ArticleNums");
 	         if(savedInstanceState != null){
-	        	 articleTitle = savedInstanceState.getString("ArticleTitle");
-		         articleId = savedInstanceState.getInt("ArticleId");
-		         downloadBoolean = savedInstanceState.getBoolean("ArticleDownloadBoolean", false);
-		         yRate = savedInstanceState.getInt("ReadingRate", 0);
-		         articleIDs = savedInstanceState.getIntegerArrayList("ArticleIDs");
-		         ariticlePosition = savedInstanceState.getInt("ArticlePosition");
-		         articleNum = savedInstanceState.getInt("ArticleNum");
-		         articleNums = savedInstanceState.getIntegerArrayList("ArticleNums");
+	        	 getSavedState(savedInstanceState);
 	         }
 
 	  	    if (articleIDs != null) {
@@ -162,6 +155,26 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         ab.setDisplayHomeAsUpEnabled(true);
 
         setAboutUsDialog();
+    }
+    
+    
+    public void getSavedState(Bundle savedInstanceState){
+    	 if(savedInstanceState.containsKey("ArticleTitle"));
+	 		articleTitle = savedInstanceState.getString("ArticleTitle");
+	 	 if(savedInstanceState.containsKey("ArticleId"));
+	 	 	articleId = savedInstanceState.getInt("ArticleId");
+	 	 if(savedInstanceState.containsKey("ArticleDownloadBoolean"));
+	 	 	downloadBoolean = savedInstanceState.getBoolean("ArticleDownloadBoolean", false);
+	     if(savedInstanceState.containsKey("ReadingRate"));
+	     	yRate = savedInstanceState.getInt("ReadingRate", 0);
+	     if(savedInstanceState.containsKey("ArticleIDs"));
+	     	articleIDs = savedInstanceState.getIntegerArrayList("ArticleIDs");
+	     if(savedInstanceState.containsKey("ArticlePosition"));
+	     	ariticlePosition = savedInstanceState.getInt("ArticlePosition");
+	     if(savedInstanceState.containsKey("ArticleNum"));
+	     	articleNum = savedInstanceState.getInt("ArticleNum");
+	     if(savedInstanceState.containsKey("ArticleNums"));
+	     	articleNums = savedInstanceState.getIntegerArrayList("ArticleNums");
     }
     
     @Override
