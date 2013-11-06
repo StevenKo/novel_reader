@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.novel.db.SQLiteNovel;
@@ -50,7 +51,11 @@ public class NovelAPI {
     public static ArrayList<GameAPP> apps;
     
     public static void sendClickInfo(Context context, int appid){
-    	String device_id = Settings.Secure.getString(context.getContentResolver(),Settings.Secure.ANDROID_ID);
+//    	String device_id = Settings.Secure.getString(context.getContentResolver(),Settings.Secure.ANDROID_ID);
+    	
+    	TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+    	String device_id = telephonyManager.getDeviceId();
+    	
     	String ip = DeviceUtils.getIPAddress(true);
     	
     	HttpClient httpclient = new DefaultHttpClient();
