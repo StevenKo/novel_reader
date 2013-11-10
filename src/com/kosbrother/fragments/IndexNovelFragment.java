@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.novel.reader.R;
 import com.novel.reader.adapter.GridViewAdapter;
 import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.GameAPP;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.LoadMoreGridView;
 
@@ -114,6 +115,8 @@ public class IndexNovelFragment extends Fragment {
 
     private class LoadMoreTask extends AsyncTask {
 
+		private ArrayList<GameAPP> apps;
+
 		@Override
         protected void onPreExecute() {
             // TODO Auto-generated method stub
@@ -146,7 +149,7 @@ public class IndexNovelFragment extends Fragment {
 	              }
 	        	  break;
 	          }
-            
+        	apps = NovelAPI.getAppInfo(mActivity);
 
             return null;
         }
@@ -167,6 +170,7 @@ public class IndexNovelFragment extends Fragment {
         
         private void setLoadMoreNovels(){
         	if (moreNovels != null && moreNovels.size()!=0) {
+        		myGridViewAdapter.addDatas(moreNovels,apps);
                 myGridViewAdapter.notifyDataSetChanged();
             } else {
                 checkLoad = false;
@@ -179,7 +183,7 @@ public class IndexNovelFragment extends Fragment {
         	if (novels != null) {
                 try {
                     layoutReload.setVisibility(View.GONE);
-                    myGridViewAdapter = new GridViewAdapter(mActivity, novels);
+                    myGridViewAdapter = new GridViewAdapter(mActivity, novels,apps);
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 

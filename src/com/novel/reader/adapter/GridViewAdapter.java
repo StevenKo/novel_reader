@@ -1,10 +1,16 @@
 package com.novel.reader.adapter;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -12,28 +18,48 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.novel.reader.NovelIntroduceActivity;
 import com.novel.reader.R;
+import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.GameAPP;
 import com.novel.reader.entity.Novel;
 import com.novel.reader.util.NovelReaderUtil;
 import com.taiwan.imageload.ImageLoader;
 
 public class GridViewAdapter extends BaseAdapter {
 
-    private final Activity         activity;
-    private final ArrayList<Novel> data;
+    private Activity         activity;
+    private ArrayList<Object> data = new ArrayList<Object>();
     private static LayoutInflater  inflater = null;
     public ImageLoader             imageLoader;
 
-    public GridViewAdapter(Activity a, ArrayList<Novel> d) {
+    public GridViewAdapter(Activity a, ArrayList<Novel> d, ArrayList<GameAPP> apps) {
         activity = a;
-        data = d;
+        addDatas(d, apps);
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = new ImageLoader(activity.getApplicationContext(), 70);
 
+    }
+    
+    public void addDatas(ArrayList<Novel> d, ArrayList<GameAPP> apps){
+    	Random random = new Random();
+        int r = random.nextInt(3) + 7;
+        ArrayList<GameAPP> lessShowedApps = GameAPP.lessShowedTimeAPP(apps);
+        for(int i=0; i<d.size();i++){
+        	if((i+1) % r == 0){
+        		GameAPP showedApp = lessShowedApps.get(random.nextInt(lessShowedApps.size()));
+        		showedApp.showedTime += 1;
+        		data.add(showedApp);
+        	    data.add(d.get(i));
+        	}else
+        		data.add(d.get(i));
+        }
     }
 
     public int getCount() {
@@ -49,7 +75,100 @@ public class GridViewAdapter extends BaseAdapter {
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View vi = convertView;
+    	if (data.get(position) instanceof Novel)
+    		return getNovelGridView(position,convertView,parent, (Novel)data.get(position));
+    	else
+    		return getAppGridView(position,convertView,parent, (GameAPP)data.get(position));
+    }
+    
+    private View getAppGridView(final int position, View convertView, ViewGroup parent,final GameAPP app){
+    	View vi = convertView;
+    	Display display = activity.getWindowManager().getDefaultDisplay();
+        int width = display.getWidth(); // deprecated
+        int height = display.getHeight(); // deprecated
+
+        if (width > 480) {
+            vi = inflater.inflate(R.layout.item_app, null);
+        } else {
+            vi = inflater.inflate(R.layout.item_app, null);
+        }
+        
+        vi.setClickable(true);
+        vi.setFocusable(true);
+        vi.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+            	showRecommendAppDialog(app);
+            }
+
+        });
+        ImageView image = (ImageView) vi.findViewById(R.id.grid_item_image);
+        TextView textName = (TextView) vi.findViewById(R.id.grid_item_name);
+        TextView description = (TextView) vi.findViewById(R.id.description);
+        
+        if (NovelReaderUtil.isDisplayDefaultBookCover(app.imageUrl)) {
+            image.setImageResource(R.drawable.bookcover_default);
+        } else {
+            imageLoader.DisplayImage(app.imageUrl, image);
+        }
+        
+        textName.setText(NovelReaderUtil.translateTextIfCN(activity,(app.title)));
+        if (app.title.length() > 6)
+            textName.setTextSize(12);
+        description.setText("推薦優質APP");
+        if (app.description.length() > 6)
+        	description.setTextSize(12);
+       
+        
+    	return vi;
+    }
+    
+    protected void showRecommendAppDialog(final GameAPP app) {
+    	
+    	LayoutInflater inflater = activity.getLayoutInflater();
+    	LinearLayout recomendLayout = (LinearLayout) inflater.inflate(R.layout.dialog_recommend_app,null);
+
+    	ImageView image = (ImageView) recomendLayout.findViewById(R.id.grid_item_image);
+        TextView textName = (TextView) recomendLayout.findViewById(R.id.grid_item_name);
+        TextView description = (TextView) recomendLayout.findViewById(R.id.description);
+    	
+        if (NovelReaderUtil.isDisplayDefaultBookCover(app.imageUrl)) {
+            image.setImageResource(R.drawable.bookcover_default);
+        } else {
+            imageLoader.DisplayImage(app.imageUrl, image);
+        }
+        
+        textName.setText(NovelReaderUtil.translateTextIfCN(activity,(app.title)));
+        if (app.title.length() > 6)
+            textName.setTextSize(12);
+        description.setText(NovelReaderUtil.translateTextIfCN(activity,(app.description)));
+        if (app.description.length() > 6)
+        	description.setTextSize(12);
+    	
+    	Builder a = new AlertDialog.Builder(activity).setTitle("推薦優質APP")
+        .setPositiveButton("前往下載", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+	            	Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(app.appStoreUrl));
+	            	activity.startActivity(browseIntent);
+	            	new AsyncTask() {
+						@Override
+						protected Object doInBackground(Object... arg0) {
+							NovelAPI.sendClickInfo(activity, app.appid);
+							return null;
+					}}.execute();
+            	
+            }
+        });
+    	a.setView(recomendLayout);
+    	AlertDialog dialog = a.create();
+    	dialog.show();
+		
+	}
+
+	private View getNovelGridView(final int position, View convertView, ViewGroup parent,final Novel novel){
+    	View vi = convertView;
         // if (convertView == null)
         // vi = inflater.inflate(R.layout.item_gridview_novel, null);
 
@@ -73,13 +192,13 @@ public class GridViewAdapter extends BaseAdapter {
                 // Toast.makeText(activity, "tt", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(activity, NovelIntroduceActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("NovelId", data.get(position).getId());
-                bundle.putString("NovelName", data.get(position).getName());
-                bundle.putString("NovelAuthor", data.get(position).getAuthor());
-                bundle.putString("NovelDescription", data.get(position).getDescription());
-                bundle.putString("NovelUpdate", data.get(position).getLastUpdate());
-                bundle.putString("NovelPicUrl", data.get(position).getPic());
-                bundle.putString("NovelArticleNum", data.get(position).getArticleNum());
+                bundle.putInt("NovelId", novel.getId());
+                bundle.putString("NovelName", novel.getName());
+                bundle.putString("NovelAuthor", novel.getAuthor());
+                bundle.putString("NovelDescription", novel.getDescription());
+                bundle.putString("NovelUpdate", novel.getLastUpdate());
+                bundle.putString("NovelPicUrl", novel.getPic());
+                bundle.putString("NovelArticleNum", novel.getArticleNum());
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
 
@@ -94,23 +213,23 @@ public class GridViewAdapter extends BaseAdapter {
         TextView textFinish = (TextView) vi.findViewById(R.id.grid_item_finish);
         TextView textSerialize = (TextView) vi.findViewById(R.id.serializing);
 
-        textName.setText(NovelReaderUtil.translateTextIfCN(activity,(data.get(position).getName())));
-        if (data.get(position).getName().length() > 6)
+        textName.setText(NovelReaderUtil.translateTextIfCN(activity,(novel.getName())));
+        if (novel.getName().length() > 6)
             textName.setTextSize(12);
-        textAuthor.setText(NovelReaderUtil.translateTextIfCN(activity,data.get(position).getAuthor()));
-        if (data.get(position).getAuthor().length() > 14) {
+        textAuthor.setText(NovelReaderUtil.translateTextIfCN(activity,novel.getAuthor()));
+        if (novel.getAuthor().length() > 14) {
             textAuthor.setTextSize(8);
         }
-        textCounts.setText(data.get(position).getArticleNum());
-        textFinish.setText(data.get(position).getLastUpdate());
+        textCounts.setText(novel.getArticleNum());
+        textFinish.setText(novel.getLastUpdate());
 
-        if (NovelReaderUtil.isDisplayDefaultBookCover(data.get(position).getPic())) {
+        if (NovelReaderUtil.isDisplayDefaultBookCover(novel.getPic())) {
             image.setImageResource(R.drawable.bookcover_default);
         } else {
-            imageLoader.DisplayImage(data.get(position).getPic(), image);
+            imageLoader.DisplayImage(novel.getPic(), image);
         }
 
-        if (data.get(position).isSerializing()) {
+        if (novel.isSerializing()) {
             textSerialize.setText("連載中...");
         } else {
             textSerialize.setText("全本");

@@ -99,7 +99,7 @@ public class MyBookcaseFragment extends Fragment {
 
             if (novels != null && novels.size() != 0) {
                 try {
-                    myGridViewAdapter = new GridViewAdapter(mActivity, novels);
+                    myGridViewAdapter = new GridViewAdapter(mActivity, novels,null);
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 

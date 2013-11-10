@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+import org.json.JSONException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -361,6 +363,7 @@ public class MainActivity extends SherlockFragmentActivity{
 
 			@Override
 			protected String doInBackground(Object... params) {
+				
 				String msg = "";
 	            try {
 	                if (gcm == null) {

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.novel.reader.R;
 import com.novel.reader.adapter.GridViewAdapter;
 import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.GameAPP;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.LoadMoreGridView;
 
@@ -30,6 +31,7 @@ public class ClassicFragment extends Fragment {
     private Button           buttonReload;
     private LinearLayout     layoutReload;
 	private Activity mActivity;
+	public ArrayList<GameAPP> apps;
     
     @Override
 	  public void onAttach(Activity activity) {
@@ -109,6 +111,7 @@ public class ClassicFragment extends Fragment {
             } else if (classicType == 1) {
                 novels = NovelAPI.getClassicNovels();
             }
+            apps = NovelAPI.getAppInfo(mActivity);
 
             return null;
         }
@@ -123,7 +126,7 @@ public class ClassicFragment extends Fragment {
             if (novels != null && novels.size() != 0) {
                 try {
                     layoutReload.setVisibility(View.GONE);
-                    myGridViewAdapter = new GridViewAdapter(mActivity, novels);
+                    myGridViewAdapter = new GridViewAdapter(mActivity, novels,apps);
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 

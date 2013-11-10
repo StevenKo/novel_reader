@@ -2,6 +2,7 @@ package com.novel.reader.api;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -10,37 +11,120 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.novel.db.SQLiteNovel;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Bookmark;
 import com.novel.reader.entity.Category;
+import com.novel.reader.entity.GameAPP;
 import com.novel.reader.entity.Novel;
+import com.novel.reader.util.DeviceUtils;
 
 public class NovelAPI {
 
     final static String         HOST  = "http://106.187.40.42";
     public static final String  TAG   = "NOVEL_API";
     public static final boolean DEBUG = true;
+    final static String GAME_HOST = "http://apply.inapp.tw";
+    public static ArrayList<GameAPP> apps;
+    
+    public static void sendClickInfo(Context context, int appid){
+//    	String device_id = Settings.Secure.getString(context.getContentResolver(),Settings.Secure.ANDROID_ID);
+    	
+    	TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+    	String device_id = telephonyManager.getDeviceId();
+    	
+    	String ip = DeviceUtils.getIPAddress(true);
+    	
+    	HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("http://www.inapp.tw/adlog/");
 
-    // public static ArrayList<Bookmark> getNovelBookmarks(int novelId, Context context) {
-    // SQLiteNovel db = new SQLiteNovel(context);
-    // return db.getNovelBookmarks(novelId);
-    // }
+        try {
+            // Add your data
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+            nameValuePairs.add(new BasicNameValuePair("ip", ip));
+            nameValuePairs.add(new BasicNameValuePair("appid", appid+""));
+            nameValuePairs.add(new BasicNameValuePair("imei", device_id));
+            nameValuePairs.add(new BasicNameValuePair("bigtype", "3"));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity httpEntity = response.getEntity();
+            InputStream is = httpEntity.getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    is, "UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            is.close();
+            String json = sb.toString();
+            
+        } catch (ClientProtocolException e) {
+        } catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+    	
+//    	String message = getMessageFromServer("GET", "", null,GAME_HOST + "/adlog" + "?ip="+ip+"&appid="+appid+"&imei="+device_id+"&bigtype=3");
+//		return message;
+    }
+    
+    public static ArrayList<GameAPP> getAppInfo(Context context){
+    	if(apps!=null)
+    		return apps;
+    	apps = new ArrayList<GameAPP>();
+    	String message = getMessageFromServer("GET", "", null,GAME_HOST+"/api/spread?index=1&count=15");
+    	if (message == null) {
+    		return null;
+        } else{
+        	try {
+	        	 JSONArray articlesArray = new JSONArray(message.toString());
+	             for (int i = 0; i < articlesArray.length(); i++) {
+	            
+		             int id = articlesArray.getJSONObject(i).getInt("id");
+		             int appid = articlesArray.getJSONObject(i).getInt("appid");
+		             String title = articlesArray.getJSONObject(i).getString("title");
+		             String description = articlesArray.getJSONObject(i).getString("description");
+		             String imageUrl = articlesArray.getJSONObject(i).getString("imageUrl");
+		             String appStoreUrl = articlesArray.getJSONObject(i).getString("appStoreUrl");
+		             GameAPP app = new GameAPP(id,appid,title,description,imageUrl,appStoreUrl);
+		             apps.add(app);
+	             }
+             
+	             return apps;
+             }catch(Exception e){
+            	 return null;
+             }
+        }
+    }
 
     public static ArrayList<Bookmark> getAllRecentReadBookmarks(Context context) {
         SQLiteNovel db = new SQLiteNovel(context);
@@ -632,6 +716,62 @@ public class NovelAPI {
             }
             if (DEBUG)
                 Log.d(TAG, lines.toString());
+
+            reader.close();
+            connection.disconnect();
+
+            return lines.toString();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    private static String getMessageFromServer(String requestMethod, String apiPath, JSONObject json, String apiUrl) {
+        URL url;
+        try {
+            if (apiUrl != null)
+                url = new URL(apiUrl);
+            else
+                url = new URL(HOST + apiPath);
+
+            if (DEBUG)
+                Log.d(TAG, "URL: " + url);
+
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod(requestMethod);
+
+            connection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+            if (requestMethod.equalsIgnoreCase("POST"))
+                connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.connect();
+
+            if (requestMethod.equalsIgnoreCase("POST")) {
+                OutputStream outputStream;
+
+                outputStream = connection.getOutputStream();
+                if (DEBUG)
+                    Log.d("post message", json.toString());
+
+                outputStream.write(json.toString().getBytes());
+                outputStream.flush();
+                outputStream.close();
+            }
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder lines = new StringBuilder();
+            ;
+            String tempStr;
+
+            while ((tempStr = reader.readLine()) != null) {
+                lines = lines.append(tempStr);
+            }
+            if (DEBUG)
+                Log.d("MOVIE_API", lines.toString());
 
             reader.close();
             connection.disconnect();
