@@ -34,8 +34,8 @@ import com.google.ads.AdSize;
 import com.google.ads.AdView;
 import com.google.ads.AdRequest.ErrorCode;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.kosbrother.fragments.CategoryAllNovelsFragment;
 import com.kosbrother.fragments.CategoryLatestNovelsFragment;
-import com.kosbrother.fragments.CategoryNewNovelsFragment;
 import com.kosbrother.fragments.CategoryRecommendFragment;
 import com.kosbrother.fragments.CategoryWeekFragment;
 import com.kosbrother.fragments.CategroyHotNovelsFragment;
@@ -203,7 +203,7 @@ public class CategoryActivity extends SherlockFragmentActivity {
             } else if (position == 3) {
                 kk = CategoryLatestNovelsFragment.newInstance();
             } else if (position == 4) {
-                kk = CategoryNewNovelsFragment.newInstance();
+                kk = CategoryAllNovelsFragment.newInstance();
             }
             return kk;
         }

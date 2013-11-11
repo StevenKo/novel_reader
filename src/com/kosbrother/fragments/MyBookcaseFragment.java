@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import com.novel.reader.R;
 import com.novel.reader.adapter.GridViewAdapter;
 import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.GameAPP;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.LoadMoreGridView;
 
@@ -99,7 +100,7 @@ public class MyBookcaseFragment extends Fragment {
 
             if (novels != null && novels.size() != 0) {
                 try {
-                    myGridViewAdapter = new GridViewAdapter(mActivity, novels,null);
+                    myGridViewAdapter = new GridViewAdapter(mActivity, novels, new ArrayList<GameAPP>());
                     myGrid.setAdapter(myGridViewAdapter);
                 } catch (Exception e) {
 

@@ -37,6 +37,7 @@ public final class CategoryLatestNovelsFragment extends Fragment {
 //    private static int       id;
     private Button           buttonReload;
 	private Activity mActivity;
+	private ArrayList<GameAPP> apps;
     
     @Override
 	  public void onAttach(Activity activity) {
@@ -112,7 +113,6 @@ public final class CategoryLatestNovelsFragment extends Fragment {
 
     private class DownloadChannelsTask extends AsyncTask {
 
-        private ArrayList<GameAPP> apps;
 
 		@Override
         protected void onPreExecute() {
@@ -188,6 +188,7 @@ public final class CategoryLatestNovelsFragment extends Fragment {
             loadmoreLayout.setVisibility(View.GONE);
 
             if (moreNovels != null && moreNovels.size()!=0) {
+            	myGridViewAdapter.addDatas(mActivity,moreNovels,apps);
                 myGridViewAdapter.notifyDataSetChanged();
             } else {
                 checkLoad = false;

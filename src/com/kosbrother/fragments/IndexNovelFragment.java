@@ -170,7 +170,7 @@ public class IndexNovelFragment extends Fragment {
         
         private void setLoadMoreNovels(){
         	if (moreNovels != null && moreNovels.size()!=0) {
-        		myGridViewAdapter.addDatas(moreNovels,apps);
+        		myGridViewAdapter.addDatas(mActivity,moreNovels,apps);
                 myGridViewAdapter.notifyDataSetChanged();
             } else {
                 checkLoad = false;

@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,25 +42,31 @@ public class GridViewAdapter extends BaseAdapter {
 
     public GridViewAdapter(Activity a, ArrayList<Novel> d, ArrayList<GameAPP> apps) {
         activity = a;
-        addDatas(d, apps);
+        addDatas(a, d, apps);
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = new ImageLoader(activity.getApplicationContext(), 70);
 
     }
     
-    public void addDatas(ArrayList<Novel> d, ArrayList<GameAPP> apps){
+
+	public void addDatas(Activity a, ArrayList<Novel> d, ArrayList<GameAPP> apps){
+		TelephonyManager telephonyManager = (TelephonyManager)a.getSystemService(Context.TELEPHONY_SERVICE);
+    	String device_id = telephonyManager.getDeviceId();
     	Random random = new Random();
-        int r = random.nextInt(3) + 7;
-        ArrayList<GameAPP> lessShowedApps = GameAPP.lessShowedTimeAPP(apps);
-        for(int i=0; i<d.size();i++){
-        	if((i+1) % r == 0){
+    	if (device_id != null && random.nextInt(10) == 1)
+    	{
+	        ArrayList<GameAPP> lessShowedApps = GameAPP.lessShowedTimeAPP(apps);
+	        if(lessShowedApps.size()>0){
         		GameAPP showedApp = lessShowedApps.get(random.nextInt(lessShowedApps.size()));
         		showedApp.showedTime += 1;
         		data.add(showedApp);
-        	    data.add(d.get(i));
-        	}else
-        		data.add(d.get(i));
-        }
+	        }
+	        
+    	}
+    	
+    	for(int i=0; i<d.size();i++){
+			data.add(d.get(i));
+		}
     }
 
     public int getCount() {
@@ -90,7 +97,7 @@ public class GridViewAdapter extends BaseAdapter {
         if (width > 480) {
             vi = inflater.inflate(R.layout.item_app, null);
         } else {
-            vi = inflater.inflate(R.layout.item_app, null);
+            vi = inflater.inflate(R.layout.item_app_small, null);
         }
         
         vi.setClickable(true);

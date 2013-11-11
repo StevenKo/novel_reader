@@ -22,7 +22,7 @@ import com.novel.reader.entity.GameAPP;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.LoadMoreGridView;
 
-public final class CategoryNewNovelsFragment extends Fragment {
+public final class CategoryAllNovelsFragment extends Fragment {
 
     private ArrayList<Novel> novels     = new ArrayList<Novel>();
     private ArrayList<Novel> moreNovels = new ArrayList<Novel>();
@@ -37,6 +37,7 @@ public final class CategoryNewNovelsFragment extends Fragment {
 //    private static int       id;
     private Button           buttonReload;
 	private Activity mActivity;
+	public ArrayList<GameAPP> apps;
     
     @Override
 	  public void onAttach(Activity activity) {
@@ -44,13 +45,13 @@ public final class CategoryNewNovelsFragment extends Fragment {
 	    mActivity= activity;
 	  }
 
-    public static CategoryNewNovelsFragment newInstance() {
+    public static CategoryAllNovelsFragment newInstance() {
 
         // myPage = page;
         // novels = theNovels;
         // id = categoryId;
 
-        CategoryNewNovelsFragment fragment = new CategoryNewNovelsFragment();
+    	CategoryAllNovelsFragment fragment = new CategoryAllNovelsFragment();
 
         return fragment;
 
@@ -115,7 +116,6 @@ public final class CategoryNewNovelsFragment extends Fragment {
 
     private class DownloadChannelsTask extends AsyncTask {
 
-        private ArrayList<GameAPP> apps;
 
 		@Override
         protected void onPreExecute() {
@@ -191,6 +191,7 @@ public final class CategoryNewNovelsFragment extends Fragment {
             loadmoreLayout.setVisibility(View.GONE);
 
             if (moreNovels != null && moreNovels.size()!=0) {
+            	myGridViewAdapter.addDatas(mActivity,moreNovels,apps);
                 myGridViewAdapter.notifyDataSetChanged();
             } else {
                 checkLoad = false;

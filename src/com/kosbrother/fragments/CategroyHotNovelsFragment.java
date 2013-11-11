@@ -142,48 +142,5 @@ public class CategroyHotNovelsFragment extends Fragment {
         }
     }
 
-    private class LoadMoreTask extends AsyncTask {
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            // TODO Auto-generated method stub
-
-            moreNovels = NovelAPI.getThisMonthHotNovels();
-            if (moreNovels != null) {
-                for (int i = 0; i < moreNovels.size(); i++) {
-                    novels.add(moreNovels.get(i));
-                }
-                for (int i = 0; i < moreNovels.size(); i++) {
-                    novels.add(moreNovels.get(i));
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            // TODO Auto-generated method stub
-            super.onPostExecute(result);
-
-            loadmoreLayout.setVisibility(View.GONE);
-
-            if (moreNovels != null) {
-                myGridViewAdapter.notifyDataSetChanged();
-            } else {
-                checkLoad = false;
-                Toast.makeText(mActivity, "no more data", Toast.LENGTH_SHORT).show();
-            }
-            myGrid.onLoadMoreComplete();
-
-        }
-    }
 
 }
