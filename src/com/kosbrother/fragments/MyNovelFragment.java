@@ -4,29 +4,44 @@ package com.kosbrother.fragments;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.novel.db.SQLiteNovel;
 import com.novel.reader.BookmarkActivity;
+import com.novel.reader.CategoryActivity;
 import com.novel.reader.ClassicNovelsActivity;
 import com.novel.reader.MyNovelActivity;
 import com.novel.reader.R;
 import com.novel.reader.SettingActivity;
+import com.novel.reader.adapter.GridViewAdapter;
+import com.novel.reader.adapter.GridViewAppAdapter;
 import com.novel.reader.adapter.GridViewIndexBookmarkAdapter;
 import com.novel.reader.adapter.GridViewIndexNovelAdapter;
+import com.novel.reader.api.NovelAPI;
 import com.novel.reader.costum.view.ExpandableHeightGridView;
 import com.novel.reader.entity.Bookmark;
+import com.novel.reader.entity.GameAPP;
 import com.novel.reader.entity.Novel;
+import com.novel.reader.util.NovelReaderUtil;
+import com.taiwan.imageload.ImageLoader;
 
 public final class MyNovelFragment extends Fragment {
 
@@ -51,6 +66,8 @@ public final class MyNovelFragment extends Fragment {
 	private LinearLayout progressLayout;
 	private ScrollView scrollView;
 	private Activity mActivity;
+	public ArrayList<GameAPP> apps;
+	private ImageLoader imageLoader;
 	
 	@Override
 	  public void onAttach(Activity activity) {
@@ -76,6 +93,7 @@ public final class MyNovelFragment extends Fragment {
         super.onResume();
         getData();
     	setViews();
+    	new DownloadAppsTask().execute();
         progressLayout.setVisibility(View.GONE);
         scrollView.scrollTo(0, 0);
     }
@@ -195,6 +213,7 @@ public final class MyNovelFragment extends Fragment {
         novelGridView.setAdapter(novelAdapter);
         bookmarkGridView.setAdapter(bookmarkAdapter);
         
+        
     }
 
     private void findViews() {
@@ -216,4 +235,30 @@ public final class MyNovelFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
+    
+    private class DownloadAppsTask extends AsyncTask {
+
+
+		@Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            apps = NovelAPI.getAppInfo(mActivity);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+        	GridView gridApp = (GridView) myFragmentView.findViewById(R.id.app_grid);
+        	if (apps != null)
+        		gridApp.setAdapter(new GridViewAppAdapter(mActivity, apps));
+            super.onPostExecute(result);
+        }
+    }
+    
+
 }

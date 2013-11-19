@@ -33,28 +33,25 @@ import com.novel.reader.entity.Novel;
 import com.novel.reader.util.NovelReaderUtil;
 import com.taiwan.imageload.ImageLoader;
 
-public class GridViewAdapter extends BaseAdapter {
+public class GridViewAppAdapter extends BaseAdapter {
 
     private Activity         activity;
-    private ArrayList<Object> data = new ArrayList<Object>();
+    private ArrayList<GameAPP> data = new ArrayList<GameAPP>();
     private static LayoutInflater  inflater = null;
     public ImageLoader             imageLoader;
 
-    public GridViewAdapter(Activity a, ArrayList<Novel> d, ArrayList<GameAPP> apps) {
+    public GridViewAppAdapter(Activity a, ArrayList<GameAPP> apps) {
         activity = a;
-        addDatas(a, d, apps);
+        
+        TelephonyManager telephonyManager = (TelephonyManager)a.getSystemService(Context.TELEPHONY_SERVICE);
+    	String device_id = telephonyManager.getDeviceId();
+    	if (device_id != null)
+    		data = apps;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = new ImageLoader(activity.getApplicationContext(), 70);
 
     }
     
-
-	public void addDatas(Activity a, ArrayList<Novel> d, ArrayList<GameAPP> apps){
-    	
-    	for(int i=0; i<d.size();i++){
-			data.add(d.get(i));
-		}
-    }
 
     public int getCount() {
         return data.size();
@@ -69,10 +66,7 @@ public class GridViewAdapter extends BaseAdapter {
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
-    	if (data.get(position) instanceof Novel)
-    		return getNovelGridView(position,convertView,parent, (Novel)data.get(position));
-    	else
-    		return getAppGridView(position,convertView,parent, (GameAPP)data.get(position));
+    	return getAppGridView(position,convertView,parent, (GameAPP)data.get(position));
     }
     
     private View getAppGridView(final int position, View convertView, ViewGroup parent,final GameAPP app){
