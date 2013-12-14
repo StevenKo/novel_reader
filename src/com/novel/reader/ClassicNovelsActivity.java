@@ -26,6 +26,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.android.vending.billing.InAppBillingForNovel;
 import com.google.ads.Ad;
 import com.google.ads.AdListener;
 import com.google.ads.AdRequest;
@@ -55,6 +56,8 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
 
     private AlertDialog.Builder aboutUsDialog;
 
+    private InAppBillingForNovel iap;
+	private LinearLayout bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +79,34 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
         pager.setAdapter(adapter);
 
         setAboutUsDialog();
-        AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
+        
+        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        iap = new InAppBillingForNovel(this, bannerAdView);
         
     }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // very important:
+        if (iap != null && iap.mHelper != null) {
+        	iap.mHelper.dispose();
+        	iap.mHelper = null;
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (iap.mHelper == null) return;
+
+        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        else {
+        }
+    }
+    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,6 +118,7 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0, 7, 7, "購買贊助版").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         itemSearch = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse)
                 .setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
@@ -167,6 +196,9 @@ public class ClassicNovelsActivity extends SherlockFragmentActivity {
         case ID_Report:
         	Report.createReportDialog(this,this.getResources().getString(R.string.report_not_novel_problem),this.getResources().getString(R.string.report_not_article_problem));
             break;
+        case 7:
+        	iap.launchSubscriptionFlow();
+        	break;
         }
         return true;
     }

@@ -29,6 +29,7 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.android.vending.billing.InAppBillingForNovel;
 import com.google.ads.Ad;
 import com.google.ads.AdListener;
 import com.google.ads.AdRequest;
@@ -86,6 +87,9 @@ public class MyDownloadArticleActivity extends SherlockActivity {
     private ProgressDialog                       progressDialog     = null;
 	private Button updateNovelButton;
 	private RelativeLayout novel_layout;
+	
+	private InAppBillingForNovel iap;
+	private LinearLayout bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +116,33 @@ public class MyDownloadArticleActivity extends SherlockActivity {
         setAboutUsDialog();
 
         new DownloadArticlesTask().execute();
-        AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
+        
+        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        iap = new InAppBillingForNovel(this, bannerAdView);
 
 
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // very important:
+        if (iap != null && iap.mHelper != null) {
+        	iap.mHelper.dispose();
+        	iap.mHelper = null;
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (iap.mHelper == null) return;
+
+        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        else {
+        }
     }
 
     private void setViews() {

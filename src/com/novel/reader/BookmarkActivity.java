@@ -3,6 +3,7 @@ package com.novel.reader;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.android.vending.billing.InAppBillingForNovel;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.MyBookmarkFragment;
@@ -39,6 +41,9 @@ public class BookmarkActivity extends SherlockFragmentActivity{
     private static FragmentStatePagerAdapter adapter;
 	private static BookmarkActivity mActivity;
 
+	
+	private InAppBillingForNovel iap;
+	private LinearLayout bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +76,34 @@ public class BookmarkActivity extends SherlockFragmentActivity{
 
         settings = getSharedPreferences(Setting.keyPref, 0);
         alertDeleteBookmark = settings.getBoolean(alertKey, true);
-        AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
+        
+        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        iap = new InAppBillingForNovel(this, bannerAdView);
+        
         if (alertDeleteBookmark)
             showArticleDeleteDialog();
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // very important:
+        if (iap != null && iap.mHelper != null) {
+        	iap.mHelper.dispose();
+        	iap.mHelper = null;
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (iap.mHelper == null) return;
+
+        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        else {
+        }
     }
     
     class NovelPagerAdapter extends FragmentStatePagerAdapter {

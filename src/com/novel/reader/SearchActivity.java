@@ -35,6 +35,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.android.vending.billing.InAppBillingForNovel;
 import com.google.ads.Ad;
 import com.google.ads.AdListener;
 import com.google.ads.AdRequest;
@@ -63,6 +64,9 @@ public class SearchActivity extends SherlockListActivity {
 
     private LinearLayout        layoutNoSearch;
     private AlertDialog.Builder aboutUsDialog;
+    
+    private InAppBillingForNovel iap;
+	private LinearLayout bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +104,32 @@ public class SearchActivity extends SherlockListActivity {
 
         setAboutUsDialog();
         new LoadDataTask().execute();
-        AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
+        
+        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        iap = new InAppBillingForNovel(this, bannerAdView);
 
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // very important:
+        if (iap != null && iap.mHelper != null) {
+        	iap.mHelper.dispose();
+        	iap.mHelper = null;
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (iap.mHelper == null) return;
+
+        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        else {
+        }
     }
 
     private void fetchData() {
@@ -172,6 +200,7 @@ public class SearchActivity extends SherlockListActivity {
         menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0, 7, 7, "購買贊助版").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         item = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse)
                 .setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
@@ -243,6 +272,9 @@ public class SearchActivity extends SherlockListActivity {
             break;
         case ID_SEARCH: // response
             break;
+        case 7:
+        	iap.launchSubscriptionFlow();
+        	break;
         }
         return true;
     }
