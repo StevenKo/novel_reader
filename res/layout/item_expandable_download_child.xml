@@ -13,7 +13,14 @@
 	   	android:gravity="center_vertical"
 	   	android:background="@drawable/custom_list"
    		>
-    
+        
+        <CheckBox android:id="@+id/checkbox_child"
+			    android:layout_width="wrap_content"	 
+		   		android:layout_height="wrap_content"
+		   		android:layout_marginRight="15dp"
+		   		android:layout_marginLeft="3dp"
+			    />
+        
 	    <TextView android:id="@+id/expandlist_child"
 		    android:layout_width="0dp"
 	   		android:layout_height="wrap_content"
@@ -21,10 +28,7 @@
 	   		android:layout_weight="1"
 	   		android:layout_marginLeft="5dp"
 		    />
-	    <CheckBox android:id="@+id/checkbox_child"
-			    android:layout_width="wrap_content"	 
-		   		android:layout_height="wrap_content"
-			    />
+	    
     	<TextView  android:id="@+id/text_child_downloaded"
     	    android:layout_width="wrap_content"	 
 		   	android:layout_height="wrap_content"
