@@ -26,7 +26,7 @@ public class InAppBillingForNovel {
     Context mContext;
     public static boolean mIsYearSubscription = false;
     
-    String IAP_subscription = "year_subscription";
+    String IAP_subscription = "year_subscription_1";
 	private LinearLayout madBannerView;
     
     public InAppBillingForNovel(Context context, LinearLayout adBannerView)
