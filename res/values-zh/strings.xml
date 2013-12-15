@@ -155,6 +155,10 @@
     <string name="InterstitialAd">插页广告</string>
     <string name="BannerAd">横幅广告</string>
     
+    <string name="buy_year_subscription">购买赞助版</string>
+    <string name="buy_fail">购买失败，请再试一次！</string>
+    <string name="restart_novel">购买失败，请再试一次！</string>
+    
     <!-- for load more -->
     <string name="hello">Hello World, LoadMoreListView!</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh...</string>

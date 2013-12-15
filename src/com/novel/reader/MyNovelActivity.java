@@ -118,7 +118,8 @@ public class MyNovelActivity extends SherlockFragmentActivity {
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, 7, 7, "購買贊助版").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        if(!InAppBillingForNovel.mIsYearSubscription)
+        	menu.add(0, 7, 7, getResources().getString(R.string.buy_year_subscription)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
 
         return true;

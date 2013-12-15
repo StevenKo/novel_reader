@@ -381,7 +381,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         menu.add(0, ID_Bookmark, 5, getResources().getString(R.string.menu_add_bookmark)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         menu.add(0, ID_Report, 4, getResources().getString(R.string.menu_report)).setIcon(R.drawable.icon_report)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menu.add(0, 7, 7, "購買贊助版").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        if(!InAppBillingForNovel.mIsYearSubscription)
+        	menu.add(0, 7, 7, getResources().getString(R.string.buy_year_subscription)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
 
         return true;

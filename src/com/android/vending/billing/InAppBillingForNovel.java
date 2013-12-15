@@ -24,7 +24,7 @@ public class InAppBillingForNovel {
     static final String TAG = "iapp";
     public IabHelper mHelper;
     Context mContext;
-    boolean mIsYearSubscription;
+    public static boolean mIsYearSubscription = false;
     
     String IAP_subscription = "year_subscription";
 	private LinearLayout madBannerView;
@@ -133,12 +133,12 @@ public class InAppBillingForNovel {
             if (result.isFailure()) {
             	
             	if(!mIsYearSubscription)
-            		alert("購買失敗，請再試一次！");
+            		alert(mContext.getResources().getString(R.string.buy_fail));
                 return;
             }
             
             if (purchase.getSku().equals(IAP_subscription)) {
-            	alert("請重啟\"小說王\"即是贊助版本，謝謝!");
+            	alert(mContext.getResources().getString(R.string.restart_novel));
             }
 
             Log.d(TAG, "Purchase successful.");

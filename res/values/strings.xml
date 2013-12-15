@@ -156,6 +156,9 @@
     <string name="InterstitialAd">插頁廣告</string>
     <string name="BannerAd">橫幅廣告</string>
     
+    <string name="buy_year_subscription">購買贊助版</string>
+    <string name="buy_fail">購買失敗，請再試一次！</string>
+    <string name="restart_novel">請重啟\"小說王\"即是贊助版本，謝謝!</string>
     <!-- for vpon -->
     <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
