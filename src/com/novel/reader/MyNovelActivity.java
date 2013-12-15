@@ -20,6 +20,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.android.vending.billing.InAppBillingForNovel;
 import com.google.ads.Ad;
 import com.google.ads.AdListener;
 import com.google.ads.AdRequest;
@@ -45,7 +46,11 @@ public class MyNovelActivity extends SherlockFragmentActivity {
     
     private ViewPager                 pager;
     private FragmentStatePagerAdapter adapter;
+    
+    private InAppBillingForNovel iap;
+	private LinearLayout bannerAdView;
 
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +80,32 @@ public class MyNovelActivity extends SherlockFragmentActivity {
         indicator.setViewPager(pager);
 
         setAboutUsDialog();
-        AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
+       
+        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        iap = new InAppBillingForNovel(this, bannerAdView);
 
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // very important:
+        if (iap != null && iap.mHelper != null) {
+        	iap.mHelper.dispose();
+        	iap.mHelper = null;
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (iap.mHelper == null) return;
+
+        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        else {
+        }
     }
 
     @Override
@@ -89,6 +118,9 @@ public class MyNovelActivity extends SherlockFragmentActivity {
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        if(!InAppBillingForNovel.mIsYearSubscription)
+        	menu.add(0, 7, 7, getResources().getString(R.string.buy_year_subscription)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
 
         return true;
     }
@@ -124,6 +156,9 @@ public class MyNovelActivity extends SherlockFragmentActivity {
         case ID_Report:
         	Report.createReportDialog(this,getResources().getString(R.string.report_not_novel_problem),getResources().getString(R.string.report_not_article_problem));
             break;
+        case 7:
+        	iap.launchSubscriptionFlow();
+        	break;
         }
         return true;
     }

@@ -148,11 +148,15 @@
     <string name="no_novel_in_bookcase">目前還沒有收藏或下載的小說</string>
     <string name="no_bookmark_in_my_bookmarks">目前還沒有收集書籤或閱讀過小說章節</string>
     
-    <string name="update_info"><![CDATA[<font color=\'blue\'>V2.8.3:</font> \n\t修複程式錯誤！\n\n<font color=\'blue\'>V2.8:</font> \n\t因為有不少使用者反應廣告佔據版面的問題，我們將閱讀頁的<font color=\'red\'>橫幅式廣告</font>換成<font color=\'red\'>插頁式的廣告</font>，如果使用者想換為原先橫幅式的廣告，可以在"設定"裡做設定，謝謝!]]></string>
+    <string name="update_info"><![CDATA[<font color=\'blue\'>V2.8.5:</font> <br>新增購買贊助版本(免廣告), 懇請大家多多支持!<br><font color=\'blue\'>V2.8.3:</font> <br>修複程式錯誤<br><font color=\'blue\'>V2.8:</font> <br>因為有不少使用者反應廣告佔據版面的問題，我們將閱讀頁的<font color=\'red\'>橫幅式廣告</font>換成<font color=\'red\'>插頁式的廣告</font>，如果使用者想換為原先橫幅式的廣告，可以在"設定"裡做設定，謝謝!]]></string>
     <string name="update">版本更新通知</string>
     <string name="aritcle_ad_type">小說閱讀頁廣告模式</string>
     <string name="InterstitialAd">插頁廣告</string>
     <string name="BannerAd">橫幅廣告</string>
+    
+    <string name="buy_year_subscription">購買贊助版</string>
+    <string name="buy_fail">購買失敗，請再試一次！</string>
+    <string name="restart_novel">請重啟\"小說王\"即是贊助版本，謝謝!</string>
     
     
     <!-- for load more -->
