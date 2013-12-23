@@ -129,26 +129,23 @@ public class IndexNovelFragment extends Fragment {
         	
         	switch (novelFragment) {
 	          case HOT_NOVEL:
-	        	  novels = NovelAPI.getHotNovels();
-	        	  checkLoad = false;
+	        	  moreNovels = NovelAPI.getHotNovels(myPage);
 	        	  break;
 	          case MONTH_NOVEL:
-	        	  novels = NovelAPI.getThisMonthHotNovels();
-	        	  checkLoad = false;
+	        	  moreNovels = NovelAPI.getThisMonthHotNovels(myPage);
 	        	  break;
 	          case WEEK_NOVEL:
-	        	  novels = NovelAPI.getThisWeekHotNovels();
-	        	  checkLoad = false;
+	        	  moreNovels = NovelAPI.getThisWeekHotNovels(myPage);
 	        	  break;
 	          case LATEST_NOVEL:
 	        	  moreNovels = NovelAPI.getLatestUpdateNovels(myPage);
-	              if (moreNovels != null && moreNovels.size()!=0) {
-	                  for (int i = 0; i < moreNovels.size(); i++) {
-	                      novels.add(moreNovels.get(i));
-	                  }
-	              }
 	        	  break;
-	          }
+	        }
+        	if (moreNovels != null && moreNovels.size()!=0) {
+                for (int i = 0; i < moreNovels.size(); i++) {
+                    novels.add(moreNovels.get(i));
+                }
+            }
         	apps = NovelAPI.getAppInfo(mActivity);
 
             return null;
@@ -160,7 +157,7 @@ public class IndexNovelFragment extends Fragment {
             progressLayout.setVisibility(View.GONE);
             loadmoreLayout.setVisibility(View.GONE);
             
-            if (novelFragment==LATEST_NOVEL && myPage > 1)
+            if (myPage > 1)
             	setLoadMoreNovels();
             else{
             	setNovesAdapter();

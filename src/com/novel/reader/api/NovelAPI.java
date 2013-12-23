@@ -525,9 +525,9 @@ public class NovelAPI {
         return articles;
     }
 
-    public static ArrayList<Novel> getThisMonthHotNovels() {
+    public static ArrayList<Novel> getThisMonthHotNovels(int myPage) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
-        String message = getMessageFromServer("GET", "/api/v1/novels/this_month_hot.json", null);
+        String message = getMessageFromServer("GET", "/api/v1/novels/this_month_hot.json" + "?page=" + myPage, null);
         if (message == null) {
             return null;
         } else {
@@ -536,9 +536,9 @@ public class NovelAPI {
 
     }
 
-    public static ArrayList<Novel> getThisWeekHotNovels() {
+    public static ArrayList<Novel> getThisWeekHotNovels(int myPage) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
-        String message = getMessageFromServer("GET", "/api/v1/novels/this_week_hot.json", null);
+        String message = getMessageFromServer("GET", "/api/v1/novels/this_week_hot.json"+ "?page=" + myPage, null);
         if (message == null) {
             return null;
         } else {
@@ -546,9 +546,9 @@ public class NovelAPI {
         }
     }
 
-    public static ArrayList<Novel> getHotNovels() {
+    public static ArrayList<Novel> getHotNovels(int myPage) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
-        String message = getMessageFromServer("GET", "/api/v1/novels/hot.json", null);
+        String message = getMessageFromServer("GET", "/api/v1/novels/hot.json"+ "?page=" + myPage, null);
         if (message == null) {
             return null;
         } else {
@@ -578,9 +578,9 @@ public class NovelAPI {
         }
     }
 
-    public static ArrayList<Novel> getCategoryRecommendNovels(int category_id) {
+    public static ArrayList<Novel> getCategoryRecommendNovels(int category_id, int page) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
-        String message = getMessageFromServer("GET", "/api/v1/novels/category_recommend.json?category_id=" + category_id, null);
+        String message = getMessageFromServer("GET", "/api/v1/novels/category_recommend.json?category_id=" + category_id+ "&page=" + page, null);
         if (message == null) {
             return null;
         } else {
@@ -588,9 +588,9 @@ public class NovelAPI {
         }
     }
 
-    public static ArrayList<Novel> getCategoryThisWeekHotNovels(int category_id) {
+    public static ArrayList<Novel> getCategoryThisWeekHotNovels(int category_id, int page) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
-        String message = getMessageFromServer("GET", "/api/v1/novels/category_this_week_hot.json?category_id=" + category_id, null);
+        String message = getMessageFromServer("GET", "/api/v1/novels/category_this_week_hot.json?category_id=" + category_id+ "&page=" + page, null);
         if (message == null) {
             return null;
         } else {
@@ -598,9 +598,9 @@ public class NovelAPI {
         }
     }
 
-    public static ArrayList<Novel> getCategoryHotNovels(int category_id) {
+    public static ArrayList<Novel> getCategoryHotNovels(int category_id, int page) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
-        String message = getMessageFromServer("GET", "/api/v1/novels/category_hot.json?category_id=" + category_id, null);
+        String message = getMessageFromServer("GET", "/api/v1/novels/category_hot.json?category_id=" + category_id+ "&page=" + page, null);
         if (message == null) {
             return null;
         } else {
@@ -654,7 +654,7 @@ public class NovelAPI {
         }
     }
     
-    public static ArrayList<Novel> getCategoryLatestNovels(int category_id, int page) {
+	public static ArrayList<Novel> getCategoryLatestNovels(int category_id, int page) {
         ArrayList<Novel> novels = new ArrayList<Novel>();
         String message = getMessageFromServer("GET", "/api/v1/novels/category_latest_update.json?category_id=" + category_id + "&page=" + page, null);
         if (message == null) {

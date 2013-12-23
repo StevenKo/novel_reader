@@ -26,7 +26,7 @@ public final class CategoryAllNovelsFragment extends Fragment {
 
     private ArrayList<Novel> novels     = new ArrayList<Novel>();
     private ArrayList<Novel> moreNovels = new ArrayList<Novel>();
-    private static int       myPage     = 1;
+    private int       myPage     = 1;
     private LoadMoreGridView myGrid;
     private GridViewAdapter  myGridViewAdapter;
     private Boolean          checkLoad  = true;
