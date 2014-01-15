@@ -90,7 +90,12 @@ public class BookmarkActivity extends SherlockFragmentActivity{
 
         // very important:
         if (iap != null && iap.mHelper != null) {
-        	iap.mHelper.dispose();
+        	try {
+        		iap.mHelper.dispose();
+        	}catch (IllegalArgumentException ex){
+                ex.printStackTrace();
+            }finally{}
+        	
         	iap.mHelper = null;
         }
     }
