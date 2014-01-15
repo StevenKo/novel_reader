@@ -81,7 +81,8 @@ public class DownloadActivity extends SherlockFragmentActivity {
         new DownloadArticlesTask().execute();
         
         bannerAdView = (LinearLayout) findViewById(R.id.adonView);
-        iap = new InAppBillingForNovel(this, bannerAdView);
+        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        	iap = new InAppBillingForNovel(this, bannerAdView);
 
     }
     

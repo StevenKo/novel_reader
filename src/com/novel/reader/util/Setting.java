@@ -33,6 +33,7 @@ public class Setting {
     public final static String                    keyAppTheme             = "AppTheme";
     public final static String                    keyArticleAdType        = "ArticleAdType";
     public final static String                    keyUpdateAppVersion     = "UpdateAppVersion";
+    public final static String                    keyYearSubscription     = "YearSubscription";
 
     public final static int                       initialTextSize         = 20;                // textsize in pixel
     public final static int                       initialTextLanguage     = 0;                 // 0 繁體, 1 簡體
@@ -61,6 +62,7 @@ public class Setting {
                                                                                   put(keyAppTheme, initialAppTheme);
                                                                                   put(keyArticleAdType,InterstitialAd);
                                                                                   put(keyUpdateAppVersion,0);
+                                                                                  put(keyYearSubscription,0);
                                                                               }
                                                                           };
 

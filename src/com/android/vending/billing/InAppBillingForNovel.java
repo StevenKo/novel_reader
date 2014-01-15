@@ -9,6 +9,7 @@ import com.android.vending.billing.util.Purchase;
 import com.novel.reader.AdViewUtil;
 import com.novel.reader.ArticleActivity;
 import com.novel.reader.R;
+import com.novel.reader.util.Setting;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,7 +25,7 @@ public class InAppBillingForNovel {
     static final String TAG = "iapp";
     public IabHelper mHelper;
     Context mContext;
-    public static boolean mIsYearSubscription = false;
+    public  boolean mIsYearSubscription = false;
     
     String IAP_subscription = "year_subscription_1";
 	private LinearLayout madBannerView;
@@ -111,6 +112,12 @@ public class InAppBillingForNovel {
             Log.d(TAG, "Query inventory was successful.");
             Purchase premiumPurchase = inventory.getPurchase(IAP_subscription);
             mIsYearSubscription = (premiumPurchase != null && premiumPurchase.getPurchaseState() == 0);
+            
+            if(mIsYearSubscription)
+            	Setting.saveSetting(Setting.keyYearSubscription, 1, mContext);
+            else
+            	Setting.saveSetting(Setting.keyYearSubscription, 0, mContext);
+            
             if (!mIsYearSubscription && madBannerView != null){
                 AdViewUtil.setBannerAdView(madBannerView, mContext);
             }
@@ -147,7 +154,7 @@ public class InAppBillingForNovel {
     };
 
 	public void requesetInterstitialAd(Activity activity) {
-		if(!mIsYearSubscription)
+		if(Setting.getSetting(Setting.keyYearSubscription, mContext) ==  0)
 			AdViewUtil.requestInterstitialAd(activity);
 	}
 

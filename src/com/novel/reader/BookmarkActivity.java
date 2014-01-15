@@ -78,7 +78,9 @@ public class BookmarkActivity extends SherlockFragmentActivity{
         alertDeleteBookmark = settings.getBoolean(alertKey, true);
         
         bannerAdView = (LinearLayout) findViewById(R.id.adonView);
-        iap = new InAppBillingForNovel(this, bannerAdView);
+        
+        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        	iap = new InAppBillingForNovel(this, bannerAdView);
         
         if (alertDeleteBookmark)
             showArticleDeleteDialog();
