@@ -86,7 +86,6 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
     private ArrayList<Group>                    mGroups           = new ArrayList<Group>();
     private AlertDialog.Builder                 aboutUsDialog;
     
-    private InAppBillingForNovel iap;
 	private LinearLayout bannerAdView;
 
     @Override
@@ -119,37 +118,11 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         setAboutUsDialog();
         
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	iap = new InAppBillingForNovel(this, null);
+        	AdViewUtil.setBannerAdView(bannerAdView, this);
 
 
     }
     
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        // very important:
-        if (iap != null && iap.mHelper != null) {
-        	try {
-        		iap.mHelper.dispose();
-        	}catch (IllegalArgumentException ex){
-                ex.printStackTrace();
-            }finally{}
-        	
-        	iap.mHelper = null;
-        }
-    }
-    
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (iap.mHelper == null) return;
-
-        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-        else {
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -161,8 +134,12 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
             setGroupsAndAdatper();
             novelLayoutProgress.setVisibility(View.GONE);
         }
+        
+        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
+        	bannerAdView.setVisibility(View.GONE);
 
     }
+    
 
     private void findViews() {
         novelImageView = (ImageView) findViewById(R.id.novel_image);
@@ -432,7 +409,9 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
         	Report.createReportDialog(this,novelName+"("+novelId+")",this.getResources().getString(R.string.report_not_article_problem));  	
             break;
         case 7:
-        	iap.launchSubscriptionFlow();
+        	Intent intent1 = new Intent();
+            intent1.setClass(this, DonateActivity.class);
+            startActivity(intent1);
         	break;
         }
         return true;

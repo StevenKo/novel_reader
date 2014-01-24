@@ -28,12 +28,10 @@ public class InAppBillingForNovel {
     public  boolean mIsYearSubscription = false;
     
     String IAP_subscription = "year_subscription_1";
-	private LinearLayout madBannerView;
     
-    public InAppBillingForNovel(Context context, LinearLayout adBannerView)
+    public InAppBillingForNovel(Context context)
     {
     	mContext = context;
-    	madBannerView = adBannerView;
     	mHelper = new IabHelper(context, base64EncodedPublicKey);
     	mHelper.enableDebugLogging(true);
     	
@@ -113,14 +111,13 @@ public class InAppBillingForNovel {
             Purchase premiumPurchase = inventory.getPurchase(IAP_subscription);
             mIsYearSubscription = (premiumPurchase != null && premiumPurchase.getPurchaseState() == 0);
             
-            if(mIsYearSubscription)
+            if(mIsYearSubscription){
             	Setting.saveSetting(Setting.keyYearSubscription, 1, mContext);
+            	alert("經驗證已購買，十分感謝你！");
+            }
             else
             	Setting.saveSetting(Setting.keyYearSubscription, 0, mContext);
             
-            if (!mIsYearSubscription && madBannerView != null){
-                AdViewUtil.setBannerAdView(madBannerView, mContext);
-            }
             Log.d(TAG, "User is " + (mIsYearSubscription ? IAP_subscription : "not year_subscription"));
             
 

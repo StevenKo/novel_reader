@@ -32,6 +32,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
@@ -90,7 +91,7 @@ public class MainActivity extends SherlockFragmentActivity{
 	String regid;
 	GoogleCloudMessaging gcm;
 	private String local;
-	private InAppBillingForNovel iap;
+
 	private LinearLayout bannerAdView;
 
     
@@ -134,35 +135,16 @@ public class MainActivity extends SherlockFragmentActivity{
         checkDB();
         
         bannerAdView = (LinearLayout) findViewById(R.id.adonView);
-        iap = new InAppBillingForNovel(this, bannerAdView);
+        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        	AdViewUtil.setBannerAdView(bannerAdView, this);
 
     }
     
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        // very important:
-        if (iap != null && iap.mHelper != null) {
-        	try {
-        		iap.mHelper.dispose();
-        	}catch (IllegalArgumentException ex){
-                ex.printStackTrace();
-            }finally{}
-        	
-        	iap.mHelper = null;
-        }
-    }
-    
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (iap.mHelper == null) return;
-
-        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-        else {
-        }
+    protected void onResume() {
+        super.onResume();
+        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
+        	bannerAdView.setVisibility(View.GONE);
     }
     
     private void showUpdateInfoDialog(Activity mActivity){
@@ -296,7 +278,9 @@ public class MainActivity extends SherlockFragmentActivity{
         	Report.createReportDialog(this,this.getResources().getString(R.string.report_not_novel_problem),this.getResources().getString(R.string.report_not_article_problem));
             break;
         case 7:
-        	iap.launchSubscriptionFlow();
+        	Intent intent1 = new Intent();
+            intent1.setClass(this, DonateActivity.class);
+            startActivity(intent1);
         	break;
         }
         return true;

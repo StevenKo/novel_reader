@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
@@ -42,7 +43,6 @@ public class BookmarkActivity extends SherlockFragmentActivity{
 	private static BookmarkActivity mActivity;
 
 	
-	private InAppBillingForNovel iap;
 	private LinearLayout bannerAdView;
 
     @Override
@@ -80,38 +80,18 @@ public class BookmarkActivity extends SherlockFragmentActivity{
         bannerAdView = (LinearLayout) findViewById(R.id.adonView);
         
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	iap = new InAppBillingForNovel(this, bannerAdView);
+            AdViewUtil.setBannerAdView(bannerAdView, this);
         
         if (alertDeleteBookmark)
             showArticleDeleteDialog();
     }
-    
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        // very important:
-        if (iap != null && iap.mHelper != null) {
-        	try {
-        		iap.mHelper.dispose();
-        	}catch (IllegalArgumentException ex){
-                ex.printStackTrace();
-            }finally{}
-        	
-        	iap.mHelper = null;
-        }
+    protected void onResume() {
+        super.onResume();
+        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
+        	bannerAdView.setVisibility(View.GONE);
     }
     
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (iap.mHelper == null) return;
-
-        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-        else {
-        }
-    }
     
     class NovelPagerAdapter extends FragmentStatePagerAdapter {
     	

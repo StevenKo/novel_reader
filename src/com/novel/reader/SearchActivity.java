@@ -65,7 +65,6 @@ public class SearchActivity extends SherlockListActivity {
     private LinearLayout        layoutNoSearch;
     private AlertDialog.Builder aboutUsDialog;
     
-    private InAppBillingForNovel iap;
 	private LinearLayout bannerAdView;
 
     @Override
@@ -107,37 +106,17 @@ public class SearchActivity extends SherlockListActivity {
         
         bannerAdView = (LinearLayout) findViewById(R.id.adonView);
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	iap = new InAppBillingForNovel(this, bannerAdView);
+        	AdViewUtil.setBannerAdView(bannerAdView, this);
 
     }
     
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        // very important:
-        if (iap != null && iap.mHelper != null) {
-        	try {
-        		iap.mHelper.dispose();
-        	}catch (IllegalArgumentException ex){
-                ex.printStackTrace();
-            }finally{}
-        	
-        	iap.mHelper = null;
-        }
+    protected void onResume() {
+        super.onResume();
+        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
+        	bannerAdView.setVisibility(View.GONE);
     }
     
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (iap.mHelper == null) return;
-
-        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-        else {
-        }
-    }
-
     private void fetchData() {
         novels = NovelAPI.searchNovels(keyword);
     }
@@ -280,7 +259,9 @@ public class SearchActivity extends SherlockListActivity {
         case ID_SEARCH: // response
             break;
         case 7:
-        	iap.launchSubscriptionFlow();
+        	Intent intent1 = new Intent();
+            intent1.setClass(this, DonateActivity.class);
+            startActivity(intent1);
         	break;
         }
         return true;

@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
@@ -47,7 +48,6 @@ public class MyNovelActivity extends SherlockFragmentActivity {
     private ViewPager                 pager;
     private FragmentStatePagerAdapter adapter;
     
-    private InAppBillingForNovel iap;
 	private LinearLayout bannerAdView;
 
    
@@ -83,36 +83,10 @@ public class MyNovelActivity extends SherlockFragmentActivity {
        
         bannerAdView = (LinearLayout) findViewById(R.id.adonView);
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	iap = new InAppBillingForNovel(this, bannerAdView);
+        	AdViewUtil.setBannerAdView(bannerAdView, this);
 
     }
     
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        // very important:
-        if (iap != null && iap.mHelper != null) {
-        	try {
-        		iap.mHelper.dispose();
-        	}catch (IllegalArgumentException ex){
-                ex.printStackTrace();
-            }finally{}
-        	
-        	iap.mHelper = null;
-        }
-    }
-    
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (iap.mHelper == null) return;
-
-        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-        else {
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,7 +137,9 @@ public class MyNovelActivity extends SherlockFragmentActivity {
         	Report.createReportDialog(this,getResources().getString(R.string.report_not_novel_problem),getResources().getString(R.string.report_not_article_problem));
             break;
         case 7:
-        	iap.launchSubscriptionFlow();
+        	Intent intent1 = new Intent();
+            intent1.setClass(this, DonateActivity.class);
+            startActivity(intent1);
         	break;
         }
         return true;
@@ -215,7 +191,11 @@ public class MyNovelActivity extends SherlockFragmentActivity {
         int position = pager.getCurrentItem();
         pager.setAdapter(adapter);
         pager.setCurrentItem(position);
+        
+        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
+        	bannerAdView.setVisibility(View.GONE);
     }
+    
 
     public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
         final float centerX = 320 / 2.0f;

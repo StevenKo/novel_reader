@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal" >
+    <ImageView android:id="@+id/novel_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/app_icon"
+            android:layout_marginTop="15dp"
+            />
+    <TextView android:id="@+id/novel_name"
+                android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:text="小說王需要你"
+            	android:textSize="18dp"
+            	android:textStyle="bold"
+            	android:layout_marginTop="15dp"
+                />
+    <TextView  android:id="@+id/novel_author"
+                android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:text="現在只要贊助'小說王', 即可以免除廣告！"
+            	android:textColor="#f00"
+            	android:layout_marginTop="5dp"
+                />
+   	<TextView  android:id="@+id/novel_author"
+                android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:text="小說王開發者、設計師、編輯之前皆是無薪開發, 所以不得不在APP裡面, 放一些廣告, 造成大家的困擾, 我們十分抱歉！希望大家可以贊助我們, 也享受看小說不再受到廣告的干擾, 謝謝"
+            	android:layout_marginTop="5dp"
+            	android:layout_marginRight="5dp"
+            	android:layout_marginLeft="5dp"
+                />
+   	<Button android:id="@+id/donate_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           	android:text="贊助小說王"
+            android:textSize="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            />
+   	<Button android:id="@+id/validate_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           	android:text="已購買, 重新驗證!"
+            android:textSize="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            />
+
+</LinearLayout>

@@ -98,7 +98,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	private LinearLayout articleLayout;
 	private int articleAdType;
 
-	private InAppBillingForNovel iap;
 	private LinearLayout bannerAdView;
 	
 
@@ -159,33 +158,6 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
         setAboutUsDialog();
         
-    }
-    
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        // very important:
-        if (iap != null && iap.mHelper != null) {
-        	try {
-        		iap.mHelper.dispose();
-        	}catch (IllegalArgumentException ex){
-                ex.printStackTrace();
-            }finally{}
-        	
-        	iap.mHelper = null;
-        }
-    }
-    
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (iap.mHelper == null) return;
-
-        if (!iap.mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-        else {
-        }
     }
     
     
@@ -428,7 +400,9 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         	Report.createReportDialog(this,novelName+"("+novelId+")",myAricle.getTitle()+"(Num:"+myAricle.getNum()+")");  	
             break;
         case 7:
-        	iap.launchSubscriptionFlow();
+        	Intent intent1 = new Intent();
+            intent1.setClass(this, DonateActivity.class);
+            startActivity(intent1);
         	break;
         }
         return true;
@@ -472,8 +446,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
             myAricle.setNovelId(novelId);
 
             new GetLastPositionTask().execute();
-            if(articleAdType == Setting.InterstitialAd && iap != null)
-            	iap.requesetInterstitialAd(ArticleActivity.this);
+            if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
+                AdViewUtil.requestInterstitialAd(ArticleActivity.this);
 
         }
     }
@@ -545,8 +519,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 articleScrollView.scrollTo(0, 0);
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
-                if(articleAdType == Setting.InterstitialAd && iap != null)
-                	iap.requesetInterstitialAd(ArticleActivity.this);
+                if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
+                    AdViewUtil.requestInterstitialAd(ArticleActivity.this);
 
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_data), Toast.LENGTH_SHORT).show();
@@ -586,8 +560,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 articleScrollView.scrollTo(0, 0);
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
-                if(articleAdType == Setting.InterstitialAd && iap != null)
-                	iap.requesetInterstitialAd(ArticleActivity.this);
+                if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
+                    AdViewUtil.requestInterstitialAd(ArticleActivity.this);
 
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_up), Toast.LENGTH_SHORT).show();
@@ -625,8 +599,8 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 articleScrollView.scrollTo(0, 0);
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
-                if(articleAdType == Setting.InterstitialAd && iap != null)
-                	iap.requesetInterstitialAd(ArticleActivity.this);
+                if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
+                    AdViewUtil.requestInterstitialAd(ArticleActivity.this);
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_down), Toast.LENGTH_SHORT).show();
             }
@@ -751,7 +725,9 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         
         bannerAdView = (LinearLayout) findViewById(R.id.adonView);
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	iap = new InAppBillingForNovel(this, bannerAdView);
+            AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
+        else
+        	((LinearLayout) findViewById(R.id.adonView)).setVisibility(View.GONE);
 
     }
 

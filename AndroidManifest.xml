@@ -54,6 +54,12 @@
             android:screenOrientation="portrait" 
             >
         </activity>
+        <activity
+            android:name="com.novel.reader.DonateActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" 
+            >
+        </activity>
         <activity      
             android:name="com.novel.reader.SearchActivity"
             android:configChanges="keyboardHidden|orientation"
