@@ -1,6 +1,8 @@
 package com.novel.reader.adapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 import android.app.Activity;
@@ -228,7 +230,16 @@ public class GridViewAdapter extends BaseAdapter {
         } else {
             textSerialize.setText("全本");
         }
-
+        
+        String format = "yy-MM-dd";
+        SimpleDateFormat formater = new SimpleDateFormat(format);
+        Date today = new Date();
+        String currentDateTimeString = formater.format(today);
+        if(currentDateTimeString.equals(novel.getLastUpdate())){
+        	TextView textNewArticle = (TextView) vi.findViewById(R.id.new_article);
+        	textNewArticle.setVisibility(View.VISIBLE);
+        }
+        
         return vi;
     }
 }

@@ -13,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.novel.reader.R;
+import com.novel.reader.adapter.GridViewAdapter;
 import com.novel.reader.adapter.GridViewDownloadAdapter;
 import com.novel.reader.api.NovelAPI;
+import com.novel.reader.entity.GameAPP;
 import com.novel.reader.entity.Novel;
 import com.taiwan.imageload.LoadMoreGridView;
 
@@ -27,6 +29,7 @@ public class MyDownloadFragment extends Fragment {
     private LinearLayout            loadmoreLayout;
     private LinearLayout            noDataLayout;
 	private Activity mActivity;
+	public ArrayList<Novel> novelsFromServer;
     
     @Override
 	  public void onAttach(Activity activity) {
@@ -120,8 +123,30 @@ public class MyDownloadFragment extends Fragment {
                 myGrid.setVisibility(View.GONE);
                 noDataLayout.setVisibility(View.VISIBLE);
             }
-            new UpdateServerDownloadTask().execute();
+//            new UpdateServerDownloadTask().execute();
+            new getNovelsInfoFromServerTask().execute();
         }
+    }
+    
+    private class getNovelsInfoFromServerTask extends AsyncTask {
+
+		@Override
+		protected Object doInBackground(Object... params) {
+
+			novelsFromServer = NovelAPI.getCollectNovelsInfoFromServer(novels);
+			return null;
+		}
+		
+		@Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            if(novelsFromServer != null){
+            	myGridViewAdapter = new GridViewDownloadAdapter(mActivity, novelsFromServer);
+                myGrid.setAdapter(myGridViewAdapter);
+                NovelAPI.updateNovelsInfo(novelsFromServer, mActivity);
+            }
+        }
+    	
     }
     
     private class UpdateServerDownloadTask extends AsyncTask {

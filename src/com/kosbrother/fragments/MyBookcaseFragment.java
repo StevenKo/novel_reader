@@ -28,6 +28,7 @@ public class MyBookcaseFragment extends Fragment {
     private LinearLayout     loadmoreLayout;
     private LinearLayout     noDataLayout;
 	private Activity mActivity;
+	public ArrayList<Novel> novelsFromServer;
     
     @Override
 	  public void onAttach(Activity activity) {
@@ -109,9 +110,32 @@ public class MyBookcaseFragment extends Fragment {
                 myGrid.setVisibility(View.GONE);
                 noDataLayout.setVisibility(View.VISIBLE);
             }
-            new UpdateServerCollectTask().execute();
+//            new UpdateServerCollectTask().execute();
+            new getNovelsInfoFromServerTask().execute();
         }
     }
+    
+    private class getNovelsInfoFromServerTask extends AsyncTask {
+
+		@Override
+		protected Object doInBackground(Object... params) {
+
+			novelsFromServer = NovelAPI.getCollectNovelsInfoFromServer(novels);
+			return null;
+		}
+		
+		@Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            if(novelsFromServer != null){
+            	myGridViewAdapter = new GridViewAdapter(mActivity, novelsFromServer, new ArrayList<GameAPP>());
+            	myGrid.setAdapter(myGridViewAdapter);
+            	NovelAPI.updateNovelsInfo(novelsFromServer, mActivity);
+            }
+        }
+    	
+    }
+
     
     private class UpdateServerCollectTask extends AsyncTask {
 

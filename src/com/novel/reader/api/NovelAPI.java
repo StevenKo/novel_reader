@@ -268,6 +268,15 @@ public class NovelAPI {
         SQLiteNovel db = new SQLiteNovel(context);
         db.deleteArticles(articles);
     }
+    
+    public static void updateNovelsInfo(ArrayList<Novel> novels, Context context){
+    	SQLiteNovel db = new SQLiteNovel(context);
+    	for (Novel novel: novels){
+    		novel.setIsDownload(db.isNovelDownloaded(novel.getId()));
+    		novel.setIsCollected(db.isNovelCollected(novel.getId()));
+    		db.updateNovel(novel);
+    	}
+    }
 
     public static boolean collecNovel(final Novel novel, final Context context) {
         novel.setIsCollected(true);
@@ -348,6 +357,21 @@ public class NovelAPI {
         // }
 
         return true;
+    }
+    
+    public static ArrayList<Novel> getCollectNovelsInfoFromServer(ArrayList<Novel> collectNovels){
+    	String idLst = "";
+        for (int i = 0; i < collectNovels.size(); i++)
+            idLst = collectNovels.get(i).getId() + "," + idLst;
+        idLst = idLst.substring(0, idLst.length() - 1);
+        
+        ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/collect_novels_info.json?novels_id=" + idLst, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
     }
 
     public static ArrayList<Novel> searchNovels(String keyword) {
