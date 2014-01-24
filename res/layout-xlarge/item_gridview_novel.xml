@@ -125,17 +125,35 @@
 	              android:layout_marginTop="2px">
 		    </TextView>
 	        </RelativeLayout>
+	        <RelativeLayout android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:layout_marginRight="10px"
+	        >
 	        <TextView
 	            android:id="@+id/serializing"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/serializing"
-	            android:layout_alignParentRight="true"
 	            android:textSize="20px" 
 	              android:textColor="#FF3333"
 	              android:typeface="serif"
 	              android:layout_marginTop="3px">
 	        </TextView>
+	        
+	        <TextView
+	            android:id="@+id/new_article"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="今日更新"
+	            android:layout_alignParentRight="true"
+	            android:textSize="20px" 
+	            android:textColor="#3333ff"
+	            android:typeface="serif"
+	            android:layout_marginTop="3px"
+	            android:visibility="gone">
+	        </TextView>
+	        </RelativeLayout>
 	    </LinearLayout>
     
     </LinearLayout>

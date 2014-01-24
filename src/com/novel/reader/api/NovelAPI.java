@@ -363,7 +363,8 @@ public class NovelAPI {
     	String idLst = "";
         for (int i = 0; i < collectNovels.size(); i++)
             idLst = collectNovels.get(i).getId() + "," + idLst;
-        idLst = idLst.substring(0, idLst.length() - 1);
+        if (idLst.length() > 0)
+        	idLst = idLst.substring(0, idLst.length() - 1);
         
         ArrayList<Novel> novels = new ArrayList<Novel>();
         String message = getMessageFromServer("GET", "/api/v1/novels/collect_novels_info.json?novels_id=" + idLst, null);
