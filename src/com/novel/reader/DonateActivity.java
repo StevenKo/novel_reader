@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.android.vending.billing.InAppBillingForNovel;
 import com.novel.reader.util.Setting;
 
@@ -80,6 +81,16 @@ public class DonateActivity extends SherlockFragmentActivity {
         }
         else {
         }
+    }
+    
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+        case android.R.id.home:
+            finish();
+        }
+		return true;
     }
 
 	

@@ -150,7 +150,7 @@
     <string name="no_novel_in_bookcase">目前還沒有收藏或下載的小說</string>
     <string name="no_bookmark_in_my_bookmarks">目前還沒有收集書籤或閱讀過小說章節</string>
     
-    <string name="update_info"><![CDATA[<font color=\'blue\'>V2.9.1:</font> <br>新增穿越小說的類別<br><font color=\'blue\'>V2.9.0:</font> <br>更換小說類別、推薦方式，新增3000本小說<br><font color=\'blue\'>V2.8.5:</font> <br>新增購買<font color=\'red\'>贊助版本(免廣告)</font>, 懇請大家多多支持!<br><font color=\'blue\'>V2.8:</font> <br>因為有不少使用者反應廣告佔據版面的問題，我們將閱讀頁的<font color=\'red\'>橫幅式廣告</font>換成<font color=\'red\'>插頁式的廣告</font>，如果使用者想換為原先橫幅式的廣告，可以在"設定"裡做設定，謝謝!]]></string>
+    <string name="update_info"><![CDATA[<font color=\'blue\'>V2.9.2:</font> <br>顯示今日更新小說<br><font color=\'blue\'>V2.9.0:</font> <br>更換小說類別、推薦方式，新增3000本小說<br><font color=\'blue\'>V2.8.5:</font> <br>新增購買<font color=\'red\'>贊助版本(免廣告)</font>, 懇請大家多多支持!<br><font color=\'blue\'>V2.8:</font> <br>因為有不少使用者反應廣告佔據版面的問題，我們將閱讀頁的<font color=\'red\'>橫幅式廣告</font>換成<font color=\'red\'>插頁式的廣告</font>，如果使用者想換為原先橫幅式的廣告，可以在"設定"裡做設定，謝謝!]]></string>
     <string name="update">版本更新通知</string>
     <string name="aritcle_ad_type">小說閱讀頁廣告模式</string>
     <string name="InterstitialAd">插頁廣告</string>
@@ -159,6 +159,14 @@
     <string name="buy_year_subscription">購買贊助版</string>
     <string name="buy_fail">購買失敗，請再試一次！</string>
     <string name="restart_novel">請重啟\"小說王\"即是贊助版本，謝謝!</string>
+    
+    <string name="need_you">小說王需要你</string>
+    <string name="notice_no_ad">現在只要贊助\'小說王\', 即可以免除廣告！</string>
+    <string name="donate_des">小說王開發者、設計師、編輯之前皆是無薪開發, 所以不得不在APP裡面, 放一些廣告, 造成大家的困擾, 我們十分抱歉！希望大家可以贊助我們, 也享受看小說不再受到廣告的干擾, 謝謝!</string>
+    <string name="donate_app">贊助小說王</string>
+    <string name="verify_buy">已購買, 重新驗證!</string>
+    
+    
     <!-- for vpon -->
     <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>

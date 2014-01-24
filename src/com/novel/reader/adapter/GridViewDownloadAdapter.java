@@ -111,7 +111,7 @@ public class GridViewDownloadAdapter extends BaseAdapter {
         }
 
         if (data.get(position).isSerializing()) {
-            textSerialize.setText("連載中...");
+        	textSerialize.setText(activity.getResources().getString(R.string.serializing));
         } else {
             textSerialize.setText("全本");
         }

@@ -218,7 +218,7 @@ public class GridViewAppAdapter extends BaseAdapter {
         }
 
         if (novel.isSerializing()) {
-            textSerialize.setText("連載中...");
+        	textSerialize.setText(activity.getResources().getString(R.string.serializing));
         } else {
             textSerialize.setText("全本");
         }

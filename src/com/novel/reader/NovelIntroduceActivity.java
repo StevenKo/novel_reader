@@ -116,9 +116,6 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
 
         setViews();
         setAboutUsDialog();
-        
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	AdViewUtil.setBannerAdView(bannerAdView, this);
 
 
     }
@@ -135,8 +132,6 @@ public class NovelIntroduceActivity extends SherlockFragmentActivity {
             novelLayoutProgress.setVisibility(View.GONE);
         }
         
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
-        	bannerAdView.setVisibility(View.GONE);
 
     }
     

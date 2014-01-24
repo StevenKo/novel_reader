@@ -149,7 +149,7 @@
     <string name="no_novel_in_bookcase">目前还没有收藏或下载的小说</string>
     <string name="no_bookmark_in_my_bookmarks">目前还没有收集书签或阅读过小说章节</string>
     
-    <string name="update_info"><![CDATA[<font color=\'blue\'>V2.9.1:</font> <br>新增穿越小说的类别<br><font color=\'blue\'>V2.9.0:</font> <br>更换小说类别、推荐方式，新增3000本小说<br><font color=\'blue\'>V2.8.5: </font> <br>新增​​购买<font color=\'red\'>赞助版本(免广告)</font>, 恳请大家多多支持!<br><font color=\'blue\'>V2 .8:</font> <br>因为有不少使用者反应广告占据版面的问题，我们将阅读页的<font color=\'red\'>横幅式广告</font>换成<font color =\'red\'>插页式的广告</font>，如果使用者想换为原先横幅式的广告，可以在"设定"里做设定，谢谢!]]></string>
+    <string name="update_info"><![CDATA[<font color=\'blue\'>V2.9.2:</font> <br>显示今日更新小说<br><font color=\'blue\'>V2.9.0:</font> <br>更换小说类别、推荐方式，新增3000本小说<br><font color=\'blue\'>V2.8.5: </font> <br>新增​​购买<font color=\'red\'>赞助版本(免广告)</font>, 恳请大家多多支持!<br><font color=\'blue\'>V2 .8:</font> <br>因为有不少使用者反应广告占据版面的问题，我们将阅读页的<font color=\'red\'>横幅式广告</font>换成<font color =\'red\'>插页式的广告</font>，如果使用者想换为原先横幅式的广告，可以在"设定"里做设定，谢谢!]]></string>
     <string name="update">版本更新通知</string>
     <string name="aritcle_ad_type">小说阅读页广告模式</string>
     <string name="InterstitialAd">插页广告</string>
@@ -158,6 +158,12 @@
     <string name="buy_year_subscription">购买赞助版</string>
     <string name="buy_fail">购买失败，请再试一次！</string>
     <string name="restart_novel">购买失败，请再试一次！</string>
+    
+    <string name="need_you">小说王需要你</string>
+    <string name="notice_no_ad">现在只要赞助\'小说王\', 即可以免除广告！ </string>
+    <string name="donate_des">小说王开发者、设计师、编辑之前皆是无薪开发, 所以不得不在APP里面, 放一些广告, 造成大家的困扰, 我们十分抱歉！希望大家可以赞助我们, 也享受看小说不再受到广告的干扰, 谢谢!</string>
+    <string name="donate_app">赞助小说王</string>
+    <string name="verify_buy">已购买, 重新验证!</string>
     
     <!-- for load more -->
     <string name="hello">Hello World, LoadMoreListView!</string>
