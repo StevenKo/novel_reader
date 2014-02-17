@@ -78,18 +78,12 @@ public class DownloadActivity extends SherlockFragmentActivity {
         }
 
         new DownloadArticlesTask().execute();
-        
-        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	AdViewUtil.setBannerAdView(bannerAdView, this);
 
     }
     
     @Override
     protected void onResume() {
         super.onResume();
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
-        	bannerAdView.setVisibility(View.GONE);
     }
     
 
@@ -143,7 +137,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
             // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
             break;
         case ID_SELECT_ALL: // setting
-            if (articleList.size() != 0) {
+            if (articleList != null && articleList.size() != 0) {
                 Toast.makeText(DownloadActivity.this, getResources().getString(R.string.menu_add_all), Toast.LENGTH_SHORT).show();
                 downloadCount = 0;
                 for (int i = 0; i < mGroups.size(); i++) {
@@ -161,7 +155,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
             }
             break;
         case ID_SELECT_NONE: // response
-            if (articleList.size() != 0) {
+            if (articleList != null && articleList.size() != 0) {
                 Toast.makeText(DownloadActivity.this, getResources().getString(R.string.menu_remove_all), Toast.LENGTH_SHORT).show();
                 downloadCount = 0;
                 for (int i = 0; i < mGroups.size(); i++) {
