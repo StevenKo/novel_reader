@@ -121,6 +121,8 @@ public class MyBookcaseFragment extends Fragment {
 		protected Object doInBackground(Object... params) {
 
 			novelsFromServer = NovelAPI.getCollectNovelsInfoFromServer(novels);
+			if(novelsFromServer != null)
+				NovelAPI.updateNovelsInfo(novelsFromServer, mActivity);
 			return null;
 		}
 		
@@ -130,7 +132,6 @@ public class MyBookcaseFragment extends Fragment {
             if(novelsFromServer != null){
             	myGridViewAdapter = new GridViewAdapter(mActivity, novelsFromServer, new ArrayList<GameAPP>());
             	myGrid.setAdapter(myGridViewAdapter);
-            	NovelAPI.updateNovelsInfo(novelsFromServer, mActivity);
             }
         }
     	

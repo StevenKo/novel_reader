@@ -134,6 +134,8 @@ public class MyDownloadFragment extends Fragment {
 		protected Object doInBackground(Object... params) {
 
 			novelsFromServer = NovelAPI.getCollectNovelsInfoFromServer(novels);
+			if(novelsFromServer != null)
+				NovelAPI.updateNovelsInfo(novelsFromServer, mActivity);
 			return null;
 		}
 		
@@ -143,7 +145,6 @@ public class MyDownloadFragment extends Fragment {
             if(novelsFromServer != null){
             	myGridViewAdapter = new GridViewDownloadAdapter(mActivity, novelsFromServer);
                 myGrid.setAdapter(myGridViewAdapter);
-                NovelAPI.updateNovelsInfo(novelsFromServer, mActivity);
             }
         }
     	
