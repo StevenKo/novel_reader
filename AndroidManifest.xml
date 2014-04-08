@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.novel.reader"
-    android:versionCode="51"
-    android:versionName="2.9.5"
+    android:versionCode="52"
+    android:versionName="2.9.6"
     android:installLocation="auto" >
 
 <!-- android:theme="@style/Theme.Sherlock.Light.DarkActionBar"     -->
@@ -102,12 +102,12 @@
         <activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
         
+        
 		<activity
-            android:name="com.vpon.widget.VponActivity" 
+            android:name="com.vpadn.widget.VpadnActivity"
             android:configChanges="orientation|keyboardHidden|navigation|keyboard|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent"
             android:hardwareAccelerated="true"
-            >
+            android:theme="@android:style/Theme.Translucent" >
         </activity>
         
         <!--HODo Ad 設定  -->

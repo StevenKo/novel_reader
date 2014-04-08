@@ -53,45 +53,45 @@ public class NovelAPI {
     public static void sendClickInfo(Context context, int appid){
 //    	String device_id = Settings.Secure.getString(context.getContentResolver(),Settings.Secure.ANDROID_ID);
     	
-    	TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-    	String device_id = telephonyManager.getDeviceId();
-    	
-    	String ip = DeviceUtils.getIPAddress(true);
-    	
-    	HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://www.inapp.tw/adlog/");
-
-        try {
-            // Add your data
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair("ip", ip));
-            nameValuePairs.add(new BasicNameValuePair("appid", appid+""));
-            nameValuePairs.add(new BasicNameValuePair("imei", device_id));
-            nameValuePairs.add(new BasicNameValuePair("bigtype", "3"));
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));
-
-            // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(httppost);
-            HttpEntity httpEntity = response.getEntity();
-            InputStream is = httpEntity.getContent();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    is, "UTF-8"));
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            is.close();
-            String json = sb.toString();
-            
-        } catch (ClientProtocolException e) {
-        } catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+//    	TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+//    	String device_id = telephonyManager.getDeviceId();
+//    	
+//    	String ip = DeviceUtils.getIPAddress(true);
+//    	
+//    	HttpClient httpclient = new DefaultHttpClient();
+//        HttpPost httppost = new HttpPost("http://www.inapp.tw/adlog/");
+//
+//        try {
+//            // Add your data
+//            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+//            nameValuePairs.add(new BasicNameValuePair("ip", ip));
+//            nameValuePairs.add(new BasicNameValuePair("appid", appid+""));
+//            nameValuePairs.add(new BasicNameValuePair("imei", device_id));
+//            nameValuePairs.add(new BasicNameValuePair("bigtype", "3"));
+//            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));
+//
+//            // Execute HTTP Post Request
+//            HttpResponse response = httpclient.execute(httppost);
+//            HttpEntity httpEntity = response.getEntity();
+//            InputStream is = httpEntity.getContent();
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(
+//                    is, "UTF-8"));
+//            StringBuilder sb = new StringBuilder();
+//            String line = null;
+//            while ((line = reader.readLine()) != null) {
+//                sb.append(line + "\n");
+//            }
+//            is.close();
+//            String json = sb.toString();
+//            
+//        } catch (ClientProtocolException e) {
+//        } catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} 
     	
 //    	String message = getMessageFromServer("GET", "", null,GAME_HOST + "/adlog" + "?ip="+ip+"&appid="+appid+"&imei="+device_id+"&bigtype=3");
 //		return message;
@@ -101,29 +101,39 @@ public class NovelAPI {
     	if(apps!=null)
     		return apps;
     	apps = new ArrayList<GameAPP>();
-    	String message = getMessageFromServer("GET", "", null,GAME_HOST+"/api/spread?index=1&count=15");
-    	if (message == null) {
-    		return null;
-        } else{
-        	try {
-	        	 JSONArray articlesArray = new JSONArray(message.toString());
-	             for (int i = 0; i < articlesArray.length(); i++) {
-	            
-		             int id = articlesArray.getJSONObject(i).getInt("id");
-		             int appid = articlesArray.getJSONObject(i).getInt("appid");
-		             String title = articlesArray.getJSONObject(i).getString("title");
-		             String description = articlesArray.getJSONObject(i).getString("description");
-		             String imageUrl = articlesArray.getJSONObject(i).getString("imageUrl");
-		             String appStoreUrl = articlesArray.getJSONObject(i).getString("appStoreUrl");
-		             GameAPP app = new GameAPP(id,appid,title,description,imageUrl,appStoreUrl);
-		             apps.add(app);
-	             }
-             
-	             return apps;
-             }catch(Exception e){
-            	 return null;
-             }
-        }
+    	int id = 0;
+        int appid = 0;
+        String title = "AndroMoney理財幫手";
+        String description = "榮獲Google Play 首頁之效率排行工具之記帳理財APP。";
+        String imageUrl = "";
+        String appStoreUrl = "https://play.google.com/store/apps/details?id=com.kpmoney.android";
+        GameAPP app = new GameAPP(id,appid,title,description,imageUrl,appStoreUrl);
+        apps.add(app);
+        return apps;
+        
+//    	String message = getMessageFromServer("GET", "", null,GAME_HOST+"/api/spread?index=1&count=15");
+//    	if (message == null) {
+//    		return null;
+//        } else{
+//        	try {
+//	        	 JSONArray articlesArray = new JSONArray(message.toString());
+//	             for (int i = 0; i < articlesArray.length(); i++) {
+//	            
+//		             int id = articlesArray.getJSONObject(i).getInt("id");
+//		             int appid = articlesArray.getJSONObject(i).getInt("appid");
+//		             String title = articlesArray.getJSONObject(i).getString("title");
+//		             String description = articlesArray.getJSONObject(i).getString("description");
+//		             String imageUrl = articlesArray.getJSONObject(i).getString("imageUrl");
+//		             String appStoreUrl = articlesArray.getJSONObject(i).getString("appStoreUrl");
+//		             GameAPP app = new GameAPP(id,appid,title,description,imageUrl,appStoreUrl);
+//		             apps.add(app);
+//	             }
+//             
+//	             return apps;
+//             }catch(Exception e){
+//            	 return null;
+//             }
+//        }
     }
 
     public static ArrayList<Bookmark> getAllRecentReadBookmarks(Context context) {

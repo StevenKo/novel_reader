@@ -14,6 +14,6 @@
 	<classpathentry kind="lib" path="libs/InMobiAdNetwork-3.7.1.jar"/>
 	<classpathentry kind="lib" path="libs/InMobiCommons-3.7.1.jar"/>
 	<classpathentry kind="lib" path="libs/libadapterinmobi.jar"/>
-	<classpathentry kind="lib" path="libs/vpadn-sdk-obf401-20803102.jar"/>
+	<classpathentry kind="lib" path="libs/vpadn-sdk-obf422-81304102.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

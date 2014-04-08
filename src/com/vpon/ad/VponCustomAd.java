@@ -1,7 +1,11 @@
 package com.vpon.ad;
 
+
+import java.util.HashSet;
+
 import android.app.Activity;
- 
+import android.util.Log;
+
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.mediation.MediationAdRequest;
@@ -9,20 +13,18 @@ import com.google.ads.mediation.customevent.CustomEventBanner;
 import com.google.ads.mediation.customevent.CustomEventBannerListener;
 import com.google.ads.mediation.customevent.CustomEventInterstitial;
 import com.google.ads.mediation.customevent.CustomEventInterstitialListener;
-import com.vpon.ads.VponAd;
-import com.vpon.ads.VponAdListener;
-import com.vpon.ads.VponAdRequest;
-import com.vpon.ads.VponAdSize;
-import com.vpon.ads.VponBanner;
-import com.vpon.ads.VponInterstitialAd;
-import com.vpon.ads.VponPlatform;
- 
-//TODO: 這class完整路徑需要註冊在admob mediation web上
+import com.vpadn.ads.VpadnAd;
+import com.vpadn.ads.VpadnAdListener;
+import com.vpadn.ads.VpadnAdRequest;
+import com.vpadn.ads.VpadnAdSize;
+import com.vpadn.ads.VpadnBanner;
+import com.vpadn.ads.VpadnInterstitialAd;
+
 public class VponCustomAd implements CustomEventBanner, CustomEventInterstitial {
- 
-	private VponBanner vponBanner = null;
-	private VponInterstitialAd interstitialAd = null;
- 
+
+	private VpadnBanner vponBanner = null;
+	private VpadnInterstitialAd interstitialAd = null;
+
 	@Override
 	public void destroy() {
 		if (vponBanner != null) {
@@ -34,26 +36,26 @@ public class VponCustomAd implements CustomEventBanner, CustomEventInterstitial 
 			interstitialAd = null;
 		}
 	}
- 
+
 	/*
-	 * 將admob AdSize轉換成 VponAdSize
+	 * 
 	 */
-	private VponAdSize getVponAdSizeByAdSize(AdSize adSize) {
- 
+	private VpadnAdSize getVponAdSizeByAdSize(AdSize adSize) {
+
 		if (adSize.equals(AdSize.BANNER)) {
-			return VponAdSize.BANNER;
+			return VpadnAdSize.BANNER;
 		} else if (adSize.equals(AdSize.IAB_BANNER)) {
-			return VponAdSize.IAB_BANNER;
+			return VpadnAdSize.IAB_BANNER;
 		} else if (adSize.equals(AdSize.IAB_LEADERBOARD)) {
-			return VponAdSize.IAB_LEADERBOARD;
+			return VpadnAdSize.IAB_LEADERBOARD;
 		} else if (adSize.equals(AdSize.IAB_MRECT)) {
-			return VponAdSize.IAB_MRECT;
+			return VpadnAdSize.IAB_MRECT;
 		} else if (adSize.equals(AdSize.IAB_WIDE_SKYSCRAPER)) {
-			return VponAdSize.IAB_WIDE_SKYSCRAPER;
+			return VpadnAdSize.IAB_WIDE_SKYSCRAPER;
 		} else if (adSize.equals(AdSize.SMART_BANNER)) {
-			return VponAdSize.SMART_BANNER;
+			return VpadnAdSize.SMART_BANNER;
 		}
- 
+
 		boolean isAutoHeight = false;
 		boolean isFullWidth = false;
 		if (adSize.isAutoHeight()) {
@@ -62,151 +64,161 @@ public class VponCustomAd implements CustomEventBanner, CustomEventInterstitial 
 		if (adSize.isFullWidth()) {
 			isFullWidth = true;
 		}
- 
+
 		if (isAutoHeight && isFullWidth) {
-			return VponAdSize.SMART_BANNER;
+			return VpadnAdSize.SMART_BANNER;
 		}
- 
+
 		if (isAutoHeight && !isFullWidth) {
-			return new VponAdSize(adSize.getWidth(), VponAdSize.AUTO_HEIGHT);
+			return new VpadnAdSize(adSize.getWidth(), VpadnAdSize.AUTO_HEIGHT);
 		}
 		if (!isAutoHeight && isFullWidth) {
-			return new VponAdSize(VponAdSize.FULL_WIDTH, adSize.getHeight());
+			return new VpadnAdSize(VpadnAdSize.FULL_WIDTH, adSize.getHeight());
 		}
- 
+
 		if (adSize.isCustomAdSize()) {
-			return new VponAdSize(adSize.getWidth(), adSize.getHeight());
+			return new VpadnAdSize(adSize.getWidth(), adSize.getHeight());
 		}
- 
-		return VponAdSize.SMART_BANNER;
+
+		return VpadnAdSize.SMART_BANNER;
 	}
- 
+
 	/*
-	 * 將admob的 MediationAdRequest轉換成 VponAdRequest
+	 * 
 	 */
-	private VponAdRequest getVponAdRequestByMediationAdRequest(MediationAdRequest request) {
- 
-		VponAdRequest adRequest = new VponAdRequest();
-		if (request.getBirthday() != null) {
-			adRequest.setBirthday(request.getBirthday());
-		}
-		if (request.getAgeInYears() != null) {
-			adRequest.setAge(request.getAgeInYears());
-		}
- 
+	private VpadnAdRequest getVpadnAdRequestByMediationAdRequest(MediationAdRequest request) {
+
+		VpadnAdRequest adRequest = new VpadnAdRequest();
+//		if (request.getBirthday() != null)
+//			Log.e("VPON", request.getBirthday().toString());
+//		if (request.getBirthday() != null) {
+//			adRequest.setBirthday(request.getBirthday());
+//		}
+//		if (request.getAgeInYears() != null) {
+//			adRequest.setAge(request.getAgeInYears());
+//		}
+
 		if (request.getKeywords() != null) {
 			adRequest.setKeywords(request.getKeywords());
 		}
- 
+
 		if (request.getGender() != null) {
 			if (request.getGender().equals(AdRequest.Gender.FEMALE)) {
-				adRequest.setGender(VponAdRequest.Gender.FEMALE);
+				adRequest.setGender(VpadnAdRequest.Gender.FEMALE);
 			} else if (request.getGender().equals(AdRequest.Gender.MALE)) {
-				adRequest.setGender(VponAdRequest.Gender.MALE);
+				adRequest.setGender(VpadnAdRequest.Gender.MALE);
 			} else {
-				adRequest.setGender(VponAdRequest.Gender.UNKNOWN);
+				adRequest.setGender(VpadnAdRequest.Gender.UNKNOWN);
 			}
 		}
- 
+		
 		return adRequest;
 	}
- 
+
 	@Override
 	public void requestBannerAd(final CustomEventBannerListener listener, final Activity activity, String label, String serverParameter, AdSize adSize,
 			MediationAdRequest request, Object customEventExtra) {
- 
+
 		if (vponBanner != null) {
 			vponBanner.destroy();
 			vponBanner = null;
 		}
- 
-		VponAdRequest adRequest = getVponAdRequestByMediationAdRequest(request);
- 
-		// TODO:請將Vpon的 bannerID 設定在admob的mediation web上 由serverParameeter帶進來
-		vponBanner = new VponBanner(activity, serverParameter, getVponAdSizeByAdSize(adSize), VponPlatform.TW);
-		vponBanner.setAdListener(new VponAdListener() {
- 
+		//serverParameter = "8a80818237562d25013759f861ed0169";
+		VpadnAdRequest adRequest = getVpadnAdRequestByMediationAdRequest(request);
+		
+		HashSet<String> testDeviceImeiSet = new HashSet<String>();
+	    testDeviceImeiSet.add("357138052176820"); 
+	    adRequest.setTestDevices(testDeviceImeiSet);
+
+		// 
+		vponBanner = new VpadnBanner(activity, serverParameter, getVponAdSizeByAdSize(adSize), "TW");
+		
+       
+        
+		vponBanner.setAdListener(new VpadnAdListener() {
+
 			@Override
-			public void onVponDismissScreen(VponAd arg0) {
+			public void onVpadnDismissScreen(VpadnAd arg0) {
 				listener.onDismissScreen();
 			}
- 
+
 			@Override
-			public void onVponFailedToReceiveAd(VponAd arg0, VponAdRequest.VponErrorCode arg1) {
+			public void onVpadnFailedToReceiveAd(VpadnAd arg0, VpadnAdRequest.VpadnErrorCode arg1) {
 				listener.onFailedToReceiveAd();
 			}
- 
+
 			@Override
-			public void onVponLeaveApplication(VponAd arg0) {
+			public void onVpadnLeaveApplication(VpadnAd arg0) {
 				listener.onLeaveApplication();
 			}
- 
+
 			@Override
-			public void onVponPresentScreen(VponAd arg0) {
+			public void onVpadnPresentScreen(VpadnAd arg0) {
 				listener.onPresentScreen();
 			}
- 
+
 			@Override
-			public void onVponReceiveAd(VponAd arg0) {
+			public void onVpadnReceiveAd(VpadnAd arg0) {
 				listener.onReceivedAd(vponBanner);
 			}
- 
+
 		});
- 
+
 		vponBanner.loadAd(adRequest);
 	}
- 
+
 	@Override
 	public void requestInterstitialAd(final CustomEventInterstitialListener listener, Activity activity, String label, String serverParameter,
 			MediationAdRequest request, Object customEventExtra) {
- 
-		// TODO:請將Vpon的 interstitialBannerID 設定在admob的mediation web上 由serverParameeter帶進來
-		interstitialAd = new VponInterstitialAd(activity, serverParameter, VponPlatform.TW);
-		interstitialAd.setAdListener(new VponAdListener() {
- 
+		Log.d("abcdefg","Call VponCustomAd");
+
+		// 
+		interstitialAd = new VpadnInterstitialAd(activity, serverParameter, "TW");
+		interstitialAd.setAdListener(new VpadnAdListener() {
+
 			@Override
-			public void onVponDismissScreen(VponAd arg0) {
+			public void onVpadnDismissScreen(VpadnAd arg0) {
 				if (interstitialAd != null) {
 					interstitialAd.destroy();
 					interstitialAd = null;
 				}
 				listener.onDismissScreen();
 			}
- 
+
 			@Override
-			public void onVponFailedToReceiveAd(VponAd arg0, VponAdRequest.VponErrorCode arg1) {
+			public void onVpadnFailedToReceiveAd(VpadnAd arg0, VpadnAdRequest.VpadnErrorCode arg1) {
 				if (interstitialAd != null) {
 					interstitialAd.destroy();
 					interstitialAd = null;
 				}
 				listener.onFailedToReceiveAd();
 			}
- 
+
 			@Override
-			public void onVponLeaveApplication(VponAd arg0) {
+			public void onVpadnLeaveApplication(VpadnAd arg0) {
 				listener.onLeaveApplication();
 			}
- 
+
 			@Override
-			public void onVponPresentScreen(VponAd arg0) {
+			public void onVpadnPresentScreen(VpadnAd arg0) {
 				listener.onPresentScreen();
 			}
- 
+
 			@Override
-			public void onVponReceiveAd(VponAd arg0) {
+			public void onVpadnReceiveAd(VpadnAd arg0) {
 				listener.onReceivedAd();
 			}
- 
+
 		});
-		interstitialAd.loadAd(new VponAdRequest());
- 
+		interstitialAd.loadAd(new VpadnAdRequest());
+
 	}
- 
+
 	@Override
 	public void showInterstitial() {
 		if (interstitialAd != null && interstitialAd.isReady()) {
 			interstitialAd.show();
 		}
- 
+
 	}
 }

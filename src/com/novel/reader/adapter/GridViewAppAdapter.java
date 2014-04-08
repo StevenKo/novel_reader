@@ -95,11 +95,7 @@ public class GridViewAppAdapter extends BaseAdapter {
         TextView textName = (TextView) vi.findViewById(R.id.grid_item_name);
         TextView description = (TextView) vi.findViewById(R.id.description);
         
-        if (NovelReaderUtil.isDisplayDefaultBookCover(app.imageUrl)) {
-            image.setImageResource(R.drawable.bookcover_default);
-        } else {
-            imageLoader.DisplayImage(app.imageUrl, image);
-        }
+        image.setImageResource(R.drawable.andromoney_icon);
         
         textName.setText(NovelReaderUtil.translateTextIfCN(activity,(app.title)));
         if (app.title.length() > 6)
@@ -121,11 +117,8 @@ public class GridViewAppAdapter extends BaseAdapter {
         TextView textName = (TextView) recomendLayout.findViewById(R.id.grid_item_name);
         TextView description = (TextView) recomendLayout.findViewById(R.id.description);
     	
-        if (NovelReaderUtil.isDisplayDefaultBookCover(app.imageUrl)) {
-            image.setImageResource(R.drawable.bookcover_default);
-        } else {
-            imageLoader.DisplayImage(app.imageUrl, image);
-        }
+        
+        image.setImageResource(R.drawable.andromoney_icon);
         
         textName.setText(NovelReaderUtil.translateTextIfCN(activity,(app.title)));
         if (app.title.length() > 6)
