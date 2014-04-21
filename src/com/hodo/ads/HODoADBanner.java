@@ -1,7 +1,6 @@
 package com.hodo.ads;
-
-
 import android.app.Activity;
+
 import com.google.ads.AdSize;
 import com.google.ads.mediation.MediationAdRequest;
 import com.google.ads.mediation.customevent.CustomEventBanner;
@@ -22,10 +21,12 @@ public class HODoADBanner implements CustomEventBanner {
 			Object customEventExtra) {
 		// TODO Auto-generated method stub
 		hodoADview=new HodoADView(activity);
+		hodoADview.setBannerPositionType(HodoADView.BANNER_BOTTOM);
 		hodoADview.setAutoRefresh(false);
 		hodoADview.setListener(new HodoADListener() {
 			@Override
 			public void onGetBanner() {
+				//¶®•\®˙±obanner
 				listener.onReceivedAd(hodoADview);
 			}
 			@Override
@@ -35,6 +36,7 @@ public class HODoADBanner implements CustomEventBanner {
 			public void onBannerChange() {
 			}
 		});
+		//Ω–¥¿¥´±ºßA™∫HODo AD ¥£®—™∫appid
 		hodoADview.requestAD("5209e27037e");
 	}
 }
