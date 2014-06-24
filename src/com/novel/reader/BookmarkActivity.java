@@ -3,9 +3,8 @@ package com.novel.reader;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,19 +12,14 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
 import android.widget.LinearLayout;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.android.vending.billing.InAppBillingForNovel;
-import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.MyBookmarkFragment;
 import com.novel.reader.util.Setting;
@@ -166,26 +160,6 @@ public class BookmarkActivity extends SherlockFragmentActivity{
     }
 
 
-    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
-        final float centerX = 320 / 2.0f;
-        final float centerY = 48 / 2.0f;
-        final float zDepth = -0.50f * view.getHeight();
-
-        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
-        rotation.setDuration(1000);
-        rotation.setInterpolator(new AccelerateInterpolator());
-        rotation.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-            }
-
-            public void onAnimationEnd(Animation animation) {
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        view.startAnimation(rotation);
-    }
     
     @Override
     public void onStart() {

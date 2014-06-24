@@ -12,14 +12,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -35,13 +31,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.android.vending.billing.InAppBillingForNovel;
-import com.google.ads.Ad;
-import com.google.ads.AdListener;
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
-import com.google.ads.AdRequest.ErrorCode;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Novel;
@@ -330,28 +319,6 @@ public class SearchActivity extends SherlockListActivity {
 
                     }
                 });
-    }
-
-
-    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
-        final float centerX = 320 / 2.0f;
-        final float centerY = 48 / 2.0f;
-        final float zDepth = -0.50f * view.getHeight();
-
-        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
-        rotation.setDuration(1000);
-        rotation.setInterpolator(new AccelerateInterpolator());
-        rotation.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-            }
-
-            public void onAnimationEnd(Animation animation) {
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        view.startAnimation(rotation);
     }
     
     @Override

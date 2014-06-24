@@ -1,18 +1,15 @@
 package com.novel.reader;
 
-import com.google.ads.Ad;
-import com.google.ads.AdListener;
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
-import com.google.ads.AdRequest.ErrorCode;
-import com.google.ads.InterstitialAd;
-
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.Display;
 import android.widget.LinearLayout;
+
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.AdRequest;
+
 
 public class AdViewUtil {
 	
@@ -22,36 +19,11 @@ public class AdViewUtil {
 	
 	private static void getBannerAdRequest(LinearLayout adBannerLayout, Context ctx){
 
-        final AdRequest adReq = new AdRequest();
-        AdView adMobAdView = new AdView((Activity) ctx, AdSize.SMART_BANNER, admobKey);
-        adMobAdView.setAdListener(new AdListener() {
-			@Override
-			public void onDismissScreen(Ad arg0) {
-				Log.d("admob_banner", "onDismissScreen");
-			}
-
-			@Override
-			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {
-				Log.d("admob_banner", "onFailedToReceiveAd");
-			}
-
-			@Override
-			public void onLeaveApplication(Ad arg0) {
-				Log.d("admob_banner", "onLeaveApplication");
-			}
-
-			@Override
-			public void onPresentScreen(Ad arg0) {
-				Log.d("admob_banner", "onPresentScreen");
-			}
-
-			@Override
-			public void onReceiveAd(Ad ad) {
-				Log.d("admob_banner", "onReceiveAd ad:" + ad.getClass());
-			}
-
-		});
-		adMobAdView.loadAd(adReq);
+        AdView adMobAdView = new AdView((Activity) ctx);
+        adMobAdView.setAdUnitId(admobKey);
+        adMobAdView.setAdSize(AdSize.SMART_BANNER);
+        adMobAdView.setAdListener(new LogAdListener(ctx));
+		adMobAdView.loadAd(new AdRequest.Builder().build());
 		adBannerLayout.addView(adMobAdView);
 		
 	}
@@ -70,39 +42,15 @@ public class AdViewUtil {
 	}
 	
 	public static void requestInterstitialAd(Activity mActivity){
-		interstitial = new InterstitialAd(mActivity, MY_INTERSTITIAL_UNIT_ID);
-	    AdRequest adRequest = new AdRequest();
-	    interstitial.loadAd(adRequest);
-	    interstitial.setAdListener(new AdListener() {
+		interstitial = new InterstitialAd(mActivity);
+		interstitial.setAdUnitId(MY_INTERSTITIAL_UNIT_ID);
+		interstitial.setAdListener(new LogAdListener(mActivity){
 			@Override
-			public void onDismissScreen(Ad arg0) {
-				Log.d("admob_interstitial", "onDismissScreen");
+		    public void onAdLoaded() {
+				interstitial.show();
 			}
-
-			@Override
-			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {
-				Log.d("admob_interstitial", "onFailedToReceiveAd");
-			}
-
-			@Override
-			public void onLeaveApplication(Ad arg0) {
-				Log.d("admob_interstitial", "onLeaveApplication");
-			}
-
-			@Override
-			public void onPresentScreen(Ad arg0) {
-				Log.d("admob_interstitial", "onPresentScreen");
-			}
-
-			@Override
-			public void onReceiveAd(Ad ad) {
-				Log.d("admob_interstitial", "onReceiveAd ad:" + ad.getClass());
-				if (ad == interstitial) {
-				      interstitial.show();
-				    }
-			}
-
 		});
+		interstitial.loadAd(new AdRequest.Builder().build());	    
 		
 	}
 
