@@ -11,30 +11,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.text.InputType;
-import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.android.vending.billing.InAppBillingForNovel;
-import com.google.ads.Ad;
-import com.google.ads.AdListener;
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
-import com.google.ads.AdRequest.ErrorCode;
+import com.ads.AdFragmentActivity;
+import com.android.slidingtab.SlidingTabLayout;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.CategoryAllNovelsFragment;
 import com.kosbrother.fragments.CategoryLatestNovelsFragment;
@@ -43,9 +33,8 @@ import com.kosbrother.fragments.CategoryWeekFragment;
 import com.kosbrother.fragments.CategroyHotNovelsFragment;
 import com.kosbrother.tool.Report;
 import com.novel.reader.util.Setting;
-import com.viewpagerindicator.TitlePageIndicator;
 
-public class CategoryActivity extends SherlockFragmentActivity {
+public class CategoryActivity extends AdFragmentActivity {
 
     private static final int    ID_SETTING  = 0;
     private static final int    ID_RESPONSE = 1;
@@ -64,7 +53,10 @@ public class CategoryActivity extends SherlockFragmentActivity {
 
     private AlertDialog.Builder aboutUsDialog;
 
-	private LinearLayout bannerAdView;
+	private RelativeLayout bannerAdView;
+	private ActionBar actionbar;
+	private ViewPager pager;
+	private SlidingTabLayout mSlidingTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,30 +64,30 @@ public class CategoryActivity extends SherlockFragmentActivity {
         Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.simple_titles);
 
-        final ActionBar ab = getSupportActionBar();
         mBundle = this.getIntent().getExtras();
         categoryName = mBundle.getString("CategoryName");
         categoryId = mBundle.getInt("CategoryId");
-
-        ab.setTitle(categoryName);
-        ab.setDisplayHomeAsUpEnabled(true);
+        
+        actionbar = getSupportActionBar();
+        actionbar.setTitle(categoryName);
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.category_sections);
 
         FragmentPagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
 
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
-        TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
-        indicator.setViewPager(pager);
-
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setViewPager(pager);
+        
         setAboutUsDialog();
         
-        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-            AdViewUtil.setBannerAdView(bannerAdView, this);
+        	mAdView = setBannerAdView(bannerAdView);
         
 
     }
@@ -160,7 +152,7 @@ public class CategoryActivity extends SherlockFragmentActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {
@@ -254,27 +246,6 @@ public class CategoryActivity extends SherlockFragmentActivity {
                 });
     }
 
-
-    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
-        final float centerX = 320 / 2.0f;
-        final float centerY = 48 / 2.0f;
-        final float zDepth = -0.50f * view.getHeight();
-
-        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
-        rotation.setDuration(1000);
-        rotation.setInterpolator(new AccelerateInterpolator());
-        rotation.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-            }
-
-            public void onAnimationEnd(Animation animation) {
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        view.startAnimation(rotation);
-    }
     
     @Override
     public void onStart() {

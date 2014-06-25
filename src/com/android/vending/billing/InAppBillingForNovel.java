@@ -6,7 +6,6 @@ import com.android.vending.billing.util.IabHelper;
 import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Inventory;
 import com.android.vending.billing.util.Purchase;
-import com.novel.reader.AdViewUtil;
 import com.novel.reader.ArticleActivity;
 import com.novel.reader.R;
 import com.novel.reader.util.Setting;
@@ -148,14 +147,6 @@ public class InAppBillingForNovel {
             Log.d(TAG, "Purchase successful.");
 
         }
-    };
-
-	public void requesetInterstitialAd(Activity activity) {
-		if(Setting.getSetting(Setting.keyYearSubscription, mContext) ==  0)
-			AdViewUtil.requestInterstitialAd(activity);
-	}
-
-    
-    
+    };    
     
 }

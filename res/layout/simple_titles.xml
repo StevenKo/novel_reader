@@ -21,22 +21,20 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" xmlns:app="http://schemas.android.com/apk/res/com.android.novel.reader">
 
-    <com.viewpagerindicator.TitlePageIndicator
-        android:id="@+id/indicator"
-        android:padding="10dip"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:background="#858585"
-        />
+    <com.android.slidingtab.SlidingTabLayout
+          android:id="@+id/sliding_tabs"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"      
         />
-    <LinearLayout
-         android:id="@+id/adonView"
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:id="@+id/adonView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"

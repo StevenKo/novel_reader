@@ -3,35 +3,29 @@ package com.novel.reader;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.view.ActionMode;
 import android.util.SparseArray;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-import com.android.vending.billing.InAppBillingForNovel;
-import com.google.ads.AdView;
+import com.ads.AdFragmentActivity;
+import com.android.slidingtab.SlidingTabLayout;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.MyBookmarkFragment;
 import com.novel.reader.util.Setting;
-import com.viewpagerindicator.TitlePageIndicator;
 
-public class BookmarkActivity extends SherlockFragmentActivity{
+public class BookmarkActivity extends AdFragmentActivity{
 
    
     private boolean                              alertDeleteBookmark;
@@ -43,7 +37,9 @@ public class BookmarkActivity extends SherlockFragmentActivity{
 	private static BookmarkActivity mActivity;
 
 	
-	private LinearLayout bannerAdView;
+	private RelativeLayout bannerAdView;
+	private ActionBar actionbar;
+	private SlidingTabLayout mSlidingTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +49,9 @@ public class BookmarkActivity extends SherlockFragmentActivity{
         
         mActivity = BookmarkActivity.this;
         
-        final ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.my_bookmark));
-        ab.setDisplayHomeAsUpEnabled(true);
+        actionbar = getSupportActionBar();
+        actionbar.setTitle(getResources().getString(R.string.my_bookmark));
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.bookmarks);
@@ -71,16 +67,17 @@ public class BookmarkActivity extends SherlockFragmentActivity{
                 pager.setCurrentItem(1);
             }
         }
-        TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
-        indicator.setViewPager(pager);
+        
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setViewPager(pager);
 
         settings = getSharedPreferences(Setting.keyPref, 0);
         alertDeleteBookmark = settings.getBoolean(alertKey, true);
         
-        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
         
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-            AdViewUtil.setBannerAdView(bannerAdView, this);
+        	mAdView = setBannerAdView(bannerAdView);
         
         if (alertDeleteBookmark)
             showArticleDeleteDialog();
@@ -129,7 +126,7 @@ public class BookmarkActivity extends SherlockFragmentActivity{
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {
@@ -166,26 +163,6 @@ public class BookmarkActivity extends SherlockFragmentActivity{
     }
 
 
-    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
-        final float centerX = 320 / 2.0f;
-        final float centerY = 48 / 2.0f;
-        final float zDepth = -0.50f * view.getHeight();
-
-        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
-        rotation.setDuration(1000);
-        rotation.setInterpolator(new AccelerateInterpolator());
-        rotation.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-            }
-
-            public void onAnimationEnd(Animation animation) {
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        view.startAnimation(rotation);
-    }
     
     @Override
     public void onStart() {
@@ -247,7 +224,7 @@ public class BookmarkActivity extends SherlockFragmentActivity{
 	private ActionMode mActionMode;
 	  
     public void showCallBackAction() {
-    	mActionMode = mActivity.startActionMode(mActionModeCallback);  
+    	mActionMode = mActivity.startSupportActionMode(mActionModeCallback);  
     }
     
     public void closeActionMode(){
@@ -259,6 +236,5 @@ public class BookmarkActivity extends SherlockFragmentActivity{
       	    fragment2.isShowDeleteCallbackAction = false;
     	}
     }
-    
 
 }
