@@ -9,10 +9,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.view.ActionMode;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -22,11 +20,12 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.ads.AdFragmentActivity;
+import com.android.slidingtab.SlidingTabLayout;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.MyBookmarkFragment;
 import com.novel.reader.util.Setting;
 
-public class BookmarkActivity extends AdFragmentActivity implements ActionBar.TabListener{
+public class BookmarkActivity extends AdFragmentActivity{
 
    
     private boolean                              alertDeleteBookmark;
@@ -40,6 +39,7 @@ public class BookmarkActivity extends AdFragmentActivity implements ActionBar.Ta
 	
 	private RelativeLayout bannerAdView;
 	private ActionBar actionbar;
+	private SlidingTabLayout mSlidingTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,25 +68,8 @@ public class BookmarkActivity extends AdFragmentActivity implements ActionBar.Ta
             }
         }
         
-        actionbar = getSupportActionBar();
-        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        for(int i=0; i<CONTENT.length; i++)
-        	actionbar.addTab(actionbar.newTab().setText(CONTENT[i]).setTabListener(this));
-        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-        	 
-            @Override
-            public void onPageSelected(int position) {
-            	actionbar.setSelectedNavigationItem(position);
-            }
- 
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-            }
- 
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setViewPager(pager);
 
         settings = getSharedPreferences(Setting.keyPref, 0);
         alertDeleteBookmark = settings.getBoolean(alertKey, true);
@@ -253,19 +236,5 @@ public class BookmarkActivity extends AdFragmentActivity implements ActionBar.Ta
       	    fragment2.isShowDeleteCallbackAction = false;
     	}
     }
-	
-    @Override
-	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
-	}
-
-	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction arg1) {
-		pager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
-	}
-    
 
 }

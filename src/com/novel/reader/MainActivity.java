@@ -21,10 +21,8 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
 import android.text.Html;
 import android.text.InputType;
 import android.view.KeyEvent;
@@ -40,6 +38,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ads.AdFragmentActivity;
+import com.android.slidingtab.SlidingTabLayout;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.kosbrother.fragments.CategoryListFragment;
@@ -50,7 +49,7 @@ import com.novel.db.SQLiteNovel;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.util.Setting;
 
-public class MainActivity extends AdFragmentActivity implements ActionBar.TabListener{
+public class MainActivity extends AdFragmentActivity {
 
     private static final int    ID_SETTING  = 0;
     private static final int    ID_RESPONSE = 1;
@@ -81,6 +80,7 @@ public class MainActivity extends AdFragmentActivity implements ActionBar.TabLis
 
 	private RelativeLayout bannerAdView;
 	private ActionBar actionbar;
+	private SlidingTabLayout mSlidingTabLayout;
 
     
     
@@ -100,25 +100,8 @@ public class MainActivity extends AdFragmentActivity implements ActionBar.TabLis
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
         
-        actionbar = getSupportActionBar();
-        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        for(int i=0; i<CONTENT.length; i++)
-        	actionbar.addTab(actionbar.newTab().setText(CONTENT[i]).setTabListener(this));
-        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-        	 
-            @Override
-            public void onPageSelected(int position) {
-            	actionbar.setSelectedNavigationItem(position);
-            }
- 
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-            }
- 
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setViewPager(pager);
 
         pager.setCurrentItem(1);
 
@@ -404,19 +387,5 @@ public class MainActivity extends AdFragmentActivity implements ActionBar.TabLis
             
         }.execute(null, null, null);
     }
-
-	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction arg1) {		
-	}
-
-	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction arg1) {
-		pager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction arg1) {
-		
-	}
 
 }
