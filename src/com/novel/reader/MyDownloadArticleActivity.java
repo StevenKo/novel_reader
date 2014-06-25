@@ -24,6 +24,7 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.ads.AdFragmentActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.ExpandListDownLoadReadAdapter;

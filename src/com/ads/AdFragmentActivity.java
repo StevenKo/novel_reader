@@ -1,4 +1,4 @@
-package com.novel.reader;
+package com.ads;
 
 import android.view.Display;
 import android.widget.RelativeLayout;
@@ -8,6 +8,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.novel.reader.LogAdListener;
+import com.novel.reader.R;
+import com.novel.reader.R.string;
 
 public class AdFragmentActivity extends SherlockFragmentActivity{
 	protected AdView mAdView;

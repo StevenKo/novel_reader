@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.ads.AdFragmentActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.MyBookcaseFragment;
 import com.kosbrother.fragments.MyDownloadFragment;

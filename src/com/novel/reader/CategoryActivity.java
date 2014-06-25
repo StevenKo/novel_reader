@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.ads.AdFragmentActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.CategoryAllNovelsFragment;
 import com.kosbrother.fragments.CategoryLatestNovelsFragment;

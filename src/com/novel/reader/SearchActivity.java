@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.ads.AdFragmentListActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Novel;
