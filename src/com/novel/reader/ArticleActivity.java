@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -35,7 +34,7 @@ import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Bookmark;
 import com.novel.reader.util.Setting;
 
-public class ArticleActivity extends SherlockFragmentActivity implements DetectScrollViewListener {
+public class ArticleActivity extends AdFragmentActivity implements DetectScrollViewListener {
 
     private static final int    ID_SETTING  = 0;
     private static final int    ID_RESPONSE = 1;
@@ -85,7 +84,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 	private LinearLayout articleLayout;
 	private int articleAdType;
 
-	private LinearLayout bannerAdView;
+	private RelativeLayout bannerAdView;
 	
 
     @Override
@@ -434,7 +433,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
 
             new GetLastPositionTask().execute();
             if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
-                AdViewUtil.requestInterstitialAd(ArticleActivity.this);
+                requestInterstitialAd();
 
         }
     }
@@ -507,7 +506,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
                 if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
-                    AdViewUtil.requestInterstitialAd(ArticleActivity.this);
+                	requestInterstitialAd();
 
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_data), Toast.LENGTH_SHORT).show();
@@ -548,7 +547,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
                 if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
-                    AdViewUtil.requestInterstitialAd(ArticleActivity.this);
+                	requestInterstitialAd();
 
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_up), Toast.LENGTH_SHORT).show();
@@ -587,7 +586,7 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
                 setActionBarTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
                 if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
-                    AdViewUtil.requestInterstitialAd(ArticleActivity.this);
+                	requestInterstitialAd();
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_down), Toast.LENGTH_SHORT).show();
             }
@@ -706,15 +705,15 @@ public class ArticleActivity extends SherlockFragmentActivity implements DetectS
         
         articleAdType = Setting.getSetting(Setting.keyArticleAdType, ArticleActivity.this);
         if(articleAdType == Setting.BannerAd){
-        	((LinearLayout) findViewById(R.id.adonView)).setVisibility(View.VISIBLE);
+        	((RelativeLayout) findViewById(R.id.adonView)).setVisibility(View.VISIBLE);
         }else
-        	((LinearLayout) findViewById(R.id.adonView)).setVisibility(View.GONE);
+        	((RelativeLayout) findViewById(R.id.adonView)).setVisibility(View.GONE);
         
-        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-            AdViewUtil.setBannerAdView((LinearLayout) findViewById(R.id.adonView), this);
+        	mAdView = setBannerAdView(bannerAdView);
         else
-        	((LinearLayout) findViewById(R.id.adonView)).setVisibility(View.GONE);
+        	((RelativeLayout) findViewById(R.id.adonView)).setVisibility(View.GONE);
 
     }
 

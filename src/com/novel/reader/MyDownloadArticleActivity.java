@@ -20,7 +20,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -35,7 +34,7 @@ import com.novel.reader.entity.Novel;
 import com.novel.reader.util.Setting;
 import com.taiwan.imageload.ImageLoader;
 
-public class MyDownloadArticleActivity extends SherlockActivity {
+public class MyDownloadArticleActivity extends AdFragmentActivity {
 
     private static final int                     ID_SETTING         = 0;
     private static final int                     ID_RESPONSE        = 1;
@@ -65,7 +64,7 @@ public class MyDownloadArticleActivity extends SherlockActivity {
     private AlertDialog.Builder                  aboutUsDialog;
 
 
-    private static SherlockActivity              myActivity;
+    private static MyDownloadArticleActivity              myActivity;
     private static ActionMode                    myMode;
     private static ExpandListDownLoadReadAdapter mAdapter;
     private static boolean                       actionModeShowing  = false;
@@ -74,7 +73,7 @@ public class MyDownloadArticleActivity extends SherlockActivity {
 	private Button updateNovelButton;
 	private RelativeLayout novel_layout;
 	
-	private LinearLayout bannerAdView;
+	private RelativeLayout bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +101,9 @@ public class MyDownloadArticleActivity extends SherlockActivity {
 
         new DownloadArticlesTask().execute();
         
-        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	AdViewUtil.setBannerAdView(bannerAdView, this);
+        	mAdView = setBannerAdView(bannerAdView);
 
 
     }

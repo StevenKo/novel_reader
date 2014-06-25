@@ -31,9 +31,9 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -47,7 +47,7 @@ import com.novel.reader.api.NovelAPI;
 import com.novel.reader.util.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class MainActivity extends SherlockFragmentActivity{
+public class MainActivity extends AdFragmentActivity{
 
     private static final int    ID_SETTING  = 0;
     private static final int    ID_RESPONSE = 1;
@@ -76,7 +76,7 @@ public class MainActivity extends SherlockFragmentActivity{
 	GoogleCloudMessaging gcm;
 	private String local;
 
-	private LinearLayout bannerAdView;
+	private RelativeLayout bannerAdView;
 
     
     
@@ -118,9 +118,9 @@ public class MainActivity extends SherlockFragmentActivity{
         gcm = GoogleCloudMessaging.getInstance(this);
         checkDB();
         
-        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	AdViewUtil.setBannerAdView(bannerAdView, this);
+        	mAdView = setBannerAdView(bannerAdView);
 
     }
     

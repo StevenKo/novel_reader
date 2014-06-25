@@ -12,9 +12,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -24,7 +24,7 @@ import com.kosbrother.tool.Report;
 import com.novel.reader.util.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class MyNovelActivity extends SherlockFragmentActivity {
+public class MyNovelActivity extends AdFragmentActivity {
 
     private static final int          ID_SETTING  = 0;
     private static final int          ID_RESPONSE = 1;
@@ -37,7 +37,7 @@ public class MyNovelActivity extends SherlockFragmentActivity {
     private ViewPager                 pager;
     private FragmentStatePagerAdapter adapter;
     
-	private LinearLayout bannerAdView;
+	private RelativeLayout bannerAdView;
 
    
     @Override
@@ -70,9 +70,9 @@ public class MyNovelActivity extends SherlockFragmentActivity {
 
         setAboutUsDialog();
        
-        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	AdViewUtil.setBannerAdView(bannerAdView, this);
+        	mAdView = setBannerAdView(bannerAdView);
 
     }
     

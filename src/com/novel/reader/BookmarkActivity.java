@@ -13,9 +13,9 @@ import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -25,7 +25,7 @@ import com.kosbrother.fragments.MyBookmarkFragment;
 import com.novel.reader.util.Setting;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class BookmarkActivity extends SherlockFragmentActivity{
+public class BookmarkActivity extends AdFragmentActivity{
 
    
     private boolean                              alertDeleteBookmark;
@@ -37,7 +37,7 @@ public class BookmarkActivity extends SherlockFragmentActivity{
 	private static BookmarkActivity mActivity;
 
 	
-	private LinearLayout bannerAdView;
+	private RelativeLayout bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +71,10 @@ public class BookmarkActivity extends SherlockFragmentActivity{
         settings = getSharedPreferences(Setting.keyPref, 0);
         alertDeleteBookmark = settings.getBoolean(alertKey, true);
         
-        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
         
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-            AdViewUtil.setBannerAdView(bannerAdView, this);
+        	mAdView = setBannerAdView(bannerAdView);
         
         if (alertDeleteBookmark)
             showArticleDeleteDialog();

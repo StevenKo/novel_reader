@@ -25,10 +25,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -37,7 +37,7 @@ import com.novel.reader.entity.Novel;
 import com.novel.reader.util.Setting;
 import com.taiwan.imageload.ImageLoader;
 
-public class SearchActivity extends SherlockListActivity {
+public class SearchActivity extends AdFragmentListActivity {
 
     private static final int    ID_SETTING  = 0;
     private static final int    ID_RESPONSE = 1;
@@ -54,7 +54,7 @@ public class SearchActivity extends SherlockListActivity {
     private LinearLayout        layoutNoSearch;
     private AlertDialog.Builder aboutUsDialog;
     
-	private LinearLayout bannerAdView;
+	private RelativeLayout bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +93,9 @@ public class SearchActivity extends SherlockListActivity {
         setAboutUsDialog();
         new LoadDataTask().execute();
         
-        bannerAdView = (LinearLayout) findViewById(R.id.adonView);
+        bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	AdViewUtil.setBannerAdView(bannerAdView, this);
+        	mAdView = setBannerAdView(bannerAdView);
 
     }
     
