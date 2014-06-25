@@ -10,6 +10,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,11 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.ads.AdFragmentActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.tool.ChildArticle;
@@ -189,7 +189,7 @@ public class MyDownloadArticleActivity extends AdFragmentActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {
@@ -360,7 +360,7 @@ public class MyDownloadArticleActivity extends AdFragmentActivity {
     public static void showCallBackAction() {
         boolean show = checkSelectOrNot();
         if (show && !actionModeShowing) {
-            myActivity.startActionMode(MyDownloadArticleActivity.mActionModeCallback);
+            myActivity.startSupportActionMode(MyDownloadArticleActivity.mActionModeCallback);
             actionModeShowing = true;
         } else if (!show) {
             actionModeShowing = false;
@@ -383,7 +383,7 @@ public class MyDownloadArticleActivity extends AdFragmentActivity {
 
     // 如果有按刪除鍵, 就刪除並重整Data
     @Override
-    public void onActionModeFinished(ActionMode mode) {
+    public void onSupportActionModeFinished(ActionMode mode) {
         actionModeShowing = false;
         if (isDeleteArticles) {
             new DownloadArticlesTask().execute();

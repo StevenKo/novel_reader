@@ -21,11 +21,16 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 import android.text.Html;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -34,8 +39,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.ads.AdFragmentActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -46,9 +49,8 @@ import com.kosbrother.tool.Report;
 import com.novel.db.SQLiteNovel;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.util.Setting;
-import com.viewpagerindicator.TitlePageIndicator;
 
-public class MainActivity extends AdFragmentActivity{
+public class MainActivity extends AdFragmentActivity implements ActionBar.TabListener{
 
     private static final int    ID_SETTING  = 0;
     private static final int    ID_RESPONSE = 1;
@@ -78,6 +80,7 @@ public class MainActivity extends AdFragmentActivity{
 	private String local;
 
 	private RelativeLayout bannerAdView;
+	private ActionBar actionbar;
 
     
     
@@ -96,9 +99,26 @@ public class MainActivity extends AdFragmentActivity{
 
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
-
-        TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
-        indicator.setViewPager(pager);
+        
+        actionbar = getSupportActionBar();
+        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        for(int i=0; i<CONTENT.length; i++)
+        	actionbar.addTab(actionbar.newTab().setText(CONTENT[i]).setTabListener(this));
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        	 
+            @Override
+            public void onPageSelected(int position) {
+            	actionbar.setSelectedNavigationItem(position);
+            }
+ 
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+ 
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
 
         pager.setCurrentItem(1);
 
@@ -234,7 +254,7 @@ public class MainActivity extends AdFragmentActivity{
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {
@@ -384,5 +404,19 @@ public class MainActivity extends AdFragmentActivity{
             
         }.execute(null, null, null);
     }
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction arg1) {		
+	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction arg1) {
+		pager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction arg1) {
+		
+	}
 
 }

@@ -5,6 +5,10 @@ import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,15 +20,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.novel.db.SQLiteNovel;
 import com.novel.reader.util.Setting;
 
-public class SettingActivity extends SherlockFragmentActivity implements RadioGroup.OnCheckedChangeListener{
+public class SettingActivity extends ActionBarActivity implements RadioGroup.OnCheckedChangeListener{
 
     // private SharedPreferences prefs;
     private int                 textSize;
@@ -202,7 +202,7 @@ public class SettingActivity extends SherlockFragmentActivity implements RadioGr
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {

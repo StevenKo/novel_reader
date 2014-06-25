@@ -9,23 +9,23 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.ads.AdFragmentActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.MyBookcaseFragment;
 import com.kosbrother.fragments.MyDownloadFragment;
 import com.kosbrother.tool.Report;
 import com.novel.reader.util.Setting;
-import com.viewpagerindicator.TitlePageIndicator;
 
-public class MyNovelActivity extends AdFragmentActivity {
+public class MyNovelActivity extends AdFragmentActivity implements ActionBar.TabListener{
 
     private static final int          ID_SETTING  = 0;
     private static final int          ID_RESPONSE = 1;
@@ -39,6 +39,7 @@ public class MyNovelActivity extends AdFragmentActivity {
     private FragmentStatePagerAdapter adapter;
     
 	private RelativeLayout bannerAdView;
+	private ActionBar actionbar;
 
    
     @Override
@@ -47,9 +48,9 @@ public class MyNovelActivity extends AdFragmentActivity {
         Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.simple_titles);
 
-        final ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.title_my_bookcase));
-        ab.setDisplayHomeAsUpEnabled(true);
+        actionbar = getSupportActionBar();
+        actionbar.setTitle(getResources().getString(R.string.title_my_bookcase));
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.collections);
@@ -66,8 +67,26 @@ public class MyNovelActivity extends AdFragmentActivity {
             }
         }
 
-        TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
-        indicator.setViewPager(pager);
+        actionbar = getSupportActionBar();
+        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        for(int i=0; i<CONTENT.length; i++)
+        	actionbar.addTab(actionbar.newTab().setText(CONTENT[i]).setTabListener(this));
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        	 
+            @Override
+            public void onPageSelected(int position) {
+            	actionbar.setSelectedNavigationItem(position);
+            }
+ 
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+ 
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
+
 
         setAboutUsDialog();
        
@@ -96,7 +115,7 @@ public class MyNovelActivity extends AdFragmentActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {
@@ -197,5 +216,21 @@ public class MyNovelActivity extends AdFragmentActivity {
       super.onStop();
       EasyTracker.getInstance().activityStop(this);
     }
+
+
+	@Override
+	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
+	}
+
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction arg1) {
+		pager.setCurrentItem(tab.getPosition());
+	}
+
+
+	@Override
+	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {		
+	}
 
 }

@@ -9,6 +9,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,10 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.tool.ChildArticle;
 import com.kosbrother.tool.ExpandListDownLoadAdapter;
@@ -30,7 +30,7 @@ import com.novel.reader.entity.Article;
 import com.novel.reader.service.DownloadService;
 import com.novel.reader.util.Setting;
 
-public class DownloadActivity extends SherlockFragmentActivity {
+public class DownloadActivity extends ActionBarActivity {
 
     private static final int                          ID_SELECT_ALL  = 0;
     private static final int                          ID_SELECT_NONE = 1;
@@ -127,7 +127,7 @@ public class DownloadActivity extends SherlockFragmentActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {

@@ -2,17 +2,17 @@ package com.novel.reader;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
 import com.android.vending.billing.InAppBillingForNovel;
 import com.novel.reader.util.Setting;
 
-public class DonateActivity extends SherlockFragmentActivity {
+public class DonateActivity extends ActionBarActivity {
 	
 	private Button donate_btn;
 	private Button validate_btn;
@@ -84,7 +84,7 @@ public class DonateActivity extends SherlockFragmentActivity {
     }
     
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId) {
         case android.R.id.home:

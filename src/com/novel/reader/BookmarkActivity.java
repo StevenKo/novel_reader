@@ -9,24 +9,24 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.view.ActionMode;
 import android.util.SparseArray;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.ads.AdFragmentActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.MyBookmarkFragment;
 import com.novel.reader.util.Setting;
-import com.viewpagerindicator.TitlePageIndicator;
 
-public class BookmarkActivity extends AdFragmentActivity{
+public class BookmarkActivity extends AdFragmentActivity implements ActionBar.TabListener{
 
    
     private boolean                              alertDeleteBookmark;
@@ -39,6 +39,7 @@ public class BookmarkActivity extends AdFragmentActivity{
 
 	
 	private RelativeLayout bannerAdView;
+	private ActionBar actionbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +49,9 @@ public class BookmarkActivity extends AdFragmentActivity{
         
         mActivity = BookmarkActivity.this;
         
-        final ActionBar ab = getSupportActionBar();
-        ab.setTitle(getResources().getString(R.string.my_bookmark));
-        ab.setDisplayHomeAsUpEnabled(true);
+        actionbar = getSupportActionBar();
+        actionbar.setTitle(getResources().getString(R.string.my_bookmark));
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.bookmarks);
@@ -66,8 +67,26 @@ public class BookmarkActivity extends AdFragmentActivity{
                 pager.setCurrentItem(1);
             }
         }
-        TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
-        indicator.setViewPager(pager);
+        
+        actionbar = getSupportActionBar();
+        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        for(int i=0; i<CONTENT.length; i++)
+        	actionbar.addTab(actionbar.newTab().setText(CONTENT[i]).setTabListener(this));
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        	 
+            @Override
+            public void onPageSelected(int position) {
+            	actionbar.setSelectedNavigationItem(position);
+            }
+ 
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+ 
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
 
         settings = getSharedPreferences(Setting.keyPref, 0);
         alertDeleteBookmark = settings.getBoolean(alertKey, true);
@@ -124,7 +143,7 @@ public class BookmarkActivity extends AdFragmentActivity{
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {
@@ -222,7 +241,7 @@ public class BookmarkActivity extends AdFragmentActivity{
 	private ActionMode mActionMode;
 	  
     public void showCallBackAction() {
-    	mActionMode = mActivity.startActionMode(mActionModeCallback);  
+    	mActionMode = mActivity.startSupportActionMode(mActionModeCallback);  
     }
     
     public void closeActionMode(){
@@ -234,6 +253,19 @@ public class BookmarkActivity extends AdFragmentActivity{
       	    fragment2.isShowDeleteCallbackAction = false;
     	}
     }
+	
+    @Override
+	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
+	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction arg1) {
+		pager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
+	}
     
 
 }

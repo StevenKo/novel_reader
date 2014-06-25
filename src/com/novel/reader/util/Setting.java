@@ -92,10 +92,10 @@ public class Setting {
         int theme = getSetting(keyAppTheme, activity);
         switch (theme) {
         case 0:
-            activity.setTheme(R.style.Theme_Sherlock_Light);
+            activity.setTheme(R.style.Theme_AppCompat_Light);
             return;
         case 1:
-            activity.setTheme(R.style.Theme_Sherlock_Light_DarkActionBar);
+            activity.setTheme(R.style.Theme_AppCompat_Light_DarkActionBar);
             // try {
             // LinearLayout layout = (LinearLayout) activity.findViewById(R.id.adonView);
             // layout.setBackgroundColor(activity.getResources().getColor(R.color.black));

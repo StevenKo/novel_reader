@@ -10,20 +10,21 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 import android.text.InputType;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.ads.AdFragmentActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.CategoryAllNovelsFragment;
@@ -33,9 +34,8 @@ import com.kosbrother.fragments.CategoryWeekFragment;
 import com.kosbrother.fragments.CategroyHotNovelsFragment;
 import com.kosbrother.tool.Report;
 import com.novel.reader.util.Setting;
-import com.viewpagerindicator.TitlePageIndicator;
 
-public class CategoryActivity extends AdFragmentActivity {
+public class CategoryActivity extends AdFragmentActivity implements ActionBar.TabListener{
 
     private static final int    ID_SETTING  = 0;
     private static final int    ID_RESPONSE = 1;
@@ -55,6 +55,8 @@ public class CategoryActivity extends AdFragmentActivity {
     private AlertDialog.Builder aboutUsDialog;
 
 	private RelativeLayout bannerAdView;
+	private ActionBar actionbar;
+	private ViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,25 +64,41 @@ public class CategoryActivity extends AdFragmentActivity {
         Setting.setApplicationActionBarTheme(this);
         setContentView(R.layout.simple_titles);
 
-        final ActionBar ab = getSupportActionBar();
         mBundle = this.getIntent().getExtras();
         categoryName = mBundle.getString("CategoryName");
         categoryId = mBundle.getInt("CategoryId");
-
-        ab.setTitle(categoryName);
-        ab.setDisplayHomeAsUpEnabled(true);
+        
+        actionbar = getSupportActionBar();
+        actionbar.setTitle(categoryName);
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.category_sections);
 
         FragmentPagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
 
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
-        TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
-        indicator.setViewPager(pager);
-
+        actionbar = getSupportActionBar();
+        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        for(int i=0; i<CONTENT.length; i++)
+        	actionbar.addTab(actionbar.newTab().setText(CONTENT[i]).setTabListener(this));
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        	 
+            @Override
+            public void onPageSelected(int position) {
+            	actionbar.setSelectedNavigationItem(position);
+            }
+ 
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+ 
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
         setAboutUsDialog();
         
         bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
@@ -150,7 +168,7 @@ public class CategoryActivity extends AdFragmentActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {
@@ -256,5 +274,21 @@ public class CategoryActivity extends AdFragmentActivity {
       super.onStop();
       EasyTracker.getInstance().activityStop(this);
     }
+
+
+
+
+	@Override
+	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
+	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction arg1) {
+		pager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
+	}
 
 }

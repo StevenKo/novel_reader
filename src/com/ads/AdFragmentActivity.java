@@ -1,17 +1,17 @@
 package com.ads;
 
+import android.support.v7.app.ActionBarActivity;
 import android.view.Display;
 import android.widget.RelativeLayout;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.novel.reader.R;
-import com.novel.reader.R.string;
 
-public class AdFragmentActivity extends SherlockFragmentActivity{
+
+public class AdFragmentActivity extends ActionBarActivity{
 	protected AdView mAdView;
 	
 	@Override

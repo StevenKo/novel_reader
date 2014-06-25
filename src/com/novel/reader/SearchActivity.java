@@ -11,9 +11,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -28,17 +31,14 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.ads.AdFragmentListActivity;
+import com.ads.AdFragmentActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Novel;
 import com.novel.reader.util.Setting;
 import com.taiwan.imageload.ImageLoader;
 
-public class SearchActivity extends AdFragmentListActivity {
+public class SearchActivity extends AdFragmentActivity {
 
     private static final int    ID_SETTING  = 0;
     private static final int    ID_RESPONSE = 1;
@@ -67,7 +67,7 @@ public class SearchActivity extends AdFragmentListActivity {
         final ActionBar ab = getSupportActionBar();
         mBundle = this.getIntent().getExtras();
         keyword = mBundle.getString("SearchKeyword");
-        novelListView = this.getListView();
+        novelListView = (ListView)findViewById(R.id.listView);
 
         novelListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -219,7 +219,7 @@ public class SearchActivity extends AdFragmentListActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
         switch (itemId) {
