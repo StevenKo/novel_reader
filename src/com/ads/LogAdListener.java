@@ -14,29 +14,24 @@
  * limitations under the License.
  */
 
-package com.novel.reader;
+package com.ads;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * An ad listener that toasts all ad events.
  */
 public class LogAdListener extends AdListener {
-    private Context mContext;
 
-    public LogAdListener(Context context) {
-        this.mContext = context;
+    public LogAdListener() {
     }
 
     @Override
     public void onAdLoaded() {
-        Toast.makeText(mContext, "onAdLoaded()", Toast.LENGTH_SHORT).show();
-//        Log.d("admob_ads", "onAdLoaded()");
+        Log.d("admob_ads", "onAdLoaded()");
     }
 
     @Override
@@ -56,22 +51,21 @@ public class LogAdListener extends AdListener {
                 errorReason = "No fill";
                 break;
         }
-        Toast.makeText(mContext, String.format("onAdFailedToLoad(%s)", errorReason),
-                Toast.LENGTH_SHORT).show();
+        Log.d("admob_ads", String.format("onAdFailedToLoad(%s)", errorReason));
     }
 
     @Override
     public void onAdOpened() {
-        Toast.makeText(mContext, "onAdOpened()", Toast.LENGTH_SHORT).show();
+    	Log.d("admob_ads", "onAdOpened()");
     }
 
     @Override
     public void onAdClosed() {
-        Toast.makeText(mContext, "onAdClosed()", Toast.LENGTH_SHORT).show();
+    	Log.d("admob_ads", "onAdClosed()");
     }
 
     @Override
     public void onAdLeftApplication() {
-        Toast.makeText(mContext, "onAdLeftApplication()", Toast.LENGTH_SHORT).show();
+    	Log.d("admob_ads", "onAdLeftApplication()");
     }
 }

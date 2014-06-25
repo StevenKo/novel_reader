@@ -8,7 +8,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
-import com.novel.reader.LogAdListener;
 import com.novel.reader.R;
 import com.novel.reader.R.string;
 
@@ -44,7 +43,7 @@ public class AdFragmentActivity extends SherlockFragmentActivity{
         final AdView adMobAdView = new AdView(this);
         adMobAdView.setAdUnitId(getResources().getString(R.string.admobKey));
         adMobAdView.setAdSize(AdSize.SMART_BANNER);
-        adMobAdView.setAdListener(new LogAdListener(this){
+        adMobAdView.setAdListener(new LogAdListener(){
 			@Override
 		    public void onAdLoaded() {
 				RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -76,7 +75,7 @@ public class AdFragmentActivity extends SherlockFragmentActivity{
 	public void requestInterstitialAd(){
 		interstitial = new InterstitialAd(this);
 		interstitial.setAdUnitId(getResources().getString(R.string.InterstitialAd));
-		interstitial.setAdListener(new LogAdListener(this){
+		interstitial.setAdListener(new LogAdListener(){
 			@Override
 		    public void onAdLoaded() {
 				interstitial.show();
