@@ -49,7 +49,8 @@ public class AdFragmentActivity extends SherlockFragmentActivity{
 		    public void onAdLoaded() {
 				RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 		                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-				bannerAdView.addView(adMobAdView,params);
+				if(adMobAdView.getParent() == null)
+					bannerAdView.addView(adMobAdView,params);
 			}
 		});
 		adMobAdView.loadAd(new AdRequest.Builder().build());
