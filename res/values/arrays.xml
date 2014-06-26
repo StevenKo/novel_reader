@@ -31,7 +31,7 @@
         <item>全部小說</item>
     </string-array>
     <string-array name="collections">
-        <item>我的書櫃</item>
+        <item>我的收藏</item>
         <item>我的下載</item>
     </string-array>
     <string-array name="bookmarks">

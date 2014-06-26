@@ -111,6 +111,7 @@
 	<string name="my_read_setting">阅读设定</string>
 	<string name="my_classic_novel">经典小说</string>
 	<string name="my_classic_action_novel">经典武侠</string>
+	<string name="my_download">我的下载</string>
     
     <string name="reminder">提醒</string>
     <string name="delete_bookmark_reminder">长按书签可以删除书签哦！</string>
