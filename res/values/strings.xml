@@ -107,6 +107,8 @@
     <string name="my_read_setting">閱讀設定</string>
     <string name="my_classic_novel">經典小說</string>
     <string name="my_classic_action_novel">經典武俠</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="my_download">我的下載</string>
     
     <string name="reminder">提醒</string>
     <string name="delete_bookmark_reminder">長按書籤可以刪除書籤哦！</string>
@@ -167,6 +169,10 @@
     <string name="donate_des">小說王開發者、設計師、編輯之前皆是無薪開發, 所以不得不在APP裡面, 放一些廣告, 造成大家的困擾, 我們十分抱歉！希望大家可以贊助我們, 也享受看小說不再受到廣告的干擾, 謝謝!</string>
     <string name="donate_app">贊助小說王</string>
     <string name="verify_buy">已購買, 重新驗證!</string>
+    
+    
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
     
     
     <!-- for vpon -->

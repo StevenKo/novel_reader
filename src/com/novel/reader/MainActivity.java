@@ -13,16 +13,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.text.InputType;
 import android.view.KeyEvent;
@@ -32,8 +35,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -59,7 +64,6 @@ public class MainActivity extends AdFragmentActivity {
     private static final int    ID_Report   = 6;
 
     private String[]            CONTENT;
-    private EditText            search;
     private MenuItem            itemSearch;
     private ViewPager           pager;
     private AlertDialog.Builder aboutUsDialog;
@@ -76,11 +80,18 @@ public class MainActivity extends AdFragmentActivity {
 	private Context context;
 	String regid;
 	GoogleCloudMessaging gcm;
-	private String local;
 
 	private RelativeLayout bannerAdView;
-	private ActionBar actionbar;
 	private SlidingTabLayout mSlidingTabLayout;
+	
+	
+	//navigationdrawler
+	private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    private CharSequence mDrawerTitle;
+    private CharSequence mTitle;
 
     
     
@@ -88,24 +99,12 @@ public class MainActivity extends AdFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Setting.setApplicationActionBarTheme(this);
-        setContentView(R.layout.simple_titles);
-
-        Resources res = getResources();
-        CONTENT = res.getStringArray(R.array.sections);
         
+        setContentView(R.layout.layout_main);
         setTextLocale();
-        
-        FragmentPagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
-
-        pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(adapter);
-        
-        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
-        mSlidingTabLayout.setViewPager(pager);
-
-        pager.setCurrentItem(1);
-
+        setViewPagerAndSlidingTab();
         setAboutUsDialog();
+        setNavigationDrawler();
         
         if(Setting.getSetting(Setting.keyUpdateAppVersion,this) < Setting.getAppVersion(this)){
         	showUpdateInfoDialog(this);
@@ -128,7 +127,57 @@ public class MainActivity extends AdFragmentActivity {
 
     }
     
-    @Override
+    private void setNavigationDrawler() {
+    	mTitle = mDrawerTitle = getTitle();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    	mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerList.setAdapter(new NavigationListAdapter(this));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        
+        // enable ActionBar app icon to behave as action to toggle nav drawer
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+        
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the sliding drawer and the action bar app icon
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description for accessibility */
+                R.string.drawer_close  /* "close drawer" description for accessibility */
+                ) {
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+	}
+
+	private void setViewPagerAndSlidingTab() {
+    	Resources res = getResources();
+        CONTENT = res.getStringArray(R.array.sections);
+    	FragmentPagerAdapter adapter = new NovelPagerAdapter(getSupportFragmentManager());
+
+        pager = (ViewPager) findViewById(R.id.pager);
+        pager.setAdapter(adapter);
+        
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setViewPager(pager);
+
+        pager.setCurrentItem(1);
+	}
+
+	@Override
     protected void onResume() {
         super.onResume();
         if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
@@ -238,6 +287,10 @@ public class MainActivity extends AdFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+    	
+    	if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 
         int itemId = item.getItemId();
         switch (itemId) {
@@ -387,5 +440,63 @@ public class MainActivity extends AdFragmentActivity {
             
         }.execute(null, null, null);
     }
+    
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private void selectItem(int position) {
+       switch(position){
+	       case 0:
+	    	   Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+	           startActivity(intent);
+	           break;
+	       case 1:
+	           Intent bookmarkIntent = new Intent();
+	           bookmarkIntent.putExtra("IS_RECNET", false);
+	           bookmarkIntent.setClass(MainActivity.this, BookmarkActivity.class);
+	           startActivity(bookmarkIntent);
+	           break;
+	       case 2:
+	           Intent recent_intent = new Intent();
+	           recent_intent.putExtra("IS_RECNET", true);
+	           recent_intent.setClass(MainActivity.this, BookmarkActivity.class);
+	           startActivity(recent_intent);
+	    	   break;
+	       case 3:
+	    	   Intent collectIntent = new Intent(MainActivity.this, MyNovelActivity.class);
+               startActivity(collectIntent);
+	    	   break;
+	       case 4:
+	    	   Intent downloadIntent = new Intent(MainActivity.this, MyNovelActivity.class);
+	    	   downloadIntent.putExtra("noti", true);
+               startActivity(downloadIntent);
+	    	   break;
+       }
+       mDrawerLayout.closeDrawer(mDrawerList);
+       
+    }
+    
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getActionBar().setTitle(mTitle);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
 
 }
