@@ -74,7 +74,7 @@ public class AdFragmentActivity extends ActionBarActivity{
 	
 	public void requestInterstitialAd(){
 		interstitial = new InterstitialAd(this);
-		interstitial.setAdUnitId(getResources().getString(R.string.InterstitialAd));
+		interstitial.setAdUnitId(getResources().getString(R.string.MY_INTERSTITIAL_UNIT_ID));
 		interstitial.setAdListener(new LogAdListener(){
 			@Override
 		    public void onAdLoaded() {
