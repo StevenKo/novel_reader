@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.ActionBar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,13 +71,9 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     private ArrayList<Integer>  articleIDs;
     // private ProgressDialog progressDialog= null;
     private AlertDialog.Builder aboutUsDialog;
-    private final String        adWhirlKey  = "215f895eb71748e7ba4cb3a5f20b061e";
     private ActionBar           ab;
     private LinearLayout        layoutProgress;
     private int                 currentY    = 0;
-    private int                 appTheme;
-    private Boolean             booleanSend;
-    private String              reportContent;
     private int                 articleNum = -1;
     private ArrayList<Integer>  articleNums;
 	private WebView             articleWebView;
@@ -86,6 +81,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 	private int articleAdType;
 
 	private RelativeLayout bannerAdView;
+	private TextView articleTitleTextView;
 	
 
     @Override
@@ -137,9 +133,9 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         
         ab.setDisplayShowCustomEnabled(true);
         ab.setDisplayShowTitleEnabled(false);
-
-        setActionBarTitle(articleTitle);
-
+        
+        setArticleTitle(articleTitle);
+        
         // ab.setTitle(novelName);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -182,20 +178,8 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
       super.onSaveInstanceState(savedInstanceState);
     }
 
-    private void setActionBarTitle(String articleTitle) {
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.item_title, null);
-        TextView titleText = ((TextView) v.findViewById(R.id.title));
-        titleText.setText(novelName + ":" + articleTitle);
-        titleText.setSelected(true);
-        int theme = Setting.getSetting(Setting.keyAppTheme, this);
-        if (theme != Setting.initialAppTheme) {
-            titleText.setTextColor(getResources().getColor(R.color.white));
-            RelativeLayout bottom_buttons = (RelativeLayout) findViewById(R.id.bottom_buttons);
-            bottom_buttons.setBackgroundColor(getResources().getColor(R.color.light_black));
-            articlePercent.setTextColor(getResources().getColor(R.color.white));
-        }
-        ab.setCustomView(v);
+    private void setArticleTitle(String articleTitle) {
+              articleTitleTextView.setText(novelName + ":" + articleTitle);
     }
 
     private void restorePreValues() {
@@ -228,6 +212,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         articleButtonDown = (Button) findViewById(R.id.article_button_down);
         articlePercent = (TextView) findViewById(R.id.article_percent);
         articleLayout = (LinearLayout)findViewById(R.id.article_layout);
+        articleTitleTextView = (TextView)findViewById(R.id.article_title);
 
         articleScrollView.setScrollViewListener(ArticleActivity.this);
 
@@ -504,7 +489,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
                 myAricle.setNovelId(novelId);
                 articleScrollView.scrollTo(0, 0);
-                setActionBarTitle(myAricle.getTitle());
+                setArticleTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
                 if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
                 	requestInterstitialAd();
@@ -545,7 +530,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
                 myAricle.setNovelId(novelId);
                 articleScrollView.scrollTo(0, 0);
-                setActionBarTitle(myAricle.getTitle());
+                setArticleTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
                 if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
                 	requestInterstitialAd();
@@ -584,7 +569,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
                 myAricle.setNovelId(novelId);
                 articleScrollView.scrollTo(0, 0);
-                setActionBarTitle(myAricle.getTitle());
+                setArticleTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
                 if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
                 	requestInterstitialAd();
