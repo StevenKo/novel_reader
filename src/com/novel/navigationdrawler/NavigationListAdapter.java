@@ -1,6 +1,12 @@
-package com.novel.reader;
+package com.novel.navigationdrawler;
 
 import java.util.ArrayList;
+
+import com.novel.reader.R;
+import com.novel.reader.R.drawable;
+import com.novel.reader.R.id;
+import com.novel.reader.R.layout;
+import com.novel.reader.R.string;
 
 import android.app.Activity;
 import android.content.Context;
