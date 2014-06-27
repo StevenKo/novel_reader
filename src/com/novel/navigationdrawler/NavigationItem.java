@@ -1,4 +1,4 @@
-package com.novel.reader;
+package com.novel.navigationdrawler;
 
 import android.graphics.drawable.Drawable;
 

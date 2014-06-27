@@ -51,6 +51,7 @@ import com.kosbrother.fragments.IndexNovelFragment;
 import com.kosbrother.fragments.MyNovelFragment;
 import com.kosbrother.tool.Report;
 import com.novel.db.SQLiteNovel;
+import com.novel.navigationdrawler.NavigationListAdapter;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.util.Setting;
 
