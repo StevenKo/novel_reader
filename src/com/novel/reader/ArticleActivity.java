@@ -243,6 +243,12 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
                 } else {
                     new GetPreviousArticleTask().execute();
                 }
+                Bookmark bookmark = NovelAPI.findBookMarkByArticle(myArticle, ArticleActivity.this);
+            	if(bookmark != null){
+            		bookmarkImage.setVisibility(View.VISIBLE);
+            	}else{
+            		bookmarkImage.setVisibility(View.GONE);
+            	}
             }
         });
 
@@ -264,6 +270,12 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
                 } else {
                     new GetNextArticleTask().execute();
                 }
+                Bookmark bookmark = NovelAPI.findBookMarkByArticle(myArticle, ArticleActivity.this);
+            	if(bookmark != null){
+            		bookmarkImage.setVisibility(View.VISIBLE);
+            	}else{
+            		bookmarkImage.setVisibility(View.GONE);
+            	}
 
             }
         });
@@ -352,7 +364,6 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
-        Novel theNovel;
 		switch (itemId) {
         case android.R.id.home:
             finish();
@@ -379,15 +390,30 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         	showModeDialog();
         	break;
         case ID_NOVEL:
-			theNovel = NovelAPI.getNovel(novelId, this);
         	if (NovelAPI.isNovelCollected(this, novelId)){
+        		Novel theNovel = NovelAPI.getNovel(novelId, this);
         		NovelAPI.removeNovelFromCollected(theNovel, this);
         		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.menu_remove_collect_novel), Toast.LENGTH_SHORT).show();
+        		invalidateOptionsMenu();
         	}else{
-        		NovelAPI.collecNovel(theNovel, this);
-        		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.menu_collect_novel), Toast.LENGTH_SHORT).show();
+        		new AsyncTask(){
+        			Novel theNovel;
+        			@Override
+        			protected Object doInBackground(Object... arg0) {
+        				theNovel = NovelAPI.getNovel(novelId, ArticleActivity.this);
+        				NovelAPI.collecNovel(theNovel, ArticleActivity.this);
+        				return null;
+        			}
+        			 @Override
+        		        protected void onPostExecute(Object result) {
+        		            super.onPostExecute(result);
+        	        		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.menu_collect_novel), Toast.LENGTH_SHORT).show();
+        	        		invalidateOptionsMenu();
+        		        }
+        		}.execute();
+        		
+        		
         	}
-        	invalidateOptionsMenu();
         	break;
         case ID_FONT_SIZE:
         	showFontSizeDialog();
