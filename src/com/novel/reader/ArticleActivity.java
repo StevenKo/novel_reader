@@ -32,6 +32,7 @@ import com.kosbrother.tool.Report;
 import com.novel.reader.api.NovelAPI;
 import com.novel.reader.entity.Article;
 import com.novel.reader.entity.Bookmark;
+import com.novel.reader.entity.Novel;
 import com.novel.reader.util.Setting;
 
 public class ArticleActivity extends AdFragmentActivity implements DetectScrollViewListener {
@@ -81,6 +82,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 	private RelativeLayout bannerAdView;
 	private TextView articleTitleTextView;
 	private ImageView bookmarkImage;
+	private ImageView novelImage;
 	
 
     @Override
@@ -210,6 +212,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         articleLayout = (LinearLayout)findViewById(R.id.article_layout);
         articleTitleTextView = (TextView)findViewById(R.id.article_title);
         bookmarkImage = (ImageView)findViewById(R.id.bookmarkImage);
+        novelImage = (ImageView)findViewById(R.id.novelImage);
 
         articleScrollView.setScrollViewListener(ArticleActivity.this);
 
@@ -316,6 +319,24 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+    	setBookMarkItem(menu);
+    	setCollectNovelItem(menu);
+    	
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void setCollectNovelItem(Menu menu) {
+    	if (NovelAPI.isNovelCollected(this, novelId)){
+    		novelImage.setVisibility(View.VISIBLE);
+    		menu.findItem(ID_NOVEL).setTitle(getResources().getString(R.string.menu_remove_collect_novel));
+    	}else{
+    		novelImage.setVisibility(View.GONE);
+    		menu.findItem(ID_NOVEL).setTitle(getResources().getString(R.string.menu_collect_novel));
+    	}
+	}
+
+
+	private void setBookMarkItem(Menu menu) {
     	Bookmark bookmark = NovelAPI.findBookMarkByArticle(myArticle, ArticleActivity.this);
     	if(bookmark != null){
     		bookmarkImage.setVisibility(View.VISIBLE);
@@ -324,14 +345,15 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     		bookmarkImage.setVisibility(View.GONE);
     		menu.findItem(ID_Bookmark).setTitle(getResources().getString(R.string.menu_add_bookmark));
     	}
-        return super.onPrepareOptionsMenu(menu);
-    }
+	}
 
-    @Override
+
+	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
-        switch (itemId) {
+        Novel theNovel;
+		switch (itemId) {
         case android.R.id.home:
             finish();
             break;
@@ -343,8 +365,10 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         	Bookmark bookmark = NovelAPI.findBookMarkByArticle(myArticle, ArticleActivity.this);
         	if(bookmark != null){
         		NovelAPI.deleteBookmark(bookmark, ArticleActivity.this);
+        		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.menu_delete_bookmark), Toast.LENGTH_SHORT).show();
         	}else{
 	            NovelAPI.insertBookmark(new Bookmark(0, myArticle.getNovelId(), myArticle.getId(), yRate, novelName, myArticle.getTitle(), novelPic, false),ArticleActivity.this);
+	            Toast.makeText(ArticleActivity.this, getResources().getString(R.string.menu_add_bookmark), Toast.LENGTH_SHORT).show();
         	}
             invalidateOptionsMenu();
             break;
@@ -353,6 +377,17 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             break;
         case ID_MODE:
         	showBackgroundDialog();
+        	break;
+        case ID_NOVEL:
+			theNovel = NovelAPI.getNovel(novelId, this);
+        	if (NovelAPI.isNovelCollected(this, novelId)){
+        		NovelAPI.removeNovelFromCollected(theNovel, this);
+        		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.menu_remove_collect_novel), Toast.LENGTH_SHORT).show();
+        	}else{
+        		NovelAPI.collecNovel(theNovel, this);
+        		Toast.makeText(ArticleActivity.this, getResources().getString(R.string.menu_collect_novel), Toast.LENGTH_SHORT).show();
+        	}
+        	invalidateOptionsMenu();
         	break;
         }
         return true;

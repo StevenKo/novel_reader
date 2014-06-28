@@ -108,9 +108,15 @@
     	android:id="@+id/bookmarkImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:src="@drawable/article_bookmark"
-        android:layout_marginRight="5dp"
-        android:visibility="gone"
+        android:layout_marginLeft="5dp"
+        />
+<ImageView
+    	android:id="@+id/novelImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/bookmarkImage"
+        android:src="@drawable/star"
+        android:layout_marginLeft="5dp"
         />
 </RelativeLayout>

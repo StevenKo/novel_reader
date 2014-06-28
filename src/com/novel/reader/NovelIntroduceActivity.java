@@ -76,7 +76,6 @@ public class NovelIntroduceActivity extends ActionBarActivity {
     private ExpandableListView                  novelListView;
     private Novel                               theNovel;
     private Boolean                             descriptionExpand = false;
-    private Boolean                             isNovelChecked;
     private MenuItem                            itemSearch;
     private int                                 expandGroup       = -1;
 
@@ -86,6 +85,7 @@ public class NovelIntroduceActivity extends ActionBarActivity {
     private AlertDialog.Builder                 aboutUsDialog;
     
 	private LinearLayout bannerAdView;
+	private Boolean isNovelChecked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +111,6 @@ public class NovelIntroduceActivity extends ActionBarActivity {
         ab.setTitle(getResources().getString(R.string.title_novel_introduce));
         ab.setDisplayHomeAsUpEnabled(true);
 
-        isNovelChecked = NovelAPI.isNovelCollected(NovelIntroduceActivity.this, novelId);
-
         setViews();
         setAboutUsDialog();
 
@@ -123,6 +121,14 @@ public class NovelIntroduceActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        
+        isNovelChecked = NovelAPI.isNovelCollected(NovelIntroduceActivity.this, novelId);
+        if (isNovelChecked) {
+            checkBoxAddBookcase.setChecked(true);
+        } else {
+            checkBoxAddBookcase.setChecked(false);
+        }
+        
         novelLayoutProgress.setVisibility(View.VISIBLE);
         if (articleList == null || articleList.size() == 0) {
             new DownloadArticlesTask().execute();
@@ -150,12 +156,6 @@ public class NovelIntroduceActivity extends ActionBarActivity {
     }
 
     private void setViews() {
-
-        if (isNovelChecked) {
-            checkBoxAddBookcase.setChecked(true);
-        } else {
-            checkBoxAddBookcase.setChecked(false);
-        }
 
         novelTextName.setText(NovelReaderUtil.translateTextIfCN(this,theNovel.getName() + "(" + theNovel.getArticleNum() + ")"));
         novelTextAuthor.setText(NovelReaderUtil.translateTextIfCN(this,getResources().getString(R.string.novel_author) + theNovel.getAuthor()));
