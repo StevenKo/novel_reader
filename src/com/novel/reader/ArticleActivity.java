@@ -44,7 +44,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     private static final int    ID_Report   = 5;
 	private static final int    ID_MODE = 6;
 	private static final int    ID_FONT_SIZE = 7;
-	private static final int    ID_MENU = 8;
+	private static final int    ID_CONTENTS = 8;
 	private static final int    ID_NOVEL = 9;
 	
 	private int                 textSize;
@@ -321,7 +321,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     	
     	menu.add(0, ID_MODE, 0, "日間模式").setIcon(getModeIcon()).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     	menu.add(0, ID_FONT_SIZE, 1, "字型大小").setIcon(getFontSizeIcon()).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    	menu.add(0, ID_MENU, 2, "目錄").setIcon(getMenuIcon()).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	menu.add(0, ID_CONTENTS, 2, "目錄").setIcon(getContentsIcon()).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     	
     	menu.add(0, ID_Bookmark, 3, getResources().getString(R.string.menu_add_bookmark)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
     	menu.add(0, ID_NOVEL, 4, getResources().getString(R.string.menu_collect_novel)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -349,11 +349,11 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 		else
 			return R.drawable.article_font_size_white;
     }
-    private int getMenuIcon(){
+    private int getContentsIcon(){
     	if(isLightAppTheme())
-			return R.drawable.article_menu;
+			return R.drawable.article_contents;
 		else
-			return R.drawable.article_menu_white;
+			return R.drawable.article_contents_white;
     }
 
 
