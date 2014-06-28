@@ -71,7 +71,7 @@ public class DownloadActivity extends ActionBarActivity {
 
         setViews();
 
-        if (Setting.getSetting(Setting.keyOpenDownloadPage, DownloadActivity.this) == 0) {
+        if (Setting.getSettingInt(Setting.keyOpenDownloadPage, DownloadActivity.this) == 0) {
             remindDialog.show();
             Setting.saveSetting(Setting.keyOpenDownloadPage, 1, DownloadActivity.this);
         }

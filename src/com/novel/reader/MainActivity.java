@@ -107,7 +107,7 @@ public class MainActivity extends AdFragmentActivity {
         setAboutUsDialog();
         setNavigationDrawler();
         
-        if(Setting.getSetting(Setting.keyUpdateAppVersion,this) < Setting.getAppVersion(this)){
+        if(Setting.getSettingInt(Setting.keyUpdateAppVersion,this) < Setting.getAppVersion(this)){
         	showUpdateInfoDialog(this);
         	Setting.saveSetting(Setting.keyUpdateAppVersion, Setting.getAppVersion(this), this);
         }
@@ -123,7 +123,7 @@ public class MainActivity extends AdFragmentActivity {
         checkDB();
         
         bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  0)
         	mAdView = setBannerAdView(bannerAdView);
 
     }
@@ -181,7 +181,7 @@ public class MainActivity extends AdFragmentActivity {
 	@Override
     protected void onResume() {
         super.onResume();
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  1)
         	bannerAdView.setVisibility(View.GONE);
     }
     

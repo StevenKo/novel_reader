@@ -23,22 +23,38 @@
     <string name="article_no_down">無下一篇</string>
     <string name="article_no_data">資料錯誤</string>
     
-    <string name="setting_text">文字大小:</string>
+    <string name="setting_text">文字大小</string>
     <string name="setting_text_preview">文字預覽:小說王</string>
-    <string name="setting_select_lan">繁簡字體選擇:</string>
+    <string name="setting_select_lan">繁簡字體選擇</string>
     <string name="setting_lan_tra">繁體</string>
     <string name="setting_lan_sim">簡體</string>
-    <string name="setting_select_direction">閱讀方向:</string>
-    <string name="setting_direction_portrait">直向:</string>
+    <string name="setting_select_direction">閱讀方向</string>
+    <string name="setting_direction_portrait">直向</string>
     <string name="setting_direction_horizontal">橫向</string>
-    <string name="setting_select_tap">點擊換頁:</string>
+    <string name="setting_select_tap">點擊換頁</string>
     <string name="setting_tap_open">開啟</string>
     <string name="setting_tap_close">關閉</string>
-    <string name="setting_select_sleeping">閱讀時停止休眠:</string>
+    <string name="setting_select_sleeping">閱讀時停止休眠</string>
     <string name="setting_sleeping_open">開啟停止休眠</string>
     <string name="setting_sleeping_close">關閉停止休眠</string>
-    <string name="setting_select_text_color">選擇閱讀字體顏色:</string>
-	<string name="setting_select_text_background">選擇閱讀背景顏色:</string>
+    <string name="setting_select_text_color">字色:</string>
+	<string name="setting_select_text_background">背景:</string>
+    <string name="theme_setting">App主題色＆上下邊顏色\n(App要重開,設定才會生效)</string>
+    <string name="theme_light">亮白(預設)</string>
+    <string name="theme_dark">灰黑</string>
+    <string name="aritcle_ad_type">小說閱讀頁廣告模式</string>
+    <string name="InterstitialAd">插頁廣告</string>
+    <string name="BannerAd">橫幅廣告</string>
+    <string name="reset_db_hint">資料庫重置(清空 DB)</string>
+    <string name="reset_db_message">確定要重置資料庫嗎？(完成後,請重開APP)</string>
+    <string name="reset_db_success">重置完成</string>
+    <string name="reset_db_fail">重置失敗</string>
+    <string name="reset">重置</string>
+    <string name="setting_sun_mode">日間模式設定</string>
+    <string name="setting_moon_mode">夜間模式設定</string>
+    <string name="setting_select_mode">閱讀模式選擇</string>
+    <string name="sun_mode">日間模式</string>
+    <string name="moon_mode">夜間模式</string>
     
     <string name="title_my_downloading"> 我的下載</string>
     <string name="title_my_bookcase"> 我的書櫃</string>
@@ -78,12 +94,16 @@
     <string name="menu_respond">意見回饋</string>
     <string name="menu_aboutus">關於我們</string>
     <string name="menu_recommend">為App評分</string>
-    <string name="menu_add_bookmark">加書籤</string>
+    <string name="menu_add_bookmark">此章節加入書籤</string>
+    <string name="menu_delete_bookmark">此章節移除書籤</string>
     <string name="menu_search">搜索</string>
     <string name="menu_add_all">全選</string>
     <string name="menu_remove_all">全取消</string>
     <string name="menu_download">下載</string>
     <string name="menu_report">問題回報</string>
+    <string name="menu_article_report">章節問題回報</string>
+    <string name="menu_collect_novel">收藏此本小說</string>
+    <string name="menu_remove_collect_novel">取消收藏此本小說</string>
     
     <string name="report_title">小說王問題回報</string>
     <string name="report_chapter">回報章節:</string>
@@ -121,17 +141,7 @@
     <string name="delete_no">不刪除</string>
     <string name="delete_articles">刪除所選章節</string>
     
-    <string name="theme_setting">App主題色＆上下邊顏色\n(App要重開,設定才會生效):</string>
-    <string name="theme_light">亮白(預設)</string>
-    <string name="theme_dark">灰黑</string>
-    
     <string name="search_hint">搜尋小說名稱或作者</string>
-    
-    <string name="reset_db_hint">資料庫重置(清空 DB)</string>
-    <string name="reset_db_message">確定要重置資料庫嗎？(完成後,請重開APP)</string>
-    <string name="reset_db_success">重置完成</string>
-    <string name="reset_db_fail">重置失敗</string>
-    <string name="reset">重置</string>
     
     <string name="no_data">目前無資料</string>
     <string name="no_internet">無法連線</string>
@@ -156,9 +166,6 @@
     
     <string name="update_info"><![CDATA[<font color=\'blue\'>V2.9.3:</font> <br>顯示今日更新小說<br><font color=\'blue\'>V2.9.0:</font> <br>更換小說類別、推薦方式，新增3000本小說<br><font color=\'blue\'>V2.8.5:</font> <br>新增購買<font color=\'red\'>贊助版本(免廣告)</font>, 懇請大家多多支持!<br><font color=\'blue\'>V2.8:</font> <br>因為有不少使用者反應廣告佔據版面的問題，我們將閱讀頁的<font color=\'red\'>橫幅式廣告</font>換成<font color=\'red\'>插頁式的廣告</font>，如果使用者想換為原先橫幅式的廣告，可以在"設定"裡做設定，謝謝!]]></string>
     <string name="update">版本更新通知</string>
-    <string name="aritcle_ad_type">小說閱讀頁廣告模式</string>
-    <string name="InterstitialAd">插頁廣告</string>
-    <string name="BannerAd">橫幅廣告</string>
     
     <string name="buy_year_subscription">購買贊助版</string>
     <string name="buy_fail">購買失敗，請再試一次！</string>

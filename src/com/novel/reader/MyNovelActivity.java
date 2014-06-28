@@ -74,7 +74,7 @@ public class MyNovelActivity extends AdFragmentActivity{
         setAboutUsDialog();
        
         bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  0)
         	mAdView = setBannerAdView(bannerAdView);
 
     }
@@ -90,7 +90,7 @@ public class MyNovelActivity extends AdFragmentActivity{
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  0)
         	menu.add(0, 7, 7, getResources().getString(R.string.buy_year_subscription)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
 
@@ -184,7 +184,7 @@ public class MyNovelActivity extends AdFragmentActivity{
         pager.setAdapter(adapter);
         pager.setCurrentItem(position);
         
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  1)
         	bannerAdView.setVisibility(View.GONE);
     }
     

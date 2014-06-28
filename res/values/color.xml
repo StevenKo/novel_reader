@@ -57,6 +57,8 @@
     <color name="transparent80">#33000000</color>
     <color name="transparent50">#88000000</color>
     <color name="redorange">#d14329</color>
+    
+    <color name="setting_text_color">#2098db</color>
    
    
     <!-- Add for VPON -->

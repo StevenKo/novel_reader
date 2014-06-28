@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -37,19 +37,19 @@ import com.novel.reader.util.Setting;
 public class ArticleActivity extends AdFragmentActivity implements DetectScrollViewListener {
 
     private static final int    ID_SETTING  = 0;
-    private static final int    ID_RESPONSE = 1;
-    private static final int    ID_ABOUT_US = 2;
-    private static final int    ID_GRADE    = 3;
     private static final int    ID_Bookmark = 4;
     private static final int    ID_Report   = 5;
-
-    private int                 textSize;
+	private static final int    ID_BACKGROUND = 6;
+	private static final int    ID_FONT_SIZE = 7;
+	private static final int    ID_MENU = 8;
+	private static final int    ID_NOVEL = 9;
+	
+	private int                 textSize;
     private int                 textLanguage;                                    // 0 for 繁體, 1 for 簡體
     private int                 readingDirection;                                // 0 for 直向, 1 for 橫向
     private int                 clickToNextPage;                                 // 0 for yes, 1 for no
     private int                 stopSleeping;                                    // 0 for yes, 1 for no
-    private int                 textColor;
-    private int                 textBackground;
+    private String 				textMode;
 
     private TextView            articleTextView;
     private DetectScrollView    articleScrollView;
@@ -70,7 +70,6 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     private int                 ariticlePosition = -1;
     private ArrayList<Integer>  articleIDs;
     // private ProgressDialog progressDialog= null;
-    private AlertDialog.Builder aboutUsDialog;
     private ActionBar           ab;
     private LinearLayout        layoutProgress;
     private int                 currentY    = 0;
@@ -137,10 +136,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         setArticleTitle(articleTitle);
         
         // ab.setTitle(novelName);
-        ab.setDisplayHomeAsUpEnabled(true);
-
-        setAboutUsDialog();
-        
+        ab.setDisplayHomeAsUpEnabled(true);        
     }
     
     
@@ -183,13 +179,13 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     }
 
     private void restorePreValues() {
-        textSize = Setting.getSetting(Setting.keyTextSize, ArticleActivity.this);
-        textColor = Setting.getSetting(Setting.keyTextColor, ArticleActivity.this);
-        textBackground = Setting.getSetting(Setting.keyTextBackground, ArticleActivity.this);
-        textLanguage = Setting.getSetting(Setting.keyTextLanguage, ArticleActivity.this);
-        readingDirection = Setting.getSetting(Setting.keyReadingDirection, ArticleActivity.this);
-        clickToNextPage = Setting.getSetting(Setting.keyClickToNextPage, ArticleActivity.this);
-        stopSleeping = Setting.getSetting(Setting.keyStopSleeping, ArticleActivity.this);
+    	
+    	textSize = Setting.getSettingInt(Setting.keyTextSize, ArticleActivity.this);
+        textMode = Setting.getSettingString(Setting.keyMode, ArticleActivity.this);
+        textLanguage = Setting.getSettingInt(Setting.keyTextLanguage, ArticleActivity.this);
+        readingDirection = Setting.getSettingInt(Setting.keyReadingDirection, ArticleActivity.this);
+        clickToNextPage = Setting.getSettingInt(Setting.keyClickToNextPage, ArticleActivity.this);
+        stopSleeping = Setting.getSettingInt(Setting.keyStopSleeping, ArticleActivity.this);
 
         if (readingDirection == 0) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -217,11 +213,9 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         articleScrollView.setScrollViewListener(ArticleActivity.this);
 
         articleTextView.setTextSize(textSize);
-        articleTextView.setTextColor(textColor);
-        if(textBackground!=Setting.initialTextBackground){
-        	articleLayout.setBackgroundColor(textBackground);
-        	layoutProgress.setBackgroundColor(textBackground);
-        }
+        articleTextView.setTextColor(Setting.getBackgroundModeTextColor(textMode,this));
+        articleLayout.setBackgroundColor(Setting.getBackgroundModeBackgroundColor(textMode,this));
+        layoutProgress.setBackgroundColor(Setting.getBackgroundModeBackgroundColor(textMode,this));
         	
         
         
@@ -299,7 +293,8 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
     }
 
-    @Override
+
+	@Override
     public void onScrollChanged(DetectScrollView scrollView, int x, int y, int oldx, int oldy) {
         int kk = articleScrollView.getHeight();
         int tt = articleTextView.getHeight();
@@ -320,21 +315,23 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        // getMenuInflater().inflate(R.menu.activity_main, menu);
-
-        menu.add(0, ID_SETTING, 0, getResources().getString(R.string.menu_settings)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, ID_Bookmark, 5, getResources().getString(R.string.menu_add_bookmark)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menu.add(0, ID_Report, 4, getResources().getString(R.string.menu_report)).setIcon(R.drawable.icon_report)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
-        	menu.add(0, 7, 7, getResources().getString(R.string.buy_year_subscription)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-
+    	
+    	menu.add(0, ID_BACKGROUND, 0, "日間模式").setIcon(R.drawable.article_sun).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	menu.add(0, ID_FONT_SIZE, 1, "字型大小").setIcon(R.drawable.article_font_size).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	menu.add(0, ID_MENU, 2, "目錄").setIcon(R.drawable.article_menu).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	
+    	menu.add(0, ID_Bookmark, 3, getResources().getString(R.string.menu_add_bookmark)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+    	menu.add(0, ID_NOVEL, 4, getResources().getString(R.string.menu_collect_novel)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+    	menu.add(0, ID_SETTING, 5, getResources().getString(R.string.my_read_setting)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+    	menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_article_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        
         return true;
+    }
+    
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+//        menu.findItem(ID_Bookmark).setVisible(false);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -344,26 +341,10 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         switch (itemId) {
         case android.R.id.home:
             finish();
-            // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
             break;
         case ID_SETTING: // setting
             Intent intent = new Intent(ArticleActivity.this, SettingActivity.class);
             startActivity(intent);
-            break;
-        case ID_RESPONSE: // response
-            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-            emailIntent.setType("plain/text");
-            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] { getResources().getString(R.string.respond_mail_address) });
-            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.respond_mail_title));
-            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-            break;
-        case ID_ABOUT_US:
-            aboutUsDialog.show();
-            break;
-        case ID_GRADE:
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-            startActivity(browserIntent);
             break;
         case ID_Bookmark:
             addBookMarkDialog.show();
@@ -371,17 +352,50 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         case ID_Report:
         	Report.createReportDialog(this,novelName+"("+novelId+")",myAricle.getTitle()+"(Num:"+myAricle.getNum()+")");  	
             break;
-        case 7:
-        	Intent intent1 = new Intent();
-            intent1.setClass(this, DonateActivity.class);
-            startActivity(intent1);
+        case ID_BACKGROUND:
+        	showBackgroundDialog();
         	break;
         }
         return true;
     }
 
     
-    private class UploadUserReadNovelTask extends AsyncTask{
+    private void showBackgroundDialog() {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	CharSequence[] array = {"日期模式", "夜間模式", "修改"};
+    	builder.setTitle("文字&背景模式").setSingleChoiceItems(array, Setting.getTextModePosition(textMode), new DialogInterface.OnClickListener() {
+
+	    	@Override
+	    	public void onClick(DialogInterface dialog, int position) {
+	    		switch(position){
+	    		case 0:
+	    			articleLayout.setBackgroundColor(Setting.getBackgroundModeBackgroundColor(Setting.keySunMode,ArticleActivity.this));
+	    			articleTextView.setTextColor(Setting.getBackgroundModeTextColor(Setting.keySunMode,ArticleActivity.this));
+	    			textMode = Setting.keySunMode;
+	    			Setting.saveSetting(Setting.keyMode, Setting.keySunMode, ArticleActivity.this);
+	    			break;
+	    		case 1:
+	    			articleLayout.setBackgroundColor(Setting.getBackgroundModeBackgroundColor(Setting.keyMoonMode,ArticleActivity.this));
+	    			articleTextView.setTextColor(Setting.getBackgroundModeTextColor(Setting.keyMoonMode,ArticleActivity.this));
+	    			textMode = Setting.keyMoonMode;
+	    			Setting.saveSetting(Setting.keyMode, Setting.keyMoonMode, ArticleActivity.this);
+	    			break;
+	    		case 2:
+	    			Intent intent = new Intent(ArticleActivity.this, SettingActivity.class);
+	                startActivity(intent);
+	                break;
+	    		}
+	    		dialog.dismiss();
+	    	}
+
+			
+    	});
+
+    	builder.create().show();
+	}    
+
+
+	private class UploadUserReadNovelTask extends AsyncTask{
 
 		@Override
 		protected Object doInBackground(Object... arg0) {
@@ -418,7 +432,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             myAricle.setNovelId(novelId);
 
             new GetLastPositionTask().execute();
-            if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
+            if(articleAdType == Setting.InterstitialAd && Setting.getSettingInt(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
                 requestInterstitialAd();
 
         }
@@ -491,7 +505,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
                 articleScrollView.scrollTo(0, 0);
                 setArticleTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
-                if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
+                if(articleAdType == Setting.InterstitialAd && Setting.getSettingInt(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
                 	requestInterstitialAd();
 
             } else {
@@ -532,7 +546,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
                 articleScrollView.scrollTo(0, 0);
                 setArticleTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
-                if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
+                if(articleAdType == Setting.InterstitialAd && Setting.getSettingInt(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
                 	requestInterstitialAd();
 
             } else {
@@ -571,7 +585,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
                 articleScrollView.scrollTo(0, 0);
                 setArticleTitle(myAricle.getTitle());
                 articlePercent.setText("0%");
-                if(articleAdType == Setting.InterstitialAd && Setting.getSetting(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
+                if(articleAdType == Setting.InterstitialAd && Setting.getSettingInt(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
                 	requestInterstitialAd();
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_down), Toast.LENGTH_SHORT).show();
@@ -613,38 +627,22 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         }
     }
 
-    private void setAboutUsDialog() {
-
-        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.play_store_icon)
-                .setMessage(getResources().getString(R.string.about_us))
-                .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         int originTextLan = textLanguage;
 
-        textSize = Setting.getSetting(Setting.keyTextSize, ArticleActivity.this);
-        textColor = Setting.getSetting(Setting.keyTextColor, ArticleActivity.this);
-        textBackground = Setting.getSetting(Setting.keyTextBackground, ArticleActivity.this);
-        textLanguage = Setting.getSetting(Setting.keyTextLanguage, ArticleActivity.this);
-        readingDirection = Setting.getSetting(Setting.keyReadingDirection, ArticleActivity.this);
-        clickToNextPage = Setting.getSetting(Setting.keyClickToNextPage, ArticleActivity.this);
-        stopSleeping = Setting.getSetting(Setting.keyStopSleeping, ArticleActivity.this);
-        // appTheme = Setting.getSetting(Setting.keyAppTheme, ArticleActivity.this);
+        textSize = Setting.getSettingInt(Setting.keyTextSize, ArticleActivity.this);
+        textMode = Setting.getSettingString(Setting.keyMode, ArticleActivity.this);
+        textLanguage = Setting.getSettingInt(Setting.keyTextLanguage, ArticleActivity.this);
+        readingDirection = Setting.getSettingInt(Setting.keyReadingDirection, ArticleActivity.this);
+        clickToNextPage = Setting.getSettingInt(Setting.keyClickToNextPage, ArticleActivity.this);
+        stopSleeping = Setting.getSettingInt(Setting.keyStopSleeping, ArticleActivity.this);
 
         articleTextView.setTextSize(textSize);
-        articleTextView.setTextColor(textColor);
-        if(textBackground!=Setting.initialTextBackground){
-        	articleLayout.setBackgroundColor(textBackground);
-        	layoutProgress.setBackgroundColor(textBackground);
-        }
+        articleTextView.setTextColor(Setting.getBackgroundModeTextColor(textMode,this));
+        articleLayout.setBackgroundColor(Setting.getBackgroundModeBackgroundColor(textMode,this));
+        layoutProgress.setBackgroundColor(Setting.getBackgroundModeBackgroundColor(textMode,this));
 
         if (originTextLan != textLanguage) {
             if (textLanguage == 1) {
@@ -689,14 +687,14 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             ArticleActivity.this.findViewById(android.R.id.content).setKeepScreenOn(true);
         }
         
-        articleAdType = Setting.getSetting(Setting.keyArticleAdType, ArticleActivity.this);
+        articleAdType = Setting.getSettingInt(Setting.keyArticleAdType, ArticleActivity.this);
         if(articleAdType == Setting.BannerAd){
         	((RelativeLayout) findViewById(R.id.adonView)).setVisibility(View.VISIBLE);
         }else
         	((RelativeLayout) findViewById(R.id.adonView)).setVisibility(View.GONE);
         
         bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  0)
         	mAdView = setBannerAdView(bannerAdView);
         else
         	((RelativeLayout) findViewById(R.id.adonView)).setVisibility(View.GONE);

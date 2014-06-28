@@ -21,22 +21,38 @@
 	<string name="article_no_down">无下一篇</string>
 	<string name="article_no_data">资料错误</string>
     
-	<string name="setting_text">文字大小:</string>
+	<string name="setting_text">文字大小</string>
 	<string name="setting_text_preview">文字预览:小说王</string>
-	<string name="setting_select_lan">繁简字体选择:</string>
+	<string name="setting_select_lan">繁简字体选择</string>
 	<string name="setting_lan_tra">繁体</string>
 	<string name="setting_lan_sim">简体</string>
-	<string name="setting_select_direction">阅读方向:</string>
+	<string name="setting_select_direction">阅读方向</string>
 	<string name="setting_direction_portrait">直向</string>
 	<string name="setting_direction_horizontal">橫向</string>
-	<string name="setting_select_tap">点击换页:</string>
+	<string name="setting_select_tap">点击换页</string>
 	<string name="setting_tap_open">开启</string>
 	<string name="setting_tap_close">关闭</string>
-	<string name="setting_select_sleeping">阅读时停止休眠:</string>
+	<string name="setting_select_sleeping">阅读时停止休眠</string>
 	<string name="setting_sleeping_open">开启停止休眠</string>
 	<string name="setting_sleeping_close">关闭停止休眠</string>
-	<string name="setting_select_text_color">选择阅读字体颜色</string>
-	<string name="setting_select_text_background">选择阅读背景颜色:</string>
+	<string name="setting_select_text_color">字色:</string>
+	<string name="setting_select_text_background">背景:</string>
+  <string name="theme_setting">App主题色＆上下边颜色\n(App要重开,设定才会生效)</string>
+  <string name="theme_light">亮白(预设)</string>
+  <string name="theme_dark">灰黑</string>
+  <string name="aritcle_ad_type">小说阅读页广告模式</string>
+  <string name="InterstitialAd">插页广告</string>
+  <string name="BannerAd">横幅广告</string>
+  <string name="reset_db_hint">资料库重置(清空DB)</string>
+  <string name="reset_db_message">确定要重置资料库吗？ (完成后,请重开APP)</string>
+  <string name="reset_db_success">重置完成</string>
+  <string name="reset_db_fail">重置失败</string>
+  <string name="reset">重置</string>
+  <string name="setting_sun_mode">日间模式设定</string>
+  <string name="setting_moon_mode">夜间模式设定</string>
+  <string name="setting_select_mode">阅读模式选择</string>
+  <string name="sun_mode">日间模式</string>
+  <string name="moon_mode">夜间模式</string>
 	
 	<string name="title_my_downloading"> 我的下载</string>
 	<string name="title_my_bookcase"> 我的书柜</string>
@@ -81,12 +97,16 @@
 	<string name="menu_respond">意见回馈</string>
 	<string name="menu_aboutus">关于我们</string>
 	<string name="menu_recommend">为App评分</string>
-	<string name="menu_add_bookmark">加书签</string>
+	<string name="menu_add_bookmark">此章节加入书签</string>
+	<string name="menu_delete_bookmark">此章节移除书签</string>
 	<string name="menu_search">搜索</string>
 	<string name="menu_add_all">全选</string>
 	<string name="menu_remove_all">全取消</string>
 	<string name="menu_download">下载</string>
 	<string name="menu_report">问题回报</string>
+	<string name="menu_article_report">章节问题回报</string>
+	<string name="menu_collect_novel">收藏此本小说</string>
+    <string name="menu_remove_collect_novel">取消收藏此本小说</string>
 	
 	<string name="report_title">小说王问题回报</string>
 	<string name="report_chapter">回报章节:</string>
@@ -120,16 +140,6 @@
     
 	<string name="delete_articles">删除所选章节</string>
     
-    <string name="theme_setting">App主题色＆上下边颜色\n(App要重开,设定才会生效):</string>
-    <string name="theme_light">亮白(预设)</string>
-    <string name="theme_dark">灰黑</string>
-        
-    <string name="reset_db_hint">资料库重置(清空DB)</string>
-    <string name="reset_db_message">确定要重置资料库吗？ (完成后,请重开APP)</string>
-    <string name="reset_db_success">重置完成</string>
-    <string name="reset_db_fail">重置失败</string>
-    <string name="reset">重置</string>
-    
     <string name="no_data">目前无资料</string>
     <string name="no_internet">无法连线</string>
     <string name="try_again">重试</string>
@@ -152,9 +162,7 @@
     
     <string name="update_info"><![CDATA[<font color=\'blue\'>V2.9.3:</font> <br>显示今日更新小说<br><font color=\'blue\'>V2.9.0:</font> <br>更换小说类别、推荐方式，新增3000本小说<br><font color=\'blue\'>V2.8.5: </font> <br>新增​​购买<font color=\'red\'>赞助版本(免广告)</font>, 恳请大家多多支持!<br><font color=\'blue\'>V2 .8:</font> <br>因为有不少使用者反应广告占据版面的问题，我们将阅读页的<font color=\'red\'>横幅式广告</font>换成<font color =\'red\'>插页式的广告</font>，如果使用者想换为原先横幅式的广告，可以在"设定"里做设定，谢谢!]]></string>
     <string name="update">版本更新通知</string>
-    <string name="aritcle_ad_type">小说阅读页广告模式</string>
-    <string name="InterstitialAd">插页广告</string>
-    <string name="BannerAd">横幅广告</string>
+    
     
     <string name="buy_year_subscription">购买赞助版</string>
     <string name="buy_fail">购买失败，请再试一次！</string>

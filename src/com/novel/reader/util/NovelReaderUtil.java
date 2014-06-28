@@ -17,7 +17,7 @@ public class NovelReaderUtil {
 		
 		String retrun_string = null;
 		
-		int local = Setting.getSetting(Setting.keyTextLanguage, context);
+		int local = Setting.getSettingInt(Setting.keyTextLanguage, context);
 		if(local == Setting.TEXT_CHINA){
 			try {
 				retrun_string = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(string);

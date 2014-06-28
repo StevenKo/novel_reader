@@ -70,7 +70,7 @@ public class ClassicNovelsActivity extends AdFragmentActivity {
         setAboutUsDialog();
         
         bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  0)
         	mAdView = setBannerAdView(bannerAdView);
         
     }
@@ -78,7 +78,7 @@ public class ClassicNovelsActivity extends AdFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  1)
         	bannerAdView.setVisibility(View.GONE);
     }
     
@@ -93,7 +93,7 @@ public class ClassicNovelsActivity extends AdFragmentActivity {
         menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  0)
         	menu.add(0, 7, 7, getResources().getString(R.string.buy_year_subscription)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         itemSearch = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse)

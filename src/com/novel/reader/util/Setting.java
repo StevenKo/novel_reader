@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.util.Log;
 
+import com.novel.reader.ArticleActivity;
 import com.novel.reader.R;
 
 public class Setting {
@@ -28,12 +30,13 @@ public class Setting {
     public final static String                    keyClickToNextPage      = "ClickToNextPage";
     public final static String                    keyStopSleeping         = "StopSleeping";
     public final static String                    keyOpenDownloadPage     = "OpenDownloadPage";
-    public final static String                    keyTextColor            = "TextColor";
-    public final static String                    keyTextBackground       = "TextBackground";
     public final static String                    keyAppTheme             = "AppTheme";
     public final static String                    keyArticleAdType        = "ArticleAdType";
     public final static String                    keyUpdateAppVersion     = "UpdateAppVersion";
     public final static String                    keyYearSubscription     = "YearSubscription";
+    public final static String keySunMode = "SunModeSetting";
+    public final static String keyMoonMode = "MoonModeSetting";
+    public final static String keyMode = "ModeSetting"; // 0 for SunMode, 1 for MoonMode
 
     public final static int                       initialTextSize         = 20;                // textsize in pixel
     public final static int                       initialTextLanguage     = 0;                 // 0 繁體, 1 簡體
@@ -42,7 +45,6 @@ public class Setting {
     public final static int                       initialStopSleeping     = 1;
     public final static int                       initialOpenDownloadPage = 0;
     public final static int                       initialTextColor        = -16777216;
-    public final static int                       initialTextBackground   = -1;
     public final static int                       initialAppTheme         = 0;                 // 0 for 亮白, 1 for 灰黑
     public final static int                       InterstitialAd          = 0;                // 0 for InterstitialAd, 1 for Banner
     public final static int                       BannerAd                = 1;               
@@ -57,19 +59,38 @@ public class Setting {
                                                                                   put(keyClickToNextPage, initialClickToNextPage);
                                                                                   put(keyStopSleeping, initialStopSleeping);
                                                                                   put(keyOpenDownloadPage, initialOpenDownloadPage);
-                                                                                  put(keyTextColor, initialTextColor);
-                                                                                  put(keyTextBackground, initialTextBackground);
                                                                                   put(keyAppTheme, initialAppTheme);
                                                                                   put(keyArticleAdType,InterstitialAd);
                                                                                   put(keyUpdateAppVersion,0);
                                                                                   put(keyYearSubscription,0);
                                                                               }
                                                                           };
+                                                                        // WHITE is -1, Black is -16777216
+     private static final HashMap<String, String> initStringMap          = new HashMap<String, String>() {
+                                                                              {
+                                                                                  put(keySunMode, "-1,-16777216");
+                                                                                  put(keyMoonMode, "-16777216,-1");
+                                                                                  put(keyMode,keySunMode);
+                                                                              }
+                                                                          };
+                                             
+	
 
-    public static int getSetting(String settingKey, Context context) {
+    public static int getSettingInt(String settingKey, Context context) {
         SharedPreferences sharePreference = context.getSharedPreferences(keyPref, 0);
         int settingValue = sharePreference.getInt(settingKey, initMap.get(settingKey));
         return settingValue;
+    }
+    
+    public static String getSettingString(String settingKey, Context context) {
+        SharedPreferences sharePreference = context.getSharedPreferences(keyPref, 0);
+        String settingValue = sharePreference.getString(settingKey, initStringMap.get(settingKey));
+        return settingValue;
+    }
+    
+    public static void saveSetting(String settingKey, String settingValue, Context context){
+    	SharedPreferences sharePreference = context.getSharedPreferences(keyPref, 0);
+        sharePreference.edit().putString(settingKey, settingValue).commit();
     }
 
     public static void saveSetting(String settingKey, int settingValue, Context context) {
@@ -89,7 +110,7 @@ public class Setting {
     }
 
     public static void setApplicationActionBarTheme(Activity activity) {
-        int theme = getSetting(keyAppTheme, activity);
+        int theme = getSettingInt(keyAppTheme, activity);
         switch (theme) {
         case 0:
             activity.setTheme(R.style.Theme_AppCompat_Light);
@@ -173,5 +194,23 @@ public class Setting {
                 prefs.getLong(PROPERTY_ON_SERVER_EXPIRATION_TIME, -1);
         return System.currentTimeMillis() > expirationTime;
     }
+    
+    public static int getTextModePosition(String mode) {
+		if (mode == Setting.keySunMode)
+			return 0;
+		else
+			return 1;
+	}
+    
+
+	public static int getBackgroundModeBackgroundColor(String keyMode, Context context) {
+    	String sunSetting = getSettingString(keyMode, context);
+    	return Integer.parseInt(sunSetting.split(",")[0]);
+	}
+    
+	public static int getBackgroundModeTextColor(String keyMode, Context context) {
+    	String sunSetting = getSettingString(keyMode, context);
+    	return Integer.parseInt(sunSetting.split(",")[1]);
+	}
 
 }

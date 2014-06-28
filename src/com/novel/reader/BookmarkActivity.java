@@ -76,7 +76,7 @@ public class BookmarkActivity extends AdFragmentActivity{
         
         bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
         
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  0)
         	mAdView = setBannerAdView(bannerAdView);
         
         if (alertDeleteBookmark)
@@ -85,7 +85,7 @@ public class BookmarkActivity extends AdFragmentActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  1)
         	bannerAdView.setVisibility(View.GONE);
     }
     

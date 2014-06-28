@@ -103,7 +103,7 @@ public class MyDownloadArticleActivity extends AdFragmentActivity {
         new DownloadArticlesTask().execute();
         
         bannerAdView = (RelativeLayout) findViewById(R.id.adonView);
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  0)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  0)
         	mAdView = setBannerAdView(bannerAdView);
 
 
@@ -112,7 +112,7 @@ public class MyDownloadArticleActivity extends AdFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(Setting.getSetting(Setting.keyYearSubscription, this) ==  1)
+        if(Setting.getSettingInt(Setting.keyYearSubscription, this) ==  1)
         	bannerAdView.setVisibility(View.GONE);
     }
     
