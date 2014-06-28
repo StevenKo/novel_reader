@@ -376,7 +376,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         	Report.createReportDialog(this,novelName+"("+novelId+")",myArticle.getTitle()+"(Num:"+myArticle.getNum()+")");  	
             break;
         case ID_MODE:
-        	showBackgroundDialog();
+        	showModeDialog();
         	break;
         case ID_NOVEL:
 			theNovel = NovelAPI.getNovel(novelId, this);
@@ -389,12 +389,48 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         	}
         	invalidateOptionsMenu();
         	break;
+        case ID_FONT_SIZE:
+        	showFontSizeDialog();
+        	break;
         }
         return true;
     }
 
     
-    private void showBackgroundDialog() {
+    private void showFontSizeDialog() {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	CharSequence[] array = {"大", "中", "小","修改"};
+    	builder.setTitle("文字大小設定").setSingleChoiceItems(array, -1, new DialogInterface.OnClickListener() {
+
+	    	@Override
+	    	public void onClick(DialogInterface dialog, int position) {
+	    		switch(position){
+	    		case 0:
+	    			articleTextView.setTextSize(28);
+	    			Setting.saveSetting(Setting.keyTextSize, 28, ArticleActivity.this);
+	    			break;
+	    		case 1:
+	    			articleTextView.setTextSize(20);
+	    			Setting.saveSetting(Setting.keyTextSize, 20, ArticleActivity.this);
+	    			break;
+	    		case 2:
+	    			articleTextView.setTextSize(14);
+	    			Setting.saveSetting(Setting.keyTextSize, 12, ArticleActivity.this);
+	    			break;
+	    		case 3:
+	    			Intent intent = new Intent(ArticleActivity.this, SettingActivity.class);
+	                startActivity(intent);
+	                break;
+	    		}
+	    		dialog.dismiss();
+	    	}
+    	});
+
+    	builder.create().show();
+	}
+
+
+	private void showModeDialog() {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	CharSequence[] array = {"日期模式", "夜間模式", "修改"};
     	builder.setTitle("文字&背景模式").setSingleChoiceItems(array, Setting.getTextModePosition(textMode), new DialogInterface.OnClickListener() {
