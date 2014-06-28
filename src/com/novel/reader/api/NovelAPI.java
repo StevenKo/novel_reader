@@ -940,4 +940,9 @@ public class NovelAPI {
 //			return false;
 //		} 
     }
+
+	public static Bookmark findBookMarkByArticle(Article article, Context context) {
+		SQLiteNovel db = new SQLiteNovel(context);
+		return db.findBookMarkByArticle(article);
+	}
 }

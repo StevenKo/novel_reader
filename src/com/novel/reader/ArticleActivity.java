@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -19,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,7 +39,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     private static final int    ID_SETTING  = 0;
     private static final int    ID_Bookmark = 4;
     private static final int    ID_Report   = 5;
-	private static final int    ID_BACKGROUND = 6;
+	private static final int    ID_MODE = 6;
 	private static final int    ID_FONT_SIZE = 7;
 	private static final int    ID_MENU = 8;
 	private static final int    ID_NOVEL = 9;
@@ -56,10 +56,9 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     private Button              articleButtonUp;
     private Button              articleButtonDown;
     private TextView            articlePercent;
-    private Article             myAricle;                                        // uset to get article text
+    private Article             myArticle;                                        // uset to get article text
     private Article             theGottenArticle;
     private Boolean             downloadBoolean;
-    private AlertDialog.Builder addBookMarkDialog;
     private Bundle              mBundle;
     private String              novelName;
     private String              articleTitle;
@@ -81,6 +80,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
 	private RelativeLayout bannerAdView;
 	private TextView articleTitleTextView;
+	private ImageView bookmarkImage;
 	
 
     @Override
@@ -99,7 +99,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         novelPic = mBundle.getString("NovelPic");
         novelId = mBundle.getInt("NovelId");
         
-        if(myAricle == null){
+        if(myArticle == null){
 	         articleTitle = mBundle.getString("ArticleTitle");
 	         articleId = mBundle.getInt("ArticleId");
 	         downloadBoolean = mBundle.getBoolean("ArticleDownloadBoolean", false);
@@ -114,15 +114,15 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
 	  	    if (articleIDs != null) {
 	  	        if (downloadBoolean) {
-	  	            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
+	  	            myArticle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
 	  	        } else {
-	  	            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
+	  	            myArticle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
 	  	        }
 	  	    } else {
 	  	        if (downloadBoolean) {
-	  	            myAricle = new Article(articleId, novelId, "", articleTitle, "", true, articleNum);
+	  	            myArticle = new Article(articleId, novelId, "", articleTitle, "", true, articleNum);
 	  	        } else {
-	  	            myAricle = new Article(articleId, novelId, "", articleTitle, "", false, articleNum);
+	  	            myArticle = new Article(articleId, novelId, "", articleTitle, "", false, articleNum);
 	  	        }
 	  	    }
 	  	
@@ -161,15 +161,15 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-      NovelAPI.createRecentBookmark(new Bookmark(0, myAricle.getNovelId(), myAricle.getId(), yRate, novelName, myAricle.getTitle(), novelPic, true),
+      NovelAPI.createRecentBookmark(new Bookmark(0, myArticle.getNovelId(), myArticle.getId(), yRate, novelName, myArticle.getTitle(), novelPic, true),
                 ArticleActivity.this);
-      savedInstanceState.putString("ArticleTitle", myAricle.getTitle());
-      savedInstanceState.putInt("ArticleId", myAricle.getId());
-      savedInstanceState.putBoolean("ArticleDownloadBoolean", myAricle.isDownload());
+      savedInstanceState.putString("ArticleTitle", myArticle.getTitle());
+      savedInstanceState.putInt("ArticleId", myArticle.getId());
+      savedInstanceState.putBoolean("ArticleDownloadBoolean", myArticle.isDownload());
       savedInstanceState.putInt("ReadingRate", yRate);
       savedInstanceState.putIntegerArrayList("ArticleIDs", articleIDs);
       savedInstanceState.putInt("ArticlePosition", ariticlePosition);
-      savedInstanceState.putInt("ArticleNum", myAricle.getNum());
+      savedInstanceState.putInt("ArticleNum", myArticle.getNum());
       savedInstanceState.putIntegerArrayList("ArticleNums", articleNums);
       super.onSaveInstanceState(savedInstanceState);
     }
@@ -209,6 +209,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         articlePercent = (TextView) findViewById(R.id.article_percent);
         articleLayout = (LinearLayout)findViewById(R.id.article_layout);
         articleTitleTextView = (TextView)findViewById(R.id.article_title);
+        bookmarkImage = (ImageView)findViewById(R.id.bookmarkImage);
 
         articleScrollView.setScrollViewListener(ArticleActivity.this);
 
@@ -228,9 +229,9 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
                     if (ariticlePosition != 0) {
                         ariticlePosition = ariticlePosition - 1;
                         if (downloadBoolean) {
-                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
+                            myArticle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
                         } else {
-                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
+                            myArticle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
                         }
                         new UpdateArticleTask().execute();
                     } else {
@@ -249,9 +250,9 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
                     if (ariticlePosition < articleIDs.size() - 1) {
                         ariticlePosition = ariticlePosition + 1;
                         if (downloadBoolean) {
-                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
+                            myArticle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", true, articleNums.get(ariticlePosition));
                         } else {
-                            myAricle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
+                            myArticle = new Article(articleIDs.get(ariticlePosition), novelId, "", articleTitle, "", false, articleNums.get(ariticlePosition));
                         }
                         new UpdateArticleTask().execute();
                     } else {
@@ -275,21 +276,6 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
                 }
             });
         }
-
-        addBookMarkDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.add_my_bookmark_title))
-                .setMessage(getResources().getString(R.string.add_my_bookmark_content)).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        NovelAPI.insertBookmark(
-                                new Bookmark(0, myAricle.getNovelId(), myAricle.getId(), yRate, novelName, myAricle.getTitle(), novelPic, false),
-                                ArticleActivity.this);
-                    }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
 
     }
 
@@ -316,7 +302,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	
-    	menu.add(0, ID_BACKGROUND, 0, "日間模式").setIcon(R.drawable.article_sun).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	menu.add(0, ID_MODE, 0, "日間模式").setIcon(R.drawable.article_sun).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     	menu.add(0, ID_FONT_SIZE, 1, "字型大小").setIcon(R.drawable.article_font_size).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     	menu.add(0, ID_MENU, 2, "目錄").setIcon(R.drawable.article_menu).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     	
@@ -330,7 +316,14 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-//        menu.findItem(ID_Bookmark).setVisible(false);
+    	Bookmark bookmark = NovelAPI.findBookMarkByArticle(myArticle, ArticleActivity.this);
+    	if(bookmark != null){
+    		bookmarkImage.setVisibility(View.VISIBLE);
+    		menu.findItem(ID_Bookmark).setTitle(getResources().getString(R.string.menu_delete_bookmark));
+    	}else{
+    		bookmarkImage.setVisibility(View.GONE);
+    		menu.findItem(ID_Bookmark).setTitle(getResources().getString(R.string.menu_add_bookmark));
+    	}
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -347,12 +340,18 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             startActivity(intent);
             break;
         case ID_Bookmark:
-            addBookMarkDialog.show();
+        	Bookmark bookmark = NovelAPI.findBookMarkByArticle(myArticle, ArticleActivity.this);
+        	if(bookmark != null){
+        		NovelAPI.deleteBookmark(bookmark, ArticleActivity.this);
+        	}else{
+	            NovelAPI.insertBookmark(new Bookmark(0, myArticle.getNovelId(), myArticle.getId(), yRate, novelName, myArticle.getTitle(), novelPic, false),ArticleActivity.this);
+        	}
+            invalidateOptionsMenu();
             break;
         case ID_Report:
-        	Report.createReportDialog(this,novelName+"("+novelId+")",myAricle.getTitle()+"(Num:"+myAricle.getNum()+")");  	
+        	Report.createReportDialog(this,novelName+"("+novelId+")",myArticle.getTitle()+"(Num:"+myArticle.getNum()+")");  	
             break;
-        case ID_BACKGROUND:
+        case ID_MODE:
         	showBackgroundDialog();
         	break;
         }
@@ -399,7 +398,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
 		@Override
 		protected Object doInBackground(Object... arg0) {
-			NovelAPI.sendNovel(myAricle.getId(), Settings.Secure.getString(ArticleActivity.this.getContentResolver(),Settings.Secure.ANDROID_ID));
+			NovelAPI.sendNovel(myArticle.getId(), Settings.Secure.getString(ArticleActivity.this.getContentResolver(),Settings.Secure.ANDROID_ID));
 			return null;
 		}
     	
@@ -414,10 +413,10 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
         @Override
         protected Object doInBackground(Object... params) {
-            if (myAricle != null) {
-                theGottenArticle = NovelAPI.getArticle(myAricle, ArticleActivity.this);
+            if (myArticle != null) {
+                theGottenArticle = NovelAPI.getArticle(myArticle, ArticleActivity.this);
                 if (theGottenArticle != null) {
-                    myAricle = theGottenArticle;
+                    myArticle = theGottenArticle;
                 }
             }
             return null;
@@ -429,7 +428,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
             layoutProgress.setVisibility(View.GONE);
             setArticleText();
-            myAricle.setNovelId(novelId);
+            myArticle.setNovelId(novelId);
 
             new GetLastPositionTask().execute();
             if(articleAdType == Setting.InterstitialAd && Setting.getSettingInt(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
@@ -439,11 +438,11 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     }
     
     private void setArticleText(){
-    	if(myAricle.getText().indexOf("*&&$$*") > 0){
+    	if(myArticle.getText().indexOf("*&&$$*") > 0){
         	// this is img of text
         	articleScrollView.setVisibility(View.GONE);
         	articleWebView.setVisibility(View.VISIBLE);
-        	String[] urls = myAricle.getText().split("\\*&&\\$\\$\\*");
+        	String[] urls = myArticle.getText().split("\\*&&\\$\\$\\*");
         	String html = "<html><body>";
         	String imgString = "";
         	for(int i=0; i < urls.length ; i++){
@@ -463,12 +462,12 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             String text = "";
             if(textLanguage == 1){
             	try {
-            	    text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getText());
+            	    text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myArticle.getText());
 	            }catch (IOException e) {
 	            	e.printStackTrace();
 	            }
             }else{
-            	text = myAricle.getText();
+            	text = myArticle.getText();
             }
             articleTextView.setText(text+"\n");
         }
@@ -484,10 +483,10 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
         @Override
         protected Object doInBackground(Object... params) {
-            if (myAricle != null) {
-                theGottenArticle = NovelAPI.getArticle(myAricle, ArticleActivity.this);
+            if (myArticle != null) {
+                theGottenArticle = NovelAPI.getArticle(myArticle, ArticleActivity.this);
                 if (theGottenArticle != null) {
-                    myAricle = theGottenArticle;
+                    myArticle = theGottenArticle;
                 }
             }
             return null;
@@ -501,9 +500,9 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             if (theGottenArticle != null) {
             	setArticleText();
 
-                myAricle.setNovelId(novelId);
+                myArticle.setNovelId(novelId);
                 articleScrollView.scrollTo(0, 0);
-                setArticleTitle(myAricle.getTitle());
+                setArticleTitle(myArticle.getTitle());
                 articlePercent.setText("0%");
                 if(articleAdType == Setting.InterstitialAd && Setting.getSettingInt(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
                 	requestInterstitialAd();
@@ -525,10 +524,10 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
         @Override
         protected Object doInBackground(Object... params) {
-            if (myAricle != null) {
-                theGottenArticle = NovelAPI.getPreviousArticle(myAricle, ArticleActivity.this);
+            if (myArticle != null) {
+                theGottenArticle = NovelAPI.getPreviousArticle(myArticle, ArticleActivity.this);
                 if (theGottenArticle != null) {
-                    myAricle = theGottenArticle;
+                    myArticle = theGottenArticle;
                 }
             }
             return null;
@@ -542,9 +541,9 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             if (theGottenArticle != null) {
                 setArticleText();
 
-                myAricle.setNovelId(novelId);
+                myArticle.setNovelId(novelId);
                 articleScrollView.scrollTo(0, 0);
-                setArticleTitle(myAricle.getTitle());
+                setArticleTitle(myArticle.getTitle());
                 articlePercent.setText("0%");
                 if(articleAdType == Setting.InterstitialAd && Setting.getSettingInt(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
                 	requestInterstitialAd();
@@ -565,10 +564,10 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
         @Override
         protected Object doInBackground(Object... params) {
-            if (myAricle != null) {
-                theGottenArticle = NovelAPI.getNextArticle(myAricle, ArticleActivity.this);
+            if (myArticle != null) {
+                theGottenArticle = NovelAPI.getNextArticle(myArticle, ArticleActivity.this);
                 if (theGottenArticle != null) {
-                    myAricle = theGottenArticle;
+                    myArticle = theGottenArticle;
                 }
             }
             return null;
@@ -581,9 +580,9 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             if (theGottenArticle != null) {
             	setArticleText();
 
-                myAricle.setNovelId(novelId);
+                myArticle.setNovelId(novelId);
                 articleScrollView.scrollTo(0, 0);
-                setArticleTitle(myAricle.getTitle());
+                setArticleTitle(myArticle.getTitle());
                 articlePercent.setText("0%");
                 if(articleAdType == Setting.InterstitialAd && Setting.getSettingInt(Setting.keyYearSubscription, ArticleActivity.this) ==  0)
                 	requestInterstitialAd();
@@ -648,13 +647,13 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             if (textLanguage == 1) {
                 String text = "";
                 try {
-                    text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myAricle.getTitle() + "\n\n" + myAricle.getText());
+                    text = taobe.tec.jcc.JChineseConvertor.getInstance().t2s(myArticle.getTitle() + "\n\n" + myArticle.getText());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 articleTextView.setText(text);
             } else {
-                articleTextView.setText(articleTitle + "\n\n" + myAricle.getText());
+                articleTextView.setText(articleTitle + "\n\n" + myArticle.getText());
             }
         }
 
@@ -703,7 +702,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
     @Override
     protected void onPause() {
-        NovelAPI.createRecentBookmark(new Bookmark(0, myAricle.getNovelId(), myAricle.getId(), yRate, novelName, myAricle.getTitle(), novelPic, true),
+        NovelAPI.createRecentBookmark(new Bookmark(0, myArticle.getNovelId(), myArticle.getId(), yRate, novelName, myArticle.getTitle(), novelPic, true),
                 ArticleActivity.this);
         super.onPause();
     }

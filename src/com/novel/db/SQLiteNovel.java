@@ -744,4 +744,25 @@ public class SQLiteNovel extends SQLiteOpenHelper {
         return updateNovel(novel);
     }
 
+	public Bookmark findBookMarkByArticle(Article article) {
+		Cursor cursor = null;
+        cursor = db.rawQuery("SELECT * FROM " + BookmarkSchema.TABLE_NAME + " WHERE is_recent_read = 0 AND novel_id = " + article.getNovelId() + " AND article_id = " + article.getId() +" ORDER BY id DESC LIMIT 1", null);
+        Bookmark bookmark = null;
+		while (cursor.moveToNext()) {
+            int ID = cursor.getInt(0);
+            int NOVEL_ID = cursor.getInt(1);
+            int ARTICLE_ID = cursor.getInt(2);
+            int READ_RATE = cursor.getInt(3);
+            String NOVEL_NAME = cursor.getString(4);
+            String ARTICLE_TITLE = cursor.getString(5);
+            String NOVEL_PIC = cursor.getString(6);
+            Boolean IS_RECENT_READ = cursor.getInt(7) > 0;
+
+            bookmark = new Bookmark(ID, NOVEL_ID, ARTICLE_ID, READ_RATE, NOVEL_NAME, ARTICLE_TITLE, NOVEL_PIC, IS_RECENT_READ);
+        }
+        cursor.close();
+        
+		return bookmark;
+	}
+
 }

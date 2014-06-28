@@ -105,10 +105,12 @@
         />
 </LinearLayout>
 <ImageView
+    	android:id="@+id/bookmarkImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:src="@drawable/article_bookmark"
         android:layout_marginRight="5dp"
+        android:visibility="gone"
         />
 </RelativeLayout>
