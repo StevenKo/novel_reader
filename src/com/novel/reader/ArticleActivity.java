@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -317,9 +318,9 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	
-    	menu.add(0, ID_MODE, 0, "日間模式").setIcon(R.drawable.article_sun).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    	menu.add(0, ID_FONT_SIZE, 1, "字型大小").setIcon(R.drawable.article_font_size).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    	menu.add(0, ID_MENU, 2, "目錄").setIcon(R.drawable.article_menu).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	menu.add(0, ID_MODE, 0, "日間模式").setIcon(getModeIcon()).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	menu.add(0, ID_FONT_SIZE, 1, "字型大小").setIcon(getFontSizeIcon()).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	menu.add(0, ID_MENU, 2, "目錄").setIcon(getMenuIcon()).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     	
     	menu.add(0, ID_Bookmark, 3, getResources().getString(R.string.menu_add_bookmark)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
     	menu.add(0, ID_NOVEL, 4, getResources().getString(R.string.menu_collect_novel)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -329,7 +330,33 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         return true;
     }
     
-    @Override
+    private boolean isLightAppTheme(){
+    	if(Setting.getSettingInt(Setting.keyAppTheme, this) == 0)
+    		return true;
+    	else
+    		return false;
+    }
+    private int getModeIcon() {
+		if(isLightAppTheme())
+			return R.drawable.article_sun;
+		else
+			return R.drawable.article_sun_white;
+	}
+    private int getFontSizeIcon(){
+    	if(isLightAppTheme())
+			return R.drawable.article_font_size;
+		else
+			return R.drawable.article_font_size_white;
+    }
+    private int getMenuIcon(){
+    	if(isLightAppTheme())
+			return R.drawable.article_menu;
+		else
+			return R.drawable.article_menu_white;
+    }
+
+
+	@Override
     public boolean onPrepareOptionsMenu(Menu menu) {
     	setBookMarkItem(menu);
     	setCollectNovelItem(menu);
