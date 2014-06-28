@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -452,8 +453,8 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
     
     private void showFontSizeDialog() {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	CharSequence[] array = {"大", "中", "小","修改"};
-    	builder.setTitle("文字大小設定").setSingleChoiceItems(array, -1, new DialogInterface.OnClickListener() {
+    	CharSequence[] array = getResources().getStringArray(R.array.fontsize_selection);
+    	builder.setTitle(getResources().getString(R.string.fontsize_setting_title)).setSingleChoiceItems(array, -1, new DialogInterface.OnClickListener() {
 
 	    	@Override
 	    	public void onClick(DialogInterface dialog, int position) {
@@ -485,8 +486,8 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
 
 	private void showModeDialog() {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	CharSequence[] array = {"日期模式", "夜間模式", "修改"};
-    	builder.setTitle("文字&背景模式").setSingleChoiceItems(array, Setting.getTextModePosition(textMode), new DialogInterface.OnClickListener() {
+    	CharSequence[] array = getResources().getStringArray(R.array.mode_selection);
+    	builder.setTitle(getResources().getString(R.string.mode_setting_title)).setSingleChoiceItems(array, Setting.getTextModePosition(textMode), new DialogInterface.OnClickListener() {
 
 	    	@Override
 	    	public void onClick(DialogInterface dialog, int position) {

@@ -53,6 +53,8 @@
   <string name="setting_select_mode">阅读模式选择</string>
   <string name="sun_mode">日间模式</string>
   <string name="moon_mode">夜间模式</string>
+  <string name="mode_setting_title">文字背景模式</string>
+  <string name="fontsize_setting_title">文字大小设定</string>
   
   <string name="title_my_downloading"> 我的下载</string>
   <string name="title_my_bookcase"> 我的书柜</string>

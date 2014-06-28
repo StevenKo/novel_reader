@@ -34,4 +34,19 @@
 	    <item>我的收藏</item>
 	    <item>我的下载</item>
 	</string-array>
+	<string-array name="bookmarks">
+	  <item>我的书签</item>
+	  <item>最近阅读</item>
+	</string-array>
+	<string-array name="fontsize_selection">
+	  <item>大</item>
+	  <item>中</item>
+	  <item>小</item>
+	  <item>修改</item>
+	</string-array>
+	<string-array name="mode_selection">
+	  <item>日间模式</item>
+	  <item>夜间模式</item>
+	  <item>修改</item>
+	</string-array>
 </resources>
