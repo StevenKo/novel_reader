@@ -102,6 +102,12 @@
             android:screenOrientation="portrait" 
             >
         </activity>
+        <activity
+            android:name="com.novel.reader.NovelContentsActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" 
+            >
+        </activity>
         
         <activity
             android:name="com.google.android.gms.ads.AdActivity"

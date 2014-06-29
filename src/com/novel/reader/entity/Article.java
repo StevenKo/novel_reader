@@ -1,7 +1,7 @@
 package com.novel.reader.entity;
 
 public class Article {
-    protected int     id;
+    public int     id;
     protected int     novelId;
     protected String  text;
     protected String  title;
@@ -31,7 +31,7 @@ public class Article {
         this.isDownloaded = isDownloaded;
         this.num = num;
     }
-
+    
     public int getNum() {
         return num;
     }

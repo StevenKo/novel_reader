@@ -244,13 +244,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
                     }
                 } else {
                     new GetPreviousArticleTask().execute();
-                }
-                Bookmark bookmark = NovelAPI.findBookMarkByArticle(myArticle, ArticleActivity.this);
-            	if(bookmark != null){
-            		bookmarkImage.setVisibility(View.VISIBLE);
-            	}else{
-            		bookmarkImage.setVisibility(View.GONE);
-            	}
+                }                
             }
         });
 
@@ -272,13 +266,6 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
                 } else {
                     new GetNextArticleTask().execute();
                 }
-                Bookmark bookmark = NovelAPI.findBookMarkByArticle(myArticle, ArticleActivity.this);
-            	if(bookmark != null){
-            		bookmarkImage.setVisibility(View.VISIBLE);
-            	}else{
-            		bookmarkImage.setVisibility(View.GONE);
-            	}
-
             }
         });
 
@@ -295,6 +282,16 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         }
 
     }
+
+
+    private void updateBookmark() {
+		Bookmark bookmark = NovelAPI.findBookMarkByArticle(myArticle, ArticleActivity.this);
+    	if(bookmark != null){
+    		bookmarkImage.setVisibility(View.VISIBLE);
+    	}else{
+    		bookmarkImage.setVisibility(View.GONE);
+    	}
+	}
 
 
 	@Override
@@ -446,9 +443,26 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
         case ID_FONT_SIZE:
         	showFontSizeDialog();
         	break;
+        case ID_CONTENTS:
+        	Intent intentContents = new Intent(ArticleActivity.this, NovelContentsActivity.class);
+        	intentContents.putExtra("NovelName", novelName);
+        	intentContents.putExtra("NovelId", novelId);
+        	intentContents.putExtra("ArticleId", myArticle.getId());
+            startActivityForResult(intentContents, 1);
+            break;
         }
         return true;
     }
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		int resultArticleId = data.getIntExtra("SelectArticleId", 0);
+		int resultPosition = data.getIntExtra("SelectArticlePosition", 0);
+	    if (requestCode == 1 && resultCode == RESULT_OK && resultArticleId != 0 && resultPosition != 0) {
+	    	myArticle.id = resultArticleId;
+	    	ariticlePosition = resultPosition;
+	    	new UpdateArticleTask().execute();
+	    }
+	}
 
     
     private void showFontSizeDialog() {
@@ -635,7 +649,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_data), Toast.LENGTH_SHORT).show();
             }
-
+            updateBookmark();
         }
     }
 
@@ -676,7 +690,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_up), Toast.LENGTH_SHORT).show();
             }
-
+            updateBookmark();
         }
     }
 
@@ -714,7 +728,7 @@ public class ArticleActivity extends AdFragmentActivity implements DetectScrollV
             } else {
                 Toast.makeText(ArticleActivity.this, getResources().getString(R.string.article_no_down), Toast.LENGTH_SHORT).show();
             }
-
+            updateBookmark();
         }
     }
 
