@@ -27,6 +27,7 @@ import com.ads.AdFragmentActivity;
 import com.android.slidingtab.SlidingTabLayout;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragments.CategoryAllNovelsFragment;
+import com.kosbrother.fragments.CategoryFinishFragment;
 import com.kosbrother.fragments.CategoryLatestNovelsFragment;
 import com.kosbrother.fragments.CategoryRecommendFragment;
 import com.kosbrother.fragments.CategoryWeekFragment;
@@ -211,6 +212,8 @@ public class CategoryActivity extends AdFragmentActivity {
             } else if (position == 3) {
                 kk = CategoryLatestNovelsFragment.newInstance();
             } else if (position == 4) {
+                kk = CategoryFinishFragment.newInstance();
+            }else if (position == 5) {
                 kk = CategoryAllNovelsFragment.newInstance();
             }
             return kk;

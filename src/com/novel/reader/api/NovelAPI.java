@@ -708,6 +708,16 @@ public class NovelAPI {
             return parseNovel(message, novels);
         }
     }
+    
+    public static ArrayList<Novel> getCategoryFinish(int categoryId, int page) {
+    	ArrayList<Novel> novels = new ArrayList<Novel>();
+        String message = getMessageFromServer("GET", "/api/v1/novels/category_finish.json?category_id=" + categoryId + "&page=" + page, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseNovel(message, novels);
+        }
+	}
 
     public static ArrayList<Category> getCategories() {
         return Category.getCategories();
@@ -945,4 +955,5 @@ public class NovelAPI {
 		SQLiteNovel db = new SQLiteNovel(context);
 		return db.findBookMarkByArticle(article);
 	}
+
 }
