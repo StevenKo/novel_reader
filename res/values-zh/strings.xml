@@ -93,7 +93,7 @@
 	<string name="respond_mail_address">service@kosbrother.com</string>
 	<string name="respond_mail_title">意见回馈from 小说王</string>
 	
-	<string name="recommend_url">https://play.google.com/store/apps/developer?id=KosBrother</string>
+	<string name="recommend_url">https://play.google.com/store/apps/details?id=com.novel.reader</string>
 	
 	<string name="menu_settings">设定</string>
 	<string name="menu_respond">意见回馈</string>

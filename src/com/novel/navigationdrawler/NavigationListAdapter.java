@@ -32,6 +32,10 @@ public class NavigationListAdapter extends BaseAdapter {
         data.add(new NavigationItem(activity.getResources().getString(R.string.my_recent_reading), R.drawable.navigation_recent));
         data.add(new NavigationItem(activity.getResources().getString(R.string.my_collect), R.drawable.navigation_collect));
         data.add(new NavigationItem(activity.getResources().getString(R.string.my_download), R.drawable.navigation_download));
+        data.add(new NavigationItem(activity.getResources().getString(R.string.menu_aboutus), R.drawable.navigation_profile));
+        data.add(new NavigationItem(activity.getResources().getString(R.string.menu_recommend), R.drawable.navigation_like));
+        data.add(new NavigationItem(activity.getResources().getString(R.string.menu_report), R.drawable.navigation_voice));
+        data.add(new NavigationItem(activity.getResources().getString(R.string.buy_year_subscription), R.drawable.navigation_trophy));
 
     }
 

@@ -233,17 +233,8 @@ public class MainActivity extends AdFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        // getMenuInflater().inflate(R.menu.activity_main, menu);
 
-        menu.add(0, ID_SETTING, 0, getResources().getString(R.string.menu_settings)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, ID_RESPONSE, 1, getResources().getString(R.string.menu_respond)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, ID_ABOUT_US, 2, getResources().getString(R.string.menu_aboutus)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, ID_GRADE, 3, getResources().getString(R.string.menu_recommend)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, ID_Report, 6, getResources().getString(R.string.menu_report)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        menu.add(0, 7, 7, getResources().getString(R.string.buy_year_subscription)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-        itemSearch = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse)
+        itemSearch = menu.add(0, ID_SEARCH, 4, getResources().getString(R.string.menu_search)).setIcon(R.drawable.ic_search_inverse).setActionView(R.layout.collapsible_edittext)
                 .setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
                     private EditText search;
 
@@ -270,7 +261,7 @@ public class MainActivity extends AdFragmentActivity {
                             }
                         });
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(null, InputMethodManager.SHOW_IMPLICIT);
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                         return true;
                     }
 
@@ -280,7 +271,7 @@ public class MainActivity extends AdFragmentActivity {
                         search.setText("");
                         return true;
                     }
-                }).setActionView(R.layout.collapsible_edittext);
+                });
         itemSearch.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
         return true;
@@ -291,39 +282,6 @@ public class MainActivity extends AdFragmentActivity {
     	
     	if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
-        }
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-        case ID_SETTING: // setting
-            Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-            startActivity(intent);
-            break;
-        case ID_RESPONSE: // response
-            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-            emailIntent.setType("plain/text");
-            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] { getResources().getString(R.string.respond_mail_address) });
-            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.respond_mail_title));
-            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-            break;
-        case ID_ABOUT_US:
-            aboutUsDialog.show();
-            break;
-        case ID_GRADE:
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-            startActivity(browserIntent);
-            break;
-        case ID_SEARCH: // response
-            break;
-        case ID_Report:
-        	Report.createReportDialog(this,this.getResources().getString(R.string.report_not_novel_problem),this.getResources().getString(R.string.report_not_article_problem));
-            break;
-        case 7:
-        	Intent intent1 = new Intent();
-            intent1.setClass(this, DonateActivity.class);
-            startActivity(intent1);
-        	break;
         }
         return true;
     }
@@ -475,6 +433,21 @@ public class MainActivity extends AdFragmentActivity {
 	    	   Intent downloadIntent = new Intent(MainActivity.this, MyNovelActivity.class);
 	    	   downloadIntent.putExtra("noti", true);
                startActivity(downloadIntent);
+	    	   break;
+	       case 5:
+	    	   aboutUsDialog.show();
+	           break;
+	       case 6:
+	    	   Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+	           startActivity(browserIntent);
+	    	   break;
+	       case 7:
+	    	   Report.createReportDialog(this,this.getResources().getString(R.string.report_not_novel_problem),this.getResources().getString(R.string.report_not_article_problem));
+	    	   break;
+	       case 8:
+	    	   Intent intent1 = new Intent();
+	           intent1.setClass(this, DonateActivity.class);
+	           startActivity(intent1);
 	    	   break;
        }
        mDrawerLayout.closeDrawer(mDrawerList);

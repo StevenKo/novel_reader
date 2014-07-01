@@ -202,7 +202,7 @@ public class SearchActivity extends AdFragmentActivity {
                             }
                         });
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(null, InputMethodManager.SHOW_IMPLICIT);
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                         return true;
                     }
 
